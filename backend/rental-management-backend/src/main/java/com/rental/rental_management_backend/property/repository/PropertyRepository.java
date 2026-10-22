@@ -1,5 +1,6 @@
 package com.rental.rental_management_backend.property.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,85 @@ import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
+
+    // M3 Rental Demand Prediction: direct-rental House/Villa inventory.
+    @Query("""
+        SELECT COUNT(p)
+        FROM Property p
+        JOIN PropertyAddress pa
+            ON pa.property = p
+        WHERE LOWER(pa.city) = LOWER(:city)
+          AND LOWER(pa.area) = LOWER(:area)
+          AND p.propertyType IN (
+              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+          )
+          AND p.status IN (
+              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
+              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
+          )
+        """)
+    long countDirectRentalPropertiesForRentalDemand(
+            @Param("city") String city,
+            @Param("area") String area);
+
+    @Query("""
+        SELECT COUNT(p)
+        FROM Property p
+        JOIN PropertyAddress pa
+            ON pa.property = p
+        WHERE LOWER(pa.city) = LOWER(:city)
+          AND LOWER(pa.area) = LOWER(:area)
+          AND p.propertyType IN (
+              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+          )
+          AND p.status = :status
+        """)
+    long countDirectRentalPropertiesByStatusForRentalDemand(
+            @Param("city") String city,
+            @Param("area") String area,
+            @Param("status") PropertyStatus status);
+
+    @Query("""
+        SELECT AVG(p.monthlyRent)
+        FROM Property p
+        JOIN PropertyAddress pa
+            ON pa.property = p
+        WHERE LOWER(pa.city) = LOWER(:city)
+          AND LOWER(pa.area) = LOWER(:area)
+          AND p.propertyType IN (
+              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+          )
+          AND p.status IN (
+              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
+              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
+          )
+        """)
+    BigDecimal averageDirectRentalMonthlyRentForRentalDemand(
+            @Param("city") String city,
+            @Param("area") String area);
+
+    @Query("""
+        SELECT COUNT(p.monthlyRent)
+        FROM Property p
+        JOIN PropertyAddress pa
+            ON pa.property = p
+        WHERE LOWER(pa.city) = LOWER(:city)
+          AND LOWER(pa.area) = LOWER(:area)
+          AND p.propertyType IN (
+              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+          )
+          AND p.status IN (
+              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
+              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
+          )
+        """)
+    long countPricedDirectRentalPropertiesForRentalDemand(
+            @Param("city") String city,
+            @Param("area") String area);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
