@@ -800,7 +800,13 @@ def save_artifacts(
         pipeline,
         MODEL_FILE
     )
+# Save feature list required by inference
+    FEATURE_LIST_FILE = ARTIFACT_DIR / "feature_list.joblib"
 
+    joblib.dump(
+        FEATURES,
+        FEATURE_LIST_FILE
+    )
     # --------------------------------------------------------
     # Model comparison report
     # --------------------------------------------------------

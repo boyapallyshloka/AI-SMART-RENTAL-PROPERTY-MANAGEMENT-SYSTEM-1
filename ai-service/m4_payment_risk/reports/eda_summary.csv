@@ -1,2 +1,0 @@
-rows,columns,unique_tenants,min_snapshot,max_snapshot,duplicate_rows,duplicate_tenant_month,missing_cells
-27390,13,2570,2024-01-01,2025-12-01,0,0,0
