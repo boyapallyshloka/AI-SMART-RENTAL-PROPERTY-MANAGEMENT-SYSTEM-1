@@ -2,6 +2,7 @@
 package com.rental.rental_management_backend.maintenance.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -879,6 +880,10 @@ public class MaintenanceRequestServiceImpl
         // -----------------------------------------------------
 
         maintenanceRequest.setStatus(newStatus);
+        if (newStatus == MaintenanceStatus.COMPLETED
+                && maintenanceRequest.getCompletedDate() == null) {
+            maintenanceRequest.setCompletedDate(LocalDateTime.now());
+        }
 
         // -----------------------------------------------------
         // SAVE
@@ -940,6 +945,13 @@ public class MaintenanceRequestServiceImpl
 
         ticket.setCost(request.getCost());
         ticket.setCostResponsibility(request.getCostResponsibility());
+        // Older completed tickets may predate completion-date tracking.
+        // Backfill the date when their cost allocation is next saved so
+        // they can be included in the matching reports period.
+        if (ticket.getStatus() == MaintenanceStatus.COMPLETED
+                && ticket.getCompletedDate() == null) {
+            ticket.setCompletedDate(LocalDateTime.now());
+        }
         return mapToResponse(maintenanceRequestRepository.save(ticket));
     }
 
