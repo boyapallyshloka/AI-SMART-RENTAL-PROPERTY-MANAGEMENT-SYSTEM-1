@@ -1,8 +1,10 @@
+
 import React, {
     createContext,
     useContext,
     useEffect,
     useState,
+    useCallback,
 } from "react";
 
 import { useAuth } from "./AuthContext";
@@ -17,7 +19,6 @@ import {
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-
     const {
         user,
         loading: authLoading,
@@ -27,72 +28,52 @@ export const NotificationProvider = ({ children }) => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    // -----------------------------------------
     // Fetch all notifications
-    // -----------------------------------------
-    const fetchNotifications = async () => {
+    const fetchNotifications = useCallback(async () => {
         try {
             setLoading(true);
 
             const data = await getNotifications();
+            console.log("Notifications returned to context:", data);
 
-            console.log("Notifications API response:", data);
-
-            // Backend currently returns an array.
-            // This also protects the frontend if the API
-            // ever returns null or another unexpected value.
-            if (Array.isArray(data)) {
-                setNotifications(data);
-            } else {
-                setNotifications([]);
-            }
-
+            setNotifications(
+                Array.isArray(data) ? data : []
+            );
         } catch (error) {
             console.error(
                 "Failed to fetch notifications:",
                 error
             );
-
-            setNotifications([]);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    // -----------------------------------------
+
     // Fetch unread notification count
-    // -----------------------------------------
-    const fetchUnreadCount = async () => {
+    const fetchUnreadCount = useCallback(async () => {
         try {
             const data = await getUnreadCount();
-
-            console.log("Unread notification count:", data);
+            console.log("unread count returned to context:", data);
 
             setUnreadCount(Number(data) || 0);
-
         } catch (error) {
             console.error(
                 "Failed to fetch unread notification count:",
                 error
             );
-
-            setUnreadCount(0);
         }
-    };
+    }, []);
 
-    // -----------------------------------------
-    // Refresh notifications + unread count
-    // -----------------------------------------
-    const refreshNotifications = async () => {
+    // Refresh notifications and unread count
+    const refreshNotifications = useCallback(async () => {
         await Promise.all([
             fetchNotifications(),
             fetchUnreadCount(),
         ]);
-    };
+    }, [fetchNotifications, fetchUnreadCount]);
 
-    // -----------------------------------------
     // Mark one notification as read
-    // -----------------------------------------
     const markAsRead = async (notificationId) => {
         try {
             await markNotificationAsRead(notificationId);
@@ -100,10 +81,7 @@ export const NotificationProvider = ({ children }) => {
             setNotifications((currentNotifications) =>
                 currentNotifications.map((notification) =>
                     notification.notificationId === notificationId
-                        ? {
-                            ...notification,
-                            read: true,
-                        }
+                        ? { ...notification, read: true }
                         : notification
                 )
             );
@@ -111,7 +89,6 @@ export const NotificationProvider = ({ children }) => {
             setUnreadCount((count) =>
                 count > 0 ? count - 1 : 0
             );
-
         } catch (error) {
             console.error(
                 "Failed to mark notification as read:",
@@ -120,9 +97,7 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
-    // -----------------------------------------
     // Mark all notifications as read
-    // -----------------------------------------
     const markAllAsRead = async () => {
         try {
             await markAllNotificationsAsRead();
@@ -135,7 +110,6 @@ export const NotificationProvider = ({ children }) => {
             );
 
             setUnreadCount(0);
-
         } catch (error) {
             console.error(
                 "Failed to mark all notifications as read:",
@@ -144,16 +118,29 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
-    // -----------------------------------------
-    // Load notifications after authentication
-    // -----------------------------------------
+    // Automatically refresh after authentication
     useEffect(() => {
-
-        if (!authLoading && user) {
-            refreshNotifications();
+        if (authLoading || !user) {
+            return;
         }
 
-    }, [authLoading, user]);
+        refreshNotifications();
+
+        const intervalId = setInterval(() => {
+            refreshNotifications();
+        }, 10000);
+
+        const handleFocus = () => {
+            refreshNotifications();
+        };
+
+        window.addEventListener("focus", handleFocus);
+
+        return () => {
+            clearInterval(intervalId);
+            window.removeEventListener("focus", handleFocus);
+        };
+    }, [authLoading, user, refreshNotifications]);
 
     return (
         <NotificationContext.Provider
@@ -161,11 +148,9 @@ export const NotificationProvider = ({ children }) => {
                 notifications,
                 unreadCount,
                 loading,
-
                 fetchNotifications,
                 fetchUnreadCount,
                 refreshNotifications,
-
                 markAsRead,
                 markAllAsRead,
             }}
@@ -175,11 +160,8 @@ export const NotificationProvider = ({ children }) => {
     );
 };
 
-// -----------------------------------------
-// Custom notification hook
-// -----------------------------------------
+// Keep this hook OUTSIDE NotificationProvider
 export const useNotifications = () => {
-
     const context = useContext(NotificationContext);
 
     if (!context) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {
@@ -55,6 +55,7 @@ export default function TenantMaintenancePage() {
     location.state?.successMessage || ''
   )
   const [fetchError, setFetchError] = useState('')
+  const [searchParams] = useSearchParams()
 
   const loadTenantRequests = async () => {
     setLoading(true)
@@ -73,8 +74,8 @@ export default function TenantMaintenancePage() {
         allBackendRequests = Array.isArray(val)
           ? val
           : Array.isArray(val?.data)
-          ? val.data
-          : []
+            ? val.data
+            : []
         setRequests(allBackendRequests)
       } else {
         const err = maintRes.reason
@@ -93,8 +94,8 @@ export default function TenantMaintenancePage() {
         const props = Array.isArray(publicPropsRes.value)
           ? publicPropsRes.value
           : Array.isArray(publicPropsRes.value?.data)
-          ? publicPropsRes.value.data
-          : []
+            ? publicPropsRes.value.data
+            : []
         props.forEach((p) => {
           const pId = p.propertyId ?? p.id
           const pName = p.propertyName ?? p.name ?? p.title
@@ -109,8 +110,8 @@ export default function TenantMaintenancePage() {
         const apps = Array.isArray(appsRes.value)
           ? appsRes.value
           : Array.isArray(appsRes.value?.data)
-          ? appsRes.value.data
-          : []
+            ? appsRes.value.data
+            : []
         apps.forEach((a) => {
           const pId = a.propertyId
           const pName = a.propertyName
@@ -165,11 +166,28 @@ export default function TenantMaintenancePage() {
     }
   }
 
+  // 1. Load initial data on mount
   useEffect(() => {
     loadTenantRequests()
   }, [])
 
-  // If selectedTicket has a propertyId not yet in propertyMap, resolve it dynamically
+  // 2. Notification Deep Link Interceptor
+  useEffect(() => {
+    if (loading || requests.length === 0 || selectedTicket) return;
+
+    const targetTicketId = searchParams.get('ticket');
+    if (!targetTicketId) return;
+
+    const matchedRequest = requests.find(req =>
+      String(req.requestId || req.id || req.ticketNumber) === String(targetTicketId)
+    );
+
+    if (matchedRequest) {
+      setSelectedTicket(matchedRequest);
+    }
+  }, [loading, requests, searchParams, selectedTicket]);
+
+  // 3. Resolve missing property details dynamically for the selected ticket
   useEffect(() => {
     if (
       selectedTicket?.propertyId &&
@@ -192,10 +210,11 @@ export default function TenantMaintenancePage() {
             }))
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }, [selectedTicket, propertyMap])
 
+  // 4. Clean UI helper functions and filter arrays (Scoped perfectly!)
   const getPropertyDisplayName = (ticket) => {
     if (!ticket) return ''
     const pId = ticket.propertyId
@@ -233,7 +252,6 @@ export default function TenantMaintenancePage() {
     })),
   ]
 
-  // Filtered requests based on search, status, and priority
   const filteredRequests = requests.filter((req) => {
     const query = searchQuery.toLowerCase().trim()
     const ticketIdStr = String(req.requestId || req.id || req.ticketNumber || '').toLowerCase()

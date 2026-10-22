@@ -488,6 +488,7 @@ export default function SubmitApplicationPage() {
 
       // 2. Strictly submit only fields supported by backend RentalApplicationCreateRequest
       const payload = {
+        propertyId: Number(selectedPropertyId),
         unitId: Number(selectedUnitId),
         monthlyIncome: monthlyIncome.trim() ? Number(monthlyIncome) : null,
         employerOccupation: employer.trim() || null,

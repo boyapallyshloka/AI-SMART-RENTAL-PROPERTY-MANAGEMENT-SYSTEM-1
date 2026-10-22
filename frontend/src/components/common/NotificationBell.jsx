@@ -12,7 +12,9 @@ export default function NotificationBell() {
     markAllAsRead,
     loading,
   } = useNotifications()
-
+  console.log("Bell notifications:", notifications)
+  console.log("Bell unread count:", unreadCount)
+  console.log("Bell loading:", loading)
   const dropdownRef = useRef(null)
 
   useEffect(() => {
@@ -132,8 +134,8 @@ export default function NotificationBell() {
                   key={item.notificationId}
                   onClick={() => handleNotificationClick(item)}
                   className={`p-3.5 flex items-start gap-3 transition-colors hover:bg-[#F7F8FA] cursor-pointer ${!item.read
-                      ? 'bg-white'
-                      : 'bg-[#EAF2F7]/50'
+                    ? 'bg-white'
+                    : 'bg-[#EAF2F7]/50'
                     }`}
                 >
                   {/* Notification Icon */}

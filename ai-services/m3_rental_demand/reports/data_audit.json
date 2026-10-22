@@ -1,0 +1,12 @@
+{
+    "dataset_path": "C:\\Users\\malli\\AI-SMART-RENTAL-PROPERTY-MANAGEMENT-SYSTEM\\ai-service\\data\\ML\\M3_Rental_Demand_Data.csv",
+    "row_count": 59363,
+    "column_count": 14,
+    "missing_columns": [],
+    "extra_columns": [],
+    "exact_duplicate_rows": 0,
+    "invalid_dates": 0,
+    "duplicate_location_month_rows": 0,
+    "target_column": "next_month_demand",
+    "target_missing_values": 0
+}
