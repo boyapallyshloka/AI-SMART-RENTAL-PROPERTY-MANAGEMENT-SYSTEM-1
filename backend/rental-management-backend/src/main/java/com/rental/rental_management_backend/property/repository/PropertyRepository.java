@@ -7,8 +7,11 @@ import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import jakarta.persistence.LockModeType;
 
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
@@ -24,6 +27,22 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
     Optional<Property> findDetailsById(
             @Param("propertyId") Long propertyId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
+    Optional<Property> findByPropertyIdForUpdate(
+            @Param("propertyId") Long propertyId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        SELECT p
+        FROM Property p
+        WHERE p.propertyId = :propertyId
+          AND p.owner = :owner
+        """)
+    Optional<Property> findByPropertyIdAndOwnerForUpdate(
+            @Param("propertyId") Long propertyId,
+            @Param("owner") User owner);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByOwner(User owner);

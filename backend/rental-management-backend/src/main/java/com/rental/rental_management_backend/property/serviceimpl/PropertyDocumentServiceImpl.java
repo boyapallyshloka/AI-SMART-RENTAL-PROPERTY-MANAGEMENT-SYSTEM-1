@@ -368,6 +368,32 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public void validatePropertySubmissionEligibility(Property property) {
+        if (property == null || property.getPropertyId() == null) {
+            throw new IllegalArgumentException("Property cannot be null");
+        }
+
+        List<PropertyDocument> documents =
+                documentRepository.findByPropertyOrderByUploadedAtDesc(property);
+        Set<PropertyDocumentType> submittedTypes = documents.stream()
+                .filter(document -> document.getStatus() != PropertyDocumentStatus.REJECTED)
+                .map(PropertyDocument::getDocumentType)
+                .collect(Collectors.toSet());
+
+        List<String> missingDescriptions = REQUIRED_DOCUMENT_TYPES.stream()
+                .filter(requiredType -> !submittedTypes.contains(requiredType))
+                .map(this::formatDocumentTypeName)
+                .toList();
+
+        if (!missingDescriptions.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot submit property for approval. Upload the required document(s): "
+                            + String.join(", ", missingDescriptions));
+        }
+    }
+
     // =========================================================
     // HELPER METHODS
     // =========================================================

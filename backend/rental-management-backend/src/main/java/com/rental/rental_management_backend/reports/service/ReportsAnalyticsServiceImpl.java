@@ -1,4 +1,3 @@
-
 package com.rental.rental_management_backend.reports.service;
 
 import java.math.BigDecimal;
@@ -324,10 +323,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                     || request.getCost() == null
                     || request.getCostResponsibility() != MaintenanceCostResponsibility.OWNER_PAID
                     || request.getCompletedDate() == null) {
-                continue;
-            }
-
-            if (request.getPayer() == MaintenancePayer.TENANT_PAID) {
                 continue;
             }
 

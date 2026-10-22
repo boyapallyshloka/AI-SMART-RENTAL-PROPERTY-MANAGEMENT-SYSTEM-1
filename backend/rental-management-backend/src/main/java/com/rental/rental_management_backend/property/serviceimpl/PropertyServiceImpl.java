@@ -13,7 +13,11 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
+import com.rental.rental_management_backend.User.enums.UserStatus;
 import com.rental.rental_management_backend.exception.ResourceNotFoundException;
+import com.rental.rental_management_backend.notification.enums.NotificationPriority;
+import com.rental.rental_management_backend.notification.enums.NotificationType;
+import com.rental.rental_management_backend.notification.service.NotificationService;
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
@@ -37,6 +41,7 @@ public class PropertyServiceImpl implements PropertyService {
 	private final PropertyNotificationDispatcher notificationDispatcher;
 	private final S3Service s3Service;
 	private final com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService;
+	private final NotificationService notificationService;
 
 	public PropertyServiceImpl(
 	        PropertyRepository propertyRepository,
@@ -44,7 +49,8 @@ public class PropertyServiceImpl implements PropertyService {
 	        PropertyManagerRepository propertyManagerRepository,
 	        PropertyNotificationDispatcher notificationDispatcher,
 	        S3Service s3Service,
-	        com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService) {
+	        com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService,
+	        NotificationService notificationService) {
 
 	    this.propertyRepository = propertyRepository;
 	    this.userRepository = userRepository;
@@ -52,6 +58,7 @@ public class PropertyServiceImpl implements PropertyService {
 	    this.notificationDispatcher = notificationDispatcher;
 	    this.s3Service = s3Service;
 	    this.propertyDocumentService = propertyDocumentService;
+	    this.notificationService = notificationService;
 	}
 	@Override
 	public PropertyResponse createProperty(PropertyRequest request) {
@@ -244,6 +251,11 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
+        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException(
+                    "Property details cannot be changed while it is pending administrator review");
+        }
+
         property.setPropertyName(request.getPropertyName());
 
         property.setPropertyType(request.getPropertyType());
@@ -286,6 +298,11 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
+        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException(
+                    "A property cannot be deleted while it is pending administrator review");
+        }
+
         propertyRepository.delete(property);
     }
 
@@ -313,6 +330,27 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
+        if (status == PropertyStatus.PENDING_APPROVAL
+                || status == PropertyStatus.APPROVED) {
+            throw new IllegalArgumentException(
+                    "Use the property submission and administrator approval actions to change this status");
+        }
+
+        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException(
+                    "Properties pending administrator review cannot be changed by the owner");
+        }
+        if (property.getStatus() == PropertyStatus.DRAFT
+                && status != PropertyStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "A draft property must be submitted and approved before its status can change");
+        }
+        if (status == PropertyStatus.DRAFT
+                && property.getStatus() != PropertyStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "An approved property cannot be moved back to draft by the owner");
+        }
+
         // Enforce document approval before a property can transition to PUBLISHED or AVAILABLE
         if (status == PropertyStatus.AVAILABLE || status == PropertyStatus.PUBLISHED) {
             propertyDocumentService.validatePropertyPublishEligibility(property);
@@ -324,6 +362,116 @@ private String toPublicImageUrl(String imageUrl) {
                 propertyRepository.save(property);
 
         return convertToResponse(updatedProperty);
+    }
+
+    @Override
+    public PropertyResponse submitPropertyForApproval(Long id) {
+        User owner = getLoggedInUser();
+        validateOwner(owner);
+
+        Property property = propertyRepository
+                .findByPropertyIdAndOwnerForUpdate(id, owner)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found or you do not have permission"));
+
+        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+            return convertToResponse(property);
+        }
+        if (property.getStatus() != PropertyStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "Only draft properties can be submitted for approval");
+        }
+
+        propertyDocumentService.validatePropertySubmissionEligibility(property);
+        List<User> admins = userRepository.findByRoleAndStatus(
+                RoleType.SUPER_ADMIN, UserStatus.ACTIVE);
+        if (admins.isEmpty()) {
+            throw new IllegalStateException(
+                    "No active administrators are available to review property submissions");
+        }
+
+        property.setStatus(PropertyStatus.PENDING_APPROVAL);
+        Property submittedProperty = propertyRepository.save(property);
+        String ownerName = owner.getFirstName() + " " + owner.getLastName();
+        for (User admin : admins) {
+            notificationService.notifyUserOnce(
+                    admin.getId(),
+                    NotificationType.PROPERTY_SUBMITTED,
+                    NotificationPriority.HIGH,
+                    "Property submitted for review",
+                    "Property \"" + property.getPropertyName() + "\" (ID: "
+                            + property.getPropertyId() + ") was submitted by "
+                            + ownerName + " (" + owner.getEmail()
+                            + "). Review its details and uploaded documents.",
+                    property.getPropertyId(),
+                    "PROPERTY",
+                    "property-submitted-" + property.getPropertyId()
+                            + "-admin-" + admin.getId());
+        }
+
+        return convertToResponse(submittedProperty);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PropertyResponse> getPendingApprovalProperties() {
+        requireAdministrator();
+        return propertyRepository.findByStatus(PropertyStatus.PENDING_APPROVAL)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PropertyResponse getPropertyForAdmin(Long id) {
+        requireAdministrator();
+        Property property = propertyRepository.findDetailsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + id));
+        return convertToResponse(property);
+    }
+
+    @Override
+    public PropertyResponse approveProperty(Long id) {
+        requireAdministrator();
+        Property property = propertyRepository.findByPropertyIdForUpdate(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + id));
+
+        if (property.getStatus() == PropertyStatus.APPROVED) {
+            return convertToResponse(property);
+        }
+        if (property.getStatus() != PropertyStatus.PENDING_APPROVAL) {
+            throw new IllegalStateException(
+                    "Only properties pending approval can be approved");
+        }
+
+        propertyDocumentService.validatePropertyPublishEligibility(property);
+        property.setStatus(PropertyStatus.APPROVED);
+        Property approvedProperty = propertyRepository.save(property);
+        notificationService.notifyUserOnce(
+                property.getOwner().getId(),
+                NotificationType.PROPERTY_APPROVED,
+                NotificationPriority.HIGH,
+                "Property approved",
+                "Your property \"" + property.getPropertyName() + "\" (ID: "
+                        + property.getPropertyId()
+                        + ") has been approved. Status: APPROVED.",
+                property.getPropertyId(),
+                "PROPERTY",
+                "property-approved-" + property.getPropertyId());
+
+        return convertToResponse(approvedProperty);
+    }
+
+    private User requireAdministrator() {
+        User user = getLoggedInUser();
+        if (user.getRole() != RoleType.SUPER_ADMIN) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "Only SUPER_ADMIN users can review property submissions");
+        }
+        return user;
     }
 
     private User getLoggedInUser() {

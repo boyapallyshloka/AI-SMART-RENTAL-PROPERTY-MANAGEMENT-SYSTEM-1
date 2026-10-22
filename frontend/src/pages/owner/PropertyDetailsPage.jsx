@@ -6,6 +6,7 @@ import {
   getPropertyById,
   deleteProperty,
   updatePropertyStatus,
+  submitPropertyForApproval,
   removePropertyManager,
   CANONICAL_PROPERTY_STATUSES,
   mapBackendPropertyToUi,
@@ -109,6 +110,7 @@ export default function PropertyDetailsPage() {
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+  const [isSubmittingForApproval, setIsSubmittingForApproval] = useState(false)
   const [publishEligibility, setPublishEligibility] = useState(null)
   const [addressData, setAddressData] = useState(null)
   const [isLoadingAddress, setIsLoadingAddress] = useState(false)
@@ -480,6 +482,29 @@ export default function PropertyDetailsPage() {
     if (!CANONICAL_PROPERTY_STATUSES.includes(newStatus)) {
       alert(`Invalid status: ${newStatus}`)
       return
+    }
+
+    const handleSubmitForApproval = async () => {
+      if (!property?.id || isSubmittingForApproval) return
+      setIsSubmittingForApproval(true)
+      try {
+        const response = await submitPropertyForApproval(property.id)
+        const submitted = response?.data ?? response
+        setProperty((current) => current
+          ? { ...current, status: submitted?.status || 'PENDING_APPROVAL' }
+          : current)
+        setToastMessage('Property submitted for administrator approval.')
+        setTimeout(() => setToastMessage(''), 4000)
+      } catch (err) {
+        console.error(`Failed to submit property ID ${property.id} for approval:`, err)
+        alert(
+          err?.response?.data?.message ||
+            err?.message ||
+            'Could not submit this property. Confirm that the required title deed has been uploaded.'
+        )
+      } finally {
+        setIsSubmittingForApproval(false)
+      }
     }
 
     if ((newStatus === 'AVAILABLE' || newStatus === 'PUBLISHED') && publishEligibility && !publishEligibility.eligible) {
@@ -1478,13 +1503,20 @@ export default function PropertyDetailsPage() {
                     aria-label="Change property status"
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    disabled={isUpdatingStatus}
+                    disabled={isUpdatingStatus || property.status === 'PENDING_APPROVAL'}
                     className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
+                    {property.status && !CANONICAL_PROPERTY_STATUSES.includes(property.status) && (
+                      <option value={property.status} disabled>
+                        {property.status.replace(/_/g, ' ')}
+                      </option>
+                    )}
                     {CANONICAL_PROPERTY_STATUSES.map((st) => {
                       const isPubStatus = st === 'AVAILABLE' || st === 'PUBLISHED'
-                      const isLocked = isPubStatus && publishEligibility && !publishEligibility.eligible
+                      const isLocked =
+                        (isPubStatus && publishEligibility && !publishEligibility.eligible) ||
+                        (st === 'DRAFT' && property.status !== 'DRAFT')
                       return (
                         <option key={st} value={st} disabled={isLocked}>
                           {st === 'UNDER_MAINTENANCE'
@@ -1505,6 +1537,16 @@ export default function PropertyDetailsPage() {
                 <span className="text-xs text-[#5B6875] font-mono">
                   ID: {property.id}
                 </span>
+                {property.status === 'DRAFT' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleSubmitForApproval}
+                    disabled={isSubmittingForApproval}
+                  >
+                    {isSubmittingForApproval ? 'Submitting…' : 'Submit for approval'}
+                  </Button>
+                )}
                 <button
                   type="button"
                   onClick={() => {

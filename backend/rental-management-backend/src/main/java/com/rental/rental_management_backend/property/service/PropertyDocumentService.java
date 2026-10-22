@@ -57,4 +57,6 @@ public interface PropertyDocumentService {
             String ownerEmail);
 
     void validatePropertyPublishEligibility(Property property);
+
+    void validatePropertySubmissionEligibility(Property property);
 }

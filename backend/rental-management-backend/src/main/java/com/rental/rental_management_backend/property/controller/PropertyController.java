@@ -59,6 +59,13 @@ public class PropertyController {
                 .body(response);
     }
 
+    @PostMapping("/{id}/submit-for-approval")
+    public ResponseEntity<PropertyResponse> submitPropertyForApproval(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                propertyService.submitPropertyForApproval(id));
+    }
+
     /*
      * GET LOGGED-IN OWNER'S PROPERTIES OR AVAILABLE PROPERTIES FOR TENANT
      */
@@ -200,5 +207,4 @@ public class PropertyController {
         );
     }
 }
-
 

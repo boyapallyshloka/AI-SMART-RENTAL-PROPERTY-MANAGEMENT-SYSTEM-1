@@ -1,7 +1,7 @@
-
 package com.rental.rental_management_backend.maintenance.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -24,7 +24,6 @@ import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRe
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
-import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
@@ -231,10 +230,6 @@ public class MaintenanceRequestServiceImpl
 
         maintenanceRequest.setPriority(
                 request.getPriority());
-
-        if (request.getPayer() != null) {
-            maintenanceRequest.setPayer(request.getPayer());
-        }
 
         maintenanceRequest.setStatus(
                 MaintenanceStatus.OPEN);
@@ -734,10 +729,6 @@ public class MaintenanceRequestServiceImpl
                     request.getCost());
         }
 
-        if (request.getPayer() != null) {
-            existingRequest.setPayer(request.getPayer());
-        }
-
         // -----------------------------------------------------
         // UPDATE IMAGE
         // -----------------------------------------------------
@@ -888,6 +879,10 @@ public class MaintenanceRequestServiceImpl
         // -----------------------------------------------------
 
         maintenanceRequest.setStatus(newStatus);
+        if (newStatus == MaintenanceStatus.COMPLETED
+                && maintenanceRequest.getCompletedDate() == null) {
+            maintenanceRequest.setCompletedDate(LocalDateTime.now());
+        }
 
         // -----------------------------------------------------
         // SAVE
@@ -949,6 +944,13 @@ public class MaintenanceRequestServiceImpl
 
         ticket.setCost(request.getCost());
         ticket.setCostResponsibility(request.getCostResponsibility());
+        // Older completed tickets may predate completion-date tracking.
+        // Backfill the date when their cost allocation is next saved so
+        // they can be included in the matching reports period.
+        if (ticket.getStatus() == MaintenanceStatus.COMPLETED
+                && ticket.getCompletedDate() == null) {
+            ticket.setCompletedDate(LocalDateTime.now());
+        }
         return mapToResponse(maintenanceRequestRepository.save(ticket));
     }
 
