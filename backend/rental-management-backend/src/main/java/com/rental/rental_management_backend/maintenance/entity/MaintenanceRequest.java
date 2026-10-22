@@ -7,6 +7,7 @@ import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategor
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
+import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
@@ -155,10 +156,16 @@ public class MaintenanceRequest {
     )
     private BigDecimal cost;
 
+<<<<<<< HEAD
     // Nullable for compatibility with existing maintenance records.
     @Enumerated(EnumType.STRING)
     @Column(name = "payer", length = 20)
     private MaintenancePayer payer = MaintenancePayer.OWNER_PAID;
+=======
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cost_responsibility", length = 20)
+    private MaintenanceCostResponsibility costResponsibility;
+>>>>>>> origin/frontend/dev1
 
     // =========================================================
     // CONSTRUCTOR
@@ -289,6 +296,7 @@ public class MaintenanceRequest {
         this.cost = cost;
     }
 
+<<<<<<< HEAD
     public MaintenancePayer getPayer() {
         return payer;
     }
@@ -297,3 +305,13 @@ public class MaintenanceRequest {
         this.payer = payer;
     }
 }
+=======
+    public MaintenanceCostResponsibility getCostResponsibility() {
+        return costResponsibility;
+    }
+
+    public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
+        this.costResponsibility = costResponsibility;
+    }
+}
+>>>>>>> origin/frontend/dev1

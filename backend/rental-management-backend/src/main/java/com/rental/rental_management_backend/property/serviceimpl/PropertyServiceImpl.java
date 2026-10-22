@@ -36,19 +36,22 @@ public class PropertyServiceImpl implements PropertyService {
 	private final PropertyManagerRepository propertyManagerRepository;
 	private final PropertyNotificationDispatcher notificationDispatcher;
 	private final S3Service s3Service;
+	private final com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService;
 
 	public PropertyServiceImpl(
 	        PropertyRepository propertyRepository,
 	        UserRepository userRepository,
 	        PropertyManagerRepository propertyManagerRepository,
 	        PropertyNotificationDispatcher notificationDispatcher,
-	        S3Service s3Service) {
+	        S3Service s3Service,
+	        com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService) {
 
 	    this.propertyRepository = propertyRepository;
 	    this.userRepository = userRepository;
 	    this.propertyManagerRepository = propertyManagerRepository;
 	    this.notificationDispatcher = notificationDispatcher;
 	    this.s3Service = s3Service;
+	    this.propertyDocumentService = propertyDocumentService;
 	}
 	@Override
 	public PropertyResponse createProperty(PropertyRequest request) {
@@ -112,7 +115,7 @@ public class PropertyServiceImpl implements PropertyService {
         }
 
         if (user.getRole() == RoleType.TENANT) {
-            return propertyRepository.findByStatus(PropertyStatus.AVAILABLE)
+            return propertyRepository.findByStatusIn(List.of(PropertyStatus.AVAILABLE, PropertyStatus.PUBLISHED))
                     .stream()
                     .map(this::convertToResponse)
                     .toList();
@@ -214,7 +217,7 @@ private String toPublicImageUrl(String imageUrl) {
                                                 + propertyId
                                 ));
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE) {
+        if (property.getStatus() != PropertyStatus.AVAILABLE && property.getStatus() != PropertyStatus.PUBLISHED) {
 
             throw new RuntimeException(
                     "Property is not available for tenants"
@@ -309,6 +312,11 @@ private String toPublicImageUrl(String imageUrl) {
                                 new ResourceNotFoundException(
                                         "Property not found or you do not have permission"
                                 ));
+
+        // Enforce document approval before a property can transition to PUBLISHED or AVAILABLE
+        if (status == PropertyStatus.AVAILABLE || status == PropertyStatus.PUBLISHED) {
+            propertyDocumentService.validatePropertyPublishEligibility(property);
+        }
 
         property.setStatus(status);
 

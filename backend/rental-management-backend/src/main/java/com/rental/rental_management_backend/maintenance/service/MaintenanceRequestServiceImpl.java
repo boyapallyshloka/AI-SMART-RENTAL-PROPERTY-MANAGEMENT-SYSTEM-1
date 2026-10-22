@@ -21,10 +21,12 @@ import com.rental.rental_management_backend.maintenance.dto.M5PredictionRequest;
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
+import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
 
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
@@ -910,6 +912,46 @@ public class MaintenanceRequestServiceImpl
         return mapToResponse(updatedRequest);
     }
 
+    @Override
+    public MaintenanceRequestResponse updateCost(
+            Long ticketId,
+            MaintenanceCostUpdateRequest request) {
+
+        if (request == null || request.getCost() == null
+                || request.getCostResponsibility() == null) {
+            throw new IllegalArgumentException(
+                    "Repair amount and payer responsibility are required");
+        }
+        if (request.getCost().signum() < 0) {
+            throw new IllegalArgumentException("Repair amount cannot be negative");
+        }
+
+        MaintenanceRequest ticket = maintenanceRequestRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Maintenance request not found with ID: " + ticketId));
+        User user = getLoggedInUser();
+        RoleType role = user.getRole();
+
+        if (role == RoleType.PROPERTY_OWNER) {
+            if (ticket.getProperty() == null || ticket.getProperty().getOwner() == null
+                    || !user.getId().equals(ticket.getProperty().getOwner().getId())) {
+                throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+            }
+        } else if (role == RoleType.PROPERTY_MANAGER) {
+            if (ticket.getProperty() == null || ticket.getProperty().getPropertyManager() == null
+                    || ticket.getProperty().getPropertyManager().getUser() == null
+                    || !user.getId().equals(ticket.getProperty().getPropertyManager().getUser().getId())) {
+                throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+            }
+        } else if (role != RoleType.SUPER_ADMIN) {
+            throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+        }
+
+        ticket.setCost(request.getCost());
+        ticket.setCostResponsibility(request.getCostResponsibility());
+        return mapToResponse(maintenanceRequestRepository.save(ticket));
+    }
+
     // =========================================================
     // DELETE MAINTENANCE REQUEST
     // =========================================================
@@ -1446,10 +1488,8 @@ public class MaintenanceRequestServiceImpl
         response.setCost(
                 request.getCost());
 
-        response.setPayer(
-                request.getPayer() == null
-                        ? MaintenancePayer.OWNER_PAID
-                        : request.getPayer());
+        response.setCostResponsibility(
+                request.getCostResponsibility());
 
         return response;
     }

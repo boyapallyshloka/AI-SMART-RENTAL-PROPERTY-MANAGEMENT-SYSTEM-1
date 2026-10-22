@@ -33,6 +33,7 @@ import {
   deleteAmenity,
 } from '../../api/amenityApi'
 import { getBuildingsByProperty, deleteBuilding } from '../../api/buildingApi'
+import PropertyDocumentsSection from '../../components/properties/PropertyDocumentsSection'
 import { formatCurrency } from '../../utils/currency'
 import DeleteConfirmModal from '../../components/common/DeleteConfirmModal'
 import AssignPropertyManagerModal from '../../components/properties/AssignPropertyManagerModal'
@@ -108,6 +109,7 @@ export default function PropertyDetailsPage() {
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+  const [publishEligibility, setPublishEligibility] = useState(null)
   const [addressData, setAddressData] = useState(null)
   const [isLoadingAddress, setIsLoadingAddress] = useState(false)
   const [addressError, setAddressError] = useState(null)
@@ -480,6 +482,14 @@ export default function PropertyDetailsPage() {
       return
     }
 
+    if ((newStatus === 'AVAILABLE' || newStatus === 'PUBLISHED') && publishEligibility && !publishEligibility.eligible) {
+      const reasonList = publishEligibility.reasons?.length
+        ? '\n• ' + publishEligibility.reasons.join('\n• ')
+        : '\n• Proof of Ownership (Title Deed) must be approved by Super Admin.'
+      alert(`Cannot publish property to ${newStatus.replace('_', ' ')}:${reasonList}\n\nPlease upload required documents in the Property Documents section below.`)
+      return
+    }
+
     setIsUpdatingStatus(true)
     try {
       await updatePropertyStatus(property.id, newStatus)
@@ -491,7 +501,7 @@ export default function PropertyDetailsPage() {
       const errorMsg =
         err?.response?.data?.message ||
         err?.message ||
-        'Failed to update property status. Please try again.'
+        'Failed to update property status. Please check document verification requirements.'
       alert(`Error: ${errorMsg}`)
     } finally {
       setIsUpdatingStatus(false)
@@ -1472,14 +1482,24 @@ export default function PropertyDetailsPage() {
                     className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
-                    {CANONICAL_PROPERTY_STATUSES.map((st) => (
-                      <option key={st} value={st}>
-                        {st === 'UNDER_MAINTENANCE'
-                          ? 'Maintenance'
-                          : st.charAt(0) + st.slice(1).toLowerCase()}
-                      </option>
-                    ))}
+                    {CANONICAL_PROPERTY_STATUSES.map((st) => {
+                      const isPubStatus = st === 'AVAILABLE' || st === 'PUBLISHED'
+                      const isLocked = isPubStatus && publishEligibility && !publishEligibility.eligible
+                      return (
+                        <option key={st} value={st} disabled={isLocked}>
+                          {st === 'UNDER_MAINTENANCE'
+                            ? 'Maintenance'
+                            : st.charAt(0) + st.slice(1).toLowerCase()}
+                          {isLocked ? ' (Approval Required)' : ''}
+                        </option>
+                      )
+                    })}
                   </select>
+                  {publishEligibility && !publishEligibility.eligible && (
+                    <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
+                      Publishing Locked
+                    </span>
+                  )}
                   {isUpdatingStatus && <Loader size="xs" />}
                 </div>
                 <span className="text-xs text-[#5B6875] font-mono">
@@ -2787,6 +2807,12 @@ export default function PropertyDetailsPage() {
                 </div>
               )}
             </div>
+            {/* Property Documents & Admin Verification Section */}
+            <PropertyDocumentsSection
+              propertyId={property.id}
+              propertyStatus={property.status}
+              onEligibilityChange={setPublishEligibility}
+            />
           </div>
 
           {/* Right Sidebar: Occupancy & Financials & Actions */}

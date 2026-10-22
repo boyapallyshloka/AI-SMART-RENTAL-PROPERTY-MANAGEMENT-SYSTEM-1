@@ -7,6 +7,7 @@ import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategor
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
+import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 
 public class MaintenanceRequestResponse {
 
@@ -34,7 +35,11 @@ public class MaintenanceRequestResponse {
 
     private BigDecimal cost;
 
+<<<<<<< HEAD
     private MaintenancePayer payer;
+=======
+    private MaintenanceCostResponsibility costResponsibility;
+>>>>>>> origin/frontend/dev1
 
     public MaintenanceRequestResponse() {
     }
@@ -135,6 +140,7 @@ public class MaintenanceRequestResponse {
         this.cost = cost;
     }
 
+<<<<<<< HEAD
     public MaintenancePayer getPayer() {
         return payer;
     }
@@ -143,3 +149,13 @@ public class MaintenanceRequestResponse {
         this.payer = payer;
     }
 }
+=======
+    public MaintenanceCostResponsibility getCostResponsibility() {
+        return costResponsibility;
+    }
+
+    public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
+        this.costResponsibility = costResponsibility;
+    }
+}
+>>>>>>> origin/frontend/dev1

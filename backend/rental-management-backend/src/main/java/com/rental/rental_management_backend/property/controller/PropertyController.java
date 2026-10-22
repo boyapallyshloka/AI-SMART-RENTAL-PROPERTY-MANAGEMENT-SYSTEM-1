@@ -31,15 +31,17 @@ import jakarta.validation.Valid;
 public class PropertyController {
 
     private final PropertyService propertyService;
-
     private final PropertyDetailsService propertyDetailsService;
+    private final com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService;
 
     public PropertyController(
             PropertyService propertyService,
-            PropertyDetailsService propertyDetailsService) {
+            PropertyDetailsService propertyDetailsService,
+            com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService) {
 
         this.propertyService = propertyService;
         this.propertyDetailsService = propertyDetailsService;
+        this.propertyDocumentService = propertyDocumentService;
     }
 
     /*
@@ -146,6 +148,19 @@ public class PropertyController {
                         id,
                         status
                 )
+        );
+    }
+
+    /*
+     * GET PUBLICATION ELIGIBILITY FOR A PROPERTY
+     */
+    @GetMapping("/{id}/publish-eligibility")
+    public ResponseEntity<com.rental.rental_management_backend.property.dto.PropertyPublishEligibilityResponse> getPublishEligibility(
+            @PathVariable Long id,
+            org.springframework.security.core.Authentication authentication) {
+
+        return ResponseEntity.ok(
+                propertyDocumentService.getPublishEligibility(id, authentication.getName())
         );
     }
 
