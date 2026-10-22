@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategory;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
+import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 
 public class MaintenanceRequestResponse {
 
@@ -32,6 +33,8 @@ public class MaintenanceRequestResponse {
     private LocalDateTime completedDate;
 
     private BigDecimal cost;
+
+    private MaintenanceCostResponsibility costResponsibility;
 
     public MaintenanceRequestResponse() {
     }
@@ -130,5 +133,13 @@ public class MaintenanceRequestResponse {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public MaintenanceCostResponsibility getCostResponsibility() {
+        return costResponsibility;
+    }
+
+    public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
+        this.costResponsibility = costResponsibility;
     }
 }

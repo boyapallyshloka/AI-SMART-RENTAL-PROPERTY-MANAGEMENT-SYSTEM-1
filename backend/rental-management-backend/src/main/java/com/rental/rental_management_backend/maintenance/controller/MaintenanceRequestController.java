@@ -25,6 +25,8 @@ import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
+import jakarta.validation.Valid;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategory;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.service.MaintenanceRequestService;
@@ -258,6 +260,15 @@ public class MaintenanceRequestController {
                         request
                 )
         );
+    }
+
+    @PatchMapping("/{ticketId}/cost")
+    @PreAuthorize("hasAnyRole('PROPERTY_MANAGER','PROPERTY_OWNER','SUPER_ADMIN')")
+    public ResponseEntity<MaintenanceRequestResponse> updateCost(
+            @PathVariable Long ticketId,
+            @Valid @RequestBody MaintenanceCostUpdateRequest request) {
+        return ResponseEntity.ok(
+                maintenanceRequestService.updateCost(ticketId, request));
     }
 
     // =========================================================

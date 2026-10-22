@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
 
 public interface MaintenanceRequestService {
@@ -66,6 +67,10 @@ public interface MaintenanceRequestService {
     MaintenanceRequestResponse updateStatus(
             Long ticketId,
             MaintenanceStatusUpdateRequest request);
+
+    MaintenanceRequestResponse updateCost(
+            Long ticketId,
+            MaintenanceCostUpdateRequest request);
 
 
     /*
