@@ -164,6 +164,15 @@ export const updateMaintenanceStatus = async (ticketId, status) => {
 }
 
 /**
+ * PATCH /api/maintenance/{ticketId}/cost
+ * Save the repair amount and who is responsible for it.
+ * Body: { cost: number, costResponsibility: 'OWNER_PAID' | 'TENANT_PAID' }
+ */
+export const updateMaintenanceCost = async (ticketId, costData) => {
+  return axiosClient.patch(`/maintenance/${ticketId}/cost`, costData)
+}
+
+/**
  * GET /api/maintenance-workers
  * Fetch all registered maintenance technicians
  */
