@@ -4,6 +4,7 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 import {
   getMaintenanceRequestById,
   updateMaintenanceStatus,
+  updateMaintenanceCost,
   getMaintenanceWorkers,
   getMaintenanceAssignments,
   createMaintenanceAssignment,
@@ -96,6 +97,10 @@ export default function MaintenanceDetailsPage() {
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [statusUpdating, setStatusUpdating] = useState(false)
+  const [repairCost, setRepairCost] = useState('')
+  const [costResponsibility, setCostResponsibility] = useState('OWNER_PAID')
+  const [costSaving, setCostSaving] = useState(false)
+  const [costError, setCostError] = useState('')
 
   // Human-readable Property, Unit, and Tenant display state
   const [propertyName, setPropertyName] = useState('')
@@ -329,6 +334,8 @@ export default function MaintenanceDetailsPage() {
     try {
       const data = await getMaintenanceRequestById(id)
       setRequest(data)
+      setRepairCost(data?.cost == null ? '' : String(data.cost))
+      setCostResponsibility(data?.costResponsibility || 'OWNER_PAID')
 
       // Fetch human-readable property, unit, and tenant names
       loadRelatedEntities(data)
@@ -372,6 +379,31 @@ export default function MaintenanceDetailsPage() {
       setErrorMessage(msg)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSaveCost = async (event) => {
+    event.preventDefault()
+    setCostError('')
+    setSuccessMessage('')
+    const amount = Number(repairCost)
+    if (repairCost === '' || !Number.isFinite(amount) || amount < 0) {
+      setCostError('Enter a valid repair amount of zero or more.')
+      return
+    }
+    setCostSaving(true)
+    try {
+      const response = await updateMaintenanceCost(id, {
+        cost: amount,
+        costResponsibility,
+      })
+      const updated = response?.data || response
+      setRequest((previous) => ({ ...previous, ...updated }))
+      setSuccessMessage('Repair amount and payer saved.')
+    } catch (error) {
+      setCostError(error?.response?.data?.message || error?.message || 'Could not save the repair cost.')
+    } finally {
+      setCostSaving(false)
     }
   }
 
@@ -990,6 +1022,30 @@ export default function MaintenanceDetailsPage() {
                     </div>
                   )}
 
+                  <form onSubmit={handleSaveCost} className="pt-3 border-t border-[#D9E0E6] space-y-3">
+                    <div>
+                      <span className="text-sm font-semibold text-[#243447] block">Repair Cost & Responsibility</span>
+                      <span className="text-xs text-[#5B6875]">Saved owner-paid costs are included in Reports when the ticket is completed and its completion date is in the selected report period.</span>
+                    </div>
+                    {costError && <p role="alert" className="text-xs text-[#8A2E2C]">{costError}</p>}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <label className="space-y-1">
+                        <span className="text-xs font-medium text-[#5B6875]">Who pays?</span>
+                        <select value={costResponsibility} onChange={(event) => setCostResponsibility(event.target.value)} className="w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447]">
+                          <option value="OWNER_PAID">Owner pays</option>
+                          <option value="TENANT_PAID">Tenant pays</option>
+                        </select>
+                      </label>
+                      <label className="space-y-1">
+                        <span className="text-xs font-medium text-[#5B6875]">Repair amount (₹)</span>
+                        <input type="number" min="0" step="0.01" value={repairCost} onChange={(event) => setRepairCost(event.target.value)} className="w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447]" placeholder="Enter amount" />
+                      </label>
+                    </div>
+                    <Button type="submit" size="sm" disabled={costSaving}>
+                      {costSaving ? 'Saving…' : 'Save Cost & Responsibility'}
+                    </Button>
+                  </form>
+
                   {/* Completed / Maintenance History metadata */}
                   {isResolvedOrClosed && (
                     <div className="pt-3 border-t border-[#D9E0E6] space-y-2">
@@ -1008,8 +1064,8 @@ export default function MaintenanceDetailsPage() {
                         </div>
                         {request.cost != null && (
                           <div className="flex justify-between">
-                            <span>Actual Repair Cost:</span>
-                            <strong className="text-sm font-bold">₹{request.cost}</strong>
+                            <span>Actual Repair Cost ({request.costResponsibility === 'TENANT_PAID' ? 'Tenant pays' : 'Owner pays'}):</span>
+                            <strong className="text-sm font-bold">₹{Number(request.cost).toLocaleString('en-IN')}</strong>
                           </div>
                         )}
                       </div>

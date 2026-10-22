@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import DashboardLayout from '../../layouts/DashboardLayout'
-import AdminApiUnavailableCard from '../../components/common/AdminApiUnavailableCard'
 import { getUsersByRoleAndStatus, updateUserStatus } from '../../api/userApi'
+import PropertyDocumentReviewPage from './PropertyDocumentReviewPage'
 import { Button, EmptyState, Loader, StatusBadge } from '../../components/ui'
 import {
   AlertCircle,
   Building2,
   CheckCircle2,
-  FileCheck2,
   RefreshCw,
   ShieldCheck,
   XCircle,
@@ -20,45 +19,6 @@ const unwrapList = (response) => {
   if (Array.isArray(value?.users)) return value.users
   return []
 }
-
-const OWNER_DOCUMENT_ENDPOINTS = [
-  {
-    method: 'GET',
-    path: '/api/owner-documents/owner/{ownerId}',
-    auth: 'ROLE_SUPER_ADMIN',
-    description:
-      'Retrieve all uploaded identity records, property ownership deeds, tax certificates, and title proofs for a specific property owner.',
-  },
-  {
-    method: 'POST',
-    path: '/api/owner-documents',
-    auth: 'ROLE_PROPERTY_OWNER',
-    description:
-      'Multipart endpoint allowing property owners to upload official documents (GOVERNMENT_ID, PROPERTY_DEED, TAX_PROOF, TITLE_CERTIFICATE).',
-    body: 'multipart/form-data: { file: File, documentType: string }',
-  },
-  {
-    method: 'GET',
-    path: '/api/owner-documents/{documentId}/download',
-    auth: 'ROLE_SUPER_ADMIN',
-    description:
-      'Securely download or preview an owner verification document artifact.',
-  },
-  {
-    method: 'PUT',
-    path: '/api/owner-documents/{documentId}/verify',
-    auth: 'ROLE_SUPER_ADMIN',
-    description:
-      'Record an administrative verification decision (VERIFIED, REJECTED, RESUBMISSION_REQUIRED) with reviewer notes.',
-    body: '{\n  "status": "VERIFIED",\n  "remarks": "Title deed verified against municipal registry."\n}',
-  },
-]
-
-const OWNER_DOCUMENT_REQUIREMENTS = [
-  'The current Spring Boot backend contains TenantDocumentController for resident KYC, but has no OwnerDocument entity, repository, or controller.',
-  'Create owner_documents table (id, owner_id, document_type, file_path, file_name, file_size, verification_status, reviewer_notes, created_at, updated_at).',
-  'Implement OwnerDocumentService with secure local or S3 document storage, MIME-type validation, and role-based access checks.',
-]
 
 export default function OwnerVerificationPage() {
   const [owners, setOwners] = useState([])
@@ -118,7 +78,7 @@ export default function OwnerVerificationPage() {
               Property Owner Verification & Approvals
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-[#5B6875]">
-              Review live pending owner registrations via real backend user status APIs, and inspect document verification API requirements.
+              Review owner account registrations and property documents awaiting verification.
             </p>
           </div>
           <Button
@@ -262,25 +222,17 @@ export default function OwnerVerificationPage() {
           )}
         </div>
 
-        {/* Section 2: Owner Document Verification (Unavailable State & Required Endpoints) */}
+        {/* Property ownership documents are reviewed here; owners upload them from their property details page. */}
         <div className="space-y-4 pt-4 border-t border-[#D9E0E6]">
           <div>
             <h2 className="text-base font-bold text-[#243447]">
-              Owner Document Review & KYC Verification
+              Property Document Verification
             </h2>
             <p className="text-xs text-[#5B6875]">
-              Inspection of government IDs, property ownership deeds, and tax registration documents.
+              Review deeds and supporting property records uploaded by owners before publishing.
             </p>
           </div>
-
-          <AdminApiUnavailableCard
-            title="Owner Document Verification API Unavailable"
-            subtitle="Owner Document Subsystem Not Implemented in Backend"
-            icon={<FileCheck2 className="h-5 w-5 text-[#8A5B16]" />}
-            description="While account status management is active above (using authenticated user endpoints), the backend does not possess an owner document storage and review subsystem. Unlike tenant documents, there are currently no endpoints for owners to submit deeds or for administrators to inspect and verify uploaded ownership proofs. No mock PDF previews or dummy verification checkboxes are displayed."
-            endpoints={OWNER_DOCUMENT_ENDPOINTS}
-            backendRequirements={OWNER_DOCUMENT_REQUIREMENTS}
-          />
+          <PropertyDocumentReviewPage />
         </div>
       </div>
     </DashboardLayout>

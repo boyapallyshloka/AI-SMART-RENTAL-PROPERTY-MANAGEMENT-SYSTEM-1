@@ -602,6 +602,14 @@ export default function TenantMaintenancePage() {
                   </div>
                 )}
 
+                {selectedTicket.costResponsibility && selectedTicket.cost != null && (
+                  <div className="p-3 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] text-xs space-y-1 text-[#243447]">
+                    <div className="font-bold">Maintenance cost allocation</div>
+                    <p>{selectedTicket.costResponsibility === 'TENANT_PAID' ? 'Tenant responsible' : 'Owner responsible'}</p>
+                    <p>Repair amount: ₹{Number(selectedTicket.cost).toLocaleString('en-IN')}</p>
+                  </div>
+                )}
+
                 {selectedTicket.completedDate && (
                   <div className="p-3 rounded-xl bg-[#EDF7EE] border border-[#C6DEC8] text-xs space-y-1 text-[#2A583B]">
                     <div className="flex items-center gap-1.5 font-bold">
@@ -611,8 +619,8 @@ export default function TenantMaintenancePage() {
                     <p>
                       Completed on: {new Date(selectedTicket.completedDate).toLocaleString()}
                     </p>
-                    {selectedTicket.cost && (
-                      <p>Total Maintenance Cost: ₹{selectedTicket.cost}</p>
+                    {selectedTicket.cost != null && (
+                      <p>Total Repair Cost: ₹{Number(selectedTicket.cost).toLocaleString('en-IN')}</p>
                     )}
                   </div>
                 )}

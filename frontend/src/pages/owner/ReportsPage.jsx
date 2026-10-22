@@ -21,8 +21,9 @@ export default function ReportsPage({ role = ROLES.PROPERTY_OWNER }) {
             Live financial and occupancy information returned by the SmartEstate backend.
           </p>
         </header>
-        <ReportsAnalyticsContent scopeLabel={isAdmin ? 'Platform' : 'Portfolio'} />
+        <ReportsAnalyticsContent scopeLabel={isAdmin ? 'Platform' : 'Portfolio'} role={role} />
       </div>
     </DashboardLayout>
   )
 }
+

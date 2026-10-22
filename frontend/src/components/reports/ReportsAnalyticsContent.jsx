@@ -18,7 +18,9 @@ import {
   YAxis,
 } from 'recharts'
 import { getReportsAnalytics } from '../../api/reportApi'
+import { isPropertyOwner } from '../../utils/roles'
 import { Button, EmptyState, Loader } from '../ui'
+import OwnerExpensePanel from './OwnerExpensePanel'
 
 const localDateValue = (date) => {
   const year = date.getFullYear()
@@ -83,7 +85,7 @@ const metricCards = (summary) => [
   { label: 'Maintenance Requests', value: summary?.maintenanceRequests, icon: Wrench, format: (value) => numberValue(value)?.toLocaleString('en-IN') ?? '—' },
 ]
 
-export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio' }) {
+export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role }) {
   const initialRange = makeCurrentMonthRange()
   const [startDate, setStartDate] = useState(initialRange.startDate)
   const [endDate, setEndDate] = useState(initialRange.endDate)
@@ -199,6 +201,11 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio' }) {
         </div>
         {rangeError && <p role="alert" className="text-xs text-[#B94A48]">{rangeError}</p>}
       </form>
+
+      {/* Expense entry panel — visible only to Property Owners */}
+      {isPropertyOwner(role) && (
+        <OwnerExpensePanel onExpenseSaved={refreshReports} />
+      )}
 
       {error && (
         <div role="alert" className="flex items-center justify-between gap-3 rounded-md border border-[#F4B4B4] bg-[#FDF2F2] p-3 text-sm text-[#8A2E2C]">
