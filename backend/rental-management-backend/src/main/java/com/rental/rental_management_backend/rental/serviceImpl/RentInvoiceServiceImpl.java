@@ -16,6 +16,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
+import com.rental.rental_management_backend.User.exception.ResourceNotFoundException;
 import com.rental.rental_management_backend.User.serviceImpl.UserAuthEmailDispatcher;
 import com.rental.rental_management_backend.email.EmailService;
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
@@ -496,7 +497,7 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                         throw new RuntimeException(
                                 "Logged-in user not found");
                     }
-                    throw new RuntimeException(
+                    throw new ResourceNotFoundException(
                             "Tenant profile not found for logged-in user");
                 });
 

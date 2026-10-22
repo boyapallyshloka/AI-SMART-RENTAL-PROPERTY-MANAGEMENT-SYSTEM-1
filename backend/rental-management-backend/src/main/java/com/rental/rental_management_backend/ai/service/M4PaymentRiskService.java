@@ -10,8 +10,7 @@ import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.ai.client.M4PaymentRiskClient;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskRequest;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskResponse;
-import com.rental.rental_management_backend.payment.service.PaymentService;
-import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
+import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
 
 @Service
 public class M4PaymentRiskService {
@@ -20,11 +19,9 @@ public class M4PaymentRiskService {
 
     private final M4PaymentRiskClient paymentRiskClient;
 
-    private final PaymentService paymentService;
-
     private final UserRepository userRepository;
 
-    private final RentInvoiceRepository rentInvoiceRepository;
+    private final RentalApplicationRepository rentalApplicationRepository;
 
     public M4PaymentRiskService(
 
@@ -32,11 +29,9 @@ public class M4PaymentRiskService {
 
             M4PaymentRiskClient paymentRiskClient,
 
-            PaymentService paymentService,
-
             UserRepository userRepository,
 
-            RentInvoiceRepository rentInvoiceRepository) {
+            RentalApplicationRepository rentalApplicationRepository) {
 
         this.aggregationService =
                 aggregationService;
@@ -44,14 +39,11 @@ public class M4PaymentRiskService {
         this.paymentRiskClient =
                 paymentRiskClient;
 
-        this.paymentService =
-                paymentService;
-
         this.userRepository =
                 userRepository;
 
-        this.rentInvoiceRepository =
-                rentInvoiceRepository;
+        this.rentalApplicationRepository =
+                rentalApplicationRepository;
     }
 
     public M4PaymentRiskResponse predictPaymentRisk(
@@ -76,24 +68,16 @@ public class M4PaymentRiskService {
                 .orElseThrow(() -> new AccessDeniedException(
                         "You do not have permission to view this payment-risk prediction"));
 
-        /*
-         * Preserve the existing payment-access validation, then separately
-         * verify invoice history so authorization does not depend on payments.
-         */
-        paymentService.getPaymentsByTenant(
-                tenantId,
-                email);
-
         boolean authorized = switch (user.getRole()) {
             case SUPER_ADMIN -> true;
             case PROPERTY_OWNER ->
-                    rentInvoiceRepository
-                            .existsPaymentRiskInvoiceForTenantAndOwner(
+                    rentalApplicationRepository
+                            .existsPaymentRiskApplicationForTenantAndOwner(
                                     tenantId,
                                     user.getId());
             case PROPERTY_MANAGER ->
-                    rentInvoiceRepository
-                            .existsPaymentRiskInvoiceForTenantAndManager(
+                    rentalApplicationRepository
+                            .existsPaymentRiskApplicationForTenantAndManager(
                                     tenantId,
                                     user.getId());
             case TENANT -> false;

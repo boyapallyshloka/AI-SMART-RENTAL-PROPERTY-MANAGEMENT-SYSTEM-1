@@ -97,6 +97,44 @@ public interface RentalApplicationRepository
                         @Param("propertyId") Long propertyId,
                         @Param("status") RentalApplicationStatus status);
 
+    @Query("""
+            SELECT CASE WHEN COUNT(application) > 0 THEN true ELSE false END
+            FROM RentalApplication application
+            LEFT JOIN application.property directProperty
+            LEFT JOIN application.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE application.tenant.tenantId = :tenantId
+              AND (
+                  directProperty.owner.id = :ownerId
+                  OR unitProperty.owner.id = :ownerId
+              )
+            """)
+    boolean existsPaymentRiskApplicationForTenantAndOwner(
+            @Param("tenantId") Long tenantId,
+            @Param("ownerId") Long ownerId);
+
+    @Query("""
+            SELECT CASE WHEN COUNT(application) > 0 THEN true ELSE false END
+            FROM RentalApplication application
+            LEFT JOIN application.property directProperty
+            LEFT JOIN directProperty.propertyManager directManager
+            LEFT JOIN application.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            LEFT JOIN unitProperty.propertyManager unitManager
+            WHERE application.tenant.tenantId = :tenantId
+              AND (
+                  directManager.user.id = :managerUserId
+                  OR unitManager.user.id = :managerUserId
+              )
+            """)
+    boolean existsPaymentRiskApplicationForTenantAndManager(
+            @Param("tenantId") Long tenantId,
+            @Param("managerUserId") Long managerUserId);
+
     /*
      * Get all rental applications belonging to a property.
      *
