@@ -48,6 +48,70 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
     List<RentInvoice> findByTenantId(Long tenantId);
 
     @Query("""
+            SELECT CASE WHEN COUNT(invoice) > 0 THEN true ELSE false END
+            FROM RentInvoice invoice
+            JOIN invoice.rentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE invoice.tenantId = :tenantId
+              AND agreement.tenant.tenantId = :tenantId
+              AND (
+                  (
+                      directProperty.propertyType IN (
+                          com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                          com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                      )
+                      AND directProperty.owner.id = :ownerId
+                  )
+                  OR
+                  (
+                      unitProperty.propertyType =
+                          com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
+                      AND unitProperty.owner.id = :ownerId
+                  )
+              )
+            """)
+    boolean existsPaymentRiskInvoiceForTenantAndOwner(
+            @Param("tenantId") Long tenantId,
+            @Param("ownerId") Long ownerId);
+
+    @Query("""
+            SELECT CASE WHEN COUNT(invoice) > 0 THEN true ELSE false END
+            FROM RentInvoice invoice
+            JOIN invoice.rentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN directProperty.propertyManager directManager
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            LEFT JOIN unitProperty.propertyManager unitManager
+            WHERE invoice.tenantId = :tenantId
+              AND agreement.tenant.tenantId = :tenantId
+              AND (
+                  (
+                      directProperty.propertyType IN (
+                          com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                          com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                      )
+                      AND directManager.user.id = :managerUserId
+                  )
+                  OR
+                  (
+                      unitProperty.propertyType =
+                          com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
+                      AND unitManager.user.id = :managerUserId
+                  )
+              )
+            """)
+    boolean existsPaymentRiskInvoiceForTenantAndManager(
+            @Param("tenantId") Long tenantId,
+            @Param("managerUserId") Long managerUserId);
+
+    @Query("""
             SELECT tenant.tenantId
             FROM Tenant tenant
             WHERE tenant.user.email = :email

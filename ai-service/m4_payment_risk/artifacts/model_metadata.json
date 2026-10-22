@@ -3,7 +3,7 @@
     "model": "Logistic Regression",
     "model_artifact": "model_pipeline.joblib",
     "model_version": "M4-v1.0",
-    "training_date": "2026-09-11T14:20:31",
+    "training_date": "2026-10-16T14:46:10",
     "dataset": "M4_Payment_Risk_Engineered.csv",
     "target": "risk_label",
     "features": [
@@ -38,20 +38,20 @@
     "split_strategy": "chronological",
     "selection_metric": "f1",
     "validation_metrics": {
-        "accuracy": 0.5017126737860165,
-        "precision": 0.4044598231449443,
-        "recall": 0.5323886639676113,
-        "f1": 0.45968975311339305,
-        "roc_auc": 0.5088095986792972,
-        "pr_auc": 0.40925172290078593
+        "accuracy": 0.7251621271076524,
+        "precision": 0.5794871794871795,
+        "recall": 0.6559597523219814,
+        "f1": 0.6153566890542749,
+        "roc_auc": 0.7818433675706559,
+        "pr_auc": 0.684718667703072
     },
     "test_metrics": {
-        "accuracy": 0.48855258051998446,
-        "precision": 0.39409042363830543,
-        "recall": 0.5423811856932876,
-        "f1": 0.45649484536082474,
-        "roc_auc": 0.5013360072890581,
-        "pr_auc": 0.39700872158699885
+        "accuracy": 0.7491569390402075,
+        "precision": 0.6126938333934367,
+        "recall": 0.6639312231340367,
+        "f1": 0.6372843210802701,
+        "roc_auc": 0.8051976082374805,
+        "pr_auc": 0.7041047538056163
     },
     "preprocessing": [
         "median imputation",

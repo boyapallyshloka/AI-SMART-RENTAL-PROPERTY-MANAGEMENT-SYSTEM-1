@@ -1,6 +1,7 @@
 package com.rental.rental_management_backend.ai.service.impl;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
@@ -11,8 +12,9 @@ import com.rental.rental_management_backend.ai.dto.RentalDemandPreviewRequestDTO
 import com.rental.rental_management_backend.ai.dto.RentalDemandRequestDTO;
 import com.rental.rental_management_backend.ai.dto.RentalDemandResponseDTO;
 import com.rental.rental_management_backend.ai.service.RentalDemandService;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
-import com.rental.rental_management_backend.property.repository.PropertyAddressRepository;
+import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
 import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
@@ -22,7 +24,7 @@ public class RentalDemandServiceImpl implements RentalDemandService {
 
     private final UnitRepository unitRepository;
 
-    private final PropertyAddressRepository propertyAddressRepository;
+    private final PropertyRepository propertyRepository;
 
     private final RentalApplicationRepository rentalApplicationRepository;
 
@@ -32,14 +34,14 @@ public class RentalDemandServiceImpl implements RentalDemandService {
 
     public RentalDemandServiceImpl(
             UnitRepository unitRepository,
-            PropertyAddressRepository propertyAddressRepository,
+            PropertyRepository propertyRepository,
             RentalApplicationRepository rentalApplicationRepository,
             RentalAgreementRepository rentalAgreementRepository,
             FastApiRentalDemandClient fastApiRentalDemandClient) {
 
         this.unitRepository = unitRepository;
 
-        this.propertyAddressRepository = propertyAddressRepository;
+        this.propertyRepository = propertyRepository;
 
         this.rentalApplicationRepository = rentalApplicationRepository;
 
@@ -58,33 +60,95 @@ public class RentalDemandServiceImpl implements RentalDemandService {
 
         Integer month = request.getMonth();
 
-        long propertyCount =
-                propertyAddressRepository
-                        .countByCityIgnoreCaseAndAreaIgnoreCase(
-                                city,
-                                area);
-
-        long totalUnitCount =
+        long apartmentUnitCount =
                 unitRepository.countUnitsForRentalDemand(
                         city,
-                area);
+                        area);
 
-        long occupiedUnitCount =
+        long occupiedApartmentUnitCount =
                 unitRepository.countUnitsByStatusForRentalDemand(
                         city,
                         area,
                         UnitStatus.OCCUPIED);
 
-        long vacantUnitCount =
+        long vacantApartmentUnitCount =
                 unitRepository.countUnitsByStatusForRentalDemand(
                         city,
                         area,
                         UnitStatus.VACANT);
 
-        BigDecimal averageRent =
+        long houseVillaPropertyCount =
+                propertyRepository.countDirectRentalPropertiesForRentalDemand(
+                        city,
+                        area);
+
+        long occupiedHouseVillaPropertyCount =
+                propertyRepository.countDirectRentalPropertiesByStatusForRentalDemand(
+                        city,
+                        area,
+                        PropertyStatus.OCCUPIED);
+
+        long availableHouseVillaPropertyCount =
+                propertyRepository.countDirectRentalPropertiesByStatusForRentalDemand(
+                        city,
+                        area,
+                        PropertyStatus.AVAILABLE);
+
+        long propertyCount =
+                apartmentUnitCount + houseVillaPropertyCount;
+
+        long occupiedRentalCount =
+                occupiedApartmentUnitCount
+                        + occupiedHouseVillaPropertyCount;
+
+        long availableRentalCount =
+                vacantApartmentUnitCount
+                        + availableHouseVillaPropertyCount;
+
+        long apartmentPricedCount =
+                unitRepository.countPricedUnitsForRentalDemand(
+                        city,
+                        area);
+
+        long houseVillaPricedCount =
+                propertyRepository.countPricedDirectRentalPropertiesForRentalDemand(
+                        city,
+                        area);
+
+        BigDecimal apartmentAverageRent =
                 unitRepository.averageMonthlyRentForRentalDemand(
                         city,
                         area);
+
+        BigDecimal houseVillaAverageRent =
+                propertyRepository.averageDirectRentalMonthlyRentForRentalDemand(
+                        city,
+                        area);
+
+        long pricedRentalCount =
+                apartmentPricedCount + houseVillaPricedCount;
+
+        BigDecimal averageRent = null;
+        if (pricedRentalCount > 0) {
+            BigDecimal weightedRentTotal =
+                    BigDecimal.ZERO;
+
+            if (apartmentAverageRent != null) {
+                weightedRentTotal = weightedRentTotal.add(
+                        apartmentAverageRent.multiply(
+                                BigDecimal.valueOf(apartmentPricedCount)));
+            }
+
+            if (houseVillaAverageRent != null) {
+                weightedRentTotal = weightedRentTotal.add(
+                        houseVillaAverageRent.multiply(
+                                BigDecimal.valueOf(houseVillaPricedCount)));
+            }
+
+            averageRent = weightedRentTotal.divide(
+                    BigDecimal.valueOf(pricedRentalCount),
+                    MathContext.DECIMAL64);
+        }
 
         /*
          * M3 predicts next month's demand.
@@ -227,19 +291,19 @@ public class RentalDemandServiceImpl implements RentalDemandService {
 
         double occupancyRate = 0.0;
 
-        if (totalUnitCount > 0) {
+        if (propertyCount > 0) {
 
             occupancyRate =
-                    ((double) occupiedUnitCount / totalUnitCount)
+                    ((double) occupiedRentalCount / propertyCount)
                             * 100.0;
         }
 
         double vacancyRate = 0.0;
 
-        if (totalUnitCount > 0) {
+        if (propertyCount > 0) {
 
             vacancyRate =
-                    ((double) vacantUnitCount / totalUnitCount)
+                    ((double) availableRentalCount / propertyCount)
                             * 100.0;
         }
 
@@ -253,6 +317,8 @@ public class RentalDemandServiceImpl implements RentalDemandService {
         fastApiRequest.setCity(city);
 
         fastApiRequest.setAreaLocality(area);
+
+        fastApiRequest.setYear(currentYear);
 
         fastApiRequest.setMonth(month);
         fastApiRequest.setYear(request.getYear());
@@ -287,7 +353,7 @@ public class RentalDemandServiceImpl implements RentalDemandService {
                 vacancyRate);
 
         fastApiRequest.setAvailableUnitCount(
-                (int) vacantUnitCount);
+                (int) availableRentalCount);
 
         /*
          * Send all 13 M3 features to FastAPI.
