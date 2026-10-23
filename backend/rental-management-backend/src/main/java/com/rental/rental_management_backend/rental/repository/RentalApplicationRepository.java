@@ -46,6 +46,8 @@ public interface RentalApplicationRepository
 
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -53,6 +55,8 @@ public interface RentalApplicationRepository
 
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -61,6 +65,8 @@ public interface RentalApplicationRepository
 
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -73,13 +79,23 @@ public interface RentalApplicationRepository
             Long unitId,
             RentalApplicationStatus status);
 
-    @EntityGraph(attributePaths = {
-            "tenant.user", "property.owner", "property.propertyManager.user"
-    })
-    List<RentalApplication> findByProperty_PropertyId(Long propertyId);
-
-    boolean existsByTenant_TenantIdAndProperty_PropertyIdAndStatus(
-            Long tenantId, Long propertyId, RentalApplicationStatus status);
+        @Query("""
+                SELECT CASE WHEN COUNT(application) > 0 THEN true ELSE false END
+                FROM RentalApplication application
+                LEFT JOIN application.property directProperty
+                LEFT JOIN application.unit unit
+                LEFT JOIN unit.floor floor
+                LEFT JOIN floor.building building
+                LEFT JOIN building.property unitProperty
+                WHERE application.tenant.tenantId = :tenantId
+                  AND application.status = :status
+                  AND (directProperty.propertyId = :propertyId
+                           OR unitProperty.propertyId = :propertyId)
+                """)
+        boolean existsByTenantAndPropertyIdAndStatus(
+                        @Param("tenantId") Long tenantId,
+                        @Param("propertyId") Long propertyId,
+                        @Param("status") RentalApplicationStatus status);
 
     /*
      * Get all rental applications belonging to a property.
@@ -94,12 +110,35 @@ public interface RentalApplicationRepository
      */
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
     List<RentalApplication>
     findByUnit_Floor_Building_Property_PropertyId(
             Long propertyId);
+
+    @EntityGraph(attributePaths = {
+            "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
+            "unit.floor.building.property.owner",
+            "unit.floor.building.property.propertyManager.user"
+    })
+    @Query("""
+        SELECT application
+        FROM RentalApplication application
+        LEFT JOIN application.property directProperty
+        LEFT JOIN application.unit unit
+        LEFT JOIN unit.floor floor
+        LEFT JOIN floor.building building
+        LEFT JOIN building.property unitProperty
+        WHERE directProperty.propertyId = :propertyId
+           OR unitProperty.propertyId = :propertyId
+        """)
+    List<RentalApplication> findAllByPropertyIdIncludingUnitApplications(
+            @Param("propertyId") Long propertyId);
  // M3 Rental Demand Prediction
 
     @Query("""

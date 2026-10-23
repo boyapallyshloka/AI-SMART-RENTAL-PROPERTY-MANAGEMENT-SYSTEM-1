@@ -21,6 +21,7 @@ public interface RentalAgreementRepository
             "rentalApplication",
             "tenant.user",
             "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner"
     })
     @Query("SELECT agreement FROM RentalAgreement agreement")
@@ -59,7 +60,6 @@ public interface RentalAgreementRepository
     @EntityGraph(attributePaths = {
             "rentalApplication",
             "tenant.user",
-            "property",
             "property.owner",
             "property.propertyManager.user",
             "unit.floor.building.property.owner"

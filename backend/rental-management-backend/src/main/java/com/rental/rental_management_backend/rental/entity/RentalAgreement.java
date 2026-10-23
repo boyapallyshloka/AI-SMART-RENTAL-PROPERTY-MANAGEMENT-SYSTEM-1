@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.rental.enums.AgreementStatus;
@@ -49,6 +50,10 @@ public class RentalAgreement {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "property_id")
+    private Property property;
 
     /*
      * Unit comes from the approved rental application.
@@ -174,6 +179,14 @@ public class RentalAgreement {
 
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
+    }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
     }
 
     public Unit getUnit() {

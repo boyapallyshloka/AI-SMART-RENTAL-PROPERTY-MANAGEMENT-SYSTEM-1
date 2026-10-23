@@ -3,21 +3,16 @@ package com.rental.rental_management_backend.maintenance.service;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
-import com.rental.rental_management_backend.exception.ResourceNotFoundException;
-import com.rental.rental_management_backend.maintenance.dto.InspectionCreateRequest;
+import com.rental.rental_management_backend.User.exception.ResourceNotFoundException;
+import com.rental.rental_management_backend.maintenance.dto.InspectionRequest;
 import com.rental.rental_management_backend.maintenance.dto.InspectionResponse;
 import com.rental.rental_management_backend.maintenance.entity.Inspection;
 import com.rental.rental_management_backend.maintenance.repository.InspectionRepository;
 import com.rental.rental_management_backend.property.entity.Property;
-import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 
 @Service
@@ -26,84 +21,124 @@ public class InspectionServiceImpl implements InspectionService {
 
     private final InspectionRepository inspectionRepository;
     private final PropertyRepository propertyRepository;
-    private final PropertyManagerRepository propertyManagerRepository;
-    private final UserRepository userRepository;
+    private final MaintenancePropertyAccessService propertyAccessService;
 
     public InspectionServiceImpl(
             InspectionRepository inspectionRepository,
             PropertyRepository propertyRepository,
-            PropertyManagerRepository propertyManagerRepository,
-            UserRepository userRepository) {
+            MaintenancePropertyAccessService propertyAccessService) {
         this.inspectionRepository = inspectionRepository;
         this.propertyRepository = propertyRepository;
-        this.propertyManagerRepository = propertyManagerRepository;
-        this.userRepository = userRepository;
+        this.propertyAccessService = propertyAccessService;
+    }
+
+    @Override
+    public InspectionResponse createInspection(InspectionRequest request) {
+        User user = propertyAccessService.getAuthenticatedUser();
+        Property property = getAuthorizedProperty(user, request.getPropertyId());
+
+        Inspection inspection = new Inspection();
+        applyRequest(inspection, request, property);
+
+        return mapToResponse(inspectionRepository.save(inspection));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<InspectionResponse> getManagerInspections() {
-        User manager = getLoggedInManager();
-        Long managerId = propertyManagerRepository.findByUser_Id(manager.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Manager profile not found"))
-                .getPropertyManagerId();
+    public InspectionResponse getInspectionById(Long inspectionId) {
+        User user = propertyAccessService.getAuthenticatedUser();
+        Inspection inspection = findInspection(inspectionId);
+        authorizeInspectionProperty(user, inspection);
 
-        return inspectionRepository.findByProperty_PropertyManager_PropertyManagerIdOrderByInspectionDateDesc(managerId)
+        return mapToResponse(inspection);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InspectionResponse> getInspectionsByProperty(Long propertyId) {
+        User user = propertyAccessService.getAuthenticatedUser();
+        Property property = getAuthorizedProperty(user, propertyId);
+
+        return inspectionRepository
+                .findByProperty_PropertyId(property.getPropertyId())
                 .stream()
-                .map(this::toResponse)
+                .map(this::mapToResponse)
                 .toList();
     }
 
     @Override
-    public InspectionResponse createManagerInspection(InspectionCreateRequest request) {
-        User manager = getLoggedInManager();
-        Property property = propertyRepository.findDetailsById(request.getPropertyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+    public InspectionResponse updateInspection(
+            Long inspectionId,
+            InspectionRequest request) {
+        User user = propertyAccessService.getAuthenticatedUser();
+        Inspection inspection = findInspection(inspectionId);
+        authorizeInspectionProperty(user, inspection);
 
-        if (property.getPropertyManager() == null
-                || property.getPropertyManager().getUser() == null
-                || !manager.getId().equals(property.getPropertyManager().getUser().getId())) {
-            throw new AccessDeniedException("You can only record inspections for your assigned properties");
-        }
+        Property property = getAuthorizedProperty(user, request.getPropertyId());
+        applyRequest(inspection, request, property);
 
-        Inspection inspection = Inspection.builder()
-                .property(property)
-                .inspectionDate(request.getInspectionDate())
-                .inspectorName(request.getInspectorName().trim())
-                .passed(request.getPassed())
-                .hasIssuesRequiringAttention(request.getHasIssuesRequiringAttention())
-                .notes(request.getNotes() == null || request.getNotes().isBlank() ? null : request.getNotes().trim())
-                .build();
-
-        return toResponse(inspectionRepository.save(inspection));
+        return mapToResponse(inspectionRepository.save(inspection));
     }
 
-    private User getLoggedInManager() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()
-                || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
-            throw new AccessDeniedException("Authenticated manager is required");
-        }
+    @Override
+    public void deleteInspection(Long inspectionId) {
+        User user = propertyAccessService.getAuthenticatedUser();
+        Inspection inspection = findInspection(inspectionId);
+        authorizeInspectionProperty(user, inspection);
 
-        User user = userRepository.findByEmail(userDetails.getUsername().toLowerCase().trim())
-                .orElseThrow(() -> new AccessDeniedException("Logged-in manager was not found"));
-        if (user.getRole() == null || !"PROPERTY_MANAGER".equals(user.getRole().name())) {
-            throw new AccessDeniedException("Only property managers can access inspections");
-        }
-        return user;
+        inspectionRepository.delete(inspection);
     }
 
-    private InspectionResponse toResponse(Inspection inspection) {
-        Property property = inspection.getProperty();
-        return InspectionResponse.builder()
-                .id(inspection.getId())
-                .propertyId(property == null ? null : property.getPropertyId())
-                .propertyName(property == null ? null : property.getPropertyName())
-                .inspectionDate(inspection.getInspectionDate())
-                .inspectorName(inspection.getInspectorName())
-                .passed(inspection.getPassed())
-                .hasIssuesRequiringAttention(inspection.getHasIssuesRequiringAttention())
-                .notes(inspection.getNotes())
-                .build();
+    private Inspection findInspection(Long inspectionId) {
+        return inspectionRepository.findById(inspectionId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Inspection not found with ID: " + inspectionId));
+    }
+
+    private Property getAuthorizedProperty(User user, Long propertyId) {
+        propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + propertyId));
+
+        return propertyAccessService.getAuthorizedProperty(user, propertyId);
+    }
+
+    private void authorizeInspectionProperty(User user, Inspection inspection) {
+        if (inspection.getProperty() == null
+                || inspection.getProperty().getPropertyId() == null) {
+            throw new AccessDeniedException(
+                    "Inspection is not associated with a property");
+        }
+
+        propertyAccessService.getAuthorizedProperty(
+                user,
+                inspection.getProperty().getPropertyId());
+    }
+
+    private void applyRequest(
+            Inspection inspection,
+            InspectionRequest request,
+            Property property) {
+        inspection.setProperty(property);
+        inspection.setInspectionDate(request.getInspectionDate());
+        inspection.setInspectorName(request.getInspectorName().trim());
+        inspection.setPassed(request.getPassed());
+        inspection.setHasIssuesRequiringAttention(
+                request.getHasIssuesRequiringAttention());
+        inspection.setNotes(request.getNotes());
+    }
+
+    private InspectionResponse mapToResponse(Inspection inspection) {
+        InspectionResponse response = new InspectionResponse();
+        response.setId(inspection.getId());
+        response.setPropertyId(
+                inspection.getProperty().getPropertyId());
+        response.setInspectionDate(inspection.getInspectionDate());
+        response.setInspectorName(inspection.getInspectorName());
+        response.setPassed(inspection.getPassed());
+        response.setHasIssuesRequiringAttention(
+                inspection.getHasIssuesRequiringAttention());
+        response.setNotes(inspection.getNotes());
+        return response;
     }
 }

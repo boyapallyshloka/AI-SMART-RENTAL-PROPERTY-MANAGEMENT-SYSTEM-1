@@ -29,12 +29,15 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             SELECT payment
             FROM Payment payment
             JOIN payment.invoice invoice
-            JOIN Unit unit ON unit.unitId = invoice.unitId
-            JOIN unit.floor floor
-            JOIN floor.building building
-            JOIN building.property property
+                                                LEFT JOIN invoice.rentalAgreement agreement
+                                                LEFT JOIN agreement.property directProperty
+                                                LEFT JOIN Unit unit ON unit.unitId = invoice.unitId
+                                                LEFT JOIN unit.floor floor
+                                                LEFT JOIN floor.building building
+                                                LEFT JOIN building.property unitProperty
             WHERE payment.tenantId = :tenantId
-              AND property.owner.id = :ownerId
+                                                        AND (directProperty.owner.id = :ownerId
+                                                                         OR unitProperty.owner.id = :ownerId)
             """)
     List<Payment> findByTenantIdAndPropertyOwnerId(
             @Param("tenantId") Long tenantId,
@@ -45,13 +48,17 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             SELECT payment
             FROM Payment payment
             JOIN payment.invoice invoice
-            JOIN Unit unit ON unit.unitId = invoice.unitId
-            JOIN unit.floor floor
-            JOIN floor.building building
-            JOIN building.property property
-            JOIN property.propertyManager manager
+                                                LEFT JOIN invoice.rentalAgreement agreement
+                                                LEFT JOIN agreement.property directProperty
+                                                LEFT JOIN directProperty.propertyManager directManager
+                                                LEFT JOIN Unit unit ON unit.unitId = invoice.unitId
+                                                LEFT JOIN unit.floor floor
+                                                LEFT JOIN floor.building building
+                                                LEFT JOIN building.property unitProperty
+                                                LEFT JOIN unitProperty.propertyManager unitManager
             WHERE payment.tenantId = :tenantId
-              AND manager.user.id = :managerUserId
+                                                        AND (directManager.user.id = :managerUserId
+                                                                         OR unitManager.user.id = :managerUserId)
             """)
     List<Payment> findByTenantIdAndPropertyManagerUserId(
             @Param("tenantId") Long tenantId,

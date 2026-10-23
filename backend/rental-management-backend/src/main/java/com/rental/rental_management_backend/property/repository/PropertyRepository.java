@@ -7,8 +7,11 @@ import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import jakarta.persistence.LockModeType;
 
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
@@ -24,6 +27,22 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
     Optional<Property> findDetailsById(
             @Param("propertyId") Long propertyId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
+    Optional<Property> findByPropertyIdForUpdate(
+            @Param("propertyId") Long propertyId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        SELECT p
+        FROM Property p
+        WHERE p.propertyId = :propertyId
+          AND p.owner = :owner
+        """)
+    Optional<Property> findByPropertyIdAndOwnerForUpdate(
+            @Param("propertyId") Long propertyId,
+            @Param("owner") User owner);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByOwner(User owner);
@@ -150,13 +169,23 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                     com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
                     com.rental.rental_management_backend.property.enums.PropertyType.VILLA
                 )
-                AND p.monthlyRent IS NOT NULL
-                AND (:minRent IS NULL OR p.monthlyRent >= :minRent)
-                AND (:maxRent IS NULL OR p.monthlyRent <= :maxRent)
-                AND (:bedrooms IS NULL OR p.bedrooms = :bedrooms)
+                AND :bedrooms IS NULL
+                AND (
+                    :minRent IS NULL
+                    OR p.monthlyRent >= :minRent
+                )
+                AND (
+                    :maxRent IS NULL
+                    OR p.monthlyRent <= :maxRent
+                )
             )
 
-            OR EXISTS (
+            OR (
+                p.propertyType NOT IN (
+                    com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                    com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                )
+                AND EXISTS (
                 SELECT u.unitId
                 FROM Unit u
                 JOIN u.floor f
@@ -180,6 +209,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                 AND (
                     :bedrooms IS NULL
                     OR u.bedrooms = :bedrooms
+                )
                 )
             )
         )
@@ -246,7 +276,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                    WHERE fallbackImageId.property = p
                ))
         ),
-        false
+        false,
+        p.monthlyRent,
+        p.securityDeposit
     )
     FROM Property p
     WHERE (p.status = :status OR p.status = com.rental.rental_management_backend.property.enums.PropertyStatus.PUBLISHED)
@@ -307,7 +339,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                       )
                 )
             ),
-            false
+            false,
+            p.monthlyRent,
+            p.securityDeposit
         )
         FROM Property p
         WHERE p.propertyId = :propertyId

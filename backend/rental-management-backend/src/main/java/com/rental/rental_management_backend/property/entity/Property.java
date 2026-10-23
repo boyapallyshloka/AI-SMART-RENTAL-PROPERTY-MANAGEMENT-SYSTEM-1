@@ -1,5 +1,6 @@
 package com.rental.rental_management_backend.property.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
@@ -23,6 +24,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
@@ -42,6 +44,14 @@ public class Property {
     @Enumerated(EnumType.STRING)
     @Column(name = "property_type", nullable = false, length = 30)
     private PropertyType propertyType;
+
+    @DecimalMin(value = "0.0", message = "Monthly rent cannot be negative")
+    @Column(name = "monthly_rent", precision = 12, scale = 2)
+    private BigDecimal monthlyRent;
+
+    @DecimalMin(value = "0.0", message = "Security deposit cannot be negative")
+    @Column(name = "security_deposit", precision = 12, scale = 2)
+    private BigDecimal securityDeposit;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -146,6 +156,22 @@ public class Property {
 
     public void setPropertyType(PropertyType propertyType) {
         this.propertyType = propertyType;
+    }
+
+    public BigDecimal getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public BigDecimal getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
+        this.securityDeposit = securityDeposit;
     }
 
     public String getDescription() {

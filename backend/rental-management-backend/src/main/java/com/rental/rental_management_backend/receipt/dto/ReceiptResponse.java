@@ -16,6 +16,7 @@ public class ReceiptResponse {
     private String invoiceNumber;
 
     private Long tenantId;
+    private Long propertyId;
     private Long unitId;
 
     private BigDecimal amountPaid;
@@ -80,6 +81,14 @@ public class ReceiptResponse {
 
     public void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
     }
 
     public Long getUnitId() {

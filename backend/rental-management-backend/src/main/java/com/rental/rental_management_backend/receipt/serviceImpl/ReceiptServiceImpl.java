@@ -14,6 +14,7 @@ import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.payment.entity.Payment;
 import com.rental.rental_management_backend.payment.enums.PaymentStatus;
 import com.rental.rental_management_backend.payment.repository.PaymentRepository;
+import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
@@ -382,38 +383,11 @@ public class ReceiptServiceImpl implements ReceiptService {
     private boolean hasPropertyAccess(
             Receipt receipt,
             User user) {
+                var property = resolveReceiptProperty(receipt);
 
-        Unit unit = unitRepository
-                .findById(receipt.getUnitId())
-                .orElse(null);
-
-        if (unit == null) {
-            return false;
-        }
-
-        /*
-         * Use the same property hierarchy:
-         *
-         * Unit
-         *   ↓
-         * Floor
-         *   ↓
-         * Building
-         *   ↓
-         * Property
-         */
-
-        if (unit.getFloor() == null
-                || unit.getFloor().getBuilding() == null
-                || unit.getFloor().getBuilding().getProperty() == null) {
-
-            return false;
-        }
-
-        var property =
-                unit.getFloor()
-                        .getBuilding()
-                        .getProperty();
+                if (property == null) {
+                        return false;
+                }
 
         /*
          * PROPERTY_OWNER
@@ -438,6 +412,44 @@ public class ReceiptServiceImpl implements ReceiptService {
                             .equals(user.getId());
         }
         return false;
+    }
+
+    private Property resolveReceiptProperty(Receipt receipt) {
+        if (receipt == null) {
+            return null;
+        }
+
+        if (receipt.getPayment() != null
+                && receipt.getPayment().getInvoice() != null
+                && receipt.getPayment().getInvoice()
+                        .getRentalAgreement() != null) {
+            var agreement = receipt.getPayment().getInvoice()
+                    .getRentalAgreement();
+            if (agreement.getProperty() != null) {
+                return agreement.getProperty();
+            }
+
+            Unit agreementUnit = agreement.getUnit();
+            if (agreementUnit != null
+                    && agreementUnit.getFloor() != null
+                    && agreementUnit.getFloor().getBuilding() != null) {
+                return agreementUnit.getFloor()
+                        .getBuilding()
+                        .getProperty();
+            }
+        }
+
+        if (receipt.getUnitId() != null) {
+            Unit unit = unitRepository.findById(receipt.getUnitId())
+                    .orElse(null);
+            if (unit != null
+                    && unit.getFloor() != null
+                    && unit.getFloor().getBuilding() != null) {
+                return unit.getFloor().getBuilding().getProperty();
+            }
+        }
+
+        return null;
     }
 
     // =========================================================
@@ -484,6 +496,11 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         response.setTenantId(
                 receipt.getTenantId());
+
+        var property = resolveReceiptProperty(receipt);
+        if (property != null) {
+            response.setPropertyId(property.getPropertyId());
+        }
 
         response.setUnitId(
                 receipt.getUnitId());

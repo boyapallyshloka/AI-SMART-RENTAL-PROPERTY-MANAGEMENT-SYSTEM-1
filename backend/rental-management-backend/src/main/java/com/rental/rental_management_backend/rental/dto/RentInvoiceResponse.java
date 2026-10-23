@@ -26,6 +26,8 @@ private String tenantName;
 
 private String tenantEmail;
 
+private Long propertyId;
+
 private Long unitId;
 
 private Long propertyId;
@@ -112,6 +114,13 @@ public void setTenantEmail(String tenantEmail) {
     this.tenantEmail = tenantEmail;
 }
 
+public Long getPropertyId() {
+    return propertyId;
+}
+
+public void setPropertyId(Long propertyId) {
+    this.propertyId = propertyId;
+}
 
 public Long getUnitId() {
     return unitId;

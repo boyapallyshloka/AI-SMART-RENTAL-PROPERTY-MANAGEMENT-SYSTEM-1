@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rental.rental_management_backend.maintenancewroker.entity.MaintenanceWorker;
+import com.rental.rental_management_backend.maintenancewroker.dto.MaintenanceWorkerResponse;
 import com.rental.rental_management_backend.maintenancewroker.service.MaintenanceWorkerService;
 
 @RestController
@@ -36,7 +37,7 @@ public class MaintenanceWorkerController {
     @PreAuthorize(
             "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
     )
-    public MaintenanceWorker createWorker(
+    public MaintenanceWorkerResponse createWorker(
             @RequestBody MaintenanceWorker worker) {
 
         return service.createWorker(worker);
@@ -51,7 +52,7 @@ public class MaintenanceWorkerController {
     @PreAuthorize(
             "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
     )
-    public List<MaintenanceWorker> getAllWorkers() {
+    public List<MaintenanceWorkerResponse> getAllWorkers() {
 
         return service.getAllWorkers();
     }
@@ -65,7 +66,7 @@ public class MaintenanceWorkerController {
     @PreAuthorize(
             "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
     )
-    public MaintenanceWorker getWorkerById(
+    public MaintenanceWorkerResponse getWorkerById(
             @PathVariable Long workerId) {
 
         return service.getWorkerById(workerId);
@@ -80,7 +81,7 @@ public class MaintenanceWorkerController {
     @PreAuthorize(
             "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
     )
-    public MaintenanceWorker updateWorker(
+    public MaintenanceWorkerResponse updateWorker(
             @PathVariable Long workerId,
             @RequestBody MaintenanceWorker worker) {
 
@@ -102,5 +103,27 @@ public class MaintenanceWorkerController {
         service.deleteWorker(workerId);
 
         return "Maintenance Worker deleted successfully";
+    }
+
+    @PostMapping("/{workerId}/properties/{propertyId}")
+    @PreAuthorize(
+            "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
+    )
+    public MaintenanceWorkerResponse associateWorkerWithProperty(
+            @PathVariable Long workerId,
+            @PathVariable Long propertyId) {
+
+        return service.associateWorkerWithProperty(workerId, propertyId);
+    }
+
+    @DeleteMapping("/{workerId}/properties/{propertyId}")
+    @PreAuthorize(
+            "hasAnyRole('PROPERTY_MANAGER', 'PROPERTY_OWNER', 'SUPER_ADMIN')"
+    )
+    public MaintenanceWorkerResponse removeWorkerFromProperty(
+            @PathVariable Long workerId,
+            @PathVariable Long propertyId) {
+
+        return service.removeWorkerFromProperty(workerId, propertyId);
     }
 }

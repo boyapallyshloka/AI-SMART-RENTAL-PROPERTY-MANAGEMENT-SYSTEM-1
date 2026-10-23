@@ -2,22 +2,25 @@
 package com.rental.rental_management_backend.maintenanceAssignment.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
+import com.rental.rental_management_backend.User.enums.RoleType;
 
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
+import com.rental.rental_management_backend.maintenance.service.MaintenancePropertyAccessService;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
 
 import com.rental.rental_management_backend.maintenanceAssignment.entity.MaintenanceAssignment;
 import com.rental.rental_management_backend.maintenanceAssignment.repository.MaintenanceAssignmentRepository;
+import com.rental.rental_management_backend.maintenancewroker.entity.MaintenanceWorker;
+import com.rental.rental_management_backend.maintenancewroker.repository.MaintenanceWorkerPropertyRepository;
+import com.rental.rental_management_backend.maintenancewroker.repository.MaintenanceWorkerRepository;
+import com.rental.rental_management_backend.property.entity.Property;
 
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
 import com.rental.rental_management_backend.notification.enums.NotificationType;
@@ -36,7 +39,11 @@ public class MaintenanceAssignmentServiceImpl
 
     private final MaintenanceRequestRepository maintenanceRequestRepository;
 
-    private final UserRepository userRepository;
+    private final MaintenanceWorkerRepository workerRepository;
+
+    private final MaintenanceWorkerPropertyRepository workerPropertyRepository;
+
+    private final MaintenancePropertyAccessService propertyAccessService;
 
     private final NotificationService notificationService;
 
@@ -47,12 +54,16 @@ public class MaintenanceAssignmentServiceImpl
     public MaintenanceAssignmentServiceImpl(
             MaintenanceAssignmentRepository assignmentRepository,
             MaintenanceRequestRepository maintenanceRequestRepository,
-            UserRepository userRepository,
+            MaintenanceWorkerRepository workerRepository,
+            MaintenanceWorkerPropertyRepository workerPropertyRepository,
+            MaintenancePropertyAccessService propertyAccessService,
             NotificationService notificationService) {
 
         this.assignmentRepository = assignmentRepository;
         this.maintenanceRequestRepository = maintenanceRequestRepository;
-        this.userRepository = userRepository;
+        this.workerRepository = workerRepository;
+        this.workerPropertyRepository = workerPropertyRepository;
+        this.propertyAccessService = propertyAccessService;
         this.notificationService = notificationService;
     }
 
@@ -64,51 +75,17 @@ public class MaintenanceAssignmentServiceImpl
     public MaintenanceAssignment createAssignment(
             MaintenanceAssignment assignment) {
 
-        // -----------------------------------------------------
-        // GET AUTHENTICATION
-        // -----------------------------------------------------
-
-        Authentication authentication =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
-
-        if (authentication == null
-                || !authentication.isAuthenticated()) {
-
-            throw new AccessDeniedException(
-                    "User is not authenticated");
-        }
-
-        // -----------------------------------------------------
-        // GET LOGGED-IN USER
-        // -----------------------------------------------------
-
-        Object principal = authentication.getPrincipal();
-
-        if (!(principal instanceof UserDetails)) {
-
-            throw new AccessDeniedException(
-                    "Unable to identify logged-in user");
-        }
-
-        UserDetails userDetails =
-                (UserDetails) principal;
-
-        String email =
-                userDetails.getUsername();
-
-        // -----------------------------------------------------
-        // FIND USER FROM DATABASE
-        // -----------------------------------------------------
-
         User loggedInUser =
-                userRepository
-                        .findByEmail(
-                                email.toLowerCase().trim())
-                        .orElseThrow(() ->
-                                new AccessDeniedException(
-                                        "Logged-in user not found"));
+                propertyAccessService.getAuthenticatedUser();
+        MaintenanceRequest maintenanceRequest =
+                findMaintenanceRequest(assignment);
+        assertPropertyAccess(loggedInUser, maintenanceRequest.getProperty());
+
+        MaintenanceWorker worker = findWorker(assignment);
+        requireWorkerProperty(worker, maintenanceRequest.getProperty());
+
+        assignment.setMaintenanceRequest(maintenanceRequest);
+        assignment.setWorker(worker);
 
         // -----------------------------------------------------
         // AUTOMATICALLY SET ASSIGNED BY
@@ -160,7 +137,19 @@ public class MaintenanceAssignmentServiceImpl
     @Transactional(readOnly = true)
     public List<MaintenanceAssignment> getAllAssignments() {
 
-        return assignmentRepository.findAll();
+        User user = propertyAccessService.getAuthenticatedUser();
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            return assignmentRepository.findAll();
+        }
+
+        Set<Long> propertyIds =
+                propertyAccessService.getAuthorizedPropertyIds(user);
+        if (propertyIds.isEmpty()) {
+            return List.of();
+        }
+
+        return assignmentRepository
+                .findByMaintenancePropertyIds(propertyIds);
     }
 
     // =========================================================
@@ -172,12 +161,17 @@ public class MaintenanceAssignmentServiceImpl
     public MaintenanceAssignment getAssignmentById(
             Long id) {
 
-        return assignmentRepository
+        MaintenanceAssignment assignment = assignmentRepository
                 .findAssignmentWithDetails(id)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "Maintenance Assignment not found with id: "
                                         + id));
+
+        assertPropertyAccess(
+                propertyAccessService.getAuthenticatedUser(),
+                assignment.getMaintenanceRequest().getProperty());
+        return assignment;
     }
 
     // =========================================================
@@ -201,42 +195,37 @@ public class MaintenanceAssignmentServiceImpl
                                         "Maintenance Assignment not found with id: "
                                                 + id));
 
+        User user = propertyAccessService.getAuthenticatedUser();
+        assertPropertyAccess(
+                user,
+                existingAssignment.getMaintenanceRequest().getProperty());
+
+        MaintenanceRequest maintenanceRequest =
+                findMaintenanceRequest(assignment);
+        assertPropertyAccess(user, maintenanceRequest.getProperty());
+
+        MaintenanceWorker worker = findWorker(assignment);
+        requireWorkerProperty(worker, maintenanceRequest.getProperty());
+
         // -----------------------------------------------------
         // CHECK WHETHER WORKER CHANGED
         // -----------------------------------------------------
 
         boolean workerChanged =
                 existingAssignment.getWorker() == null
-                        && assignment.getWorker() != null;
-
-        if (existingAssignment.getWorker() != null
-                && assignment.getWorker() != null) {
-
-            Long oldWorkerId =
-                    existingAssignment
-                            .getWorker()
-                            .getWorkerId();
-
-            Long newWorkerId =
-                    assignment
-                            .getWorker()
-                            .getWorkerId();
-
-            workerChanged =
-                    oldWorkerId == null
-                            ? newWorkerId != null
-                            : !oldWorkerId.equals(newWorkerId);
-        }
+                        || !existingAssignment.getWorker()
+                                .getWorkerId()
+                                .equals(worker.getWorkerId());
 
         // -----------------------------------------------------
         // UPDATE ASSIGNMENT DETAILS
         // -----------------------------------------------------
 
         existingAssignment.setMaintenanceRequest(
-                assignment.getMaintenanceRequest());
+                maintenanceRequest);
 
         existingAssignment.setWorker(
-                assignment.getWorker());
+                worker);
 
         // DO NOT UPDATE assignedBy.
         // Original assignedBy is preserved.
@@ -292,7 +281,74 @@ public class MaintenanceAssignmentServiceImpl
                                         "Maintenance Assignment not found with id: "
                                                 + id));
 
+        assertPropertyAccess(
+                propertyAccessService.getAuthenticatedUser(),
+                assignment.getMaintenanceRequest().getProperty());
+
         assignmentRepository.delete(assignment);
+    }
+
+    private MaintenanceRequest findMaintenanceRequest(
+            MaintenanceAssignment assignment) {
+        if (assignment == null
+                || assignment.getMaintenanceRequest() == null
+                || assignment.getMaintenanceRequest().getRequestId() == null) {
+            throw new IllegalArgumentException(
+                    "Maintenance request ID is required");
+        }
+
+        Long requestId =
+                assignment.getMaintenanceRequest().getRequestId();
+        return maintenanceRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException(
+                        "Maintenance request not found with ID: "
+                                + requestId));
+    }
+
+    private MaintenanceWorker findWorker(
+            MaintenanceAssignment assignment) {
+        if (assignment == null
+                || assignment.getWorker() == null
+                || assignment.getWorker().getWorkerId() == null) {
+            throw new IllegalArgumentException(
+                    "Maintenance worker ID is required");
+        }
+
+        Long workerId = assignment.getWorker().getWorkerId();
+        MaintenanceWorker worker = workerRepository.findById(workerId)
+                .orElseThrow(() -> new RuntimeException(
+                        "Maintenance Worker not found with ID: "
+                                + workerId));
+        String availability = worker.getAvailabilityStatus();
+        if (availability != null
+                && ("UNAVAILABLE".equalsIgnoreCase(availability)
+                        || "INACTIVE".equalsIgnoreCase(availability)
+                        || "NOT_AVAILABLE".equalsIgnoreCase(availability))) {
+            throw new IllegalArgumentException(
+                    "Maintenance worker is unavailable for new assignments");
+        }
+        return worker;
+    }
+
+    private void requireWorkerProperty(
+            MaintenanceWorker worker,
+            Property property) {
+        if (!workerPropertyRepository
+                .existsByWorker_WorkerIdAndProperty_PropertyId(
+                        worker.getWorkerId(), property.getPropertyId())) {
+            throw new AccessDeniedException(
+                    "Maintenance worker is not associated with this property");
+        }
+    }
+
+    private void assertPropertyAccess(User user, Property property) {
+        if (property == null || property.getPropertyId() == null) {
+            throw new AccessDeniedException(
+                    "Maintenance request has no property");
+        }
+
+        propertyAccessService.getAuthorizedProperty(
+                user, property.getPropertyId());
     }
 
     // =========================================================
@@ -470,4 +526,3 @@ public class MaintenanceAssignmentServiceImpl
                 "==================================================");
     }
 }
-

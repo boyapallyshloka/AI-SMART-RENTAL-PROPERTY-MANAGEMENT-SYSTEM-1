@@ -1115,21 +1115,12 @@ public class PaymentServiceImpl implements PaymentService {
             return;
         }
 
-        // --------------------------------------------------------
-        // Get Unit
-        // --------------------------------------------------------
+        Property property = resolveInvoiceProperty(invoice);
 
-        Unit unit =
-                unitRepository
-                        .findById(invoice.getUnitId())
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Unit not found for invoice"));
-
-        Property property =
-                unit.getFloor()
-                        .getBuilding()
-                        .getProperty();
+        if (property == null) {
+            throw new RuntimeException(
+                    "Property not found for invoice");
+        }
 
         // --------------------------------------------------------
         // PROPERTY OWNER
@@ -1174,6 +1165,38 @@ public class PaymentServiceImpl implements PaymentService {
 
         throw new RuntimeException(
                 "You are not authorized to access this invoice");
+    }
+
+    private Property resolveInvoiceProperty(RentInvoice invoice) {
+        if (invoice == null) {
+            return null;
+        }
+
+        if (invoice.getRentalAgreement() != null) {
+            Property property = invoice.getRentalAgreement().getProperty();
+            if (property != null) {
+                return property;
+            }
+
+            Unit agreementUnit = invoice.getRentalAgreement().getUnit();
+            if (agreementUnit != null
+                    && agreementUnit.getFloor() != null
+                    && agreementUnit.getFloor().getBuilding() != null) {
+                return agreementUnit.getFloor()
+                        .getBuilding()
+                        .getProperty();
+            }
+        }
+
+        if (invoice.getUnitId() != null) {
+            return unitRepository.findById(invoice.getUnitId())
+                    .map(Unit::getFloor)
+                    .map(floor -> floor.getBuilding())
+                    .map(building -> building.getProperty())
+                    .orElse(null);
+        }
+
+        return null;
     }
 
 

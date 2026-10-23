@@ -15,6 +15,8 @@ public class RentalAgreementResponse {
 
     private Long tenantId;
 
+    private Long propertyId;
+
     private Long unitId;
 
     private Long propertyId;
@@ -73,6 +75,14 @@ public class RentalAgreementResponse {
 
     public void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
     }
 
     public Long getUnitId() {

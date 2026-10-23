@@ -348,6 +348,7 @@ public class RentalAgreementPdfServiceImpl
 
                     if (unit == null && agreement.getProperty() != null) {
                         Property property = agreement.getProperty();
+<<<<<<< HEAD
                         y = writeLine(contentStream, normalFont,
                                 "Property Name: " + property.getPropertyName(), y);
                         OptionalAddressResult addressResult = getPropertyAddress(property);
@@ -364,6 +365,33 @@ public class RentalAgreementPdfServiceImpl
                                 y = writeLine(contentStream, normalFont,
                                         "Location: " + locality, y);
                             }
+=======
+                        y = writeLine(
+                                contentStream,
+                                normalFont,
+                                "Property Name: " + property.getPropertyName(),
+                                y);
+
+                        OptionalAddressResult addressResult =
+                                getPropertyAddress(property);
+                        if (addressResult.address() != null) {
+                            PropertyAddress address = addressResult.address();
+                            y = writeLine(
+                                    contentStream,
+                                    normalFont,
+                                    "Address: " + address.getAddressLine1(),
+                                    y);
+                            y = writeLine(
+                                    contentStream,
+                                    normalFont,
+                                    "City: " + address.getCity(),
+                                    y);
+                            y = writeLine(
+                                    contentStream,
+                                    normalFont,
+                                    "State: " + address.getState(),
+                                    y);
+>>>>>>> origin/backend/dev1
                         }
                     }
 

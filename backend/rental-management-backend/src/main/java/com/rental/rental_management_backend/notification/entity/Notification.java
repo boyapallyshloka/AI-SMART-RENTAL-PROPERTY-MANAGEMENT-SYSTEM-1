@@ -93,6 +93,9 @@ public class Notification {
     )
     private String referenceType;
 
+    @Column(name = "deduplication_key", unique = true, length = 255)
+    private String deduplicationKey;
+
     @Column(
             name = "is_read",
             nullable = false
@@ -101,7 +104,8 @@ public class Notification {
 
     @Column(
             name = "created_at",
-            nullable = false
+            nullable = false,
+            updatable = false
     )
     private LocalDateTime createdAt;
 
@@ -111,6 +115,8 @@ public class Notification {
     // ============================================================
 
     public Notification() {
+        this.createdAt = LocalDateTime.now();
+        this.priority = NotificationPriority.MEDIUM;
     }
 
     // ============================================================
@@ -129,12 +135,15 @@ public class Notification {
 
         this.user = user;
         this.type = type;
-        this.priority = priority;
+        this.priority = (priority == null)
+                ? NotificationPriority.MEDIUM
+                : priority;
         this.title = title;
         this.message = message;
         this.referenceId = referenceId;
         this.referenceType = referenceType;
         this.read = read;
+        this.createdAt = LocalDateTime.now();
     }
 
     // ============================================================
@@ -150,6 +159,10 @@ public class Notification {
 
         if (priority == null) {
             priority = NotificationPriority.MEDIUM;
+        }
+
+        if (deduplicationKey != null && deduplicationKey.isBlank()) {
+            deduplicationKey = null;
         }
     }
 
@@ -189,6 +202,10 @@ public class Notification {
         return referenceType;
     }
 
+    public String getDeduplicationKey() {
+        return deduplicationKey;
+    }
+
     public boolean isRead() {
         return read;
     }
@@ -214,7 +231,9 @@ public class Notification {
     }
 
     public void setPriority(NotificationPriority priority) {
-        this.priority = priority;
+        this.priority = (priority == null)
+                ? NotificationPriority.MEDIUM
+                : priority;
     }
 
     public void setTitle(String title) {
@@ -231,6 +250,12 @@ public class Notification {
 
     public void setReferenceType(String referenceType) {
         this.referenceType = referenceType;
+    }
+
+    public void setDeduplicationKey(String deduplicationKey) {
+        this.deduplicationKey = (deduplicationKey != null && deduplicationKey.isBlank())
+                ? null
+                : deduplicationKey;
     }
 
     public void setRead(boolean read) {

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,6 +17,12 @@ public class PropertyRequest {
 
     @NotNull(message = "Property type is required")
     private PropertyType propertyType;
+
+    @DecimalMin(value = "0.0", message = "Monthly rent cannot be negative")
+    private BigDecimal monthlyRent;
+
+    @DecimalMin(value = "0.0", message = "Security deposit cannot be negative")
+    private BigDecimal securityDeposit;
 
     private String description;
 
@@ -64,6 +71,22 @@ public class PropertyRequest {
 
     public void setPropertyType(PropertyType propertyType) {
         this.propertyType = propertyType;
+    }
+
+    public BigDecimal getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public BigDecimal getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
+        this.securityDeposit = securityDeposit;
     }
 
     public String getDescription() {

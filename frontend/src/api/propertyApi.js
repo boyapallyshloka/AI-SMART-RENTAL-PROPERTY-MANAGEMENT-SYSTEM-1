@@ -20,6 +20,8 @@ export const FURNISHING_STATUSES = {
 
 export const PROPERTY_STATUSES = {
   DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
   AVAILABLE: 'AVAILABLE',
   PUBLISHED: 'PUBLISHED',
   OCCUPIED: 'OCCUPIED',
@@ -233,6 +235,28 @@ export const getPropertyDetails = async (id) => {
 export const createProperty = async (propertyData) => {
   const payload = formatPropertyRequest(propertyData)
   return axiosClient.post('/owner/properties', payload)
+}
+
+/**
+ * Submit a draft property and its uploaded documents for administrator review.
+ */
+export const submitPropertyForApproval = async (id) => {
+  return axiosClient.post(`/owner/properties/${id}/submit-for-approval`)
+}
+
+/**
+ * Administrator property review endpoints.
+ */
+export const getPendingPropertyApprovals = async () => {
+  return axiosClient.get('/admin/properties/pending-approval')
+}
+
+export const getPropertyForAdminReview = async (id) => {
+  return axiosClient.get(`/admin/properties/${id}`)
+}
+
+export const approveProperty = async (id) => {
+  return axiosClient.patch(`/admin/properties/${id}/approve`)
 }
 
 /**
@@ -1004,5 +1028,3 @@ export const searchPublicProperties = async (filters = {}) => {
 export const getPublicPropertyDetails = async (propertyId) => {
   return axiosClient.get(`/properties/public/${propertyId}`)
 }
-
-

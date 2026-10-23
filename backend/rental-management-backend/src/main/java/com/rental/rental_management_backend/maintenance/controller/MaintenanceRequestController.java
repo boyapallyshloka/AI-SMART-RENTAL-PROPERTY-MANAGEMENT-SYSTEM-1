@@ -28,6 +28,7 @@ import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpd
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import jakarta.validation.Valid;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategory;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.service.MaintenanceRequestService;
 
@@ -105,6 +106,9 @@ public class MaintenanceRequestController {
 
             @RequestParam MaintenancePriority priority,
 
+            @RequestParam(required = false)
+            MaintenancePayer payer,
+
             @RequestParam(value = "image", required = false)
             MultipartFile image)
 
@@ -122,6 +126,8 @@ public class MaintenanceRequestController {
         request.setDescription(description);
 
         request.setPriority(priority);
+
+        request.setPayer(payer);
 
         MaintenanceRequestResponse response =
                 maintenanceRequestService.createRequest(
@@ -204,6 +210,9 @@ public class MaintenanceRequestController {
             @RequestParam(required = false)
             BigDecimal cost,
 
+            @RequestParam(required = false)
+            MaintenancePayer payer,
+
             @RequestParam(value = "image", required = false)
             MultipartFile image)
 
@@ -229,6 +238,8 @@ public class MaintenanceRequestController {
         request.setCompletedDate(completedDate);
 
         request.setCost(cost);
+
+        request.setPayer(payer);
 
         return ResponseEntity.ok(
                 maintenanceRequestService.updateRequest(

@@ -1,9 +1,12 @@
 package com.rental.rental_management_backend.maintenancewroker.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class MaintenanceWorker {
@@ -17,6 +20,9 @@ public class MaintenanceWorker {
     private String email;
     private String specialization;
     private String availabilityStatus;
+
+    @Transient
+    private List<Long> propertyIds;
 
     public Long getWorkerId() {
         return workerId;
@@ -64,5 +70,13 @@ public class MaintenanceWorker {
 
     public void setAvailabilityStatus(String availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
+    }
+
+    public List<Long> getPropertyIds() {
+        return propertyIds;
+    }
+
+    public void setPropertyIds(List<Long> propertyIds) {
+        this.propertyIds = propertyIds;
     }
 }

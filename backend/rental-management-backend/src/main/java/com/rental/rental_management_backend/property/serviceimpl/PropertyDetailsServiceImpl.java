@@ -406,6 +406,10 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
         response.setPropertyType(
                 property.getPropertyType());
 
+        response.setMonthlyRent(property.getMonthlyRent());
+
+        response.setSecurityDeposit(property.getSecurityDeposit());
+
         response.setDescription(
                 property.getDescription());
 

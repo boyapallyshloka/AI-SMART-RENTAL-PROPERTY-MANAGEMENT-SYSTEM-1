@@ -27,6 +27,14 @@ public interface PropertyService {
             PropertyStatus status
     );
 
+    PropertyResponse submitPropertyForApproval(Long id);
+
+    List<PropertyResponse> getPendingApprovalProperties();
+
+    PropertyResponse getPropertyForAdmin(Long id);
+
+    PropertyResponse approveProperty(Long id);
+
     // Public/Tenant property access
     PropertyResponse getPublicPropertyById(Long propertyId);
 

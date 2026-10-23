@@ -1,5 +1,7 @@
 package com.rental.rental_management_backend.property.dto;
 
+import java.math.BigDecimal;
+
 public class PropertyCardResponse {
 
     private Long id;
@@ -12,6 +14,8 @@ public class PropertyCardResponse {
     private String address;
     private String imageUrl;
     private Boolean isFavorite;
+    private BigDecimal monthlyRent;
+    private BigDecimal securityDeposit;
 
     public PropertyCardResponse() {
     }
@@ -37,6 +41,24 @@ public class PropertyCardResponse {
         this.address = address;
         this.imageUrl = imageUrl;
         this.isFavorite = isFavorite;
+    }
+
+    public PropertyCardResponse(
+            Long id,
+            String propertyName,
+            String propertyType,
+            String status,
+            Double areaSqft,
+            Integer yearBuilt,
+            String address,
+            String imageUrl,
+            Boolean isFavorite,
+            BigDecimal monthlyRent,
+            BigDecimal securityDeposit) {
+        this(id, propertyName, propertyType, status, areaSqft, yearBuilt,
+                address, imageUrl, isFavorite);
+        this.monthlyRent = monthlyRent;
+        this.securityDeposit = securityDeposit;
     }
 
     public Long getId() {
@@ -117,5 +139,21 @@ public class PropertyCardResponse {
 
     public void setIsFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public BigDecimal getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public BigDecimal getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
+        this.securityDeposit = securityDeposit;
     }
 }

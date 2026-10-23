@@ -15,6 +15,10 @@ public class PropertyResponse {
 
     private PropertyType propertyType;
 
+    private BigDecimal monthlyRent;
+
+    private BigDecimal securityDeposit;
+
     private String description;
 
     private Double totalArea;
@@ -80,6 +84,22 @@ public class PropertyResponse {
 
     public void setPropertyType(PropertyType propertyType) {
         this.propertyType = propertyType;
+    }
+
+    public BigDecimal getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public BigDecimal getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
+        this.securityDeposit = securityDeposit;
     }
 
     public String getDescription() {

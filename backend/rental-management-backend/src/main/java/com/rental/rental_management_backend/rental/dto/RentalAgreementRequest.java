@@ -2,6 +2,10 @@
 package com.rental.rental_management_backend.rental.dto;
 
 import java.time.LocalDate;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/backend/dev1
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +25,7 @@ public class RentalAgreementRequest {
     private LocalDate moveInDate;
 
     private String termsAndConditions;
+    private LocalDate moveInDate;
 
     // Getters and Setters
 
@@ -58,5 +63,13 @@ public class RentalAgreementRequest {
 
     public void setTermsAndConditions(String termsAndConditions) {
         this.termsAndConditions = termsAndConditions;
+    }
+
+    public LocalDate getMoveInDate() {
+        return moveInDate;
+    }
+
+    public void setMoveInDate(LocalDate moveInDate) {
+        this.moveInDate = moveInDate;
     }
 }

@@ -161,19 +161,29 @@ public class RentInvoicePdfServiceImpl
                     y -= 25;
 
                     // =====================================================
-                    // UNIT
+                    // PROPERTY / UNIT
                     // =====================================================
 
-                    writeLine(
-                            contentStream,
-                            "Unit: "
-                                    + (invoice.getUnitId() == null
-                                            ? "Entire property"
-                                            : "#" + invoice.getUnitId()),
-                            y
-                    );
+                    if (invoice.getRentalAgreement() != null
+                            && invoice.getRentalAgreement().getProperty() != null) {
+                        writeLine(
+                                contentStream,
+                                "Property ID: "
+                                        + invoice.getRentalAgreement()
+                                                .getProperty().getPropertyId(),
+                                y);
+                        y -= 25;
+                    }
 
-                    y -= 40;
+                    if (invoice.getUnitId() != null) {
+                        writeLine(
+                                contentStream,
+                                "Unit ID: " + invoice.getUnitId(),
+                                y);
+                        y -= 40;
+                    } else {
+                        y -= 15;
+                    }
 
                     // =====================================================
                     // RENT

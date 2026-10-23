@@ -41,7 +41,7 @@ public class Receipt {
     @Column(name = "tenant_id", nullable = false)
     private Long tenantId;
 
-    @Column(name = "unit_id", nullable = false)
+    @Column(name = "unit_id")
     private Long unitId;
 
     @Column(name = "amount_paid", nullable = false, precision = 12, scale = 2)

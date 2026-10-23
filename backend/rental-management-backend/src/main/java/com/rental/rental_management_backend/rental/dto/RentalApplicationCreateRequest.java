@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Size;
 
 public class RentalApplicationCreateRequest {
 
+    private Long propertyId;
+
     private Long unitId;
 
     private Long propertyId;
@@ -33,6 +35,14 @@ public class RentalApplicationCreateRequest {
     private String message;
 
     public RentalApplicationCreateRequest() {
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
     }
 
     public Long getUnitId() {

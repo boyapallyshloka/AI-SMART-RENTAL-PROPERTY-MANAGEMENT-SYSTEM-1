@@ -255,6 +255,7 @@ public class RentalDemandServiceImpl implements RentalDemandService {
         fastApiRequest.setAreaLocality(area);
 
         fastApiRequest.setMonth(month);
+        fastApiRequest.setYear(request.getYear());
 
         fastApiRequest.setPropertyCount(
                 (int) propertyCount);

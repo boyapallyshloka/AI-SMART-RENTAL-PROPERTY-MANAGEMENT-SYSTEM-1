@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,20 @@ import com.rental.rental_management_backend.rental.entity.RentInvoice;
 @Repository
 public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> {
 
+    @Override
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property",
+            "rentalAgreement.unit.floor.building.property"
+    })
+    Optional<RentInvoice> findById(Long invoiceId);
+
+    @Override
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property",
+            "rentalAgreement.unit.floor.building.property"
+    })
+    List<RentInvoice> findAll();
+
     Optional<RentInvoice> findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
             Long agreementId,
             Integer billingMonth,
@@ -26,6 +41,10 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
     findFirstByRentalAgreement_AgreementIdOrderByBillingYearDescBillingMonthDesc(
             Long agreementId);
 
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property",
+            "rentalAgreement.unit.floor.building.property"
+    })
     List<RentInvoice> findByTenantId(Long tenantId);
 
     @Query("""

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.rental.enums.RentalApplicationStatus;
@@ -30,6 +31,7 @@ import jakarta.persistence.Table;
     name = "rental_applications",
     indexes = {
         @Index(name = "idx_application_tenant", columnList = "tenant_id"),
+        @Index(name = "idx_application_property", columnList = "property_id"),
         @Index(name = "idx_application_unit", columnList = "unit_id"),
         @Index(name = "idx_application_status", columnList = "status")
     }
@@ -46,7 +48,11 @@ public class RentalApplication {
     private Tenant tenant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unit_id")
+    @JoinColumn(name = "property_id")
+    private Property property;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "unit_id", nullable = true)
     private Unit unit;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -129,6 +135,14 @@ public class RentalApplication {
 
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
+    }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
     }
 
     public Unit getUnit() {

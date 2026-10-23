@@ -59,9 +59,11 @@ export const getMyAgreements = async () => {
  * - dueDay: Integer (1-31, optional)
  * - noticePeriodDays: Integer (>= 0, optional)
  * - termsAndConditions: String (optional)
+ * - moveInDate: LocalDate (optional; falls back to the application's preference)
  *
- * (Note: Unit, tenant, rent, security deposit, start/end dates are
- * automatically derived by the backend from the approved Rental Application)
+ * Unit, tenant, rent, security deposit, and lease duration come from the
+ * approved application. A supplied move-in date is used; otherwise the
+ * application's preferred move-in date is used.
  *
  * @param {Object} payload
  * @returns {Promise<Object>} RentalAgreementResponse
@@ -82,6 +84,7 @@ export const createAgreement = async (payload) => {
       payload.termsAndConditions && payload.termsAndConditions.trim()
         ? payload.termsAndConditions.trim()
         : undefined,
+    moveInDate: payload.moveInDate || undefined,
   }
 
   return await axiosClient.post('/rental-agreements', requestBody)
