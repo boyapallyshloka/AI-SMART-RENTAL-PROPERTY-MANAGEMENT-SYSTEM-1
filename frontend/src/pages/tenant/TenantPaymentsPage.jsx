@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {
@@ -9,6 +10,7 @@ import {
   createRazorpayOrder,
   verifyRazorpayPayment,
   getPaymentsByInvoice,
+  getPaymentById,
   getReceiptsByInvoice,
   downloadInvoiceReceipt,
   PAYMENT_METHODS,
@@ -136,6 +138,8 @@ const extractErrorMessage = (err, fallback = 'An unexpected error occurred.') =>
 
 export default function TenantPaymentsPage() {
   const { user } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [invoices, setInvoices] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -484,6 +488,40 @@ export default function TenantPaymentsPage() {
       setLoadingHistory(false)
     }
   }
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const invoiceId = searchParams.get('invoiceId')
+    const paymentId = searchParams.get('paymentId')
+    if ((!invoiceId && !paymentId) || loading) return
+
+    const openTargetInvoice = async () => {
+      let invoice = invoiceId
+        ? invoices.find((item) => String(item.invoiceId) === invoiceId)
+        : null
+
+      if (!invoice && paymentId) {
+        try {
+          const response = await getPaymentById(paymentId)
+          const payment = response?.data || response
+          const referencedInvoiceId =
+            payment?.invoiceId ?? payment?.invoice?.invoiceId
+          invoice = invoices.find(
+            (item) => String(item.invoiceId) === String(referencedInvoiceId)
+          )
+        } catch (error) {
+          console.error('Failed to resolve payment notification:', error)
+        }
+      }
+
+      if (invoice) {
+        await handleOpenHistoryModal(invoice)
+        navigate('/tenant/payments', { replace: true })
+      }
+    }
+
+    openTargetInvoice()
+  }, [location.search, loading, invoices, navigate])
 
   const handleCloseHistoryModal = () => {
     setHistoryInvoice(null)

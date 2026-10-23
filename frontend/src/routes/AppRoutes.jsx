@@ -77,6 +77,7 @@ import ContactPage from '../pages/ContactPage'
 // Route Guards
 import ProtectedRoute from './ProtectedRoute'
 import RoleRoute from './RoleRoute'
+import NotificationResolvePage from './NotificationResolvePage'
 import { ROLES, getDashboardPath, isPropertyOwner, isPropertyManager, normalizeRole } from '../utils/roles'
 
 /**
@@ -180,6 +181,10 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <RoleRoute allowedRole={[ROLES.PROPERTY_OWNER]}>
               <Routes>
+                <Route
+                  path="resolve"
+                  element={<NotificationResolvePage role="owner" />}
+                />
                 <Route path="dashboard" element={<OwnerDashboardPage />} />
                 <Route path="properties" element={<PropertiesPage />} />
                 <Route path="properties/add" element={<AddPropertyPage />} />
@@ -276,6 +281,10 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <RoleRoute allowedRole={[ROLES.TENANT]}>
               <Routes>
+                <Route
+                  path="resolve"
+                  element={<NotificationResolvePage role="tenant" />}
+                />
                 <Route path="dashboard" element={<TenantDashboardPage />} />
                 <Route path="buildings" element={<BuildingsPage />} />
                 <Route path="my-rental" element={<Navigate to="/tenant/buildings" replace />} />
@@ -331,6 +340,10 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <RoleRoute allowedRole={[ROLES.PROPERTY_MANAGER]}>
               <Routes>
+                <Route
+                  path="resolve"
+                  element={<NotificationResolvePage role="manager" />}
+                />
                 <Route path="dashboard" element={<ManagerDashboardPage />} />
                 <Route path="properties" element={<ManagerPropertiesPage />} />
                 <Route path="properties/:propertyId" element={<ManagerPropertyDetailsPage />} />

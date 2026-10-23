@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {
@@ -44,6 +44,7 @@ import {
 export default function TenantMaintenancePage() {
   const { user } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -168,6 +169,19 @@ export default function TenantMaintenancePage() {
   useEffect(() => {
     loadTenantRequests()
   }, [])
+
+  useEffect(() => {
+    const requestId = new URLSearchParams(location.search).get('requestId')
+    if (!requestId || loading) return
+
+    const request = requests.find(
+      (item) => String(item.requestId || item.id) === requestId
+    )
+    if (request) {
+      setSelectedTicket(request)
+      navigate('/tenant/maintenance', { replace: true })
+    }
+  }, [location.search, loading, requests, navigate])
 
   // If selectedTicket has a propertyId not yet in propertyMap, resolve it dynamically
   useEffect(() => {

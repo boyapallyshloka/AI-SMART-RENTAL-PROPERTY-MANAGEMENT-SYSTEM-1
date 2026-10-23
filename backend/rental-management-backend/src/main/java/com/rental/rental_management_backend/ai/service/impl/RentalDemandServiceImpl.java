@@ -5,6 +5,8 @@ import java.math.MathContext;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.stereotype.Service;
 
 import com.rental.rental_management_backend.ai.client.FastApiRentalDemandClient;
@@ -359,8 +361,9 @@ public class RentalDemandServiceImpl implements RentalDemandService {
          * Send all 13 M3 features to FastAPI.
          */
 
-        return fastApiRentalDemandClient.predictDemand(
-                fastApiRequest);
+        return new ObjectMapper().convertValue(
+                fastApiRentalDemandClient.predictDemand(fastApiRequest),
+                RentalDemandResponseDTO.class);
     }
 
     /**

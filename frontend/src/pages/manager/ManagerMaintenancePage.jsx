@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { ROLES } from '../../utils/roles'
 import {
@@ -83,6 +83,8 @@ const formatPropertyName = (name) => {
 }
 
 export default function ManagerMaintenancePage() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -485,6 +487,19 @@ export default function ManagerMaintenancePage() {
       } finally {
         setPredictionLoading(false)
       }
+
+      useEffect(() => {
+        const requestId = new URLSearchParams(location.search).get('requestId')
+        if (!requestId || loading) return
+
+        const ticket = requests.find(
+          (item) => String(item.requestId || item.id) === requestId
+        )
+        if (ticket) {
+          handleOpenTicketModal(ticket)
+          navigate('/manager/maintenance', { replace: true })
+        }
+      }, [location.search, loading, requests, navigate])
     }
   }
 

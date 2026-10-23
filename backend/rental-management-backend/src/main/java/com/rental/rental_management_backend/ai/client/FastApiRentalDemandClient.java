@@ -3,11 +3,13 @@ package com.rental.rental_management_backend.ai.client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.util.Map;
+
 import com.rental.rental_management_backend.ai.dto.RentalDemandRequestDTO;
-import com.rental.rental_management_backend.ai.dto.RentalDemandResponseDTO;
 
 @Component
 public class FastApiRentalDemandClient {
@@ -24,7 +26,7 @@ public class FastApiRentalDemandClient {
         this.demandPredictionUrl = demandPredictionUrl;
     }
 
-    public RentalDemandResponseDTO predictDemand(
+    public Map<String, Object> predictDemand(
             RentalDemandRequestDTO request) {
 
         return restClient
@@ -33,6 +35,6 @@ public class FastApiRentalDemandClient {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .retrieve()
-                .body(RentalDemandResponseDTO.class);
+                .body(new ParameterizedTypeReference<Map<String, Object>>() {});
     }
 }

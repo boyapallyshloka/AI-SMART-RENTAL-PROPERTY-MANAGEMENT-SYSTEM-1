@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import com.rental.rental_management_backend.notification.enums.NotificationType;
 import com.rental.rental_management_backend.notification.repository.NotificationRepository;
 import com.rental.rental_management_backend.notification.service.NotificationService;
 import com.rental.rental_management_backend.notification.service.NotificationSseService;
+import com.rental.rental_management_backend.notification.service.NotificationCreatedEvent;
 
 @Service
 @Transactional
@@ -27,15 +29,18 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final NotificationSseService notificationSseService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public NotificationServiceImpl(
             NotificationRepository notificationRepository,
             UserRepository userRepository,
-            NotificationSseService notificationSseService) {
+            NotificationSseService notificationSseService,
+            ApplicationEventPublisher eventPublisher) {
 
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.notificationSseService = notificationSseService;
+        this.eventPublisher = eventPublisher;
     }
 
     // CREATE NOTIFICATION
@@ -125,6 +130,7 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationSseService.sendNotification(
                         user.getId(),
                         response);
+                publishPushEvent(persistedNotification);
             }
             return response;
         }
@@ -151,8 +157,20 @@ public class NotificationServiceImpl implements NotificationService {
                 user.getId(),
                 response
         );
+        publishPushEvent(savedNotification);
 
         return response;
+    }
+
+    private void publishPushEvent(Notification notification) {
+        eventPublisher.publishEvent(new NotificationCreatedEvent(
+                notification.getNotificationId(),
+                notification.getUser().getId(),
+                notification.getTitle(),
+                notification.getMessage(),
+                notification.getReferenceType(),
+                notification.getReferenceId(),
+                notification.getUser().getRole()));
     }
 
     // GET ALL NOTIFICATIONS OF LOGGED-IN USER

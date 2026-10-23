@@ -1,4 +1,3 @@
-
 package com.rental.rental_management_backend.ai.controller;
 
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rental.rental_management_backend.ai.dto.RentalDemandPreviewRequestDTO;
-import com.rental.rental_management_backend.ai.dto.RentalDemandResponseDTO;
 import com.rental.rental_management_backend.ai.service.RentalDemandService;
 
 import jakarta.validation.Valid;
@@ -34,12 +32,10 @@ public class RentalDemandController {
                 'SUPER_ADMIN'
             )
             """)
-    public ResponseEntity<RentalDemandResponseDTO> predictRentalDemand(
+        public ResponseEntity<?> predictRentalDemand(
             @Valid @RequestBody RentalDemandPreviewRequestDTO request) {
 
-        RentalDemandResponseDTO response =
-                rentalDemandService.predictRentalDemand(request);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+            rentalDemandService.predictRentalDemand(request));
     }
 }

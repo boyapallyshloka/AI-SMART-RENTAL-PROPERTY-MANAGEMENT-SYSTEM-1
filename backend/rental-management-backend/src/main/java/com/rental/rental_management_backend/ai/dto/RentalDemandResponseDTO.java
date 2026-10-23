@@ -1,100 +1,50 @@
 
 package com.rental.rental_management_backend.ai.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class RentalDemandResponseDTO {
-
-    private Boolean success;
-
-    private Double prediction;
-
-    private Integer predictedDemandCount;
-
-    private String demandUnit;
-
-    private String forecastPeriod;
 
     private String city;
 
+    @JsonProperty("area_locality")
     private String areaLocality;
-
-    private Integer month;
 
     private Integer year;
 
-    private String demandLevel;
+    private Integer month;
 
-    private String modelVersion;
-    private String demandLevel;
-private Integer month;
-private Integer year;
-   public String getDemandLevel() {
-    return demandLevel;
-}
+    @JsonProperty("property_count")
+    private Integer propertyCount;
 
-public void setDemandLevel(String demandLevel) {
-    this.demandLevel = demandLevel;
-}
+    @JsonProperty("application_count")
+    private Integer applicationCount;
 
-public Integer getMonth() {
-    return month;
-}
+    @JsonProperty("agreement_start_count")
+    private Integer agreementStartCount;
 
-public void setMonth(Integer month) {
-    this.month = month;
-}
+    @JsonProperty("average_monthly_rent")
+    private Double averageMonthlyRent;
 
-public Integer getYear() {
-    return year;
-}
+    @JsonProperty("demand_lag_1_month")
+    private Integer demandLag1Month;
 
-public void setYear(Integer year) {
-    this.year = year;
-}
+    @JsonProperty("demand_lag_2_month")
+    private Integer demandLag2Month;
+
+    @JsonProperty("demand_growth_1_month")
+    private Double demandGrowth1Month;
+
+    @JsonProperty("occupancy_rate")
+    private Double occupancyRate;
+
+    @JsonProperty("vacancy_rate")
+    private Double vacancyRate;
+
+    @JsonProperty("available_unit_count")
+    private Integer availableUnitCount;
 
     public RentalDemandResponseDTO() {
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public Double getPrediction() {
-        return prediction;
-    }
-
-    public void setPrediction(Double prediction) {
-        this.prediction = prediction;
-    }
-
-    public Integer getPredictedDemandCount() {
-        return predictedDemandCount;
-    }
-
-    public void setPredictedDemandCount(Integer predictedDemandCount) {
-        this.predictedDemandCount = predictedDemandCount;
-    }
-
-    public String getDemandUnit() {
-        return demandUnit;
-    }
-
-    public void setDemandUnit(String demandUnit) {
-        this.demandUnit = demandUnit;
-    }
-
-    public String getForecastPeriod() {
-        return forecastPeriod;
-    }
-
-    public void setForecastPeriod(String forecastPeriod) {
-        this.forecastPeriod = forecastPeriod;
     }
 
     public String getCity() {
@@ -113,14 +63,6 @@ public void setYear(Integer year) {
         this.areaLocality = areaLocality;
     }
 
-    public Integer getMonth() {
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
     public Integer getYear() {
         return year;
     }
@@ -129,19 +71,91 @@ public void setYear(Integer year) {
         this.year = year;
     }
 
-    public String getDemandLevel() {
-        return demandLevel;
+    public Integer getMonth() {
+        return month;
     }
 
-    public void setDemandLevel(String demandLevel) {
-        this.demandLevel = demandLevel;
+    public void setMonth(Integer month) {
+        this.month = month;
     }
 
-    public String getModelVersion() {
-        return modelVersion;
+    public Integer getPropertyCount() {
+        return propertyCount;
     }
 
-    public void setModelVersion(String modelVersion) {
-        this.modelVersion = modelVersion;
+    public void setPropertyCount(Integer propertyCount) {
+        this.propertyCount = propertyCount;
+    }
+
+    public Integer getApplicationCount() {
+        return applicationCount;
+    }
+
+    public void setApplicationCount(Integer applicationCount) {
+        this.applicationCount = applicationCount;
+    }
+
+    public Integer getAgreementStartCount() {
+        return agreementStartCount;
+    }
+
+    public void setAgreementStartCount(Integer agreementStartCount) {
+        this.agreementStartCount = agreementStartCount;
+    }
+
+    public Double getAverageMonthlyRent() {
+        return averageMonthlyRent;
+    }
+
+    public void setAverageMonthlyRent(Double averageMonthlyRent) {
+        this.averageMonthlyRent = averageMonthlyRent;
+    }
+
+    public Integer getDemandLag1Month() {
+        return demandLag1Month;
+    }
+
+    public void setDemandLag1Month(Integer demandLag1Month) {
+        this.demandLag1Month = demandLag1Month;
+    }
+
+    public Integer getDemandLag2Month() {
+        return demandLag2Month;
+    }
+
+    public void setDemandLag2Month(Integer demandLag2Month) {
+        this.demandLag2Month = demandLag2Month;
+    }
+
+    public Double getDemandGrowth1Month() {
+        return demandGrowth1Month;
+    }
+
+    public void setDemandGrowth1Month(Double demandGrowth1Month) {
+        this.demandGrowth1Month = demandGrowth1Month;
+    }
+
+    public Double getOccupancyRate() {
+        return occupancyRate;
+    }
+
+    public void setOccupancyRate(Double occupancyRate) {
+        this.occupancyRate = occupancyRate;
+    }
+
+    public Double getVacancyRate() {
+        return vacancyRate;
+    }
+
+    public void setVacancyRate(Double vacancyRate) {
+        this.vacancyRate = vacancyRate;
+    }
+
+    public Integer getAvailableUnitCount() {
+        return availableUnitCount;
+    }
+
+    public void setAvailableUnitCount(Integer availableUnitCount) {
+        this.availableUnitCount = availableUnitCount;
     }
 }
