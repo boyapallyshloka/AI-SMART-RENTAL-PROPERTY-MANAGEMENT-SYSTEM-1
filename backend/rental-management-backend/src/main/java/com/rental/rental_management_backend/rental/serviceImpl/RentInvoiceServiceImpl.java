@@ -197,9 +197,9 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         );
 
         invoice.setUnitId(
-                agreement
-                        .getUnit()
-                        .getUnitId()
+                agreement.getUnit() == null
+                        ? null
+                        : agreement.getUnit().getUnitId()
         );
 
         invoice.setBillingMonth(
@@ -697,6 +697,13 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         response.setUnitId(
                 invoice.getUnitId()
         );
+
+        if (invoice.getRentalAgreement().getProperty() != null) {
+            response.setPropertyId(
+                    invoice.getRentalAgreement().getProperty().getPropertyId());
+            response.setPropertyName(
+                    invoice.getRentalAgreement().getProperty().getPropertyName());
+        }
 
         response.setBillingMonth(
                 invoice.getBillingMonth()

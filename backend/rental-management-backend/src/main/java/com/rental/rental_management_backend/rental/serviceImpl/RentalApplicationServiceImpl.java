@@ -27,6 +27,8 @@ import com.rental.rental_management_backend.property.entity.Floor;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
+import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
 
@@ -121,46 +123,60 @@ public class RentalApplicationServiceImpl
                         new ResourceNotFoundException(
                                 "Tenant profile not found for user"));
 
-        if (request.getUnitId() == null) {
+        Unit unit = null;
+        Property property;
+        boolean directRental = request.getUnitId() == null;
 
-            throw new IllegalArgumentException(
-                    "Unit ID is required");
+        if (!directRental) {
+            unit = unitRepository.findById(request.getUnitId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Unit not found with ID: " + request.getUnitId()));
+            if (unit.getStatus() != UnitStatus.VACANT) {
+                throw new IllegalArgumentException(
+                        "Applications can only be submitted for vacant units");
+            }
+            property = getPropertyFromUnit(unit);
+        } else {
+            if (request.getPropertyId() == null) {
+                throw new IllegalArgumentException(
+                        "A property ID is required when applying to a house or villa");
+            }
+            property = propertyRepository.findById(request.getPropertyId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Property not found with ID: " + request.getPropertyId()));
+            if (property.getPropertyType() != PropertyType.HOUSE
+                    && property.getPropertyType() != PropertyType.VILLA) {
+                throw new IllegalArgumentException(
+                        "Property-level applications are supported only for houses and villas");
+            }
+            if (property.getStatus() != PropertyStatus.AVAILABLE
+                    && property.getStatus() != PropertyStatus.PUBLISHED) {
+                throw new IllegalArgumentException(
+                        "Applications can only be submitted for available properties");
+            }
+            if (property.getMonthlyRent() == null
+                    || property.getMonthlyRent().signum() <= 0) {
+                throw new IllegalArgumentException(
+                        "This property does not have a valid monthly rental value");
+            }
         }
 
-        Unit unit = unitRepository
-                .findById(request.getUnitId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Unit not found with ID: "
-                                        + request.getUnitId()));
-
-        // --------------------------------------------------------
-        // ONLY VACANT UNITS CAN RECEIVE APPLICATIONS
-        // --------------------------------------------------------
-
-        if (unit.getStatus() != UnitStatus.VACANT) {
-
-            throw new IllegalArgumentException(
-                    "Applications can only be submitted "
-                            + "for vacant units");
-        }
-
-        // --------------------------------------------------------
-        // PREVENT DUPLICATE PENDING APPLICATION
-        // --------------------------------------------------------
-
-        boolean alreadyApplied =
-                rentalApplicationRepository
+        boolean alreadyApplied = directRental
+                ? rentalApplicationRepository
+                        .existsByTenant_TenantIdAndProperty_PropertyIdAndStatus(
+                                tenant.getTenantId(), property.getPropertyId(),
+                                RentalApplicationStatus.PENDING)
+                : rentalApplicationRepository
                         .existsByTenant_TenantIdAndUnit_UnitIdAndStatus(
-                                tenant.getTenantId(),
-                                unit.getUnitId(),
+                                tenant.getTenantId(), unit.getUnitId(),
                                 RentalApplicationStatus.PENDING);
 
         if (alreadyApplied) {
 
             throw new IllegalArgumentException(
-                    "You already have a pending application "
-                            + "for this unit");
+                    directRental
+                            ? "You already have a pending application for this property"
+                            : "You already have a pending application for this unit");
         }
 
         RentalApplication application =
@@ -169,6 +185,7 @@ public class RentalApplicationServiceImpl
         application.setTenant(tenant);
 
         application.setUnit(unit);
+        application.setProperty(property);
 
         application.setPreferredMoveInDate(
                 request.getPreferredMoveInDate());
@@ -804,10 +821,14 @@ public class RentalApplicationServiceImpl
         // GET APPLICATIONS FOR PROPERTY
         // --------------------------------------------------------
 
-        List<RentalApplication> applications =
+        List<RentalApplication> applications = new java.util.ArrayList<>(
                 rentalApplicationRepository
-                        .findByUnit_Floor_Building_Property_PropertyId(
-                                propertyId);
+                        .findByUnit_Floor_Building_Property_PropertyId(propertyId));
+        rentalApplicationRepository.findByProperty_PropertyId(propertyId)
+                .stream()
+                .filter(application -> applications.stream().noneMatch(existing ->
+                        existing.getApplicationId().equals(application.getApplicationId())))
+                .forEach(applications::add);
 
         // --------------------------------------------------------
         // SUPER ADMIN
@@ -882,8 +903,7 @@ public class RentalApplicationServiceImpl
     private void notifyOwnerAboutNewApplication(
             RentalApplication application) {
 
-        if (application == null
-                || application.getUnit() == null) {
+        if (application == null) {
 
             return;
         }
@@ -917,13 +937,13 @@ public class RentalApplicationServiceImpl
         User tenantUser = tenant != null ? tenant.getUser() : null;
         Unit unit = application.getUnit();
 
-        if (property == null || tenantUser == null || unit == null) {
+        if (property == null || tenantUser == null) {
             return;
         }
 
         String tenantName = getUserDisplayName(tenantUser);
         String propertyName = property.getPropertyName();
-        String unitNumber = unit.getUnitNumber();
+        String unitNumber = unit == null ? "Entire property" : unit.getUnitNumber();
         Long applicationId = application.getApplicationId();
         String moveInDate = application.getPreferredMoveInDate() == null
                 ? "Not specified"
@@ -980,8 +1000,7 @@ public class RentalApplicationServiceImpl
     private void notifyManagerAboutNewApplication(
             RentalApplication application) {
 
-        if (application == null
-                || application.getUnit() == null) {
+        if (application == null) {
 
             return;
         }
@@ -1110,15 +1129,14 @@ public class RentalApplicationServiceImpl
         Property property = getPropertyFromApplication(application);
         Unit unit = application.getUnit();
 
-        if (tenantUser == null || tenantUser.getEmail() == null
-                || unit == null) {
+        if (tenantUser == null || tenantUser.getEmail() == null) {
             return;
         }
 
         String recipientEmail = tenantUser.getEmail();
         String tenantName = getUserDisplayName(tenantUser);
         String propertyName = property.getPropertyName();
-        String unitNumber = unit.getUnitNumber();
+        String unitNumber = unit == null ? "Entire property" : unit.getUnitNumber();
         Long applicationId = application.getApplicationId();
         String status = application.getStatus().name();
         String rejectionReason = application.getRejectionReason();
@@ -1143,13 +1161,13 @@ public class RentalApplicationServiceImpl
         User tenantUser = tenant != null ? tenant.getUser() : null;
         Unit unit = application.getUnit();
 
-        if (property == null || tenantUser == null || unit == null) {
+        if (property == null || tenantUser == null) {
             return;
         }
 
         String tenantName = getUserDisplayName(tenantUser);
         String propertyName = property.getPropertyName();
-        String unitNumber = unit.getUnitNumber();
+        String unitNumber = unit == null ? "Entire property" : unit.getUnitNumber();
         Long applicationId = application.getApplicationId();
 
         User owner = property.getOwner();
@@ -1245,10 +1263,12 @@ public class RentalApplicationServiceImpl
     private Property getPropertyFromApplication(
             RentalApplication application) {
 
-        if (application.getUnit() == null) {
+        if (application.getProperty() != null) {
+            return application.getProperty();
+        }
 
-            throw new ResourceNotFoundException(
-                    "Unit not found for this application");
+        if (application.getUnit() == null) {
+            throw new ResourceNotFoundException("Property not found for this application");
         }
 
         return getPropertyFromUnit(
@@ -1439,6 +1459,12 @@ public class RentalApplicationServiceImpl
         // UNIT
         // --------------------------------------------------------
 
+        Property property = getPropertyFromApplication(application);
+        if (property != null) {
+            response.setPropertyId(property.getPropertyId());
+            response.setPropertyName(property.getPropertyName());
+        }
+
         Unit unit =
                 application.getUnit();
 
@@ -1487,19 +1513,22 @@ public class RentalApplicationServiceImpl
                     // PROPERTY
                     // --------------------------------------------
 
-                    Property property =
+                    Property unitProperty =
                             building.getProperty();
 
-                    if (property != null) {
+                    if (unitProperty != null) {
 
                         response.setPropertyId(
-                                property.getPropertyId());
+                                unitProperty.getPropertyId());
 
                         response.setPropertyName(
-                                property.getPropertyName());
+                                unitProperty.getPropertyName());
                     }
                 }
             }
+        } else if (property != null) {
+            response.setMonthlyRent(property.getMonthlyRent());
+            response.setSecurityDeposit(property.getSecurityDeposit());
         }
 
         // --------------------------------------------------------

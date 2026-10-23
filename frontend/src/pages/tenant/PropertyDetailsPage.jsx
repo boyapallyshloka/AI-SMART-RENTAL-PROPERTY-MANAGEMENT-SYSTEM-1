@@ -437,7 +437,9 @@ export default function PropertyDetailsPage({
                   {property.propertyName}
                 </h3>
                 <p className="text-xs text-[#5B6875]">
-                  Unit-level pricing, layouts, and availability are listed under Buildings & Units below.
+                  {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase())
+                    ? 'Rental details and home specifications for this property.'
+                    : 'Unit-level pricing, layouts, and availability are listed under Buildings & Units below.'}
                 </p>
               </div>
 
@@ -458,6 +460,29 @@ export default function PropertyDetailsPage({
                     <span className="font-semibold text-[#243447]">
                       {property.totalArea.toLocaleString('en-IN')} sq ft
                     </span>
+                  </div>
+                )}
+
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bedrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bedrooms / BHK</span>
+                    <span className="font-semibold text-[#243447]">
+                      {Number(property.bedrooms) === 0 ? 'Studio' : `${property.bedrooms} BHK`}
+                    </span>
+                  </div>
+                )}
+
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bathrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bathrooms</span>
+                    <span className="font-semibold text-[#243447]">{property.bathrooms}</span>
+                  </div>
+                )}
+
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.totalFloors != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Total Floors</span>
+                    <span className="font-semibold text-[#243447]">{property.totalFloors}</span>
                   </div>
                 )}
 

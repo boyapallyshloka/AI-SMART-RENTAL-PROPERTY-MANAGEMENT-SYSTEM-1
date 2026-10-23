@@ -12,6 +12,9 @@ public interface InspectionRepository extends JpaRepository<Inspection, Long> {
 
     List<Inspection> findByProperty_PropertyId(Long propertyId);
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"property"})
+    List<Inspection> findByProperty_PropertyManager_PropertyManagerIdOrderByInspectionDateDesc(Long propertyManagerId);
+
     long countByProperty_PropertyId(Long propertyId);
 
     long countByProperty_PropertyIdAndHasIssuesRequiringAttentionTrue(Long propertyId);

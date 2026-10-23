@@ -84,10 +84,12 @@ export const mapParkingAvailableToBackend = (parking) => {
  *   - furnishingStatus
  *   - parkingAvailable
  *   - yearBuilt
+ *   - bedrooms, bathrooms, floorNumber, totalFloors, monthlyRent,
+ *     securityDeposit (for direct-rental Houses and Villas)
  *
  * Strictly EXCLUDES response/status/legacy/UI-only fields:
  *   ownerId, ownerName, propertyId, id, status, createdAt, updatedAt,
- *   bedrooms, bathrooms, monthlyRent, securityDeposit,
+ *   bathrooms,
  *   address, city, state, zipCode, amenities, buildings, units, images, etc.
  */
 export const buildPropertyRequestPayload = (data = {}) => {
@@ -124,6 +126,26 @@ export const buildPropertyRequestPayload = (data = {}) => {
       ? Math.round(Number(rawYear))
       : undefined
 
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(propertyType)
+  const bedrooms = isDirectRental && data.bedrooms != null && data.bedrooms !== ''
+    ? Number(data.bedrooms)
+    : undefined
+  const bathrooms = isDirectRental && data.bathrooms != null && data.bathrooms !== ''
+    ? Number(data.bathrooms)
+    : undefined
+  const floorNumber = isDirectRental && data.floorNumber != null && data.floorNumber !== ''
+    ? Number(data.floorNumber)
+    : undefined
+  const totalFloors = isDirectRental && data.totalFloors != null && data.totalFloors !== ''
+    ? Number(data.totalFloors)
+    : undefined
+  const monthlyRent = isDirectRental && data.monthlyRent != null && data.monthlyRent !== ''
+    ? Number(data.monthlyRent)
+    : undefined
+  const securityDeposit = isDirectRental && data.securityDeposit != null && data.securityDeposit !== ''
+    ? Number(data.securityDeposit)
+    : undefined
+
   const payload = {
     propertyName: propertyName || undefined,
     propertyType,
@@ -132,6 +154,12 @@ export const buildPropertyRequestPayload = (data = {}) => {
     furnishingStatus,
     parkingAvailable,
     yearBuilt,
+    monthlyRent,
+    securityDeposit,
+    bedrooms,
+    bathrooms,
+    floorNumber,
+    totalFloors,
   }
 
   // Ensure ownerId, status, id, and all legacy/UI fields are NEVER included in request payload
@@ -142,10 +170,6 @@ export const buildPropertyRequestPayload = (data = {}) => {
   delete payload.status
   delete payload.createdAt
   delete payload.updatedAt
-  delete payload.bedrooms
-  delete payload.bathrooms
-  delete payload.monthlyRent
-  delete payload.securityDeposit
   delete payload.deposit
   delete payload.rent
   delete payload.address
@@ -353,6 +377,8 @@ export const mapBackendPropertyToUi = (prop) => {
     // Specs (legacy fields no longer returned by backend Property API)
     bedrooms: prop.bedrooms != null ? Number(prop.bedrooms) : null,
     bathrooms: prop.bathrooms != null ? Number(prop.bathrooms) : null,
+    floorNumber: prop.floorNumber != null ? Number(prop.floorNumber) : null,
+    totalFloors: prop.totalFloors != null ? Number(prop.totalFloors) : null,
     area,
     totalArea: area,
     furnishing: prop.furnishingStatus || prop.furnishing || null,

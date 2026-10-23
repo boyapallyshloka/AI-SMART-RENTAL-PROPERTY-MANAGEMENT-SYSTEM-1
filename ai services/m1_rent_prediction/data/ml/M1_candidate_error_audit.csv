@@ -1,0 +1,186 @@
+city,area_locality,area_type,size_sqft,bedrooms_bhk,bathrooms,floor,total_floors,furnishing_status,parking_available,property_age_years,amenity_count,amenity_parking,amenity_lift,amenity_gym,amenity_security,amenity_power_backup,amenity_air_conditioning,amenity_wifi,amenity_garden,latitude,longitude,property_type,monthly_rent,data_source,predicted_rent,absolute_error,percentage_error
+Hyderabad,Maruthi Nagar Kothapet,Built-up Area,4050.0,10.0,10.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.37338638305664,78.5435791015625,Residential House,350000.0,current_2026,101415.77,248584.2265625,71.02
+Hyderabad,Bachupally,Built-up Area,2000.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.5671,78.36323,Villa,250006.0,current_2026,34775.41,215230.58984375,86.09
+Hyderabad,MLA Colony Banjara Hills,Built-up Area,6000.0,4.0,5.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.409048080444336,78.42506408691406,Residential House,500000.0,current_2026,319969.0,180031.0,36.01
+Hyderabad,Khajaguda Nanakramguda Road,Built-up Area,3800.0,4.0,5.0,0.0,24.0,Furnished,1,5.0,3,1,0,0,0,1,0,0,1,17.4236786,78.3769223,Villa,325000.0,current_2026,157335.28,167664.71875,51.59
+Hyderabad,Gachibowli,Built-up Area,4055.0,4.0,4.0,10.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.421498,78.34114,Apartment,110000.0,current_2026,218388.6,108388.609375,98.54
+Hyderabad,Jubilee Hills,Built-up Area,2400.0,3.0,3.0,3.0,24.0,Furnished,1,0.0,5,1,1,0,1,1,1,0,0,17.411540985107422,78.50619506835938,Builder Floor Apartment,150000.0,current_2026,56655.14,93344.86328125,62.23
+Hyderabad,Shaikpet,Built-up Area,2876.0,3.0,4.0,0.0,25.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.4093686,78.3971282,Apartment,185000.0,current_2026,100795.29,84204.7109375,45.52
+Hyderabad,Financial District,Built-up Area,1700.0,3.0,3.0,9.0,15.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.4125413,78.3424450999999,Apartment,120000.0,current_2026,47541.28,72458.71484375,60.38
+Hyderabad,Kondapur,Built-up Area,4800.0,5.0,5.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4681182,78.3447529,Villa,124000.0,current_2026,193312.31,69312.328125,55.9
+Hyderabad,Jubilee Hills,Built-up Area,6000.0,5.0,5.0,0.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.432273864746094,78.40977478027344,Villa,400000.0,current_2026,342170.97,57829.03125,14.46
+Hyderabad,Shamshabad,Built-up Area,9000.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.245285034179688,78.43668365478516,Villa,100000.0,current_2026,153500.61,53500.609375,53.5
+Hyderabad,Shamshabad,Built-up Area,2800.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.245285034179688,78.43668365478516,Villa,20000.0,current_2026,66793.36,46793.3671875,233.97
+Hyderabad,Appa Junction Area,Built-up Area,3854.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.362179,78.407122,Villa,120000.0,current_2026,79934.98,40065.015625,33.39
+Hyderabad,Jubilee Hills,Built-up Area,3000.0,4.0,3.0,2.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.432273864746094,78.40977478027344,Apartment,65000.0,current_2026,103567.84,38567.8359375,59.34
+Hyderabad,Appa Junction Area,Built-up Area,4016.0,4.0,4.0,0.0,24.0,Furnished,1,5.0,4,1,0,1,1,1,0,0,0,17.362179,78.407122,Villa,85000.0,current_2026,120862.88,35862.8828125,42.19
+Hyderabad,Kothaguda,Built-up Area,3300.0,3.0,3.0,5.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4655295,78.3763881,Apartment,90000.0,current_2026,125409.84,35409.8359375,39.34
+Hyderabad,Nalagandla,Built-up Area,3200.0,4.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.473093032836914,78.29607391357422,Villa,95000.0,current_2026,64982.1,30017.90234375,31.6
+Hyderabad,Madhapur,Built-up Area,2972.0,3.0,4.0,0.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.439091,78.389497,Apartment,74000.0,current_2026,102802.83,28802.828125,38.92
+Hyderabad,Mehdipatnam,Built-up Area,1850.0,3.0,3.0,6.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.34214973449707,78.36285400390625,Apartment,90000.0,current_2026,61514.31,28485.6875,31.65
+Hyderabad,"Deluxe Colony, Toli Chowki",Built-up Area,2200.0,3.0,3.0,0.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Apartment,75000.0,current_2026,47561.38,27438.625,36.58
+Hyderabad,Velmala,Built-up Area,3500.0,4.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.470683575756837,78.21282949492188,Villa,90000.0,current_2026,65854.15,24145.8515625,26.83
+Hyderabad,"Alkapur Township, Manikonda",Built-up Area,1773.0,3.0,3.0,4.0,5.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.386104583740234,78.37028503417969,Apartment,55000.0,current_2026,31504.57,23495.427734375,42.72
+Hyderabad,Rai Durg,Built-up Area,1300.0,2.0,2.0,4.0,24.0,Furnished,1,0.0,4,1,0,0,1,1,1,0,0,17.34217071533203,78.36297607421875,Builder Floor Apartment,60000.0,current_2026,36700.34,23299.65625,38.83
+Hyderabad,Manikonda Jagir,Built-up Area,1199.0,2.0,2.0,7.0,10.0,Furnished,1,5.0,3,1,1,0,1,0,0,0,0,17.418122,78.381292,Apartment,45000.0,current_2026,22596.2,22403.798828125,49.79
+Hyderabad,OU Colony Shaikpet,Built-up Area,1945.0,3.0,3.0,4.0,14.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.4091581,78.388711,Apartment,75000.0,current_2026,53003.14,21996.8671875,29.33
+Hyderabad,Hyder Nagar,Built-up Area,1810.0,3.0,3.0,6.0,14.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.5023011,78.3827995,Apartment,65000.0,current_2026,43298.72,21701.28125,33.39
+Hyderabad,PJR Layout,Built-up Area,2653.0,3.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.35723114013672,78.37874603271484,Villa,83000.0,current_2026,61712.63,21287.37109375,25.65
+Hyderabad,IDPL Staff Cooperative Housing Society,Built-up Area,850.0,2.0,2.0,1.0,24.0,Furnished,0,5.0,1,0,0,0,1,0,0,0,0,17.492431640625,78.38677978515625,Apartment,40000.0,current_2026,19294.18,20705.814453125,51.76
+Hyderabad,Banjara Hills,Built-up Area,2000.0,1.0,1.0,5.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.415895462036133,78.43576049804688,Apartment,50000.0,current_2026,30374.57,19625.4296875,39.25
+Hyderabad,Tellapur,Built-up Area,1261.0,2.0,2.0,6.0,9.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4606196,78.2751625,Apartment,50000.0,current_2026,30878.7,19121.296875,38.24
+Hyderabad,Appa Junction Area,Built-up Area,4016.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.362179,78.407122,Villa,95000.0,current_2026,114114.36,19114.359375,20.12
+Hyderabad,Puppalaguda,Super Area,2085.0,3.0,3.0,3.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.3971920769945,78.3796118209843,Apartment,70000.0,current_2026,50900.98,19099.02734375,27.28
+Hyderabad,HITEC City,Built-up Area,1200.0,3.0,3.0,29.0,29.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.4654462,78.4071378,Apartment,55000.0,current_2026,73938.28,18938.28125,34.43
+Hyderabad,Osman Nagar,Built-up Area,871.0,2.0,2.0,13.0,24.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.4417842468164,78.2803618440924,Apartment,45000.0,current_2026,26282.66,18717.345703125,41.59
+Hyderabad,Kukatpally,Built-up Area,1140.0,2.0,2.0,0.0,5.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.505667,78.381939,Apartment,36000.0,current_2026,17365.52,18634.478515625,51.76
+Hyderabad,TNGO Colony,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,34000.0,current_2026,15575.1,18424.900390625,54.19
+Hyderabad,Jal Vayu Vihar,Built-up Area,1775.0,3.0,2.0,0.0,24.0,Furnished,0,5.0,2,0,0,1,0,0,0,0,1,17.4947934,78.3996441,Villa,50000.0,current_2026,31686.6,18313.396484375,36.63
+Hyderabad,Kukatpally,Built-up Area,2121.0,3.0,3.0,10.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.357196807861328,78.37869262695312,Apartment,85000.0,current_2026,67006.4,17993.6015625,21.17
+Hyderabad,Sri Ram Nagar Colony Puppalguda,Built-up Area,1400.0,3.0,3.0,0.0,20.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.4081827,78.3588991,Apartment,70000.0,current_2026,52036.76,17963.234375,25.66
+Hyderabad,TNGOS Colony,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,34000.0,current_2026,16225.33,17774.673828125,52.28
+Hyderabad,Koti,Built-up Area,3223.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Villa,100000.0,current_2026,82499.96,17500.0390625,17.5
+Hyderabad,Puppalguda,Built-up Area,2229.0,3.0,3.0,10.0,24.0,Furnished,1,0.0,3,1,0,0,0,1,1,0,0,17.412897,78.337732,Apartment,57999.0,current_2026,75458.75,17459.75,30.1
+Hyderabad,Tellapur,Built-up Area,545.0,1.0,1.0,0.0,5.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.47567,78.298597,Apartment,26000.0,current_2026,9283.47,16716.525390625,64.29
+Hyderabad,Gachibowli,Built-up Area,420.0,1.0,1.0,5.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.445173263549805,78.36582946777344,Apartment,13000.0,current_2026,29695.35,16695.3515625,128.43
+Hyderabad,Madhapur,Built-up Area,5600.0,6.0,6.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.447437286376953,78.3914794921875,Villa,190000.0,current_2026,206522.55,16522.53125,8.7
+Hyderabad,Kukatpally,Built-up Area,1940.0,3.0,3.0,7.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.48347554720533,78.39003442883615,Apartment,80000.0,current_2026,63597.41,16402.58984375,20.5
+Hyderabad,Kukatpally,Built-up Area,1955.0,3.0,3.0,7.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.48347554720533,78.39003442883615,Apartment,80000.0,current_2026,63597.41,16402.58984375,20.5
+Hyderabad,Ghatkesar,Built-up Area,1800.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4513233430069,78.6811762527671,Villa,17500.0,current_2026,33615.15,16115.15234375,92.09
+Hyderabad,OU Colony Shaikpet,Built-up Area,2500.0,3.0,3.0,2.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.4091581,78.388711,Residential House,41000.0,current_2026,57040.06,16040.05859375,39.12
+Hyderabad,Attapur,Built-up Area,1600.0,3.0,3.0,5.0,24.0,Furnished,1,0.0,4,1,1,0,1,1,0,0,0,17.36792755126953,78.43170928955078,Apartment,49000.0,current_2026,33465.96,15534.0390625,31.7
+Hyderabad,Annojiguda,Built-up Area,1485.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.431062698364258,78.66490936279297,Villa,18000.0,current_2026,33454.12,15454.12109375,85.86
+Hyderabad,Kukatpally,Built-up Area,1955.0,3.0,3.0,7.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.48347554720533,78.39003442883615,Apartment,79000.0,current_2026,63597.41,15402.58984375,19.5
+Hyderabad,Kothaguda,Built-up Area,2565.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,1,0,0,0,0,0,1,0,0,17.4655295,78.3763881,Apartment,72000.0,current_2026,87140.7,15140.703125,21.03
+Hyderabad,Vasanth Nagar Colony Nizampet,Built-up Area,3000.0,6.0,6.0,0.0,24.0,Furnished,0,0.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Villa,70000.0,current_2026,84906.81,14906.8125,21.3
+Hyderabad,Pragathi Nagar,Built-up Area,1595.0,3.0,3.0,0.0,10.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.5314231,78.3901540999999,Apartment,45000.0,current_2026,30732.28,14267.72265625,31.71
+Hyderabad,Kukatpally,Built-up Area,1988.0,3.0,3.0,3.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.492736,78.401235,Apartment,60000.0,current_2026,45951.08,14048.91796875,23.41
+Hyderabad,Kondapur,Built-up Area,3070.0,4.0,4.0,10.0,24.0,Furnished,1,5.0,6,1,1,0,1,1,1,0,1,17.4668133,78.3359351,Apartment,140000.0,current_2026,126007.47,13992.53125,9.99
+Hyderabad,Manikonda Jagir,Built-up Area,1600.0,3.0,3.0,4.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.412504196166992,78.36874389648438,Apartment,40000.0,current_2026,53929.3,13929.30078125,34.82
+Hyderabad,Nalagandla,Built-up Area,1530.0,3.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4654574,78.3123794,Apartment,55000.0,current_2026,41113.42,13886.5859375,25.25
+Hyderabad,Nalagandla,Built-up Area,1620.0,3.0,3.0,4.0,5.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.4391372,78.401852,Apartment,40000.0,current_2026,26190.37,13809.626953125,34.52
+Hyderabad,Lalaguda Mettuguda,Built-up Area,1300.0,2.0,2.0,0.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.43002677,78.53165732,Apartment,19500.0,current_2026,33272.06,13772.05859375,70.63
+Hyderabad,Gopanpalle,Built-up Area,1965.0,3.0,3.0,14.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4577579498291,78.31212615966797,Apartment,60000.0,current_2026,73668.28,13668.28125,22.78
+Hyderabad,Tellapur,Built-up Area,4045.0,4.0,2.0,0.0,24.0,Furnished,0,5.0,3,0,0,0,1,0,1,0,1,17.435699,78.282243,Villa,110000.0,current_2026,96449.55,13550.453125,12.32
+Hyderabad,Kokapet,Built-up Area,1769.0,3.0,3.0,8.0,35.0,Furnished,1,0.0,4,1,1,0,1,1,0,0,0,17.4022913,78.3381670999999,Apartment,82000.0,current_2026,68662.39,13337.609375,16.27
+Hyderabad,Nanakramguda,Built-up Area,2780.0,3.0,3.0,21.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.43225860595703,78.3291015625,Apartment,100000.0,current_2026,112928.24,12928.2421875,12.93
+Hyderabad,Gachibowli,Built-up Area,1083.0,2.0,2.0,6.0,24.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.443563,78.3397746,Apartment,46000.0,current_2026,33167.03,12832.96875,27.9
+Hyderabad,Pati,Built-up Area,3316.0,3.0,4.0,0.0,24.0,Furnished,0,0.0,2,0,1,1,0,0,0,0,0,17.497014,78.23643,Villa,95000.0,current_2026,82218.54,12781.4609375,13.45
+Hyderabad,Nizampet,Built-up Area,1200.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.496655,78.39288,Apartment,40000.0,current_2026,27384.39,12615.611328125,31.54
+Hyderabad,Tellapur,Built-up Area,1926.0,3.0,3.0,18.0,39.0,Furnished,1,5.0,6,1,1,0,1,1,1,0,1,17.4606196,78.2751625,Apartment,65000.0,current_2026,77530.98,12530.9765625,19.28
+Hyderabad,Maruthi Nagar Kothapet,Built-up Area,1200.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.37338638305664,78.5435791015625,Apartment,13000.0,current_2026,25382.37,12382.369140625,95.25
+Hyderabad,Gundlapochampally,Built-up Area,1850.0,3.0,3.0,5.0,24.0,Furnished,0,0.0,3,0,1,0,1,1,0,0,0,17.5889091,78.4135257,Apartment,38000.0,current_2026,50339.67,12339.671875,32.47
+Hyderabad,TNGOs Colony Phase 2,Built-up Area,1380.0,3.0,3.0,1.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.342201232910156,78.3630599975586,Residential House,45000.0,current_2026,33042.42,11957.58203125,26.57
+Hyderabad,Gachibowli,Built-up Area,1925.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.432393,78.34114,Apartment,80000.0,current_2026,68180.7,11819.3046875,14.77
+Hyderabad,Mokila,Built-up Area,3690.0,3.0,3.0,0.0,24.0,Furnished,0,0.0,1,0,0,0,0,0,1,0,0,17.439323,78.190989,Villa,60000.0,current_2026,71598.78,11598.78125,19.33
+Hyderabad,Bibinagar,Built-up Area,1800.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,9000.0,current_2026,20584.86,11584.859375,128.72
+Hyderabad,Nalagandla,Built-up Area,1960.0,3.0,3.0,17.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.4673438,78.3119744999999,Apartment,75000.0,current_2026,63542.24,11457.76171875,15.28
+Hyderabad,Kondapur,Built-up Area,888.0,1.0,1.0,4.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4626829,78.353178,Apartment,20000.0,current_2026,31166.31,11166.30859375,55.83
+Hyderabad,Kismatpur,Built-up Area,3300.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.336423873901367,78.37311553955078,Residential House,57000.0,current_2026,67839.4,10839.40625,19.02
+Hyderabad,Nalagandla,Built-up Area,3800.0,4.0,5.0,0.0,24.0,Furnished,1,5.0,3,1,0,0,1,0,0,0,1,17.46026954203994,78.30464729815273,Villa,90000.0,current_2026,100354.75,10354.75,11.51
+Hyderabad,Punjagutta Officers Colony,Built-up Area,1700.0,3.0,3.0,7.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.42936,78.45358,Apartment,42000.0,current_2026,51980.08,9980.07421875,23.76
+Hyderabad,Kompally,Built-up Area,1235.0,2.0,2.0,3.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.5383741,78.48483295,Apartment,40000.0,current_2026,30054.32,9945.68359375,24.86
+Hyderabad,Bachupally,Built-up Area,1100.0,2.0,2.0,0.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.551816,78.3860695,Apartment,33000.0,current_2026,23224.42,9775.5859375,29.62
+Hyderabad,Puppalguda,Built-up Area,770.0,2.0,1.0,3.0,24.0,Furnished,0,0.0,0,0,0,0,0,0,0,0,0,17.397192001342773,78.37960815429688,Penthouse,25000.0,current_2026,15561.26,9438.7392578125,37.75
+Hyderabad,Kondapur,Built-up Area,2000.0,3.0,3.0,3.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4626829,78.353178,Apartment,50000.0,current_2026,59296.65,9296.65234375,18.59
+Hyderabad,Hafeezpet,Built-up Area,400.0,1.0,1.0,0.0,24.0,Furnished,0,5.0,1,0,0,0,1,0,0,0,0,17.484824500000002,78.35589300000001,Apartment,25000.0,current_2026,15705.5,9294.5,37.18
+Hyderabad,Attapur,Built-up Area,1880.0,2.0,3.0,1.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.36792755126953,78.43170928955078,Apartment,45000.0,current_2026,35928.64,9071.359375,20.16
+Hyderabad,Gopanpally,Built-up Area,3650.0,4.0,5.0,0.0,24.0,Furnished,0,5.0,1,0,0,1,0,0,0,0,0,17.342079162597656,78.36309051513672,Villa,90000.0,current_2026,98806.32,8806.3203125,9.78
+Hyderabad,Medchal,Built-up Area,1400.0,2.0,2.0,3.0,24.0,Furnished,1,5.0,2,1,0,0,1,0,0,0,0,17.63950513,78.49028312,Apartment,35000.0,current_2026,26643.73,8356.267578125,23.88
+Hyderabad,Gachibowli,Built-up Area,2105.0,3.0,3.0,11.0,24.0,Furnished,0,0.0,2,0,0,0,1,0,1,0,0,17.443563,78.3397746,Apartment,87000.0,current_2026,78747.28,8252.7265625,9.49
+Hyderabad,Kollur,Built-up Area,2200.0,3.0,3.0,6.0,12.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.44988163,78.24285109,Apartment,55000.0,current_2026,46931.64,8068.35546875,14.67
+Hyderabad,Nagole,Built-up Area,1500.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.3680099,78.5774996,Residential House,10000.0,current_2026,18039.34,8039.3359375,80.39
+Hyderabad,"Chaitanyapuri, Kothapet",Built-up Area,1900.0,3.0,3.0,1.0,24.0,Furnished,1,5.0,2,1,0,0,0,1,0,0,0,17.397253036499023,78.59664154052734,Builder Floor Apartment,36000.0,current_2026,28145.96,7854.044921875,21.82
+Hyderabad,Tellapur,Built-up Area,1926.0,3.0,3.0,0.0,39.0,Furnished,0,5.0,1,0,0,0,0,0,0,0,1,17.4606196,78.2751625,Apartment,65000.0,current_2026,72798.07,7798.0703125,12.0
+Hyderabad,Financial District,Built-up Area,2220.0,3.0,3.0,7.0,39.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.4087986,78.3485812999999,Apartment,78000.0,current_2026,85496.8,7496.8046875,9.61
+Hyderabad,Patancheruvu,Built-up Area,1703.0,3.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.547673,78.273185,Residential House,27000.0,current_2026,19531.5,7468.498046875,27.66
+Hyderabad,Miyapur,Built-up Area,1925.0,3.0,3.0,9.0,22.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.489523,78.371242,Apartment,55000.0,current_2026,47541.33,7458.66796875,13.56
+Hyderabad,Phase 9 KPHB,Built-up Area,2760.0,3.0,3.0,7.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.485069274902344,78.38436889648438,Apartment,70000.0,current_2026,77324.22,7324.21875,10.46
+Hyderabad,Bachupally,Built-up Area,1110.0,2.0,2.0,6.0,33.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.551816,78.3860695,Apartment,38000.0,current_2026,30769.49,7230.5078125,19.03
+Hyderabad,"Magdum Nagar, Rhoda Mistri Nagar",Built-up Area,600.0,1.0,1.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,15000.0,current_2026,8287.55,6712.447265625,44.75
+Hyderabad,Financial District,Built-up Area,1980.0,3.0,3.0,16.0,34.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4087986,78.3485812999999,Apartment,80000.0,current_2026,86571.06,6571.0625,8.21
+Hyderabad,Miyapur,Built-up Area,1380.0,3.0,3.0,15.0,40.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.5043796,78.3633351,Apartment,50000.0,current_2026,56534.94,6534.93359375,13.07
+Hyderabad,Kompally,Built-up Area,2200.0,3.0,3.0,3.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.54259490966797,78.48229217529297,Builder Floor Apartment,27000.0,current_2026,33467.52,6467.5234375,23.95
+Hyderabad,Tellapur,Built-up Area,4100.0,4.0,5.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4606196,78.2751625,Villa,135000.0,current_2026,141238.92,6238.921875,4.62
+Hyderabad,Upperpally,Built-up Area,1600.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.359628677368164,78.41770935058594,Residential House,35000.0,current_2026,28933.2,6066.802734375,17.33
+Hyderabad,LB Nagar,Built-up Area,1000.0,1.0,1.0,0.0,24.0,Furnished,1,5.0,2,1,0,0,0,0,1,0,0,17.358327865600586,78.55254364013672,Residential House,11000.0,current_2026,16735.44,5735.44140625,52.14
+Hyderabad,Sainikpuri,Built-up Area,1150.0,3.0,3.0,2.0,24.0,Furnished,0,5.0,2,0,0,0,1,1,0,0,0,17.4936411,78.5573991,Apartment,18000.0,current_2026,23727.35,5727.34765625,31.82
+Hyderabad,Bachupally,Built-up Area,1110.0,2.0,2.0,0.0,33.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.551816,78.3860695,Apartment,34000.0,current_2026,28281.95,5718.052734375,16.82
+Hyderabad,Sri Sai Enclave Old Bowenpally,Built-up Area,2789.0,4.0,1.0,4.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Penthouse,45000.0,current_2026,50696.38,5696.38671875,12.66
+Hyderabad,Kapra,Built-up Area,1844.0,3.0,3.0,3.0,24.0,Furnished,0,5.0,2,0,0,0,1,0,1,0,0,17.48933563,78.57270384,Apartment,25000.0,current_2026,30658.86,5658.85546875,22.64
+Hyderabad,Kollur,Built-up Area,4225.0,4.0,7.0,0.0,24.0,Furnished,0,0.0,0,0,0,0,0,0,0,0,0,17.4368616,78.268243,Villa,120000.0,current_2026,125587.21,5587.2109375,4.66
+Hyderabad,Pragathi Nagar,Built-up Area,1540.0,3.0,3.0,7.0,10.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.5314231,78.3901540999999,Apartment,46000.0,current_2026,40446.05,5553.94921875,12.07
+Hyderabad,Gundlapochampally,Built-up Area,1160.0,2.0,2.0,7.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.5889091,78.4135257,Apartment,26000.0,current_2026,31520.98,5520.98046875,21.23
+Hyderabad,Miyapur,Built-up Area,935.0,2.0,2.0,17.0,40.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.5043796,78.3633351,Apartment,42500.0,current_2026,37006.33,5493.66796875,12.93
+Hyderabad,Kukatpally,Built-up Area,1380.0,3.0,3.0,5.0,7.0,Furnished,1,5.0,5,1,0,0,1,1,1,0,1,17.476447,78.392724,Apartment,40000.0,current_2026,34517.94,5482.0546875,13.71
+Hyderabad,Gachibowli,Built-up Area,1710.0,3.0,3.0,2.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.414228,78.354421,Apartment,62500.0,current_2026,57019.66,5480.3359375,8.77
+Hyderabad,Srinagar Colony Malakpet Extension,Built-up Area,1950.0,3.0,3.0,3.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.429748,78.43819,Apartment,50000.0,current_2026,55324.22,5324.2265625,10.65
+Hyderabad,Kondapur,Built-up Area,1100.0,2.0,2.0,3.0,24.0,Furnished,0,5.0,1,0,0,0,1,0,0,0,0,17.4626829,78.353178,Builder Floor Apartment,23000.0,current_2026,28072.98,5072.982421875,22.06
+Hyderabad,Nagole,Built-up Area,1141.0,3.0,2.0,0.0,24.0,Furnished,1,5.0,2,1,0,0,1,0,0,0,0,17.3680099,78.5774996,Apartment,14000.0,current_2026,19016.87,5016.8671875,35.83
+Hyderabad,Madhapur,Built-up Area,1600.0,3.0,3.0,2.0,24.0,Furnished,0,0.0,0,0,0,0,0,0,0,0,0,17.44946,78.39122,Apartment,45000.0,current_2026,49973.26,4973.265625,11.05
+Hyderabad,Gangaram Chanda Nagar,Built-up Area,1700.0,3.0,3.0,2.0,24.0,Furnished,1,5.0,5,1,0,0,1,1,1,0,1,17.495596,78.324149,Apartment,46000.0,current_2026,41091.3,4908.6953125,10.67
+Hyderabad,Miyapur,Built-up Area,3000.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.491495,78.355524,Villa,70000.0,current_2026,65108.34,4891.6640625,6.99
+Hyderabad,Nizampet,Built-up Area,1100.0,2.0,2.0,4.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.513781,78.38924,Apartment,25000.0,current_2026,20152.95,4847.046875,19.39
+Hyderabad,Tellapur,Built-up Area,1926.0,3.0,3.0,0.0,37.0,Furnished,0,5.0,1,0,0,0,0,0,0,0,1,17.4606196,78.2751625,Apartment,68000.0,current_2026,72798.07,4798.0703125,7.06
+Hyderabad,Shiva Nagar Colony Attapur,Built-up Area,1278.0,3.0,2.0,2.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.36249351501465,78.42434692382812,Apartment,25000.0,current_2026,29590.75,4590.75,18.36
+Hyderabad,Satamrai,Built-up Area,1260.0,3.0,2.0,9.0,24.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.245285034179688,78.43668365478516,Apartment,42000.0,current_2026,37417.9,4582.10546875,10.91
+Hyderabad,Alwal,Built-up Area,1100.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,1,0,0,0,0,0,0,0,1,17.503186,78.506485,Villa,25000.0,current_2026,20569.06,4430.9375,17.72
+Hyderabad,"Alkapur Township, Manikonda",Built-up Area,1200.0,3.0,3.0,1.0,24.0,Furnished,1,5.0,2,1,0,0,0,1,0,0,0,17.386104583740234,78.37028503417969,Apartment,37000.0,current_2026,41273.5,4273.50390625,11.55
+Hyderabad,Lingampally Serilingampalle,Built-up Area,900.0,2.0,1.0,2.0,24.0,Furnished,1,5.0,2,1,0,0,0,0,0,0,1,17.34211540222168,78.3629379272461,Residential House,22000.0,current_2026,17897.63,4102.369140625,18.65
+Hyderabad,Madhura Nagar,Built-up Area,2200.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Apartment,55000.0,current_2026,50973.02,4026.984375,7.32
+Hyderabad,Ameenpur,Built-up Area,940.0,2.0,2.0,5.0,24.0,Furnished,1,0.0,1,1,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Apartment,16000.0,current_2026,20018.21,4018.208984375,25.11
+Hyderabad,Nacharam,Built-up Area,1088.0,3.0,3.0,8.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.430577,78.564171,Apartment,38000.0,current_2026,34131.74,3868.265625,10.18
+Hyderabad,Kharmanghat,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,12000.0,current_2026,15575.1,3575.099609375,29.79
+Hyderabad,Phase 5th KPHB,Built-up Area,1550.0,3.0,3.0,25.0,25.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.478853225708008,78.3919448852539,Apartment,60000.0,current_2026,63509.64,3509.64453125,5.85
+Hyderabad,Chanda Nagar,Built-up Area,2000.0,3.0,3.0,0.0,24.0,Furnished,1,5.0,2,1,0,0,0,0,1,0,0,17.495741,78.325436,Residential House,40000.0,current_2026,36508.24,3491.765625,8.73
+Hyderabad,Kukatpally,Built-up Area,1672.0,3.0,3.0,7.0,33.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4753668,78.3907445999999,Apartment,80000.0,current_2026,76596.43,3403.5703125,4.25
+Hyderabad,Gopanpalle,Built-up Area,1965.0,3.0,3.0,4.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4577581101491,78.312128616532,Apartment,60000.0,current_2026,56648.28,3351.7265625,5.59
+Hyderabad,Gandhi Nagar Kavadiguda,Built-up Area,1938.0,2.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.413864135742188,78.49325561523438,Residential House,35000.0,current_2026,31661.44,3338.55859375,9.54
+Hyderabad,Kompally,Built-up Area,1725.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.5238659,78.4896693,Apartment,40000.0,current_2026,36704.86,3295.140625,8.24
+Hyderabad,Kukatpally,Built-up Area,1842.0,3.0,3.0,7.0,33.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4753668,78.3907445999999,Apartment,83000.0,current_2026,79899.93,3100.0703125,3.74
+Hyderabad,Hyder Nagar,Built-up Area,1200.0,3.0,2.0,0.0,24.0,Furnished,1,5.0,1,1,0,0,0,0,0,0,0,17.494204,78.337672,Apartment,33000.0,current_2026,29941.6,3058.404296875,9.27
+Hyderabad,Patancheruvu,Built-up Area,1213.0,3.0,3.0,9.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.513125,78.259694,Apartment,42000.0,current_2026,45035.48,3035.48046875,7.23
+Hyderabad,"Nandi Nagar, Banjara Hills",Built-up Area,1600.0,3.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4164707,78.4382469,Apartment,38000.0,current_2026,34970.84,3029.16015625,7.97
+Hyderabad,Miyapur,Built-up Area,1150.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.5210925,78.3442965,Apartment,27000.0,current_2026,24123.02,2876.978515625,10.66
+Hyderabad,Gachibowli,Built-up Area,1365.0,2.0,2.0,16.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4577581101491,78.312128616532,Apartment,47000.0,current_2026,44147.26,2852.74609375,6.07
+Hyderabad,Gachibowli,Built-up Area,1034.0,2.0,2.0,11.0,24.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.425396,78.347743,Apartment,36000.0,current_2026,38777.36,2777.35546875,7.71
+Hyderabad,Bachupally,Built-up Area,891.0,2.0,2.0,21.0,33.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.551816,78.3860695,Apartment,35000.0,current_2026,32310.78,2689.21484375,7.68
+Hyderabad,Kukatpally,Built-up Area,1672.0,3.0,3.0,7.0,33.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4753668,78.3907445999999,Apartment,74000.0,current_2026,76596.43,2596.4296875,3.51
+Hyderabad,Gachibowli,Built-up Area,1100.0,2.0,2.0,3.0,24.0,Furnished,1,0.0,2,1,0,0,1,0,0,0,0,17.44356346130371,78.33977508544922,Apartment,32000.0,current_2026,29445.77,2554.23046875,7.98
+Hyderabad,Power Welfare Society,Built-up Area,1676.0,3.0,3.0,11.0,24.0,Furnished,1,5.0,3,1,0,0,1,0,1,0,0,17.3915006,78.3389021,Apartment,75000.0,current_2026,77358.81,2358.8125,3.15
+Hyderabad,Gopanapalli Thanda,Built-up Area,3800.0,5.0,6.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4557095,78.2949497,Villa,100000.0,current_2026,97684.98,2315.015625,2.32
+Hyderabad,Snehapuri Colony Tarnaka,Built-up Area,1350.0,2.0,2.0,3.0,24.0,Furnished,1,5.0,2,1,0,0,0,0,1,0,0,17.455246551330568,78.37900851635743,Apartment,35000.0,current_2026,32842.54,2157.4609375,6.16
+Hyderabad,Bandlaguda Jagir,Built-up Area,1072.0,2.0,2.0,6.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.3549295,78.3824415,Apartment,28000.0,current_2026,25940.12,2059.87890625,7.36
+Hyderabad,Nizampet,Built-up Area,1250.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.518583297729492,78.3809814453125,Apartment,24505.0,current_2026,26559.58,2054.578125,8.38
+Hyderabad,Kondapur,Built-up Area,3300.0,4.0,5.0,0.0,24.0,Furnished,0,5.0,1,0,0,0,0,0,0,0,1,17.357263565063477,78.37867736816406,Villa,155000.0,current_2026,157032.19,2032.1875,1.31
+Hyderabad,"Indresham, Bachuguda",Built-up Area,2423.0,4.0,4.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.56943130493164,78.25357818603516,Villa,40000.0,current_2026,38094.22,1905.78515625,4.76
+Hyderabad,Manikonda Jagir,Built-up Area,2600.0,4.0,3.0,3.0,10.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.418122,78.381292,Apartment,60000.0,current_2026,61879.88,1879.88671875,3.13
+Hyderabad,Kukatpally,Built-up Area,800.0,2.0,1.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4753668,78.3907445999999,Residential House,15000.0,current_2026,13184.16,1815.84375,12.11
+Hyderabad,Mehdipatnam,Built-up Area,1000.0,1.0,1.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.345802307128906,78.38358306884766,Residential House,10000.0,current_2026,11777.9,1777.904296875,17.78
+Hyderabad,"Bolarum, Medchal Road",Built-up Area,842.0,2.0,2.0,3.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.51825523376465,78.5082778930664,Apartment,23000.0,current_2026,21352.36,1647.63671875,7.16
+Hyderabad,Financial District,Built-up Area,1980.0,3.0,3.0,27.0,40.0,Furnished,1,5.0,5,1,1,0,1,1,1,0,0,17.4087986,78.3485812999999,Apartment,85000.0,current_2026,86626.4,1626.3984375,1.91
+Hyderabad,Kondapur,Built-up Area,520.0,1.0,1.0,4.0,24.0,Furnished,0,5.0,2,0,0,0,1,1,0,0,0,17.4626829,78.353178,Builder Floor Apartment,19800.0,current_2026,18308.16,1491.8359375,7.53
+Hyderabad,Mythri Nagar Madeenaguda,Built-up Area,990.0,2.0,2.0,6.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.497217178344727,78.33527374267578,Apartment,30000.0,current_2026,28529.66,1470.3359375,4.9
+Hyderabad,Kompally,Built-up Area,842.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.5386962,78.5115194,Apartment,20000.0,current_2026,18594.81,1405.193359375,7.03
+Hyderabad,Uppal,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.403547286987305,78.5636215209961,Apartment,15500.0,current_2026,16861.62,1361.623046875,8.78
+Hyderabad,Izzathnagar,Built-up Area,450.0,1.0,1.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4713199,78.3303252,Residential House,13000.0,current_2026,11690.62,1309.37890625,10.07
+Hyderabad,Amberpet,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,0,0.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Builder Floor Apartment,15000.0,current_2026,16140.1,1140.1005859375,7.6
+Hyderabad,HITEC City,Built-up Area,1150.0,2.0,2.0,3.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.449221,78.376997,Apartment,39000.0,current_2026,37898.6,1101.39453125,2.82
+Hyderabad,Mayuri Nagar Miyapur,Built-up Area,1121.0,2.0,2.0,0.0,24.0,Furnished,1,5.0,4,1,0,0,1,1,1,0,0,17.463665,78.549908,Apartment,27000.0,current_2026,25926.74,1073.2578125,3.98
+Hyderabad,Bachupally,Built-up Area,1112.0,3.0,2.0,30.0,33.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.551816,78.3860695,Apartment,40000.0,current_2026,38946.58,1053.4140625,2.63
+Hyderabad,Vediri Township,Built-up Area,1212.0,2.0,2.0,1.0,24.0,Furnished,1,0.0,3,1,0,0,1,0,1,0,0,17.519628524780273,78.34505462646484,Builder Floor Apartment,25000.0,current_2026,23963.5,1036.50390625,4.15
+Hyderabad,Kollur,Built-up Area,1840.0,3.0,3.0,0.0,15.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4473159,78.2542634,Apartment,45000.0,current_2026,45927.08,927.07421875,2.06
+Hyderabad,Financial District,Built-up Area,1980.0,3.0,3.0,23.0,40.0,Furnished,1,5.0,4,1,1,0,1,1,0,0,0,17.4087986,78.3485812999999,Apartment,83000.0,current_2026,82085.74,914.265625,1.1
+Hyderabad,Beeramguda Ramachandrapuram,Built-up Area,1710.0,3.0,3.0,3.0,24.0,Furnished,0,5.0,2,0,0,0,1,1,0,0,0,17.506159,78.297666,Apartment,35000.0,current_2026,34123.95,876.046875,2.5
+Hyderabad,Velmala,Built-up Area,1550.0,3.0,3.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4706831,78.2128294,Villa,32000.0,current_2026,31153.53,846.46875,2.65
+Hyderabad,Miyapur,Built-up Area,1200.0,3.0,2.0,4.0,24.0,Furnished,1,5.0,6,1,1,0,1,1,1,0,1,17.493895,78.357389,Apartment,35000.0,current_2026,35832.24,832.24609375,2.38
+Hyderabad,Kukatpally,Built-up Area,1852.0,3.0,3.0,7.0,33.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.4753668,78.3907445999999,Apartment,81000.0,current_2026,80201.4,798.59375,0.99
+Hyderabad,Suchitra Road,Built-up Area,1000.0,2.0,2.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.499258,78.476754,Apartment,20000.0,current_2026,19270.24,729.7578125,3.65
+Hyderabad,Narsingi,Built-up Area,1955.0,3.0,3.0,0.0,9.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.3925725445495,78.3271569428647,Apartment,50000.0,current_2026,50708.42,708.42578125,1.42
+Hyderabad,Mayuri Nagar Miyapur,Built-up Area,1050.0,2.0,2.0,1.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.463665,78.549908,Apartment,18000.0,current_2026,17445.05,554.94921875,3.08
+Hyderabad,Bachupally,Built-up Area,880.0,2.0,2.0,1.0,24.0,Furnished,1,5.0,2,1,0,0,1,0,0,0,0,17.551816,78.3860695,Apartment,19000.0,current_2026,18500.17,499.83203125,2.63
+Hyderabad,"Hema Nagar, Secunderabad",Built-up Area,700.0,1.0,1.0,0.0,24.0,Furnished,0,5.0,0,0,0,0,0,0,0,0,0,17.455246551330568,78.37900851635743,Residential House,10000.0,current_2026,9503.53,496.46875,4.96
+Hyderabad,"Kakateeya Nagar, Secunderabad",Built-up Area,1200.0,2.0,2.0,5.0,24.0,Furnished,1,5.0,3,1,0,0,1,1,0,0,0,17.4171220774017,78.5416658687632,Apartment,30000.0,current_2026,29526.7,473.298828125,1.58
+Hyderabad,Isnapur,Built-up Area,1000.0,2.0,2.0,2.0,24.0,Furnished,1,5.0,2,1,0,0,1,0,0,0,0,17.548253,78.205388,Apartment,16000.0,current_2026,16230.88,230.8828125,1.44
+Hyderabad,Gundlapochampally,Built-up Area,1100.0,2.0,2.0,8.0,24.0,Furnished,1,5.0,3,1,0,0,1,0,1,0,0,17.5889091,78.4135257,Apartment,30000.0,current_2026,29855.57,144.431640625,0.48
+Hyderabad,Financial District,Built-up Area,1780.0,3.0,3.0,31.0,39.0,Furnished,1,0.0,4,1,0,0,1,1,1,0,0,17.4087986,78.3485812999999,Apartment,77000.0,current_2026,76856.64,143.3671875,0.19

@@ -42,7 +42,8 @@ public class RentInvoice {
     @Column(name = "tenant_id", nullable = false)
     private Long tenantId;
 
-    @Column(name = "unit_id", nullable = false)
+    // Direct-rental houses/villas have no unit; the linked agreement identifies the property.
+    @Column(name = "unit_id")
     private Long unitId;
 
     @Column(nullable = false)

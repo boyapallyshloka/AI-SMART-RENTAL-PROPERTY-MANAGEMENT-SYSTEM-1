@@ -145,6 +145,17 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             AND :maxRent IS NULL
             AND :bedrooms IS NULL
 
+            OR (
+                p.propertyType IN (
+                    com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                    com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                )
+                AND p.monthlyRent IS NOT NULL
+                AND (:minRent IS NULL OR p.monthlyRent >= :minRent)
+                AND (:maxRent IS NULL OR p.monthlyRent <= :maxRent)
+                AND (:bedrooms IS NULL OR p.bedrooms = :bedrooms)
+            )
+
             OR EXISTS (
                 SELECT u.unitId
                 FROM Unit u
@@ -211,6 +222,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         CAST(p.propertyType AS string),
         CAST(p.status AS string),
         p.totalArea,
+        p.bedrooms,
         p.yearBuilt,
         (SELECT CONCAT(CONCAT(propertyAddress.addressLine1, ', '), propertyAddress.city)
          FROM PropertyAddress propertyAddress
@@ -260,6 +272,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             CAST(p.propertyType AS string),
             CAST(p.status AS string),
             p.totalArea,
+            p.bedrooms,
             p.yearBuilt,
             (
                 SELECT CONCAT(CONCAT(a.addressLine1, ', '), a.city)

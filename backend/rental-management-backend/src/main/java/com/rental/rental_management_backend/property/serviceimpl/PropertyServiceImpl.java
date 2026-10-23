@@ -66,9 +66,15 @@ public class PropertyServiceImpl implements PropertyService {
 	    property.setPropertyType(request.getPropertyType());
 	    property.setDescription(request.getDescription());
 	    property.setTotalArea(request.getTotalArea());
+	    property.setBedrooms(request.getBedrooms());
+	    property.setBathrooms(request.getBathrooms());
+	    property.setFloorNumber(request.getFloorNumber());
+	    property.setTotalFloors(request.getTotalFloors());
 	    property.setFurnishingStatus(request.getFurnishingStatus());
 	    property.setParkingAvailable(request.getParkingAvailable());
 	    property.setYearBuilt(request.getYearBuilt());
+	    property.setMonthlyRent(request.getMonthlyRent());
+	    property.setSecurityDeposit(request.getSecurityDeposit());
 
 	    // Owner comes from the authenticated JWT user.
 	    property.setOwner(owner);
@@ -251,11 +257,23 @@ private String toPublicImageUrl(String imageUrl) {
 
         property.setTotalArea(request.getTotalArea());
 
+        property.setBedrooms(request.getBedrooms());
+
+        property.setBathrooms(request.getBathrooms());
+
+        property.setFloorNumber(request.getFloorNumber());
+
+        property.setTotalFloors(request.getTotalFloors());
+
         property.setFurnishingStatus(request.getFurnishingStatus());
 
         property.setParkingAvailable(request.getParkingAvailable());
 
         property.setYearBuilt(request.getYearBuilt());
+
+        property.setMonthlyRent(request.getMonthlyRent());
+
+        property.setSecurityDeposit(request.getSecurityDeposit());
 
         /*
          * Owner and status are intentionally not changed
@@ -383,6 +401,14 @@ private String toPublicImageUrl(String imageUrl) {
                 property.getTotalArea()
         );
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
+        response.setFloorNumber(property.getFloorNumber());
+
+        response.setTotalFloors(property.getTotalFloors());
+
         response.setFurnishingStatus(
                 property.getFurnishingStatus()
         );
@@ -394,6 +420,9 @@ private String toPublicImageUrl(String imageUrl) {
         response.setYearBuilt(
                 property.getYearBuilt()
         );
+
+        response.setMonthlyRent(property.getMonthlyRent());
+        response.setSecurityDeposit(property.getSecurityDeposit());
 
         response.setStatus(
                 property.getStatus()

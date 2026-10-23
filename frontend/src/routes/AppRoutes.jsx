@@ -54,6 +54,8 @@ import ManagerBuildingDetailsPage from '../pages/manager/ManagerBuildingDetailsP
 import ManagerApplicationsPage from '../pages/manager/ManagerApplicationsPage'
 import ManagerApplicationDetailsPage from '../pages/manager/ManagerApplicationDetailsPage'
 import ManagerMaintenancePage from '../pages/manager/ManagerMaintenancePage'
+import ManagerTechniciansPage from '../pages/manager/ManagerTechniciansPage'
+import ManagerInspectionsPage from '../pages/manager/ManagerInspectionsPage'
 import ManagerProfilePage from '../pages/manager/ManagerProfilePage'
 
 // Admin Dashboard Pages
@@ -336,6 +338,8 @@ export default function AppRoutes() {
                 <Route path="applications" element={<ManagerApplicationsPage />} />
                 <Route path="applications/:id" element={<ManagerApplicationDetailsPage />} />
                 <Route path="maintenance" element={<ManagerMaintenancePage />} />
+                <Route path="maintenance/technicians" element={<ManagerTechniciansPage />} />
+                <Route path="inspections" element={<ManagerInspectionsPage />} />
                 <Route path="agreements" element={<AgreementsPage />} />
                 <Route path="agreements/new" element={<CreateAgreementPage />} />
                 <Route path="payments" element={<PaymentsPage />} />

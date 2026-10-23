@@ -19,7 +19,7 @@ import { resolveImageUrl } from '../../api/propertyApi'
  * Enterprise PropertyCard Component for SmartEstate
  * Displays key details of a rental property for tenant browsing.
  * Strictly adheres to backend Property contract:
- * - monthlyRent, securityDeposit, bedrooms, bathrooms belong to Unit and are hidden when absent.
+ * - apartment bedroom/bathroom values come from Unit; direct-rental House/Villa bedrooms come from Property.
  * - uses real backend image URLs and IDs.
  *
  * @param {Object} props

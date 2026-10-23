@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -49,6 +50,13 @@ public class GlobalExceptionHandler {
                 return buildResponse(
                                 HttpStatus.BAD_REQUEST,
                                 ex.getMessage());
+        }
+
+        @ExceptionHandler(ResponseStatusException.class)
+        public ResponseEntity<Map<String, Object>> handleResponseStatusException(ResponseStatusException ex) {
+                return buildResponse(
+                        HttpStatus.valueOf(ex.getStatusCode().value()),
+                        ex.getReason() == null ? "Request failed" : ex.getReason());
         }
 
         @ExceptionHandler(MethodArgumentNotValidException.class)

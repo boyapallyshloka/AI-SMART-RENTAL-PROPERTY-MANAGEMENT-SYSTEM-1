@@ -18,6 +18,8 @@ public interface RentalApplicationRepository
     @Override
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -26,6 +28,8 @@ public interface RentalApplicationRepository
     @Override
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -33,6 +37,8 @@ public interface RentalApplicationRepository
 
     @EntityGraph(attributePaths = {
             "tenant.user",
+            "property.owner",
+            "property.propertyManager.user",
             "unit.floor.building.property.owner",
             "unit.floor.building.property.propertyManager.user"
     })
@@ -66,6 +72,14 @@ public interface RentalApplicationRepository
             Long tenantId,
             Long unitId,
             RentalApplicationStatus status);
+
+    @EntityGraph(attributePaths = {
+            "tenant.user", "property.owner", "property.propertyManager.user"
+    })
+    List<RentalApplication> findByProperty_PropertyId(Long propertyId);
+
+    boolean existsByTenant_TenantIdAndProperty_PropertyIdAndStatus(
+            Long tenantId, Long propertyId, RentalApplicationStatus status);
 
     /*
      * Get all rental applications belonging to a property.

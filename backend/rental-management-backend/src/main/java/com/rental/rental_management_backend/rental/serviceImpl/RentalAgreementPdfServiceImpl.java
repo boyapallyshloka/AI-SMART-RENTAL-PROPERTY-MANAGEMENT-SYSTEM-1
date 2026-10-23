@@ -346,6 +346,27 @@ public class RentalAgreementPdfServiceImpl
                         }
                     }
 
+                    if (unit == null && agreement.getProperty() != null) {
+                        Property property = agreement.getProperty();
+                        y = writeLine(contentStream, normalFont,
+                                "Property Name: " + property.getPropertyName(), y);
+                        OptionalAddressResult addressResult = getPropertyAddress(property);
+                        if (addressResult.address() != null) {
+                            PropertyAddress address = addressResult.address();
+                            y = writeLine(contentStream, normalFont,
+                                    "Address: " + address.getAddressLine1(), y);
+                            String locality = java.util.stream.Stream.of(
+                                            address.getArea(), address.getCity(),
+                                            address.getState(), address.getPincode())
+                                    .filter(value -> value != null && !value.isBlank())
+                                    .collect(java.util.stream.Collectors.joining(", "));
+                            if (!locality.isBlank()) {
+                                y = writeLine(contentStream, normalFont,
+                                        "Location: " + locality, y);
+                            }
+                        }
+                    }
+
                     y -= 10;
 
                     // =====================================================

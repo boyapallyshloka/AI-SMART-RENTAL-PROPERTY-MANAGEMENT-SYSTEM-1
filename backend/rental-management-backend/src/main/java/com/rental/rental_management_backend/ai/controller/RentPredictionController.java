@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rental.rental_management_backend.ai.dto.RentPredictionPreviewRequestDTO;
+import com.rental.rental_management_backend.ai.dto.RentPredictionPropertyRequestDTO;
 import com.rental.rental_management_backend.ai.dto.RentPredictionResponseDTO;
 import com.rental.rental_management_backend.ai.service.RentPredictionService;
 
@@ -34,5 +35,14 @@ public class RentPredictionController {
                 rentPredictionService.predictRent(request);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/predict-property")
+    @PreAuthorize("hasRole('PROPERTY_OWNER')")
+    public ResponseEntity<RentPredictionResponseDTO> predictPropertyRent(
+            @Valid @RequestBody RentPredictionPropertyRequestDTO request) {
+
+        return ResponseEntity.ok(
+                rentPredictionService.predictPropertyRent(request));
     }
 }

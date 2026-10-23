@@ -22,7 +22,9 @@ import com.rental.rental_management_backend.notification.enums.NotificationPrior
 import com.rental.rental_management_backend.notification.enums.NotificationType;
 import com.rental.rental_management_backend.notification.service.NotificationService;
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.rental.dto.RentalAgreementRequest;
 import com.rental.rental_management_backend.rental.dto.RentalAgreementResponse;
 import com.rental.rental_management_backend.rental.entity.RentalAgreement;
@@ -126,12 +128,16 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                     "Rental application does not have a tenant");
         }
 
-        if (application.getUnit() == null) {
-            throw new IllegalStateException(
-                    "Rental application does not have a unit");
-        }
-
         Unit unit = application.getUnit();
+        Property property = application.getProperty();
+        if (property == null && unit != null && unit.getFloor() != null
+                && unit.getFloor().getBuilding() != null) {
+            property = unit.getFloor().getBuilding().getProperty();
+        }
+        if (property == null) {
+            throw new IllegalStateException(
+                    "Rental application does not identify a rentable property");
+        }
 
         if (rentalAgreementRepository
                 .existsByRentalApplication_ApplicationId(
@@ -140,9 +146,15 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                     "A rental agreement already exists for this application");
         }
 
-        if (unit.getStatus() != UnitStatus.VACANT) {
+        if (unit != null && unit.getStatus() != UnitStatus.VACANT) {
             throw new IllegalStateException(
                     "Rental agreement cannot be created because the unit is not vacant");
+        }
+        if (unit == null
+                && property.getStatus() != PropertyStatus.AVAILABLE
+                && property.getStatus() != PropertyStatus.PUBLISHED) {
+            throw new IllegalStateException(
+                    "Rental agreement cannot be created because the property is not available");
         }
 
         validateDates(application);
@@ -165,6 +177,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         agreement.setRentalApplication(application);
         agreement.setTenant(application.getTenant());
         agreement.setUnit(unit);
+        agreement.setProperty(property);
 
         LocalDate startDate = application.getPreferredMoveInDate();
         Integer leaseDurationMonths =
@@ -177,12 +190,19 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         agreement.setStartDate(startDate);
         agreement.setEndDate(endDate);
 
-        agreement.setMonthlyRent(unit.getMonthlyRent());
-        agreement.setSecurityDeposit(unit.getSecurityDeposit());
+        agreement.setMonthlyRent(unit != null ? unit.getMonthlyRent() : property.getMonthlyRent());
+        agreement.setSecurityDeposit(unit != null ? unit.getSecurityDeposit() : property.getSecurityDeposit());
 
         agreement.setDueDay(request.getDueDay());
         agreement.setNoticePeriodDays(request.getNoticePeriodDays());
-        agreement.setMoveInDate(application.getPreferredMoveInDate());
+        LocalDate moveInDate = request.getMoveInDate() != null
+                ? request.getMoveInDate()
+                : application.getPreferredMoveInDate();
+        if (moveInDate != null && moveInDate.isBefore(startDate)) {
+            throw new IllegalArgumentException(
+                    "Move-in date cannot be before the lease start date");
+        }
+        agreement.setMoveInDate(moveInDate);
         agreement.setTermsAndConditions(
                 cleanString(request.getTermsAndConditions()));
         agreement.setAgreementDocument(null);
@@ -315,6 +335,9 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
             agreement.setStatus(AgreementStatus.ACTIVE);
             occupyUnit(agreement.getUnit());
+            if (agreement.getUnit() == null && agreement.getProperty() != null) {
+                agreement.getProperty().setStatus(PropertyStatus.OCCUPIED);
+            }
 
         } else if (status == AgreementStatus.EXPIRED) {
 
@@ -335,6 +358,9 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
             agreement.setStatus(AgreementStatus.EXPIRED);
             releaseUnit(agreement.getUnit());
+            if (agreement.getUnit() == null && agreement.getProperty() != null) {
+                agreement.getProperty().setStatus(PropertyStatus.AVAILABLE);
+            }
 
         } else if (status == AgreementStatus.TERMINATED) {
 
@@ -350,6 +376,9 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
             }
 
             releaseUnit(agreement.getUnit());
+            if (agreement.getUnit() == null && agreement.getProperty() != null) {
+                agreement.getProperty().setStatus(PropertyStatus.AVAILABLE);
+            }
 
         } else if (status == AgreementStatus.DRAFT) {
 
@@ -424,6 +453,9 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         if (agreementTerminated) {
             agreement.setStatus(AgreementStatus.TERMINATED);
             releaseUnit(agreement.getUnit());
+            if (agreement.getUnit() == null && agreement.getProperty() != null) {
+                agreement.getProperty().setStatus(PropertyStatus.AVAILABLE);
+            }
         }
 
         RentalAgreement updatedAgreement =
@@ -525,7 +557,9 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         }
 
         Unit unit = agreement.getUnit();
-        var property = unit != null
+        var property = agreement.getProperty() != null
+                ? agreement.getProperty()
+                : unit != null
                 && unit.getFloor() != null
                 && unit.getFloor().getBuilding() != null
                 ? unit.getFloor().getBuilding().getProperty()
@@ -546,7 +580,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                         ? "Not specified"
                         : property.getPropertyName(),
                 unit == null || unit.getUnitNumber() == null
-                        ? "Not specified"
+                        ? "Entire property"
                         : unit.getUnitNumber(),
                 formatEmailValue(agreement.getStartDate()),
                 formatEmailValue(agreement.getEndDate()),
@@ -616,15 +650,17 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
         // Resolve property through Unit -> Floor -> Building -> Property.
         Unit unit = agreement.getUnit();
-
-        if (unit != null
+        var property = agreement.getProperty() != null
+                ? agreement.getProperty()
+                : unit != null
                 && unit.getFloor() != null
                 && unit.getFloor().getBuilding() != null
-                && unit.getFloor().getBuilding().getProperty() != null) {
-
-            var property = unit.getFloor()
+                ? unit.getFloor()
                     .getBuilding()
-                    .getProperty();
+                    .getProperty()
+                : null;
+
+        if (property != null) {
 
             // Property owner.
             if (property.getOwner() != null
@@ -732,23 +768,32 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                     "Move-in date cannot be before agreement start date");
         }
 
-        if (agreement.getUnit() == null) {
-            throw new IllegalStateException(
-                    "Agreement unit is missing");
-        }
-
         Unit unit = agreement.getUnit();
-
-        if (unit.getStatus() != UnitStatus.VACANT) {
-            throw new IllegalStateException(
-                    "Agreement cannot be activated because the unit is not vacant");
-        }
-
-        if (rentalAgreementRepository.existsByUnit_UnitIdAndStatus(
-                unit.getUnitId(),
-                AgreementStatus.ACTIVE)) {
-            throw new IllegalStateException(
-                    "This unit already has an active rental agreement");
+        if (unit != null) {
+            if (unit.getStatus() != UnitStatus.VACANT) {
+                throw new IllegalStateException(
+                        "Agreement cannot be activated because the unit is not vacant");
+            }
+            if (rentalAgreementRepository.existsByUnit_UnitIdAndStatus(
+                    unit.getUnitId(), AgreementStatus.ACTIVE)) {
+                throw new IllegalStateException(
+                        "This unit already has an active rental agreement");
+            }
+        } else {
+            Property property = agreement.getProperty();
+            if (property == null) {
+                throw new IllegalStateException("Agreement property is missing");
+            }
+            if (property.getStatus() != PropertyStatus.AVAILABLE
+                    && property.getStatus() != PropertyStatus.PUBLISHED) {
+                throw new IllegalStateException(
+                        "Agreement cannot be activated because the property is not available");
+            }
+            if (rentalAgreementRepository.existsByProperty_PropertyIdAndStatus(
+                    property.getPropertyId(), AgreementStatus.ACTIVE)) {
+                throw new IllegalStateException(
+                        "This property already has an active rental agreement");
+            }
         }
     }
 
@@ -861,18 +906,13 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                             .equals(user.getId());
         }
 
-        if (agreement.getUnit() == null
-                || agreement.getUnit().getFloor() == null
-                || agreement.getUnit().getFloor().getBuilding() == null
-                || agreement.getUnit().getFloor()
-                        .getBuilding().getProperty() == null) {
-            return false;
+        var property = agreement.getProperty();
+        if (property == null && agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null) {
+            property = agreement.getUnit().getFloor().getBuilding().getProperty();
         }
-
-        var property = agreement.getUnit()
-                .getFloor()
-                .getBuilding()
-                .getProperty();
+        if (property == null) return false;
 
         // Owner can access only their own properties.
         if (user.getRole() == RoleType.PROPERTY_OWNER) {
@@ -901,19 +941,16 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
             RentalApplication application,
             User user) {
 
-        if (application == null
-                || application.getUnit() == null
-                || application.getUnit().getFloor() == null
-                || application.getUnit().getFloor().getBuilding() == null
-                || application.getUnit().getFloor()
-                        .getBuilding().getProperty() == null) {
+        if (application == null) {
             return false;
         }
-
-        var property = application.getUnit()
-                .getFloor()
-                .getBuilding()
-                .getProperty();
+        var property = application.getProperty();
+        if (property == null && application.getUnit() != null
+                && application.getUnit().getFloor() != null
+                && application.getUnit().getFloor().getBuilding() != null) {
+            property = application.getUnit().getFloor().getBuilding().getProperty();
+        }
+        if (property == null) return false;
 
         if (user.getRole() == RoleType.PROPERTY_OWNER) {
             return property.getOwner() != null
@@ -993,6 +1030,18 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
         if (agreement.getUnit() != null) {
             response.setUnitId(agreement.getUnit().getUnitId());
+        }
+        if (agreement.getProperty() != null) {
+            response.setPropertyId(agreement.getProperty().getPropertyId());
+            response.setPropertyName(agreement.getProperty().getPropertyName());
+        } else if (agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null
+                && agreement.getUnit().getFloor().getBuilding().getProperty() != null) {
+            Property unitProperty = agreement.getUnit().getFloor()
+                    .getBuilding().getProperty();
+            response.setPropertyId(unitProperty.getPropertyId());
+            response.setPropertyName(unitProperty.getPropertyName());
         }
 
         response.setStartDate(agreement.getStartDate());

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.rental.enums.AgreementStatus;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
 
@@ -52,9 +53,13 @@ public class RentalAgreement {
     /*
      * Unit comes from the approved rental application.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "unit_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "property_id")
+    private Property property;
 
     @NotNull(message = "Agreement start date is required")
     @Column(name = "start_date", nullable = false)
@@ -178,6 +183,10 @@ public class RentalAgreement {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
+
+    public Property getProperty() { return property; }
+
+    public void setProperty(Property property) { this.property = property; }
 
     public LocalDate getStartDate() {
         return startDate;

@@ -7,6 +7,7 @@ public class PropertyCardResponse {
     private String propertyType;
     private String status;
     private Double areaSqft;
+    private Integer bedrooms;
     private Integer yearBuilt;
     private String address;
     private String imageUrl;
@@ -21,6 +22,7 @@ public class PropertyCardResponse {
             String propertyType,
             String status,
             Double areaSqft,
+            Integer bedrooms,
             Integer yearBuilt,
             String address,
             String imageUrl,
@@ -30,6 +32,7 @@ public class PropertyCardResponse {
         this.propertyType = propertyType;
         this.status = status;
         this.areaSqft = areaSqft;
+        this.bedrooms = bedrooms;
         this.yearBuilt = yearBuilt;
         this.address = address;
         this.imageUrl = imageUrl;
@@ -74,6 +77,14 @@ public class PropertyCardResponse {
 
     public void setAreaSqft(Double areaSqft) {
         this.areaSqft = areaSqft;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
     }
 
     public Integer getYearBuilt() {

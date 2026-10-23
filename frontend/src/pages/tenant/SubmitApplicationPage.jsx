@@ -291,6 +291,13 @@ export default function SubmitApplicationPage() {
         if (!isMounted) return
         setPropertyDetails(data)
 
+        const property = data?.property || data?.data?.property || data?.data || data
+        if (['HOUSE', 'VILLA'].includes(String(property?.propertyType || '').toUpperCase())) {
+          setUnits([])
+          setSelectedUnitId('')
+          return
+        }
+
         // Flatten units across buildings -> floors -> units
         const rawUnits = (data?.buildings || []).flatMap((b) =>
           (b.floors || []).flatMap((f) =>
@@ -349,6 +356,10 @@ export default function SubmitApplicationPage() {
     return units.find((u) => String(u.unitId) === String(selectedUnitId))
   }, [units, selectedUnitId])
 
+  const detailProperty = propertyDetails?.property || propertyDetails?.data?.property || propertyDetails?.data || propertyDetails
+  const selectedPropertyType = String(detailProperty?.propertyType || selectedProperty?.propertyType || '').toUpperCase()
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(selectedPropertyType)
+
   // Property dropdown options
   const propertyOptions = useMemo(() => {
     return properties.map((p) => {
@@ -395,7 +406,7 @@ export default function SubmitApplicationPage() {
       errs.property = 'Please select a property'
     }
 
-    if (!selectedUnitId) {
+    if (!isDirectRental && !selectedUnitId) {
       errs.unit = 'Please select a specific unit to apply for'
     }
 
@@ -488,7 +499,9 @@ export default function SubmitApplicationPage() {
 
       // 2. Strictly submit only fields supported by backend RentalApplicationCreateRequest
       const payload = {
-        unitId: Number(selectedUnitId),
+        ...(isDirectRental
+          ? { propertyId: Number(selectedPropertyId) }
+          : { unitId: Number(selectedUnitId) }),
         monthlyIncome: monthlyIncome.trim() ? Number(monthlyIncome) : null,
         employerOccupation: employer.trim() || null,
         preferredMoveInDate: moveInDate || null,
@@ -506,7 +519,7 @@ export default function SubmitApplicationPage() {
       const appStatus = result?.status || 'status not returned by the server'
 
       setSuccessMessage(
-        `Your rental application ${appId} for Unit ${selectedUnitObj?.unitNumber || ''} at ${selectedProperty?.propertyName || 'the property'
+        `Your rental application ${appId} for ${isDirectRental ? 'the property' : `Unit ${selectedUnitObj?.unitNumber || ''}`} at ${selectedProperty?.propertyName || 'the property'
         } has been submitted successfully! Status: ${appStatus}. Redirecting to your applications...`
       )
 
@@ -617,7 +630,7 @@ export default function SubmitApplicationPage() {
           <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
             <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
               <Building2 className="w-4 h-4 text-[#315A7D]" />
-              1. Target Property & Unit
+              1. Target Property{isDirectRental ? '' : ' & Unit'}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -633,7 +646,7 @@ export default function SubmitApplicationPage() {
                 />
               </div>
 
-              <div>
+              {!isDirectRental && <div>
                 <Select
                   label="Select Unit"
                   options={unitOptions}
@@ -643,8 +656,15 @@ export default function SubmitApplicationPage() {
                   disabled={isLoadingDetails || units.length === 0}
                   required
                 />
-              </div>
+              </div>}
             </div>
+
+            {isDirectRental && (
+              <div className="rounded-md border border-[#C9D7E3] bg-[#F3F7FA] p-3.5 text-sm text-[#315A7D]">
+                This {selectedPropertyType.toLowerCase()} is rented directly. No building, floor, or unit selection is needed.
+                {detailProperty?.monthlyRent != null && <span className="ml-1">Monthly rent: <strong>{formatInr(detailProperty.monthlyRent)}/mo</strong>.</span>}
+              </div>
+            )}
 
             {/* Selected Property Details banner */}
             {selectedProperty && (

@@ -412,6 +412,14 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
         response.setTotalArea(
                 property.getTotalArea());
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
+        response.setFloorNumber(property.getFloorNumber());
+
+        response.setTotalFloors(property.getTotalFloors());
+
         response.setFurnishingStatus(
                 property.getFurnishingStatus());
 
@@ -420,6 +428,9 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
 
         response.setYearBuilt(
                 property.getYearBuilt());
+
+        response.setMonthlyRent(property.getMonthlyRent());
+        response.setSecurityDeposit(property.getSecurityDeposit());
 
         response.setStatus(
                 property.getStatus());

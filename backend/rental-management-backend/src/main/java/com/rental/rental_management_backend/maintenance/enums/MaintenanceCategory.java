@@ -7,6 +7,7 @@ public enum MaintenanceCategory {
     AC,
     APPLIANCE,
     CLEANING,
+    CARPENTRY,
     STRUCTURAL,
     OTHER
 }

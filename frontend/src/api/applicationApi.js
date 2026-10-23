@@ -32,6 +32,7 @@ export const APPLICATION_STATUSES = {
  */
 export const createApplication = async ({
   unitId,
+  propertyId,
   preferredMoveInDate,
   preferredLeaseDurationMonths,
   monthlyIncome,
@@ -39,7 +40,8 @@ export const createApplication = async ({
   message
 }) => {
   const payload = {
-    unitId: Number(unitId),
+    ...(unitId != null && unitId !== '' ? { unitId: Number(unitId) } : {}),
+    ...(propertyId != null && propertyId !== '' ? { propertyId: Number(propertyId) } : {}),
     preferredMoveInDate: preferredMoveInDate || null,
     preferredLeaseDurationMonths: Number(preferredLeaseDurationMonths),
     monthlyIncome:

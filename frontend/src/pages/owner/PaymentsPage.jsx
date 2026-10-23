@@ -187,12 +187,12 @@ export default function PaymentsPage() {
             app?.tenantEmail ||
             tenantMap.get(Number(inv.tenantId))?.tenantEmail ||
             null,
-          propertyName: app?.propertyName || null,
+          propertyName: app?.propertyName || agr?.propertyName || inv.propertyName || null,
           unitNumber: app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : inv.unitId
             ? `Unit #${inv.unitId}`
-            : '—',
+            : 'Entire property',
           amount: inv.totalAmount == null ? null : Number(inv.totalAmount),
           totalPaid: inv.totalPaid == null ? null : Number(inv.totalPaid),
           remainingAmount:
@@ -755,7 +755,7 @@ export default function PaymentsPage() {
                     <Select
                       options={activeAgreements.map((a) => ({
                         value: String(a.agreementId),
-                        label: `Agreement #${a.agreementId} — ${a.tenantName} (${a.propertyName} · Unit #${a.unitNumber || a.unitId})`,
+                        label: `Agreement #${a.agreementId} — ${a.tenantName} (${a.propertyName} · ${a.unitNumber ? `Unit #${a.unitNumber}` : a.unitId ? `Unit #${a.unitId}` : 'Entire property'})`,
                       }))}
                       value={selectedAgreementId}
                       onChange={(e) => setSelectedAgreementId(e.target.value)}

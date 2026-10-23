@@ -1,6 +1,7 @@
 package com.rental.rental_management_backend.property.entity;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
@@ -49,6 +50,22 @@ public class Property {
     @Column(name = "total_area")
     private Double totalArea;
 
+    @PositiveOrZero(message = "Bedrooms cannot be negative")
+    @Column(name = "bedrooms")
+    private Integer bedrooms;
+
+    @PositiveOrZero(message = "Bathrooms cannot be negative")
+    @Column(name = "bathrooms")
+    private Integer bathrooms;
+
+    @PositiveOrZero(message = "Floor number cannot be negative")
+    @Column(name = "floor_number")
+    private Integer floorNumber;
+
+    @PositiveOrZero(message = "Total floors cannot be negative")
+    @Column(name = "total_floors")
+    private Integer totalFloors;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "furnishing_status", length = 30)
     private FurnishingStatus furnishingStatus;
@@ -59,6 +76,14 @@ public class Property {
     // M1 AI Rent Prediction field
     @Column(name = "year_built")
     private Integer yearBuilt;
+
+    @PositiveOrZero(message = "Monthly rent cannot be negative")
+    @Column(name = "monthly_rent", precision = 12, scale = 2)
+    private BigDecimal monthlyRent;
+
+    @PositiveOrZero(message = "Security deposit cannot be negative")
+    @Column(name = "security_deposit", precision = 12, scale = 2)
+    private BigDecimal securityDeposit;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -139,6 +164,38 @@ public class Property {
         this.totalArea = totalArea;
     }
 
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(Integer floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public Integer getTotalFloors() {
+        return totalFloors;
+    }
+
+    public void setTotalFloors(Integer totalFloors) {
+        this.totalFloors = totalFloors;
+    }
+
     public FurnishingStatus getFurnishingStatus() {
         return furnishingStatus;
     }
@@ -162,6 +219,14 @@ public class Property {
     public void setYearBuilt(Integer yearBuilt) {
         this.yearBuilt = yearBuilt;
     }
+
+    public BigDecimal getMonthlyRent() { return monthlyRent; }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) { this.monthlyRent = monthlyRent; }
+
+    public BigDecimal getSecurityDeposit() { return securityDeposit; }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) { this.securityDeposit = securityDeposit; }
 
     public PropertyStatus getStatus() {
         return status;

@@ -166,8 +166,10 @@ public class RentInvoicePdfServiceImpl
 
                     writeLine(
                             contentStream,
-                            "Unit ID: "
-                                    + invoice.getUnitId(),
+                            "Unit: "
+                                    + (invoice.getUnitId() == null
+                                            ? "Entire property"
+                                            : "#" + invoice.getUnitId()),
                             y
                     );
 

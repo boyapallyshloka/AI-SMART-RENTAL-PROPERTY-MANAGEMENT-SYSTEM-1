@@ -1,6 +1,7 @@
 
 package com.rental.rental_management_backend.rental.dto;
 
+import java.time.LocalDate;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,8 @@ public class RentalAgreementRequest {
 
     @Min(value = 0, message = "Notice period cannot be negative")
     private Integer noticePeriodDays;
+
+    private LocalDate moveInDate;
 
     private String termsAndConditions;
 
@@ -44,6 +47,10 @@ public class RentalAgreementRequest {
     public void setNoticePeriodDays(Integer noticePeriodDays) {
         this.noticePeriodDays = noticePeriodDays;
     }
+
+    public LocalDate getMoveInDate() { return moveInDate; }
+
+    public void setMoveInDate(LocalDate moveInDate) { this.moveInDate = moveInDate; }
 
     public String getTermsAndConditions() {
         return termsAndConditions;

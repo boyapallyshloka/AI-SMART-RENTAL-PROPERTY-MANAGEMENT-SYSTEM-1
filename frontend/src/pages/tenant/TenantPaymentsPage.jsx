@@ -259,12 +259,12 @@ export default function TenantPaymentsPage() {
         return {
           ...inv,
           id: inv.invoiceId,
-          propertyName: app?.propertyName || null,
+          propertyName: app?.propertyName || agr?.propertyName || inv.propertyName || null,
           unitNumber: app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : inv.unitId
             ? `Unit #${inv.unitId}`
-            : '—',
+            : 'Entire property',
           amount: inv.totalAmount == null ? null : Number(inv.totalAmount),
           totalPaid: inv.totalPaid == null ? null : Number(inv.totalPaid),
           remainingAmount:
