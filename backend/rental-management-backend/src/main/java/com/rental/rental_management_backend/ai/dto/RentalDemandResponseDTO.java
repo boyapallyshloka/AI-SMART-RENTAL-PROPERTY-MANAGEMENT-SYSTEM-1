@@ -1,4 +1,3 @@
-
 package com.rental.rental_management_backend.ai.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,9 +9,13 @@ public class RentalDemandResponseDTO {
     @JsonProperty("area_locality")
     private String areaLocality;
 
-    private Integer year;
+    private String modelVersion;
+
+    private String demandLevel;
 
     private Integer month;
+
+    private Integer year;
 
     @JsonProperty("property_count")
     private Integer propertyCount;
@@ -44,8 +47,10 @@ public class RentalDemandResponseDTO {
     @JsonProperty("available_unit_count")
     private Integer availableUnitCount;
 
+
     public RentalDemandResponseDTO() {
     }
+
 
     public String getCity() {
         return city;
@@ -55,6 +60,7 @@ public class RentalDemandResponseDTO {
         this.city = city;
     }
 
+
     public String getAreaLocality() {
         return areaLocality;
     }
@@ -63,13 +69,24 @@ public class RentalDemandResponseDTO {
         this.areaLocality = areaLocality;
     }
 
-    public Integer getYear() {
-        return year;
+
+    public String getModelVersion() {
+        return modelVersion;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setModelVersion(String modelVersion) {
+        this.modelVersion = modelVersion;
     }
+
+
+    public String getDemandLevel() {
+        return demandLevel;
+    }
+
+    public void setDemandLevel(String demandLevel) {
+        this.demandLevel = demandLevel;
+    }
+
 
     public Integer getMonth() {
         return month;
@@ -79,6 +96,16 @@ public class RentalDemandResponseDTO {
         this.month = month;
     }
 
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+
     public Integer getPropertyCount() {
         return propertyCount;
     }
@@ -86,6 +113,7 @@ public class RentalDemandResponseDTO {
     public void setPropertyCount(Integer propertyCount) {
         this.propertyCount = propertyCount;
     }
+
 
     public Integer getApplicationCount() {
         return applicationCount;
@@ -95,6 +123,7 @@ public class RentalDemandResponseDTO {
         this.applicationCount = applicationCount;
     }
 
+
     public Integer getAgreementStartCount() {
         return agreementStartCount;
     }
@@ -102,6 +131,7 @@ public class RentalDemandResponseDTO {
     public void setAgreementStartCount(Integer agreementStartCount) {
         this.agreementStartCount = agreementStartCount;
     }
+
 
     public Double getAverageMonthlyRent() {
         return averageMonthlyRent;
@@ -111,6 +141,7 @@ public class RentalDemandResponseDTO {
         this.averageMonthlyRent = averageMonthlyRent;
     }
 
+
     public Integer getDemandLag1Month() {
         return demandLag1Month;
     }
@@ -118,6 +149,7 @@ public class RentalDemandResponseDTO {
     public void setDemandLag1Month(Integer demandLag1Month) {
         this.demandLag1Month = demandLag1Month;
     }
+
 
     public Integer getDemandLag2Month() {
         return demandLag2Month;
@@ -127,6 +159,7 @@ public class RentalDemandResponseDTO {
         this.demandLag2Month = demandLag2Month;
     }
 
+
     public Double getDemandGrowth1Month() {
         return demandGrowth1Month;
     }
@@ -134,6 +167,7 @@ public class RentalDemandResponseDTO {
     public void setDemandGrowth1Month(Double demandGrowth1Month) {
         this.demandGrowth1Month = demandGrowth1Month;
     }
+
 
     public Double getOccupancyRate() {
         return occupancyRate;
@@ -143,6 +177,7 @@ public class RentalDemandResponseDTO {
         this.occupancyRate = occupancyRate;
     }
 
+
     public Double getVacancyRate() {
         return vacancyRate;
     }
@@ -150,6 +185,7 @@ public class RentalDemandResponseDTO {
     public void setVacancyRate(Double vacancyRate) {
         this.vacancyRate = vacancyRate;
     }
+
 
     public Integer getAvailableUnitCount() {
         return availableUnitCount;

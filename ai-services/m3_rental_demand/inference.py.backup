@@ -1,0 +1,152 @@
+
+from pathlib import Path
+
+import joblib
+import numpy as np
+import pandas as pd
+
+from m3_rental_demand.config import MODEL_PATH, MODEL_VERSION
+
+
+class RentalDemandPredictor:
+    """Loads the two-stage M3 model and predicts rental demand."""
+
+    def __init__(self):
+        if not Path(MODEL_PATH).exists():
+            raise FileNotFoundError(
+                f"Trained model not found: {MODEL_PATH}. "
+                "Run train_model.py first."
+            )
+
+        self.artifact = joblib.load(MODEL_PATH)
+
+        if self.artifact.get("approach") != (
+            "two-stage classification and regression"
+        ):
+            raise ValueError(
+                "The loaded model is not the expected two-stage model. "
+                "Run train_model.py first."
+            )
+
+        self.classifier = self.artifact["classifier"]
+        self.regressor = self.artifact["regressor"]
+        self.threshold = float(self.artifact["threshold"])
+        self.features = self.artifact["features"]
+        self.categorical_features = self.artifact["categorical_features"]
+        self.numeric_features = self.artifact["numeric_features"]
+        self.model_version = self.artifact.get(
+            "model_version", MODEL_VERSION
+        )
+
+    def predict(self, request_data: dict) -> dict:
+        """Predict next month's rental demand."""
+
+        aliases = {
+            "areaLocality": "area_locality",
+            "propertyCount": "property_count",
+            "applicationCount": "application_count",
+            "agreementStartCount": "agreement_start_count",
+            "averageMonthlyRent": "average_monthly_rent",
+            "demandLag1Month": "demand_lag_1_month",
+            "demandLag2Month": "demand_lag_2_month",
+            "demandGrowth1Month": "demand_growth_1_month",
+            "occupancyRate": "occupancy_rate",
+            "vacancyRate": "vacancy_rate",
+            "availableUnitCount": "available_unit_count",
+        }
+
+        normalized = {
+            aliases.get(key, key): value
+            for key, value in request_data.items()
+        }
+
+        missing = [
+            feature
+            for feature in self.features
+            if feature not in normalized or normalized[feature] is None
+        ]
+
+        if missing:
+            raise ValueError(
+                f"Missing required prediction features: {missing}"
+            )
+
+        row = {feature: normalized[feature] for feature in self.features}
+        input_df = pd.DataFrame([row], columns=self.features)
+
+        for feature in self.numeric_features:
+            try:
+                value = float(input_df.at[0, feature])
+            except (TypeError, ValueError):
+                raise ValueError(
+                    f"Feature '{feature}' must be numeric."
+                ) from None
+
+            if not np.isfinite(value):
+                raise ValueError(
+                    f"Feature '{feature}' must be a finite number."
+                )
+
+            input_df[feature] = value
+
+        for feature in self.categorical_features:
+            value = input_df.at[0, feature]
+
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(
+                    f"Feature '{feature}' must be a non-empty string."
+                )
+
+            input_df[feature] = value.strip()
+
+        # Stage 1: estimate the probability of positive demand.
+        probability = float(
+            self.classifier.predict_proba(input_df)[0, 1]
+        )
+        is_positive = probability >= self.threshold
+
+        # Stage 2: estimate the demand count.
+        raw_count = float(self.regressor.predict(input_df)[0])
+        estimated_count = max(0.0, raw_count)
+
+        # Apply the classifier decision to the regression estimate.
+        if is_positive:
+            predicted_count = max(0, int(round(estimated_count)))
+        else:
+            predicted_count = 0
+
+        if predicted_count <= 2:
+            demand_level = "LOW"
+        elif predicted_count <= 5:
+            demand_level = "MEDIUM"
+        else:
+            demand_level = "HIGH"
+
+        # Forecast the month following the input month.
+        month = int(normalized["month"])
+        year = int(normalized["year"])
+
+        if not 1 <= month <= 12:
+            raise ValueError("'month' must be between 1 and 12.")
+
+        forecast_month = (month % 12) + 1
+        forecast_year = year + (1 if month == 12 else 0)
+
+        return {
+            "success": True,
+            "city": normalized["city"],
+            "areaLocality": normalized["area_locality"],
+            "month": forecast_month,
+            "year": forecast_year,
+            "predictedDemandCount": predicted_count,
+            "demandLevel": demand_level,
+            "modelVersion": self.model_version,
+        }
+
+
+predictor = RentalDemandPredictor()
+
+
+def predict_rental_demand(request_data: dict) -> dict:
+    """Convenient function for the FastAPI endpoint."""
+    return predictor.predict(request_data)

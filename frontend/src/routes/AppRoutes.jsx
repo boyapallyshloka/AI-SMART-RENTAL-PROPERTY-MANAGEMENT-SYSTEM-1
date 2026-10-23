@@ -1,6 +1,8 @@
 import React from 'react'
 import { Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import ResolveRouter from "../components/ResolveRouter";
+
 
 // Auth Pages
 import LoginPage from '../pages/auth/LoginPage'
@@ -267,6 +269,7 @@ export default function AppRoutes() {
                 <Route path="agreements" element={<AgreementsPage />} />
                 <Route path="agreements/new" element={<CreateAgreementPage />} />
                 <Route path="profile" element={<OwnerProfilePage />} />
+                <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/owner/dashboard" replace />} />
               </Routes>
             </RoleRoute>
@@ -303,6 +306,7 @@ export default function AppRoutes() {
                 <Route path="maintenance" element={<TenantMaintenancePage />} />
                 <Route path="maintenance/new" element={<CreateMaintenanceRequestPage />} />
                 <Route path="preferences" element={<Navigate to="/tenant/find-properties" replace />} />
+                <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/tenant/dashboard" replace />} />
               </Routes>
             </RoleRoute>
@@ -326,6 +330,7 @@ export default function AppRoutes() {
                 <Route path="audit-logs" element={<AuditLogsPage />} />
                 <Route path="ai-monitoring" element={<AIMonitoringPage />} />
                 <Route path="system-settings" element={<SystemSettingsPage />} />
+                <Route Path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
               </Routes>
             </RoleRoute>
@@ -357,6 +362,7 @@ export default function AppRoutes() {
                 <Route path="payments/:id" element={<PaymentDetailsPage />} />
                 <Route path="reports" element={<ReportsPage role={ROLES.PROPERTY_MANAGER} />} />
                 <Route path="profile" element={<ManagerProfilePage />} />
+                <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/manager/dashboard" replace />} />
               </Routes>
             </RoleRoute>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import DashboardLayout from '../../layouts/DashboardLayout'
 
@@ -135,6 +135,7 @@ export default function MaintenancePage() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const hasFetchedRef = useRef(false)
+  const [searchParams] = useSearchParams();
 
   // Cache/lookup maps for Property Name and Unit Number
 
@@ -153,602 +154,205 @@ export default function MaintenancePage() {
   // Resolve property names and unit numbers only when they are missing
 
   const enrichPropertiesAndUnits = async (tickets) => {
-
     if (!Array.isArray(tickets) || tickets.length === 0) {
-
       return
-
     }
 
     const newPropertyMap = {}
-
     const newUnitMap = {}
 
-    // ---------------------------------------------------------
-
     // 1. Use information already returned by /maintenance
-
-    // ---------------------------------------------------------
-
     tickets.forEach((ticket) => {
-
       if (ticket.propertyId && ticket.propertyName) {
-
         newPropertyMap[String(ticket.propertyId)] = ticket.propertyName
-
       }
-
       if (ticket.unitId && ticket.unitNumber) {
-
         newUnitMap[String(ticket.unitId)] = String(ticket.unitNumber)
-
       }
-
     })
 
-    // ---------------------------------------------------------
-
     // 2. Find what information is actually missing
-
-    // ---------------------------------------------------------
-
     const missingPropertyIds = [
-
       ...new Set(
-
         tickets
-
-          .filter(
-
-            (ticket) =>
-
-              ticket.propertyId &&
-
-              !ticket.propertyName
-
-          )
-
+          .filter((ticket) => ticket.propertyId && !ticket.propertyName)
           .map((ticket) => String(ticket.propertyId))
-
       ),
-
     ]
 
     const missingUnitPropertyIds = [
-
       ...new Set(
-
         tickets
-
-          .filter(
-
-            (ticket) =>
-
-              ticket.propertyId &&
-
-              ticket.unitId &&
-
-              !ticket.unitNumber
-
-          )
-
+          .filter((ticket) => ticket.propertyId && ticket.unitId && !ticket.unitNumber)
           .map((ticket) => String(ticket.propertyId))
-
       ),
-
     ]
 
     // Nothing else needs to be loaded
-
-    if (
-
-      missingPropertyIds.length === 0 &&
-
-      missingUnitPropertyIds.length === 0
-
-    ) {
-
-      setPropertyMap((prev) => ({
-
-        ...prev,
-
-        ...newPropertyMap,
-
-      }))
-
-      setUnitMap((prev) => ({
-
-        ...prev,
-
-        ...newUnitMap,
-
-      }))
-
+    if (missingPropertyIds.length === 0 && missingUnitPropertyIds.length === 0) {
+      setPropertyMap((prev) => ({ ...prev, ...newPropertyMap }))
+      setUnitMap((prev) => ({ ...prev, ...newUnitMap }))
       return
-
     }
 
-    // ---------------------------------------------------------
-
     // 3. Load owner's properties ONLY if property names are missing
-
-    // ---------------------------------------------------------
-
     let ownedPropertyIdSet = new Set()
-
     if (missingPropertyIds.length > 0 || missingUnitPropertyIds.length > 0) {
-
       try {
-
         let propList = propertyListCacheRef.current
-
         if (!propList) {
-
           const propRes = await getMyProperties()
-
           propList = Array.isArray(propRes?.data)
-
             ? propRes.data
-
             : Array.isArray(propRes)
-
               ? propRes
-
               : []
-
           propertyListCacheRef.current = propList
-
         }
 
         propList.forEach((property) => {
-
-          const propertyId =
-
-            property.propertyId || property.id
-
-          const propertyName =
-
-            property.propertyName ||
-
-            property.name ||
-
-            property.title
-
+          const propertyId = property.propertyId || property.id
+          const propertyName = property.propertyName || property.name || property.title
           if (propertyId) {
-
             ownedPropertyIdSet.add(String(propertyId))
-
           }
-
           if (propertyId && propertyName) {
-
             newPropertyMap[String(propertyId)] = propertyName
-
           }
-
         })
-
       } catch (error) {
-
-        console.warn(
-
-          'Could not load properties list for maintenance lookup:',
-
-          error
-
-        )
-
+        console.warn('Could not load properties list for maintenance lookup:', error)
       }
-
     }
 
-    // ---------------------------------------------------------
-
     // 4. Fetch property details ONLY when a unit number is missing
-
-    // ---------------------------------------------------------
-
-    const targetPropertyIds = missingUnitPropertyIds.filter(
-
-      (propertyId) =>
-
-        ownedPropertyIdSet.has(String(propertyId))
-
+    const targetPropertyIds = missingUnitPropertyIds.filter((propertyId) =>
+      ownedPropertyIdSet.has(String(propertyId))
     )
 
     await Promise.allSettled(
-
       targetPropertyIds.map(async (propertyId) => {
-
         const cacheKey = String(propertyId)
-
         try {
-
-          // Reuse cached property details
-
           let details = propertyDetailsCacheRef.current.get(cacheKey)
-
           if (!details) {
-
             details = await getPropertyDetails(propertyId)
-
             if (details) {
-
-              propertyDetailsCacheRef.current.set(
-
-                cacheKey,
-
-                details
-
-              )
-
+              propertyDetailsCacheRef.current.set(cacheKey, details)
             }
-
           }
-
-          if (!details) {
-
-            return
-
-          }
-
-          // ---------------------------------------------------
+          if (!details) return
 
           // Property -> Buildings -> Floors -> Units
-
-          // ---------------------------------------------------
-
           if (Array.isArray(details.buildings)) {
-
             for (const building of details.buildings) {
-
-              if (!Array.isArray(building?.floors)) {
-
-                continue
-
-              }
-
+              if (!Array.isArray(building?.floors)) continue
               for (const floor of building.floors) {
-
-                if (!Array.isArray(floor?.units)) {
-
-                  continue
-
-                }
-
+                if (!Array.isArray(floor?.units)) continue
                 for (const unit of floor.units) {
-
-                  if (
-
-                    unit?.unitId != null &&
-
-                    unit?.unitNumber
-
-                  ) {
-
-                    newUnitMap[String(unit.unitId)] =
-
-                      String(unit.unitNumber)
-
+                  if (unit?.unitId != null && unit?.unitNumber) {
+                    newUnitMap[String(unit.unitId)] = String(unit.unitNumber)
                   }
-
                 }
-
               }
-
             }
-
           }
 
-          // ---------------------------------------------------
-
-          // Flat units array, if backend provides it
-
-          // ---------------------------------------------------
-
+          // Flat units array layout option
           if (Array.isArray(details.units)) {
-
             for (const unit of details.units) {
-
-              if (
-
-                unit?.unitId != null &&
-
-                unit?.unitNumber
-
-              ) {
-
-                newUnitMap[String(unit.unitId)] =
-
-                  String(unit.unitNumber)
-
+              if (unit?.unitId != null && unit?.unitNumber) {
+                newUnitMap[String(unit.unitId)] = String(unit.unitNumber)
               }
-
             }
-
           }
-
         } catch (error) {
-
-          console.warn(
-
-            `Could not load details for property ${propertyId}:`,
-
-            error
-
-          )
-
+          console.warn(`Could not load details for property ${propertyId}:`, error)
         }
-
       })
-
     )
 
-    // ---------------------------------------------------------
-
-    // 5. Update maps once
-
-    // ---------------------------------------------------------
-
-    setPropertyMap((prev) => ({
-
-      ...prev,
-
-      ...newPropertyMap,
-
-    }))
-
-    setUnitMap((prev) => ({
-
-      ...prev,
-
-      ...newUnitMap,
-
-    }))
-
+    // 5. Update state maps once
+    setPropertyMap((prev) => ({ ...prev, ...newPropertyMap }))
+    setUnitMap((prev) => ({ ...prev, ...newUnitMap }))
   }
 
   const fetchTickets = async () => {
-
     setLoading(true)
-
     setErrorMessage('')
-
     try {
-
       const data = await getMaintenanceRequests()
-
-      // Support a direct array or common wrapped API responses.
-
       const ticketList = Array.isArray(data)
-
         ? data
-
         : Array.isArray(data?.data)
-
           ? data.data
-
           : Array.isArray(data?.content)
-
             ? data.content
-
             : []
-
-      console.log('Maintenance API response:', data)
-
-      console.log('Maintenance tickets loaded:', ticketList.length)
 
       setRequests(ticketList)
 
-      // Resolve property names and unit numbers in the background.
-
-      // Do not delay displaying maintenance tickets.
-
       if (ticketList.length > 0) {
-
         void enrichPropertiesAndUnits(ticketList).catch((error) => {
-
           console.error('Property/unit enrichment failed:', error)
-
         })
-
       }
-
     } catch (err) {
-
       console.error('Failed to fetch maintenance requests:', err)
-
-      const msg =
-
-        err?.message ||
-
-        err?.originalError?.message ||
-
-        'Unable to load maintenance requests from the server.'
-
+      const msg = err?.message || err?.originalError?.message || 'Unable to load maintenance requests.'
       setErrorMessage(msg)
-
       setRequests([])
-
     } finally {
-
       setLoading(false)
-
     }
-
   }
 
+  // 1. Core initialization on page mount
   useEffect(() => {
-
-    if (hasFetchedRef.current) {
-
-      return
-
-    }
-
+    if (hasFetchedRef.current) return
     hasFetchedRef.current = true
-
     fetchTickets()
-
   }, [])
 
+  // 🤖 2. THE NEW PUSH NOTIFICATION DEEP LINK INTERCEPTOR LOOP
+  useEffect(() => {
+    if (loading || requests.length === 0 || selectedTicket) return;
+
+    const targetTicketId = searchParams.get('ticket');
+    if (!targetTicketId) return;
+
+    const matchedRequest = requests.find(req =>
+      String(req.requestId || req.id || req.ticketNumber) === String(targetTicketId)
+    );
+
+    if (matchedRequest) {
+      console.log(`🎯 AI Deep Link Hook: Auto-opening owner ticket details panel for ID: ${targetTicketId}`);
+      setSelectedTicket(matchedRequest);
+    }
+  }, [loading, requests, searchParams, selectedTicket]);
+
   /**
-
    * Helper to format human-readable Property and Unit display for a maintenance ticket.
-
-   * Example: "Sri Sai Residency • Unit 101"
-
-   * Fallback: "Property #16 • Unit #83"
-
    */
-
   const getDisplayLocation = (req) => {
-
-    if (!req.propertyId && !req.unitId) return null
-
-    // 1. Property Name Resolution
+    if (!req || (!req.propertyId && !req.unitId)) return null
 
     const rawPropName = propertyMap[String(req.propertyId)] || req.propertyName
-
     const propDisplay = rawPropName
-
       ? formatPropertyName(rawPropName)
-
       : req.propertyId
-
         ? `Property #${req.propertyId}`
-
         : ''
 
-    // 2. Unit Number Resolution
-
     const rawUnitNum = unitMap[String(req.unitId)] || req.unitNumber
-
     let unitDisplay = ''
-
     if (rawUnitNum != null && String(rawUnitNum).trim()) {
-
-      const clean = String(rawUnitNum).trim()
-
-      unitDisplay = clean.toLowerCase().startsWith('unit') ? clean : `Unit ${clean}`
-
-    } else if (req.unitId) {
-
-      unitDisplay = `Unit #${req.unitId}`
-
+      unitDisplay = ` • Unit ${String(rawUnitNum).trim()}`
     }
 
-    // 3. Combined display
-
-    return [propDisplay, unitDisplay].filter(Boolean).join(' • ')
-
+    return `${propDisplay}${unitDisplay}`
   }
 
-  const statusOptions = [
-
-    { value: 'all', label: 'All Statuses' },
-
-    ...MAINTENANCE_STATUSES.map((st) => ({
-
-      value: st,
-
-      label: formatStatusLabel(st),
-
-    })),
-
-  ]
-
-  const priorityOptions = [
-
-    { value: 'all', label: 'All Priorities' },
-
-    ...MAINTENANCE_PRIORITIES.map((pr) => ({
-
-      value: pr,
-
-      label: `${formatPriorityLabel(pr)} Priority`,
-
-    })),
-
-  ]
-
-  // Filter requests by Tab (Active vs. History/Past vs. All), Search, Status, and Priority
-
-  const filteredRequests = requests.filter((req) => {
-
-    const reqStatus = String(req.status || '').toUpperCase()
-
-    const isPastRecord = reqStatus === 'COMPLETED' || reqStatus === 'CANCELLED'
-
-    // Tab filtering
-
-    if (activeTab === 'active' && isPastRecord) return false
-
-    if (activeTab === 'history' && !isPastRecord) return false
-
-    // Search filtering
-
-    const query = searchQuery.toLowerCase().trim()
-
-    const ticketStr = String(req.requestId || req.id || req.ticketNumber || '').toLowerCase()
-
-    const desc = String(req.description || '').toLowerCase()
-
-    const cat = String(req.category || '').toLowerCase()
-
-    const matchesSearch =
-
-      query === '' ||
-
-      ticketStr.includes(query) ||
-
-      desc.includes(query) ||
-
-      cat.includes(query)
-
-    // Status filtering
-
-    const matchesStatus =
-
-      statusFilter === 'all' || reqStatus === String(statusFilter).toUpperCase()
-
-    // Priority filtering
-
-    const reqPriority = String(req.priority || '').toUpperCase()
-
-    const matchesPriority =
-
-      priorityFilter === 'all' || reqPriority === String(priorityFilter).toUpperCase()
-
-    return matchesSearch && matchesStatus && matchesPriority
-
-  })
-
-  const hasActiveFilters =
-
-    searchQuery !== '' || statusFilter !== 'all' || priorityFilter !== 'all'
-
-  const resetFilters = () => {
-
-    setSearchQuery('')
-
-    setStatusFilter('all')
-
-    setPriorityFilter('all')
-
-  }
-
-  const activeCount = requests.filter(
-
-    (r) => String(r.status || '').toUpperCase() !== 'COMPLETED' && String(r.status || '').toUpperCase() !== 'CANCELLED'
-
-  ).length
-
-  const historyCount = requests.filter(
-
-    (r) => String(r.status || '').toUpperCase() === 'COMPLETED' || String(r.status || '').toUpperCase() === 'CANCELLED'
-
-  ).length
 
   return (
 

@@ -31,6 +31,7 @@ export const APPLICATION_STATUSES = {
  * @returns {Promise<Object>} RentalApplicationResponse
  */
 export const createApplication = async ({
+  propertyId,
   unitId,
   preferredMoveInDate,
   preferredLeaseDurationMonths,
@@ -39,6 +40,7 @@ export const createApplication = async ({
   message
 }) => {
   const payload = {
+    propertyId: Number(propertyId),
     unitId: Number(unitId),
     preferredMoveInDate: preferredMoveInDate || null,
     preferredLeaseDurationMonths: Number(preferredLeaseDurationMonths),

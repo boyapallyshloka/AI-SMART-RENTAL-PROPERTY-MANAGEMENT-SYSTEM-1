@@ -78,6 +78,10 @@ public class RentalDemandRequestDTO {
     public void setMonth(Integer month) {
         this.month = month;
     }
+    
+
+
+
     public Integer getPropertyCount() {
         return propertyCount;
     }

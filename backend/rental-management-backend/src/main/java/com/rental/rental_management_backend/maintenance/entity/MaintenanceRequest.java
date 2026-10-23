@@ -7,6 +7,7 @@ import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategor
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
@@ -27,148 +28,88 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+
 @Entity
 @Table(name = "maintenance_requests")
 public class MaintenanceRequest {
 
-    // =========================================================
-    // PRIMARY KEY
-    // =========================================================
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id")
     private Long requestId;
 
-    // =========================================================
-    // TENANT
-    // =========================================================
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
 
-    // =========================================================
-    // PROPERTY
-    // =========================================================
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    // =========================================================
-    // UNIT
-    // =========================================================
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 
-    // =========================================================
-    // CATEGORY
-    // =========================================================
 
     @NotNull(message = "Maintenance category is required")
     @Enumerated(EnumType.STRING)
-    @Column(
-        name = "category",
-        nullable = false,
-        length = 30
-    )
+    @Column(name = "category", nullable = false, length = 30)
     private MaintenanceCategory category;
 
-    // =========================================================
-    // DESCRIPTION
-    // =========================================================
 
     @NotBlank(message = "Description is required")
-    @Column(
-        name = "description",
-        nullable = false,
-        columnDefinition = "TEXT"
-    )
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    // =========================================================
-    // PRIORITY
-    // =========================================================
 
     @NotNull(message = "Maintenance priority is required")
     @Enumerated(EnumType.STRING)
-    @Column(
-        name = "priority",
-        nullable = false,
-        length = 20
-    )
+    @Column(name = "priority", nullable = false, length = 20)
     private MaintenancePriority priority;
 
-    // =========================================================
-    // STATUS
-    // =========================================================
 
     @NotNull(message = "Maintenance status is required")
     @Enumerated(EnumType.STRING)
-    @Column(
-        name = "status",
-        nullable = false,
-        length = 20
-    )
+    @Column(name = "status", nullable = false, length = 20)
     private MaintenanceStatus status = MaintenanceStatus.OPEN;
 
-    // =========================================================
-    // IMAGE URL
-    // =========================================================
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    // =========================================================
-    // REQUESTED DATE
-    // =========================================================
 
-    @Column(
-        name = "requested_date",
-        nullable = false,
-        updatable = false
-    )
+    @Column(name = "requested_date", nullable = false, updatable = false)
     private LocalDateTime requestedDate;
 
-    // =========================================================
-    // COMPLETED DATE
-    // =========================================================
 
     @Column(name = "completed_date")
     private LocalDateTime completedDate;
 
-    // =========================================================
-    // COST
-    // =========================================================
 
-    @DecimalMin(
-        value = "0.0",
-        message = "Cost cannot be negative"
-    )
-    @Column(
-        name = "cost",
-        precision = 12,
-        scale = 2
-    )
+    @DecimalMin(value = "0.0", message = "Cost cannot be negative")
+    @Column(name = "cost", precision = 12, scale = 2)
     private BigDecimal cost;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cost_responsibility", length = 20)
     private MaintenanceCostResponsibility costResponsibility;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payer", length = 20)
+    private MaintenancePayer payer;
+
+
 
     public MaintenanceRequest() {
     }
 
-    // =========================================================
-    // PRE PERSIST
-    // =========================================================
+
 
     @PrePersist
     protected void onCreate() {
@@ -180,9 +121,7 @@ public class MaintenanceRequest {
         }
     }
 
-    // =========================================================
-    // GETTERS AND SETTERS
-    // =========================================================
+
 
     public Long getRequestId() {
         return requestId;
@@ -192,6 +131,7 @@ public class MaintenanceRequest {
         this.requestId = requestId;
     }
 
+
     public Tenant getTenant() {
         return tenant;
     }
@@ -199,6 +139,7 @@ public class MaintenanceRequest {
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
     }
+
 
     public Property getProperty() {
         return property;
@@ -208,6 +149,7 @@ public class MaintenanceRequest {
         this.property = property;
     }
 
+
     public Unit getUnit() {
         return unit;
     }
@@ -215,6 +157,7 @@ public class MaintenanceRequest {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
+
 
     public MaintenanceCategory getCategory() {
         return category;
@@ -224,9 +167,6 @@ public class MaintenanceRequest {
         this.category = category;
     }
 
-    // =========================================================
-    // DESCRIPTION GETTER AND SETTER
-    // =========================================================
 
     public String getDescription() {
         return description;
@@ -236,6 +176,7 @@ public class MaintenanceRequest {
         this.description = description;
     }
 
+
     public MaintenancePriority getPriority() {
         return priority;
     }
@@ -243,6 +184,7 @@ public class MaintenanceRequest {
     public void setPriority(MaintenancePriority priority) {
         this.priority = priority;
     }
+
 
     public MaintenanceStatus getStatus() {
         return status;
@@ -252,6 +194,7 @@ public class MaintenanceRequest {
         this.status = status;
     }
 
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -259,6 +202,7 @@ public class MaintenanceRequest {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 
     public LocalDateTime getRequestedDate() {
         return requestedDate;
@@ -268,6 +212,7 @@ public class MaintenanceRequest {
         this.requestedDate = requestedDate;
     }
 
+
     public LocalDateTime getCompletedDate() {
         return completedDate;
     }
@@ -275,6 +220,7 @@ public class MaintenanceRequest {
     public void setCompletedDate(LocalDateTime completedDate) {
         this.completedDate = completedDate;
     }
+
 
     public BigDecimal getCost() {
         return cost;
@@ -284,11 +230,21 @@ public class MaintenanceRequest {
         this.cost = cost;
     }
 
+
     public MaintenanceCostResponsibility getCostResponsibility() {
         return costResponsibility;
     }
 
     public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
         this.costResponsibility = costResponsibility;
+    }
+
+
+    public MaintenancePayer getPayer() {
+        return payer;
+    }
+
+    public void setPayer(MaintenancePayer payer) {
+        this.payer = payer;
     }
 }

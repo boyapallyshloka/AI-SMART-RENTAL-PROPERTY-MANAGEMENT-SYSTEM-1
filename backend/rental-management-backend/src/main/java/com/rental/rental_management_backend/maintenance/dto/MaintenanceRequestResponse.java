@@ -7,6 +7,7 @@ import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategor
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 
 public class MaintenanceRequestResponse {
 
@@ -36,8 +37,12 @@ public class MaintenanceRequestResponse {
 
     private MaintenanceCostResponsibility costResponsibility;
 
+    private MaintenancePayer payer;
+
+
     public MaintenanceRequestResponse() {
     }
+
 
     public Long getRequestId() {
         return requestId;
@@ -47,6 +52,7 @@ public class MaintenanceRequestResponse {
         this.requestId = requestId;
     }
 
+
     public Long getTenantId() {
         return tenantId;
     }
@@ -54,6 +60,7 @@ public class MaintenanceRequestResponse {
     public void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
     }
+
 
     public Long getPropertyId() {
         return propertyId;
@@ -63,6 +70,7 @@ public class MaintenanceRequestResponse {
         this.propertyId = propertyId;
     }
 
+
     public Long getUnitId() {
         return unitId;
     }
@@ -70,6 +78,7 @@ public class MaintenanceRequestResponse {
     public void setUnitId(Long unitId) {
         this.unitId = unitId;
     }
+
 
     public MaintenanceCategory getCategory() {
         return category;
@@ -79,6 +88,7 @@ public class MaintenanceRequestResponse {
         this.category = category;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -86,6 +96,7 @@ public class MaintenanceRequestResponse {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     public MaintenancePriority getPriority() {
         return priority;
@@ -95,6 +106,7 @@ public class MaintenanceRequestResponse {
         this.priority = priority;
     }
 
+
     public MaintenanceStatus getStatus() {
         return status;
     }
@@ -102,6 +114,7 @@ public class MaintenanceRequestResponse {
     public void setStatus(MaintenanceStatus status) {
         this.status = status;
     }
+
 
     public String getImageUrl() {
         return imageUrl;
@@ -111,6 +124,7 @@ public class MaintenanceRequestResponse {
         this.imageUrl = imageUrl;
     }
 
+
     public LocalDateTime getRequestedDate() {
         return requestedDate;
     }
@@ -118,6 +132,7 @@ public class MaintenanceRequestResponse {
     public void setRequestedDate(LocalDateTime requestedDate) {
         this.requestedDate = requestedDate;
     }
+
 
     public LocalDateTime getCompletedDate() {
         return completedDate;
@@ -127,6 +142,7 @@ public class MaintenanceRequestResponse {
         this.completedDate = completedDate;
     }
 
+
     public BigDecimal getCost() {
         return cost;
     }
@@ -135,11 +151,21 @@ public class MaintenanceRequestResponse {
         this.cost = cost;
     }
 
+
     public MaintenanceCostResponsibility getCostResponsibility() {
         return costResponsibility;
     }
 
     public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
         this.costResponsibility = costResponsibility;
+    }
+
+
+    public MaintenancePayer getPayer() {
+        return payer;
+    }
+
+    public void setPayer(MaintenancePayer payer) {
+        this.payer = payer;
     }
 }
