@@ -15,16 +15,23 @@ export default function ResolveRouter() {
             return;
         }
 
+        // Inside src/components/ResolveRouter.jsx - Look for your switch statement:
+
         switch (type) {
             case 'application':
-                navigate(`/dashboard/applications?highlight=${id}`);
+                navigate(`/tenant/applications?highlight=${id}`);
                 break;
+
             case 'maintenance':
-                navigate(`/dashboard/maintenance?ticket=${id}`);
+                // 🔴 FORCE IT TO LOAD THE EXACT RECT PATH WITH THE TICKET QUERY ATTACHED:
+                navigate(`/tenant/maintenance?ticket=${id}`);
                 break;
+
             default:
-                navigate('/dashboard');
+                // If it hits this fallback, it means type or id was missing
+                navigate('/tenant/dashboard');
         }
+
     }, [searchParams, navigate]);
 
     return (

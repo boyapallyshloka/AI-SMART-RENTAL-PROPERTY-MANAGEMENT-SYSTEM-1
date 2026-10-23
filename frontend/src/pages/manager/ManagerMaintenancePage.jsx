@@ -267,6 +267,7 @@ export default function ManagerMaintenancePage() {
       // Resolve the modal info inline safely to completely bypass initialization errors
       setModalPropertyName(matchedRequest.propertyName || propertyMap[matchedRequest.propertyId] || '')
       setModalUnitNumber(matchedRequest.unitNumber || unitMap[matchedRequest.unitId] || '')
+
       setModalTenantName(matchedRequest.tenantName || matchedRequest.user?.name || 'Tenant')
     }
   }, [loading, requests, searchParams, selectedTicket, propertyMap, unitMap]);

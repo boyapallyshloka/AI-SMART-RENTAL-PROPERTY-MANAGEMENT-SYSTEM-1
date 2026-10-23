@@ -55,6 +55,8 @@ export default function TenantMaintenancePage() {
     location.state?.successMessage || ''
   )
   const [fetchError, setFetchError] = useState('')
+
+  // 🤖 1. Initialize our Push Notification URL Query Hook
   const [searchParams] = useSearchParams()
 
   const loadTenantRequests = async () => {
@@ -62,8 +64,9 @@ export default function TenantMaintenancePage() {
     setFetchError('')
 
     try {
+      // 1. Gather live property and unit infrastructure data streams from the server
       const [maintRes, publicPropsRes, appsRes] = await Promise.allSettled([
-        getMaintenanceRequests(),
+        getMainMaintenanceRequests(),
         getPublicProperties(),
         getMyApplications(),
       ])
@@ -87,7 +90,7 @@ export default function TenantMaintenancePage() {
         setRequests([])
       }
 
-      // Build property ID -> Property Name mapping
+      // Build property ID -> Property Name mapping dictionaries
       const mapping = {}
 
       if (publicPropsRes.status === 'fulfilled') {
@@ -122,7 +125,7 @@ export default function TenantMaintenancePage() {
         })
       }
 
-      // If any request has a propertyId not yet resolved in mapping, fetch its public property details
+      // Resolve secondary missing properties in background thread pools
       const missingPropIds = [
         ...new Set(
           allBackendRequests
@@ -147,7 +150,7 @@ export default function TenantMaintenancePage() {
                 mapping[Number(id)] = name
               }
             } catch (err) {
-              // Silently ignore
+              // Ignore failure silences
             }
           })
         )
@@ -166,12 +169,12 @@ export default function TenantMaintenancePage() {
     }
   }
 
-  // 1. Load initial data on mount
+  // 1. Trigger initial fetch sequence on component creation lifecycle mount
   useEffect(() => {
     loadTenantRequests()
   }, [])
 
-  // 2. Notification Deep Link Interceptor
+  // 🤖 2. Notification Deep Link Parameter Interceptor Loop
   useEffect(() => {
     if (loading || requests.length === 0 || selectedTicket) return;
 
@@ -183,11 +186,12 @@ export default function TenantMaintenancePage() {
     );
 
     if (matchedRequest) {
+      console.log(`🎯 Notification Deep Link: Auto-launching layout drawer for ticket: ${targetTicketId}`);
       setSelectedTicket(matchedRequest);
     }
   }, [loading, requests, searchParams, selectedTicket]);
 
-  // 3. Resolve missing property details dynamically for the selected ticket
+  // 3. Resolve fallback properties dynamically for single active ticket layout drawers
   useEffect(() => {
     if (
       selectedTicket?.propertyId &&
@@ -214,7 +218,7 @@ export default function TenantMaintenancePage() {
     }
   }, [selectedTicket, propertyMap])
 
-  // 4. Clean UI helper functions and filter arrays (Scoped perfectly!)
+  // 4. UI presentation utility hooks and filters
   const getPropertyDisplayName = (ticket) => {
     if (!ticket) return ''
     const pId = ticket.propertyId
