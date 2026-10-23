@@ -1,290 +1,489 @@
-import os
 import sys
+import unittest
+import os
+import hashlib
+from pathlib import Path
+from unittest.mock import patch
+
+import numpy as np
 import pandas as pd
 from fastapi.testclient import TestClient
 
-# Ensure m3_rental_demand directory and parent ai-service are in sys.path
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-if CURRENT_DIR not in sys.path:
-    sys.path.insert(0, CURRENT_DIR)
-PARENT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
-if PARENT_DIR not in sys.path:
-    sys.path.insert(0, PARENT_DIR)
 
-# Ensure working directory is ai-service so that relative data and artifact paths resolve correctly
-AI_SERVICE_DIR = PARENT_DIR
-if os.path.exists(os.path.join(AI_SERVICE_DIR, "data", "ml", "M3_Rental_Demand.csv")):
-    os.chdir(AI_SERVICE_DIR)
-elif os.path.exists(os.path.join(AI_SERVICE_DIR, "data", "raw", "ml", "M3_Rental_Demand.csv")):
-    os.chdir(AI_SERVICE_DIR)
+AI_SERVICE_DIR = Path(__file__).resolve().parent.parent
+if str(AI_SERVICE_DIR) not in sys.path:
+    sys.path.insert(0, str(AI_SERVICE_DIR))
 
-from fastapi import FastAPI
-from fastapi.exceptions import RequestValidationError
-
-try:
-    from m3_rental_demand.preprocessing import load_and_prepare, time_based_split, FEATURES, TARGET
-    from m3_rental_demand.main import predict_demand
-    from m3_rental_demand.api import router, validation_exception_handler
-except ImportError:
-    from preprocessing import load_and_prepare, time_based_split, FEATURES, TARGET
-    from main import predict_demand
-    from api import router, validation_exception_handler
-
-app = FastAPI()
-app.include_router(router)
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
-
-client = TestClient(app)
+from m3_rental_demand import inference
+from m3_rental_demand.config import (
+    DATASET_PATH,
+    FEATURES,
+    MODEL_PATH,
+    PROPERTY_TYPES,
+    TARGET_DEFINITION,
+    TARGET_COLUMN,
+)
+from m3_rental_demand.main import app
+from m3_rental_demand.preprocessing import load_and_prepare, time_based_split
 
 
-def test_no_data_leakage():
-    """Confirm no row with year_month >= '2026-01' exists in the training split."""
-    df = load_and_prepare()
-    train, _ = time_based_split(df)
-    leakage = train[train["year_month"] >= "2026-01"]
-    if len(leakage) > 0:
-        raise AssertionError(
-            f"FAIL: Data leakage detected! Found {len(leakage)} row(s) with year_month >= '2026-01' in training set."
+class FixedRegressor:
+    def predict(self, frame):
+        if list(frame.columns) != FEATURES:
+            raise AssertionError("Inference feature list is not canonical.")
+        if frame.iloc[0]["property_type"] not in PROPERTY_TYPES:
+            raise AssertionError("Inference property type is invalid.")
+        return [340.0]
+
+
+class ZeroRegressor:
+    def predict(self, frame):
+        return [0.0]
+
+
+class ZeroApplicationCountRegressor:
+    def predict(self, frame):
+        if frame.iloc[0]["application_count"] != 0:
+            raise AssertionError("A genuine zero application count was changed.")
+        return [340.0]
+
+
+class NegativeRegressor:
+    def predict(self, frame):
+        return [-2.0]
+
+
+class NonFiniteRegressor:
+    def predict(self, frame):
+        return [float("inf")]
+
+
+class ExistingModelPath:
+    def exists(self):
+        return True
+
+
+class MissingModelPath:
+    def exists(self):
+        return False
+
+
+class M3RentalDemandTests(unittest.TestCase):
+    def setUp(self):
+        self.client = TestClient(app)
+        target_values = load_and_prepare()[TARGET_COLUMN].dropna().to_numpy(
+            dtype=float
         )
-    print("PASS: test_no_data_leakage - No rows with year_month >= '2026-01' in the training split.")
-
-
-def test_no_overlap_between_train_test():
-    """Confirm train and test sets share no year_month values."""
-    df = load_and_prepare()
-    train, test = time_based_split(df)
-    train_months = set(train["year_month"].unique())
-    test_months = set(test["year_month"].unique())
-    overlap = train_months.intersection(test_months)
-    if overlap:
-        raise AssertionError(
-            f"FAIL: Train and test sets share year_month values: {sorted(overlap)}"
+        low_threshold, medium_threshold = np.quantile(
+            target_values,
+            [1 / 3, 2 / 3],
         )
-    print("PASS: test_no_overlap_between_train_test - Train and test sets share no year_month values.")
+        self.valid_payload = {
+            "city": "Hyderabad",
+            "areaLocality": "Gachibowli",
+            "propertyType": "APARTMENT",
+            "month": 12,
+            "year": 2026,
+            "propertyCount": 401,
+            "applicationCount": 89,
+            "agreementStartCount": 20,
+            "averageMonthlyRent": 25000.0,
+            "demandLag1Month": 100,
+            "demandLag2Month": 90,
+            "demandGrowth1Month": 0.1,
+            "occupancyRate": 0.85,
+            "vacancyRate": 0.15,
+            "availableUnitCount": 20,
+        }
+        self.artifact = {
+            "regressor": FixedRegressor(),
+            "features": FEATURES,
+            "approach": "regression-only",
+            "model_version": "test-model",
+            "target": TARGET_COLUMN,
+            "target_definition": TARGET_DEFINITION,
+            "training_metadata": {
+                "dataset_path": str(DATASET_PATH.resolve()),
+                "dataset_sha256": hashlib.sha256(
+                    DATASET_PATH.read_bytes()
+                ).hexdigest().upper(),
+            },
+            "rate_units": {
+                "occupancy_rate": "fraction from 0 to 1",
+                "vacancy_rate": "fraction from 0 to 1",
+            },
+            "demand_level_thresholds": {
+                "low_max": float(low_threshold),
+                "medium_max": float(medium_threshold),
+            },
+        }
 
+    def predict(self, payload=None):
+        with (
+            patch.object(inference, "MODEL_PATH", ExistingModelPath()),
+            patch.object(
+                inference,
+                "TARGET_DEFINITION",
+                TARGET_DEFINITION,
+            ),
+            patch.object(
+                inference.joblib,
+                "load",
+                return_value=self.artifact,
+            ),
+        ):
+            return self.client.post(
+                "/m3/predict-rental-demand",
+                json=payload or self.valid_payload,
+            )
 
-def test_all_features_present():
-    """Confirm every column in FEATURES exists in the dataframe after load_and_prepare()."""
-    df = load_and_prepare()
-    missing_features = [col for col in FEATURES if col not in df.columns]
-    if missing_features:
-        raise AssertionError(
-            f"FAIL: Missing expected features in prepared dataframe: {missing_features}"
+    def test_dataset_contract_and_features(self):
+        df = load_and_prepare()
+
+        self.assertEqual(len(df), 2160)
+        self.assertTrue(all(feature in df.columns for feature in FEATURES))
+        self.assertEqual(
+            df["property_type"].unique().tolist(),
+            list(PROPERTY_TYPES),
         )
-    print(f"PASS: test_all_features_present - All {len(FEATURES)} features present in prepared dataframe.")
+        self.assertEqual(int(df["year"].min()), 2024)
+        self.assertEqual(int(df["year"].max()), 2026)
+        self.assertTrue(df["occupancy_rate"].between(0, 1).all())
+        self.assertTrue(df["vacancy_rate"].between(0, 1).all())
+        self.assertEqual(int(df[TARGET_COLUMN].notna().sum()), 2100)
+        self.assertEqual(int(df[TARGET_COLUMN].isna().sum()), 60)
+        self.assertEqual(int(df[TARGET_COLUMN].max()), 233)
 
-
-def test_prediction_is_non_negative():
-    """Call predict_demand() with raw feature dict and assert result is >= 0."""
-    sample = {
-        "city": "Bangalore",
-        "area_locality": "A Narayanapura, Mahadevapura",
-        "property_count": 50,
-        "application_count": 12,
-        "agreement_start_count": 3,
-        "average_monthly_rent": 25000.0,
-        "demand_lag_1_month": 2,
-        "demand_lag_2_month": 1,
-        "demand_growth_1_month": 0.5,
-        "occupancy_rate": 85,
-        "vacancy_rate": 15,
-        "available_unit_count": 8,
-        "month": 6,
-    }
-    result = predict_demand(sample)
-    if result < 0:
-        raise AssertionError(f"FAIL: predict_demand returned negative prediction: {result}")
-    print(f"PASS: test_prediction_is_non_negative - Prediction is non-negative ({result}).")
-
-
-def test_higher_activity_gives_higher_prediction():
-    """
-    Take a base row and compare low activity vs high activity predictions using raw inputs.
-    Asserts predict_demand(high_activity) >= predict_demand(low_activity).
-    """
-    df = load_and_prepare()
-    first_row = df.iloc[0]
-
-    raw_features = [
-        "city", "area_locality", "property_count", "application_count",
-        "agreement_start_count", "average_monthly_rent", "demand_lag_1_month",
-        "demand_lag_2_month", "demand_growth_1_month", "occupancy_rate",
-        "vacancy_rate", "available_unit_count", "month"
-    ]
-    base_row = {k: first_row[k] for k in raw_features if k in first_row}
-
-    # Low-activity scenario
-    low_activity = dict(
-        base_row,
-        application_count=0,
-        agreement_start_count=0,
-        demand_lag_1_month=0,
-        demand_lag_2_month=0,
-        demand_growth_1_month=-0.5,
-        occupancy_rate=0.0,
-        vacancy_rate=100.0,
-    )
-
-    # High-activity scenario
-    high_activity = dict(
-        base_row,
-        application_count=15,
-        agreement_start_count=5,
-        demand_lag_1_month=10,
-        demand_lag_2_month=8,
-        demand_growth_1_month=0.8,
-        occupancy_rate=95.0,
-        vacancy_rate=5.0,
-    )
-
-    pred_low = predict_demand(low_activity)
-    pred_high = predict_demand(high_activity)
-
-    if not (pred_high >= pred_low):
-        raise AssertionError(
-            f"FAIL: Higher activity did not give higher prediction! "
-            f"High activity ({pred_high}) < Low activity ({pred_low})"
+    def test_target_and_lag_features_match_consecutive_month_records(self):
+        df = load_and_prepare()
+        grouped = df.groupby(
+            ["city", "area_locality", "property_type"],
+            sort=False,
+            observed=True,
         )
-    print(
-        f"PASS: test_higher_activity_gives_higher_prediction - High activity ({pred_high}) >= Low activity ({pred_low})."
-    )
+        following_apps = grouped["application_count"].shift(-1)
+        previous_apps = grouped["application_count"].shift(1)
+        previous2_apps = grouped["application_count"].shift(2)
 
+        target_mask = df[TARGET_COLUMN].notna()
+        np.testing.assert_array_equal(
+            df.loc[target_mask, TARGET_COLUMN].to_numpy(dtype=int),
+            following_apps.loc[target_mask].to_numpy(dtype=int),
+        )
+        lag1_mask = df["demand_lag_1_month"].notna()
+        np.testing.assert_array_equal(
+            df.loc[lag1_mask, "demand_lag_1_month"].to_numpy(dtype=int),
+            previous_apps.loc[lag1_mask].to_numpy(dtype=int),
+        )
+        lag2_mask = df["demand_lag_2_month"].notna()
+        np.testing.assert_array_equal(
+            df.loc[lag2_mask, "demand_lag_2_month"].to_numpy(dtype=int),
+            previous2_apps.loc[lag2_mask].to_numpy(dtype=int),
+        )
+        previous_count = previous_apps.replace(0, np.nan)
+        expected_growth = (
+            (df["application_count"] - previous_apps) / previous_count
+        )
+        growth_mask = df["demand_growth_1_month"].notna()
+        np.testing.assert_allclose(
+            df.loc[growth_mask, "demand_growth_1_month"].to_numpy(dtype=float),
+            expected_growth.loc[growth_mask].to_numpy(dtype=float),
+            atol=1e-9,
+            rtol=0,
+        )
 
-def test_api_predict_demand_valid_shape():
-    """Send a valid request to /predict-demand and verify the 200 response shape."""
-    payload = {
-        "city": "Bangalore",
-        "area_locality": "A Narayanapura, Mahadevapura",
-        "month": 6,
-        "property_count": 50,
-        "application_count": 12,
-        "agreement_start_count": 3,
-        "average_monthly_rent": 25000.0,
-        "demand_lag_1_month": 2,
-        "demand_lag_2_month": 1,
-        "demand_growth_1_month": 0.5,
-        "occupancy_rate": 85.0,
-        "vacancy_rate": 15.0,
-        "available_unit_count": 8
-    }
-    response = client.post("/m3/predict-demand", json=payload)
-    if response.status_code != 200:
-        raise AssertionError(f"FAIL: Expected status 200, got {response.status_code}: {response.text}")
+    def test_chronological_split_has_disjoint_target_months(self):
+        df = load_and_prepare()
+        train, test = time_based_split(df)
 
-    data = response.json()
-    if not data.get("success"):
-        raise AssertionError(f"FAIL: Expected 'success': True, got: {data}")
-    has_prediction = "predictedDemandCount" in data or "prediction" in data
-    if not has_prediction:
-        raise AssertionError(f"FAIL: Missing prediction key in response: {data}")
-    if data.get("modelVersion") not in ["1.0", "v1.0"]:
-        raise AssertionError(f"FAIL: Expected modelVersion '1.0' or 'v1.0', got: {data.get('modelVersion')}")
+        train_targets = set(
+            (train["year_month"] + pd.offsets.MonthBegin(1)).unique()
+        )
+        test_targets = set(
+            (test["year_month"] + pd.offsets.MonthBegin(1)).unique()
+        )
+        self.assertTrue(train_targets.isdisjoint(test_targets))
+        self.assertEqual(len(train) + len(test), 2100)
 
-    print("PASS: test_api_predict_demand_valid_shape - Valid request returned standard shape.")
+    def test_target_definition_is_explicit(self):
+        self.assertIn("immediately following calendar month", TARGET_DEFINITION)
 
+    def test_root_endpoint(self):
+        response = self.client.get("/")
 
-def test_api_predict_demand_missing_field():
-    """Send a request with a missing required field and check it returns INVALID_INPUT error format."""
-    invalid_payload = {
-        # 'city' is intentionally missing
-        "area_locality": "A Narayanapura, Mahadevapura",
-        "month": 6,
-        "property_count": 50,
-        "application_count": 12,
-        "agreement_start_count": 3,
-        "average_monthly_rent": 25000.0,
-        "demand_lag_1_month": 2,
-        "demand_lag_2_month": 1,
-        "demand_growth_1_month": 0.5,
-        "occupancy_rate": 85.0,
-        "vacancy_rate": 15.0,
-        "available_unit_count": 8
-    }
-    response = client.post("/m3/predict-demand", json=invalid_payload)
-    if response.status_code != 400:
-        raise AssertionError(f"FAIL: Expected status 400 for missing field, got {response.status_code}: {response.text}")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["success"])
+        self.assertEqual(response.json()["docs"], "/docs")
 
-    data = response.json()
-    if data.get("success") is not False:
-        raise AssertionError(f"FAIL: Expected 'success': False, got: {data}")
-    if data.get("errorCode") != "INVALID_INPUT":
-        raise AssertionError(f"FAIL: Expected 'errorCode': 'INVALID_INPUT', got: {data.get('errorCode')}")
-    if not data.get("message"):
-        raise AssertionError("FAIL: Expected non-empty 'message' field in error response")
+    def test_health_reports_promoted_artifact_ready(self):
+        self.assertTrue(MODEL_PATH.exists())
+        response = self.client.get("/m3/health")
 
-    print("PASS: test_api_predict_demand_missing_field - Returned INVALID_INPUT error format.")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["modelLoaded"])
 
+    def test_active_model_predicts_through_api(self):
+        for property_type in PROPERTY_TYPES:
+            with self.subTest(property_type=property_type):
+                response = self.client.post(
+                    "/m3/predict-rental-demand",
+                    json={
+                        **self.valid_payload,
+                        "propertyType": property_type,
+                    },
+                )
 
-def test_api_response_schema_keys():
-    """Confirm the response always includes success, predictedDemandCount/prediction, and modelVersion keys on success."""
-    payload = {
-        "city": "Mumbai",
-        "area_locality": "Andheri West",
-        "month": 8,
-        "property_count": 100,
-        "application_count": 25,
-        "agreement_start_count": 10,
-        "average_monthly_rent": 45000.0,
-        "demand_lag_1_month": 5,
-        "demand_lag_2_month": 3,
-        "demand_growth_1_month": 0.2,
-        "occupancy_rate": 90.0,
-        "vacancy_rate": 10.0,
-        "available_unit_count": 10
-    }
-    response = client.post("/m3/predict-demand", json=payload)
-    if response.status_code != 200:
-        raise AssertionError(f"FAIL: Expected status 200, got {response.status_code}: {response.text}")
+                self.assertEqual(response.status_code, 200, response.text)
+                data = response.json()
+                self.assertTrue(data["success"])
+                self.assertTrue(
+                    np.isfinite(data["predictedDemandCount"])
+                )
+                self.assertGreaterEqual(data["predictedDemandCount"], 0)
+                self.assertEqual(data["propertyType"], property_type)
+                self.assertEqual(data["modelVersion"], "v2.2")
 
-    data = response.json()
-    if not ("predictedDemandCount" in data or "prediction" in data):
-        raise AssertionError(f"FAIL: Missing predictedDemandCount or prediction in API response: {data}")
-    if "modelVersion" not in data or "success" not in data:
-        raise AssertionError(f"FAIL: Missing success or modelVersion in API response: {data}")
+    def test_prediction_has_no_twenty_count_cap(self):
+        response = self.predict()
 
-    print("PASS: test_api_response_schema_keys - All standard keys present in success response.")
+        self.assertEqual(response.status_code, 200, response.text)
+        data = response.json()
+        self.assertTrue(data["success"])
+        self.assertEqual(data["propertyType"], "APARTMENT")
+        self.assertEqual(data["month"], 1)
+        self.assertEqual(data["year"], 2027)
+        self.assertEqual(data["predictedDemandCount"], 340)
+        self.assertEqual(data["demandLevel"], "HIGH")
+        self.assertEqual(data["modelVersion"], "test-model")
+
+    def test_all_supported_property_types_are_accepted(self):
+        for property_type in PROPERTY_TYPES:
+            with self.subTest(property_type=property_type):
+                payload = {
+                    **self.valid_payload,
+                    "propertyType": property_type,
+                }
+                response = self.predict(payload)
+
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertEqual(
+                    response.json()["propertyType"],
+                    property_type,
+                )
+
+    def test_missing_property_type_is_rejected(self):
+        payload = self.valid_payload.copy()
+        del payload["propertyType"]
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_invalid_property_type_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "propertyType": "ROOM",
+        }
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_invalid_fraction_rate_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "occupancyRate": 85,
+        }
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_non_finite_numeric_values_are_rejected(self):
+        for field, value in (
+            ("averageMonthlyRent", "Infinity"),
+            ("demandGrowth1Month", "NaN"),
+            ("occupancyRate", "Infinity"),
+        ):
+            with self.subTest(field=field):
+                payload = {**self.valid_payload, field: value}
+                response = self.client.post(
+                    "/m3/predict-rental-demand",
+                    json=payload,
+                )
+
+                self.assertEqual(response.status_code, 422)
+
+    def test_negative_property_count_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "propertyCount": -1,
+        }
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_negative_rent_and_available_count_are_rejected(self):
+        for field, value in (
+            ("averageMonthlyRent", -1),
+            ("availableUnitCount", -1),
+        ):
+            with self.subTest(field=field):
+                payload = {**self.valid_payload, field: value}
+                response = self.client.post(
+                    "/m3/predict-rental-demand",
+                    json=payload,
+                )
+
+                self.assertEqual(response.status_code, 422)
+
+    def test_missing_required_field_is_rejected(self):
+        payload = self.valid_payload.copy()
+        del payload["city"]
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_missing_or_null_application_count_is_rejected(self):
+        for missing_value in ("omitted", None):
+            with self.subTest(application_count=missing_value):
+                payload = self.valid_payload.copy()
+                if missing_value == "omitted":
+                    del payload["applicationCount"]
+                else:
+                    payload["applicationCount"] = None
+
+                response = self.client.post(
+                    "/m3/predict-rental-demand",
+                    json=payload,
+                )
+
+                self.assertEqual(response.status_code, 422)
+
+    def test_genuine_zero_application_count_is_not_treated_as_missing(self):
+        artifact = {
+            **self.artifact,
+            "regressor": ZeroApplicationCountRegressor(),
+        }
+        payload = {
+            **self.valid_payload,
+            "applicationCount": 0,
+        }
+        with (
+            patch.object(inference, "MODEL_PATH", ExistingModelPath()),
+            patch.object(inference.joblib, "load", return_value=artifact),
+        ):
+            response = self.client.post(
+                "/m3/predict-rental-demand",
+                json=payload,
+            )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["predictedDemandCount"], 340)
+
+    def test_missing_model_artifact_returns_503_without_internal_details(self):
+        with patch.object(
+            inference,
+            "MODEL_PATH",
+            MissingModelPath(),
+        ):
+            response = self.client.post(
+                "/m3/predict-rental-demand",
+                json=self.valid_payload,
+            )
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(
+            response.json()["detail"],
+            "Rental-demand model is unavailable.",
+        )
+        self.assertNotIn(str(MODEL_PATH), response.text)
+
+    def test_unloadable_model_artifact_returns_503(self):
+        with (
+            patch.object(inference, "MODEL_PATH", ExistingModelPath()),
+            patch.object(
+                inference.joblib,
+                "load",
+                side_effect=OSError("internal model path or loader detail"),
+            ),
+        ):
+            response = self.client.post(
+                "/m3/predict-rental-demand",
+                json=self.valid_payload,
+            )
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(
+            response.json()["detail"],
+            "Rental-demand model is unavailable.",
+        )
+        self.assertNotIn("internal model path", response.text)
+
+    def test_invalid_month_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "month": 13,
+        }
+
+        response = self.client.post("/m3/predict-rental-demand", json=payload)
+
+        self.assertEqual(response.status_code, 422)
+
+    def test_zero_and_negative_model_outputs_return_zero(self):
+        for regressor in (ZeroRegressor(), NegativeRegressor()):
+            artifact = {
+                **self.artifact,
+                "regressor": regressor,
+            }
+            with (
+                patch.object(inference, "MODEL_PATH", ExistingModelPath()),
+                patch.object(inference.joblib, "load", return_value=artifact),
+            ):
+                response = self.client.post(
+                    "/m3/predict-rental-demand",
+                    json=self.valid_payload,
+                )
+
+            self.assertEqual(response.status_code, 200, response.text)
+            self.assertEqual(response.json()["predictedDemandCount"], 0)
+
+    def test_non_finite_model_prediction_is_rejected(self):
+        artifact = {
+            **self.artifact,
+            "regressor": NonFiniteRegressor(),
+        }
+        with (
+            patch.object(inference, "MODEL_PATH", ExistingModelPath()),
+            patch.object(inference.joblib, "load", return_value=artifact),
+        ):
+            response = self.client.post(
+                "/m3/predict-rental-demand",
+                json=self.valid_payload,
+            )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertIn("non-finite prediction", response.json()["detail"])
+
+    def test_candidate_artifact_inference(self):
+        candidate_path = os.environ.get("M3_CANDIDATE_MODEL_PATH")
+        if not candidate_path:
+            self.skipTest("M3_CANDIDATE_MODEL_PATH is not set.")
+
+        with patch.object(inference, "MODEL_PATH", Path(candidate_path)):
+            response = self.client.post(
+                "/m3/predict-rental-demand",
+                json=self.valid_payload,
+            )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        result = response.json()
+        self.assertIsInstance(result["predictedDemandCount"], int)
+        self.assertGreaterEqual(result["predictedDemandCount"], 0)
+        self.assertEqual(result["propertyType"], "APARTMENT")
 
 
 if __name__ == "__main__":
-    tests = [
-        ("test_no_data_leakage", test_no_data_leakage),
-        ("test_no_overlap_between_train_test", test_no_overlap_between_train_test),
-        ("test_all_features_present", test_all_features_present),
-        ("test_prediction_is_non_negative", test_prediction_is_non_negative),
-        ("test_higher_activity_gives_higher_prediction", test_higher_activity_gives_higher_prediction),
-        ("test_api_predict_demand_valid_shape", test_api_predict_demand_valid_shape),
-        ("test_api_predict_demand_missing_field", test_api_predict_demand_missing_field),
-        ("test_api_response_schema_keys", test_api_response_schema_keys),
-    ]
-
-    results = {}
-    print("=" * 60)
-    print("Running M3 Rental Demand Model & API Tests")
-    print("=" * 60)
-
-    for name, test_fn in tests:
-        try:
-            test_fn()
-            results[name] = "PASSED"
-        except AssertionError as e:
-            print(str(e))
-            results[name] = f"FAILED: {e}"
-        except Exception as e:
-            print(f"FAIL: {name} encountered an unexpected error: {e}")
-            results[name] = f"FAILED (Error): {e}"
-
-    print("\n" + "=" * 60)
-    print("Test Execution Summary:")
-    print("=" * 60)
-    passed_count = sum(1 for status in results.values() if status == "PASSED")
-    total_count = len(tests)
-
-    for name, status in results.items():
-        tag = "PASS" if status == "PASSED" else "FAIL"
-        print(f"[{tag}] {name}")
-
-    print(f"\nTotal: {passed_count}/{total_count} tests passed.")
-    print("=" * 60)
-
-    if passed_count != total_count:
-        sys.exit(1)
+    unittest.main()

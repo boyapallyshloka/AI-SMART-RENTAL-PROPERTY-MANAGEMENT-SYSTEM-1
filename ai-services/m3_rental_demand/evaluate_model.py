@@ -1,187 +1,176 @@
-
+import argparse
+import hashlib
 import json
+from pathlib import Path
+
 import joblib
 import numpy as np
 import pandas as pd
 
-from sklearn.metrics import (
-    accuracy_score,
-    confusion_matrix,
-    f1_score,
-    mean_absolute_error,
-    mean_squared_error,
-    precision_score,
-    recall_score,
-    r2_score,
-    roc_auc_score,
-)
-
-from config import (
-    MODULE_DIR,
-    REPORTS_DIR,
-    DATE_COLUMN,
-    TARGET_COLUMN,
+from m3_rental_demand.config import (
+    DATASET_PATH,
+    FEATURES,
     MODEL_PATH,
+    MODEL_VERSION,
+    TARGET_DEFINITION,
+    TARGET_COLUMN,
 )
-
-DATA_PATH = MODULE_DIR / "processed" / "training_data.csv"
-REPORT_PATH = REPORTS_DIR / "detailed_evaluation.json"
-
-CATEGORICAL_FEATURES = ["city", "area_locality"]
-
-NUMERIC_FEATURES = [
-    "property_count",
-    "average_monthly_rent",
-    "demand_lag_1_month",
-    "demand_lag_2_month",
-    "demand_growth_1_month",
-    "occupancy_rate",
-    "vacancy_rate",
-    "available_unit_count",
-]
-
-FEATURES = CATEGORICAL_FEATURES + NUMERIC_FEATURES
+from m3_rental_demand.preprocessing import load_and_prepare, time_based_split
+from m3_rental_demand.train_model import regression_metrics
 
 
-def regression_metrics(actual, predicted):
-    predicted = np.maximum(0, predicted)
-
-    return {
-        "mae": round(float(mean_absolute_error(actual, predicted)), 4),
-        "rmse": round(
-            float(np.sqrt(mean_squared_error(actual, predicted))), 4
-        ),
-        "r2": round(float(r2_score(actual, predicted)), 4),
-        "predicted_positive_rate": round(
-            float(np.mean(predicted > 0)), 4
-        ),
-        "actual_positive_rate": round(float(np.mean(actual > 0)), 4),
-    }
+def _sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 def main():
-    df = pd.read_csv(DATA_PATH)
-    df[DATE_COLUMN] = pd.to_datetime(df[DATE_COLUMN], errors="raise")
-    df[TARGET_COLUMN] = pd.to_numeric(df[TARGET_COLUMN], errors="raise")
-    df = df.sort_values(DATE_COLUMN).reset_index(drop=True)
+    parser = argparse.ArgumentParser(
+        description="Evaluate the active M3 artifact on the canonical dataset."
+    )
+    parser.add_argument(
+        "--evaluation-output",
+        type=Path,
+        required=True,
+        help="New report path; do not overwrite existing historical reports.",
+    )
+    args = parser.parse_args()
 
-    months = sorted(df[DATE_COLUMN].unique())
-    train_end_idx = int(len(months) * 0.60)
-    validation_end_idx = int(len(months) * 0.80)
-
-    train_end = pd.Timestamp(months[train_end_idx])
-    validation_end = pd.Timestamp(months[validation_end_idx])
-
-    train_df = df[df[DATE_COLUMN] < train_end]
-    test_df = df[df[DATE_COLUMN] >= validation_end].copy()
-
-    if test_df.empty or train_df.empty:
-        raise ValueError("Training or test period is empty.")
+    df = load_and_prepare()
+    train_df, test_df = time_based_split(df)
+    if not MODEL_PATH.exists():
+        raise FileNotFoundError(f"M3 model artifact not found: {MODEL_PATH}")
 
     artifact = joblib.load(MODEL_PATH)
-    classifier = artifact["classifier"]
-    regressor = artifact["regressor"]
-    threshold = float(artifact["threshold"])
-
-    X_test = test_df[FEATURES]
-    actual = test_df[TARGET_COLUMN].to_numpy(dtype=float)
-    actual_positive = (actual > 0).astype(int)
-
-    probabilities = classifier.predict_proba(X_test)[:, 1]
-    predicted_positive = (probabilities >= threshold).astype(int)
-
-    predicted_magnitude = np.maximum(0, regressor.predict(X_test))
-    two_stage_predictions = np.where(
-        predicted_positive == 1,
-        predicted_magnitude,
-        0,
-    )
-
-    # Baseline 1: always predict zero demand.
-    zero_predictions = np.zeros(len(test_df))
-
-    # Baseline 2: always predict the mean target in training.
-    mean_value = float(train_df[TARGET_COLUMN].mean())
-    mean_predictions = np.full(len(test_df), mean_value)
-
-    # Metrics for the positive-demand classifier.
-    if len(np.unique(actual_positive)) == 2:
-        roc_auc = float(roc_auc_score(actual_positive, probabilities))
-    else:
-        roc_auc = None
-
-    tn, fp, fn, tp = confusion_matrix(
-        actual_positive,
-        predicted_positive,
-        labels=[0, 1],
-    ).ravel()
+    if artifact.get("features") != FEATURES:
+        raise ValueError("Active M3 artifact has a stale feature contract.")
+    if (
+        artifact.get("target") != TARGET_COLUMN
+        or artifact.get("target_definition") != TARGET_DEFINITION
+    ):
+        raise ValueError("Active M3 artifact has a stale target contract.")
+    training_metadata = artifact.get("training_metadata", {})
+    expected_provenance = {
+        "dataset_sha256": _sha256(DATASET_PATH),
+        "config_script_sha256": _sha256(
+            Path(__file__).with_name("config.py")
+        ),
+        "training_script_sha256": _sha256(
+            Path(__file__).with_name("train_model.py")
+        ),
+        "preprocessing_script_sha256": _sha256(
+            Path(__file__).with_name("preprocessing.py")
+        ),
+    }
+    recorded_dataset_path = training_metadata.get("dataset_path")
+    if (
+        not isinstance(training_metadata, dict)
+        or not isinstance(recorded_dataset_path, str)
+        or Path(recorded_dataset_path).resolve() != DATASET_PATH.resolve()
+        or any(
+            training_metadata.get(name) != value
+            for name, value in expected_provenance.items()
+        )
+    ):
+        raise ValueError(
+            "Active M3 artifact provenance does not match the canonical "
+            "dataset and current training/configuration code."
+        )
+    model = artifact["regressor"]
+    y_train = train_df[TARGET_COLUMN].to_numpy(dtype=float)
+    y_test = test_df[TARGET_COLUMN].to_numpy(dtype=float)
+    train_predictions = model.predict(train_df[FEATURES])
+    test_predictions = model.predict(test_df[FEATURES])
+    if not all(
+        np.isfinite(values).all()
+        for values in (train_predictions, test_predictions)
+    ):
+        raise ValueError("The active M3 model returned non-finite predictions.")
+    test_predictions = np.maximum(0, test_predictions)
+    train_mean = float(y_train.mean())
+    property_type_metrics = {}
+    for property_type in sorted(test_df["property_type"].unique()):
+        train_type = train_df.loc[
+            train_df["property_type"] == property_type, TARGET_COLUMN
+        ]
+        test_mask = test_df["property_type"].eq(property_type).to_numpy()
+        type_actual = y_test[test_mask]
+        property_type_metrics[property_type] = {
+            "train_rows": int(len(train_type)),
+            "test_rows": int(test_mask.sum()),
+            "test_target_min": int(type_actual.min()),
+            "test_target_max": int(type_actual.max()),
+            "model_test_metrics": regression_metrics(
+                type_actual,
+                test_predictions[test_mask],
+            ),
+            "train_mean_baseline_test_metrics": regression_metrics(
+                type_actual,
+                [train_mean] * len(type_actual),
+            ),
+        }
 
     report = {
-        "test_start": str(test_df[DATE_COLUMN].min().date()),
-        "test_end": str(test_df[DATE_COLUMN].max().date()),
-        "test_rows": int(len(test_df)),
-        "threshold": threshold,
-        "classifier": {
-            "accuracy": round(
-                float(accuracy_score(actual_positive, predicted_positive)), 4
-            ),
-            "precision": round(
-                float(precision_score(
-                    actual_positive, predicted_positive, zero_division=0
-                )), 4
-            ),
-            "recall": round(
-                float(recall_score(
-                    actual_positive, predicted_positive, zero_division=0
-                )), 4
-            ),
-            "f1": round(
-                float(f1_score(
-                    actual_positive, predicted_positive, zero_division=0
-                )), 4
-            ),
-            "roc_auc": round(roc_auc, 4) if roc_auc is not None else None,
-            "confusion_matrix": {
-                "true_negative": int(tn),
-                "false_positive": int(fp),
-                "false_negative": int(fn),
-                "true_positive": int(tp),
-            },
+        "dataset_path": str(DATASET_PATH),
+        "dataset_sha256": _sha256(DATASET_PATH),
+        "model_version": artifact.get("model_version", MODEL_VERSION),
+        "target": artifact["target"],
+        "target_definition": TARGET_DEFINITION,
+        "features": FEATURES,
+        "training_metadata": training_metadata,
+        "split": {
+            "strategy": "chronological by target month",
+            "train_rows": len(train_df),
+            "test_rows": len(test_df),
         },
-        "two_stage_model": regression_metrics(
-            actual, two_stage_predictions
-        ),
-        "always_zero_baseline": regression_metrics(
-            actual, zero_predictions
-        ),
-        "training_mean_baseline": regression_metrics(
-            actual, mean_predictions
-        ),
-        "limitations": [
-            "Evaluation uses the same chronological test period as training.",
-            "The dataset is synthetic; metrics do not prove real-world accuracy.",
+        "target_range": {
+            "labeled_min": int(min(y_train.min(), y_test.min())),
+            "labeled_max": int(max(y_train.max(), y_test.max())),
+            "test_min": int(y_test.min()),
+            "test_max": int(y_test.max()),
+        },
+        "model_metrics": {
+            "train": regression_metrics(y_train, train_predictions),
+            "test": regression_metrics(y_test, test_predictions),
+        },
+        "train_mean_baseline_metrics": {
+            "train": regression_metrics(
+                y_train,
+                [train_mean] * len(y_train),
+            ),
+            "test": regression_metrics(
+                y_test,
+                [train_mean] * len(y_test),
+            ),
+        },
+        "property_type_metrics": property_type_metrics,
+        "actual_vs_predicted": [
+            {
+                "city": row.city,
+                "area_locality": row.area_locality,
+                "property_type": row.property_type,
+                "target_month": str(
+                    (row.year_month + pd.offsets.MonthBegin(1)).date()
+                ),
+                "actual": int(getattr(row, TARGET_COLUMN)),
+                "predicted": round(float(prediction), 4),
+            }
+            for row, prediction in zip(
+                test_df.itertuples(index=False),
+                test_predictions,
+            )
         ],
     }
-
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
-    REPORT_PATH.write_text(
-        json.dumps(report, indent=4),
+    args.evaluation_output.parent.mkdir(parents=True, exist_ok=True)
+    args.evaluation_output.write_text(
+        json.dumps(report, indent=2),
         encoding="utf-8",
     )
-
-    print("\n--- CLASSIFIER ---")
-    print(json.dumps(report["classifier"], indent=4))
-
-    print("\n--- TWO-STAGE MODEL ---")
-    print(json.dumps(report["two_stage_model"], indent=4))
-
-    print("\n--- ALWAYS-ZERO BASELINE ---")
-    print(json.dumps(report["always_zero_baseline"], indent=4))
-
-    print("\n--- TRAINING-MEAN BASELINE ---")
-    print(json.dumps(report["training_mean_baseline"], indent=4))
-
-    print("\nDetailed report saved to:", REPORT_PATH)
+    print(json.dumps(report, indent=2))
+    print("Evaluation report:", args.evaluation_output)
 
 
 if __name__ == "__main__":

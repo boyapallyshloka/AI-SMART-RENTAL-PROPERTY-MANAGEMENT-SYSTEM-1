@@ -12,6 +12,13 @@ from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegress
 from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.metrics import f1_score
 
+from m3_rental_demand.config import (
+    CATEGORICAL_FEATURES,
+    FEATURES,
+    NUMERIC_FEATURES,
+    TARGET_DEFINITION,
+    TARGET_COLUMN,
+)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 if CURRENT_DIR not in sys.path:
@@ -33,28 +40,8 @@ if __name__ in sys.modules:
         sys.modules["m3_rental_demand.pipeline"] = current_mod
 
 
-NUMERIC_FEATURES = [
-    "property_count",
-    "application_count",
-    "agreement_start_count",
-    "average_monthly_rent",
-    "demand_lag_1_month",
-    "demand_lag_2_month",
-    "demand_growth_1_month",
-    "occupancy_rate",
-    "vacancy_rate",
-    "available_unit_count",
-    "month",
-]
-
-CATEGORICAL_FEATURES = [
-    "city",
-    "area_locality",
-]
-
-MODEL_FEATURES = NUMERIC_FEATURES + CATEGORICAL_FEATURES
-
-TARGET = "next_month_demand"
+MODEL_FEATURES = FEATURES
+TARGET = TARGET_COLUMN
 
 
 class RentalDemandPipeline(BaseEstimator, RegressorMixin):
@@ -108,6 +95,12 @@ class RentalDemandPipeline(BaseEstimator, RegressorMixin):
         val_df: pd.DataFrame = None,
     ):
         """Fit preprocessing, classifier, and regression models."""
+
+        if not TARGET_DEFINITION:
+            raise RuntimeError(
+                "M3 training is blocked until next_month_application_count's "
+                "definition and forecast-month alignment are verified."
+            )
 
         train_data = self._prepare_inputs(df)
         X_train = train_data[self.features_]

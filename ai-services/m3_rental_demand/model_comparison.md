@@ -1,5 +1,13 @@
 # M3 Rental Demand Prediction: Model Comparison & Selection Report
 
+> **Historical results only:** This comparison belongs to an earlier dataset,
+> target contract, and model pipeline. It is not evaluation of the currently
+> configured property-type dataset and must not be used to claim its accuracy.
+> The current synthetic dataset's `next_month_application_count` is defined
+> as the following consecutive month's application count for the same
+> city/locality/property type. The results below remain unrelated to that
+> corrected dataset and must not be used to recommend the current model.
+
 This document presents an empirical comparison of the four machine learning models evaluated for the **M3 Rental Demand Prediction** module within the Avenue360 AI Smart Rental Property Management System.
 
 All evaluations were conducted strictly out-of-time on the standardized validation horizon (**2025-07 to 2025-11**, $N = 10,235$ samples) following training on **2024-01 to 2025-06** per Avenue360 ML Standard v1.1.
@@ -77,9 +85,10 @@ By using a **class-weighted classifier** in Stage 1, the Two-Stage Pipeline deco
 
 ## 3. Final Recommendation
 
-### **Recommended Model: Two-Stage Hurdle Pipeline (`model_pipeline.joblib`)**
+### **Historical Recommendation Only: Two-Stage Hurdle Pipeline**
 
-Going forward, the **Two-Stage Pipeline** (`GradientBoostingClassifier(weighted)` + `GradientBoostingRegressor`, recorded in `metrics_final.json`) is the recommended production model for the M3 Rental Demand module.
+The recommendation below applied only to the historical dataset and is not a
+recommendation for the current M3 model.
 
 ### Concrete Justification Based on Evaluated Metrics:
 1. **Superior Event Detection (+16.43% Recall Advantage)**:
