@@ -54,6 +54,19 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             UnitStatus status);
 
     List<Unit> findByStatus(UnitStatus status);
+
+    @Query("""
+        SELECT u
+        FROM Unit u
+        JOIN FETCH u.floor f
+        JOIN FETCH f.building b
+        JOIN FETCH b.property p
+        WHERE b.property.propertyId IN :propertyIds
+          AND u.status = :status
+        """)
+    List<Unit> findByPropertyIdsAndStatus(
+            @Param("propertyIds") List<Long> propertyIds,
+            @Param("status") UnitStatus status);
  
  // M3 Rental Demand Prediction
 

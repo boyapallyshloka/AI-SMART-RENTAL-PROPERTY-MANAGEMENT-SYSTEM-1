@@ -280,8 +280,34 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                ))
         ),
         false,
-        p.monthlyRent,
-        p.securityDeposit
+        CASE
+            WHEN p.propertyType IN (
+                com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+            ) THEN p.monthlyRent
+            ELSE (
+                SELECT MIN(u.monthlyRent)
+                FROM Unit u
+                JOIN u.floor f
+                JOIN f.building b
+                WHERE b.property = p
+                  AND u.status = com.rental.rental_management_backend.property.enums.UnitStatus.VACANT
+            )
+        END,
+        CASE
+            WHEN p.propertyType IN (
+                com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+            ) THEN p.securityDeposit
+            ELSE (
+                SELECT MIN(u.securityDeposit)
+                FROM Unit u
+                JOIN u.floor f
+                JOIN f.building b
+                WHERE b.property = p
+                  AND u.status = com.rental.rental_management_backend.property.enums.UnitStatus.VACANT
+            )
+        END
     )
     FROM Property p
     WHERE p.status = :status
@@ -343,8 +369,34 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                 )
             ),
             false,
-            p.monthlyRent,
-            p.securityDeposit
+            CASE
+                WHEN p.propertyType IN (
+                    com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                    com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                ) THEN p.monthlyRent
+                ELSE (
+                    SELECT MIN(u.monthlyRent)
+                    FROM Unit u
+                    JOIN u.floor f
+                    JOIN f.building b
+                    WHERE b.property = p
+                      AND u.status = com.rental.rental_management_backend.property.enums.UnitStatus.VACANT
+                )
+            END,
+            CASE
+                WHEN p.propertyType IN (
+                    com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                    com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                ) THEN p.securityDeposit
+                ELSE (
+                    SELECT MIN(u.securityDeposit)
+                    FROM Unit u
+                    JOIN u.floor f
+                    JOIN f.building b
+                    WHERE b.property = p
+                      AND u.status = com.rental.rental_management_backend.property.enums.UnitStatus.VACANT
+                )
+            END
         )
         FROM Property p
         WHERE p.propertyId = :propertyId

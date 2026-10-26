@@ -71,8 +71,14 @@ export default function PropertyCard({
   } = property
 
   const realId = propertyId ?? id
-  const displayName = propertyName || name || 'Unnamed Property'
+  const rawDisplayName = String(propertyName || name || '').trim()
+  const displayName = /^(string|null|undefined)$/i.test(rawDisplayName)
+    ? 'Property listing'
+    : rawDisplayName || 'Unnamed Property'
   const displayType = propertyType || type
+  const usesUnitPricing = !['HOUSE', 'VILLA'].includes(
+    String(displayType || '').toUpperCase()
+  )
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation()
@@ -161,8 +167,8 @@ export default function PropertyCard({
   const displayArea = totalArea ?? area
   const hasBeds = bedrooms !== undefined && bedrooms !== null
   const hasBaths = bathrooms !== undefined && bathrooms !== null
-  const hasArea = displayArea !== undefined && displayArea !== null && Number(displayArea) > 0
-  const hasYear = yearBuilt !== undefined && yearBuilt !== null
+  const hasArea = displayArea !== undefined && displayArea !== null && Number(displayArea) >= 1
+  const hasYear = yearBuilt !== undefined && yearBuilt !== null && Number(yearBuilt) > 0
   const displayLocation = location || address || city || ''
 
   // Furnishing and Parking
@@ -254,7 +260,7 @@ export default function PropertyCard({
           <div className="flex items-baseline justify-between">
             <div className="flex items-baseline gap-1">
               <span className="text-xl font-bold tracking-tight text-[#315A7D]">
-                {formattedRent}
+                {usesUnitPricing ? `From ${formattedRent}` : formattedRent}
               </span>
               <span className="text-xs text-[#5B6875] font-medium">/ month</span>
             </div>
