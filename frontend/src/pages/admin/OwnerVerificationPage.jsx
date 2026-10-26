@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { getUsersByRoleAndStatus, updateUserStatus } from '../../api/userApi'
-import PropertyApprovalPage from './PropertyApprovalPage'
+import PropertyDocumentReviewPage from './PropertyDocumentReviewPage'
 import { Button, EmptyState, Loader, StatusBadge } from '../../components/ui'
 import {
   AlertCircle,
@@ -22,7 +21,6 @@ const unwrapList = (response) => {
 }
 
 export default function OwnerVerificationPage() {
-  const location = useLocation()
   const [owners, setOwners] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -46,15 +44,6 @@ export default function OwnerVerificationPage() {
   useEffect(() => {
     loadOwners()
   }, [loadOwners])
-
-  useEffect(() => {
-    if (!location.hash) return undefined
-    const targetId = location.hash.slice(1)
-    const timer = window.setTimeout(() => {
-      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 0)
-    return () => window.clearTimeout(timer)
-  }, [location.hash])
 
   const changeStatus = async (owner, status) => {
     const id = owner?.id ?? owner?.userId
@@ -86,10 +75,10 @@ export default function OwnerVerificationPage() {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#243447]">
-              Owner Verification
+              Property Owner Verification & Approvals
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-[#5B6875]">
-              Review owner accounts, property submissions, and their verification documents.
+              Review owner account registrations and property documents awaiting verification.
             </p>
           </div>
           <Button
@@ -233,7 +222,18 @@ export default function OwnerVerificationPage() {
           )}
         </div>
 
-        <PropertyApprovalPage />
+        {/* Property ownership documents are reviewed here; owners upload them from their property details page. */}
+        <div className="space-y-4 pt-4 border-t border-[#D9E0E6]">
+          <div>
+            <h2 className="text-base font-bold text-[#243447]">
+              Property Document Verification
+            </h2>
+            <p className="text-xs text-[#5B6875]">
+              Review deeds and supporting property records uploaded by owners before publishing.
+            </p>
+          </div>
+          <PropertyDocumentReviewPage />
+        </div>
       </div>
     </DashboardLayout>
   )

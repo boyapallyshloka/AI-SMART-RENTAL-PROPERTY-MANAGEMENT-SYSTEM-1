@@ -21,8 +21,10 @@ export const FURNISHING_STATUSES = {
 export const PROPERTY_STATUSES = {
   DRAFT: 'DRAFT',
   AVAILABLE: 'AVAILABLE',
-  NOT_AVAILABLE: 'NOT_AVAILABLE',
+  PUBLISHED: 'PUBLISHED',
   OCCUPIED: 'OCCUPIED',
+  UNDER_MAINTENANCE: 'UNDER_MAINTENANCE',
+  INACTIVE: 'INACTIVE',
 }
 
 /**
@@ -82,12 +84,10 @@ export const mapParkingAvailableToBackend = (parking) => {
  *   - furnishingStatus
  *   - parkingAvailable
  *   - yearBuilt
- *   - bedrooms, bathrooms, floorNumber, totalFloors, monthlyRent,
- *     securityDeposit (for direct-rental Houses and Villas)
  *
  * Strictly EXCLUDES response/status/legacy/UI-only fields:
  *   ownerId, ownerName, propertyId, id, status, createdAt, updatedAt,
- *   bathrooms,
+ *   bedrooms, bathrooms, monthlyRent, securityDeposit,
  *   address, city, state, zipCode, amenities, buildings, units, images, etc.
  */
 export const buildPropertyRequestPayload = (data = {}) => {
@@ -124,26 +124,6 @@ export const buildPropertyRequestPayload = (data = {}) => {
       ? Math.round(Number(rawYear))
       : undefined
 
-  const isDirectRental = ['HOUSE', 'VILLA'].includes(propertyType)
-  const bedrooms = isDirectRental && data.bedrooms != null && data.bedrooms !== ''
-    ? Number(data.bedrooms)
-    : undefined
-  const bathrooms = isDirectRental && data.bathrooms != null && data.bathrooms !== ''
-    ? Number(data.bathrooms)
-    : undefined
-  const floorNumber = isDirectRental && data.floorNumber != null && data.floorNumber !== ''
-    ? Number(data.floorNumber)
-    : undefined
-  const totalFloors = isDirectRental && data.totalFloors != null && data.totalFloors !== ''
-    ? Number(data.totalFloors)
-    : undefined
-  const monthlyRent = isDirectRental && data.monthlyRent != null && data.monthlyRent !== ''
-    ? Number(data.monthlyRent)
-    : undefined
-  const securityDeposit = isDirectRental && data.securityDeposit != null && data.securityDeposit !== ''
-    ? Number(data.securityDeposit)
-    : undefined
-
   const payload = {
     propertyName: propertyName || undefined,
     propertyType,
@@ -152,12 +132,6 @@ export const buildPropertyRequestPayload = (data = {}) => {
     furnishingStatus,
     parkingAvailable,
     yearBuilt,
-    monthlyRent,
-    securityDeposit,
-    bedrooms,
-    bathrooms,
-    floorNumber,
-    totalFloors,
   }
 
   // Ensure ownerId, status, id, and all legacy/UI fields are NEVER included in request payload
@@ -168,6 +142,10 @@ export const buildPropertyRequestPayload = (data = {}) => {
   delete payload.status
   delete payload.createdAt
   delete payload.updatedAt
+  delete payload.bedrooms
+  delete payload.bathrooms
+  delete payload.monthlyRent
+  delete payload.securityDeposit
   delete payload.deposit
   delete payload.rent
   delete payload.address
@@ -234,28 +212,6 @@ export const createProperty = async (propertyData) => {
 }
 
 /**
- * Submit a draft property and its uploaded documents for administrator review.
- */
-export const submitPropertyForApproval = async (id) => {
-  return axiosClient.post(`/owner/properties/${id}/submit-for-approval`)
-}
-
-/**
- * Administrator property review endpoints.
- */
-export const getPendingPropertyApprovals = async () => {
-  return axiosClient.get('/admin/properties/pending-approval')
-}
-
-export const getPropertyForAdminReview = async (id) => {
-  return axiosClient.get(`/admin/properties/${id}`)
-}
-
-export const approveProperty = async (id) => {
-  return axiosClient.patch(`/admin/properties/${id}/approve`)
-}
-
-/**
  * PUT /api/owner/properties/{id}
  * Update an existing property
  * Payload: PropertyRequest (ownerId omitted)
@@ -276,8 +232,10 @@ export const deleteProperty = async (id) => {
 export const CANONICAL_PROPERTY_STATUSES = [
   'DRAFT',
   'AVAILABLE',
-  'NOT_AVAILABLE',
+  'PUBLISHED',
   'OCCUPIED',
+  'UNDER_MAINTENANCE',
+  'INACTIVE',
 ]
 
 /**
@@ -395,8 +353,6 @@ export const mapBackendPropertyToUi = (prop) => {
     // Specs (legacy fields no longer returned by backend Property API)
     bedrooms: prop.bedrooms != null ? Number(prop.bedrooms) : null,
     bathrooms: prop.bathrooms != null ? Number(prop.bathrooms) : null,
-    floorNumber: prop.floorNumber != null ? Number(prop.floorNumber) : null,
-    totalFloors: prop.totalFloors != null ? Number(prop.totalFloors) : null,
     area,
     totalArea: area,
     furnishing: prop.furnishingStatus || prop.furnishing || null,
@@ -926,8 +882,8 @@ export const updateManagerAssignedProperty = async (
  * Role: TENANT
  * @returns {Promise<Array<Object>>} Lightweight mapped property cards
  */
-export const getPublicProperties = async () => {
-  const response = await axiosClient.get('/properties/public')
+export const getPublicProperties = async ({ skipAuthToken = false } = {}) => {
+  const response = await axiosClient.get('/properties/public', { skipAuthToken })
   const data = Array.isArray(response) ? response : response?.data || []
   return data.map(mapBackendPropertyToUi)
 }
@@ -949,7 +905,7 @@ export const getPublicProperties = async () => {
  * @param {Object} [filters={}]
  * @returns {Promise<Array<Object>>} Mapped property search results
  */
-export const searchPublicProperties = async (filters = {}) => {
+export const searchPublicProperties = async (filters = {}, { skipAuthToken = false } = {}) => {
   const params = {}
 
   if (filters.searchQuery && String(filters.searchQuery).trim()) {
@@ -1005,7 +961,10 @@ export const searchPublicProperties = async (filters = {}) => {
     }
   }
 
-  const response = await axiosClient.get('/properties/public/search', { params })
+  const response = await axiosClient.get('/properties/public/search', {
+    params,
+    skipAuthToken,
+  })
   const data = Array.isArray(response) ? response : response?.data || []
   return data.map(mapBackendPropertyToUi)
 }
@@ -1019,6 +978,8 @@ export const searchPublicProperties = async (filters = {}) => {
  * @param {number|string} propertyId
  * @returns {Promise<Object>} PropertyDetailsResponse
  */
-export const getPublicPropertyDetails = async (propertyId) => {
-  return axiosClient.get(`/properties/public/${propertyId}`)
+export const getPublicPropertyDetails = async (propertyId, { skipAuthToken = false } = {}) => {
+  return axiosClient.get(`/properties/public/${propertyId}`, { skipAuthToken })
 }
+
+

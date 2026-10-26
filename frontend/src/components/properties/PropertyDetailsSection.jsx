@@ -106,9 +106,6 @@ export default function PropertyDetailsSection({
     type,
     totalArea,
     area,
-    bedrooms,
-    bathrooms,
-    totalFloors,
     yearBuilt,
     furnishingStatus,
     furnishing,
@@ -121,7 +118,6 @@ export default function PropertyDetailsSection({
   // Specs
   const displayType = (propertyType || type || '').replace(/_/g, ' ')
   const displayArea = totalArea ?? area
-  const isDirectRental = ['HOUSE', 'VILLA'].includes(String(propertyType || type || '').toUpperCase())
   const displayFurnishing = (furnishingStatus || furnishing || '').replace(/_/g, ' ')
   const displayParking =
     parkingAvailable != null
@@ -174,35 +170,6 @@ export default function PropertyDetailsSection({
               <p className="text-sm font-bold text-[#243447]">
                 {displayArea} sq ft
               </p>
-            </div>
-          )}
-
-          {isDirectRental && bedrooms != null && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
-              <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Bed className="w-4 h-4 text-[#315A7D]" /> Bedrooms / BHK
-              </span>
-              <p className="text-sm font-bold text-[#243447]">
-                {Number(bedrooms) === 0 ? 'Studio' : `${bedrooms} BHK`}
-              </p>
-            </div>
-          )}
-
-          {isDirectRental && bathrooms != null && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
-              <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Bath className="w-4 h-4 text-[#315A7D]" /> Bathrooms
-              </span>
-              <p className="text-sm font-bold text-[#243447]">{bathrooms}</p>
-            </div>
-          )}
-
-          {isDirectRental && totalFloors != null && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
-              <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Layers className="w-4 h-4 text-[#315A7D]" /> Total Floors
-              </span>
-              <p className="text-sm font-bold text-[#243447]">{totalFloors}</p>
             </div>
           )}
 
@@ -360,8 +327,8 @@ export default function PropertyDetailsSection({
         )}
       </div>
 
-      {/* Apartment buildings use the hierarchy below; houses and villas are rented directly. */}
-      {!isDirectRental && <div className="rounded-lg border border-[#D9E0E6] bg-white p-6 shadow-2xs space-y-6">
+      {/* 5. Buildings -> Floors -> Units Structural Hierarchy */}
+      <div className="rounded-lg border border-[#D9E0E6] bg-white p-6 shadow-2xs space-y-6">
         <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-4">
           <div>
             <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
@@ -552,7 +519,7 @@ export default function PropertyDetailsSection({
             <span>No building or unit structures are currently listed under this property.</span>
           </div>
         )}
-      </div>}
+      </div>
     </div>
   )
 }

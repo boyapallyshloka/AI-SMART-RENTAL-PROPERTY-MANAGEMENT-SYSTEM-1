@@ -9,7 +9,6 @@ import {
   FileText,
   CreditCard,
   Wrench,
-  HardHat,
   BarChart3,
   Sparkles,
   Search,
@@ -39,7 +38,6 @@ export const MANAGER_MENU = [
   { id: 'properties', label: 'Assigned Properties', icon: <Building2 className="w-4 h-4" /> },
   { id: 'applications', label: 'Applications', icon: <FileCheck className="w-4 h-4" /> },
   { id: 'maintenance', label: 'Maintenance', icon: <Wrench className="w-4 h-4" /> },
-  { id: 'technicians', label: 'Technicians', icon: <HardHat className="w-4 h-4" /> },
   { id: 'agreements', label: 'Agreements', icon: <FileText className="w-4 h-4" /> },
   { id: 'payments', label: 'Payments', icon: <CreditCard className="w-4 h-4" /> },
   { id: 'inspections', label: 'Inspections', icon: <ShieldCheck className="w-4 h-4" /> },
@@ -171,10 +169,6 @@ export default function Sidebar({
         navigate('/manager/payments')
       } else if (id === 'maintenance') {
         navigate('/manager/maintenance')
-      } else if (id === 'technicians') {
-        navigate('/manager/maintenance/technicians')
-      } else if (id === 'inspections') {
-        navigate('/manager/inspections')
       } else if (id === 'profile') {
         navigate('/manager/profile')
       } else if (id === 'reports') {
@@ -283,14 +277,7 @@ export default function Sidebar({
               (isPropertyManager(role) &&
                 item.id === 'maintenance' &&
                 (location.pathname === '/manager/maintenance' ||
-                  (location.pathname.startsWith('/manager/maintenance/') &&
-                    location.pathname !== '/manager/maintenance/technicians'))) ||
-              (isPropertyManager(role) &&
-                item.id === 'technicians' &&
-                location.pathname === '/manager/maintenance/technicians') ||
-              (isPropertyManager(role) &&
-                item.id === 'inspections' &&
-                location.pathname.startsWith('/manager/inspections')) ||
+                  location.pathname.startsWith('/manager/maintenance/'))) ||
               (isPropertyManager(role) &&
                 item.id === 'profile' &&
                 location.pathname === '/manager/profile') ||

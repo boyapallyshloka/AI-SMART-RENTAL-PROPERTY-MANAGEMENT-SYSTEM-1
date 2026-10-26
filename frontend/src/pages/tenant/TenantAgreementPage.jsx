@@ -111,7 +111,6 @@ export default function TenantAgreementPage() {
           agreementNumber: `AGR-${String(agr.agreementId).padStart(4, '0')}`,
           propertyName:
             app?.propertyName ||
-            agr.propertyName ||
             (agr.propertyId
               ? `Property #${agr.propertyId}`
               : null),
@@ -119,7 +118,7 @@ export default function TenantAgreementPage() {
             ? `Unit #${app.unitNumber}`
             : agr.unitId
             ? `Unit #${agr.unitId}`
-            : 'Entire property',
+            : '—',
           buildingName: app?.buildingName || null,
           tenantName: tenantDisplayName,
           tenantEmail: app?.tenantEmail || user?.email || '',

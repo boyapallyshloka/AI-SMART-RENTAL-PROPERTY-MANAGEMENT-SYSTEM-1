@@ -17,7 +17,7 @@ import {
   AlertCircle,
   MapPin,
 } from 'lucide-react'
-import { getOwnerPropertiesWithDetails } from '../../api/propertyApi'
+import { getMyProperties } from '../../api/propertyApi'
 import { getMaintenanceRequests } from '../../api/maintenanceApi'
 import { getInvoices } from '../../api/invoiceApi'
 import { formatCurrency } from '../../utils/currency'
@@ -28,7 +28,6 @@ export default function OwnerDashboardPage() {
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [properties, setProperties] = useState([])
-  const [propertyImageErrors, setPropertyImageErrors] = useState({})
   const [maintenanceRequests, setMaintenanceRequests] = useState([])
   const [invoices, setInvoices] = useState([])
   const [dataAvailability, setDataAvailability] = useState({ properties: false, maintenance: false, invoices: false })
@@ -39,7 +38,7 @@ export default function OwnerDashboardPage() {
 
     try {
       const [propsRes, maintRes, invRes] = await Promise.allSettled([
-        getOwnerPropertiesWithDetails(),
+        getMyProperties(),
         getMaintenanceRequests(),
         getInvoices(),
       ])
@@ -257,7 +256,7 @@ export default function OwnerDashboardPage() {
                     title="No properties registered yet"
                     description="Add your first property to configure buildings, floors, and rental units."
                     action={
-                      <Link to="/owner/properties/add">
+                      <Link to="/owner/properties/new">
                         <Button size="sm" variant="primary" leftIcon={<Plus className="w-3.5 h-3.5" />}>
                           Add Property
                         </Button>
@@ -269,47 +268,26 @@ export default function OwnerDashboardPage() {
                     {properties.slice(0, 3).map((prop) => {
                       const propId = prop.propertyId || prop.id
                       const propName = prop.propertyName || prop.name || 'Untitled Property'
-                      const addressStr = prop.locationDisplay || prop.fullLocation || [
-                        prop.addressLine1,
-                        prop.addressLine2,
-                        prop.area,
-                        prop.city,
-                        prop.state,
-                        prop.pincode,
-                      ].filter(Boolean).join(', ') || prop.address || prop.city || 'Location not set'
-                      const imageUrl = prop.imageUrl || prop.images?.[0]?.imageUrl
-                      const showImage = imageUrl && !propertyImageErrors[propId]
+                      const addressStr = prop.city
+                        ? `${prop.city}${prop.state ? `, ${prop.state}` : ''}`
+                        : prop.address || 'Location not set'
 
                       return (
                         <div key={propId} className="py-2.5 flex items-center justify-between text-sm hover:bg-[#F8FAFC] px-1.5 rounded-lg transition-colors -mx-1.5">
-                          <div className="flex items-center gap-3 min-w-0 pr-3">
-                            {showImage ? (
-                              <img
-                                src={imageUrl}
-                                alt={`${propName} property`}
-                                className="w-12 h-12 rounded-lg object-cover shrink-0 border border-[#D9E0E6]"
-                                onError={() => setPropertyImageErrors((prev) => ({ ...prev, [propId]: true }))}
-                              />
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D] shrink-0" aria-label="No property image available">
-                                <Building2 className="w-5 h-5" />
-                              </div>
-                            )}
-                            <div className="min-w-0">
-                              <Link
-                                to={`/owner/properties/${propId}`}
-                                className="font-semibold text-[#1B2B4A] hover:text-[#315A7D] transition-colors truncate block text-xs sm:text-sm"
-                              >
-                                {propName}
-                              </Link>
-                              <p className="text-[11px] text-[#64748B] flex items-center gap-1 mt-0.5">
-                                <MapPin className="w-3 h-3 text-[#94A3B8] shrink-0" />
-                                <span className="truncate">{addressStr}</span>
-                                {prop.totalUnits != null && (
-                                  <span className="shrink-0 text-[#94A3B8]">&bull; {prop.totalUnits} units</span>
-                                )}
-                              </p>
-                            </div>
+                          <div className="min-w-0 pr-3">
+                            <Link
+                              to={`/owner/properties/${propId}`}
+                              className="font-semibold text-[#1B2B4A] hover:text-[#315A7D] transition-colors truncate block text-xs sm:text-sm"
+                            >
+                              {propName}
+                            </Link>
+                            <p className="text-[11px] text-[#64748B] flex items-center gap-1 mt-0.5">
+                              <MapPin className="w-3 h-3 text-[#94A3B8] shrink-0" />
+                              <span className="truncate">{addressStr}</span>
+                              {prop.totalUnits != null && (
+                                <span className="shrink-0 text-[#94A3B8]">&bull; {prop.totalUnits} units</span>
+                              )}
+                            </p>
                           </div>
                           <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-[#F0F5FA] text-[#315A7D] border border-[#D9E2EC] shrink-0">
                             {prop.propertyType || prop.type || 'Type unavailable'}
@@ -331,7 +309,7 @@ export default function OwnerDashboardPage() {
                     <p className="text-xs text-[#64748B] mt-0.5">Common property tasks</p>
                   </div>
                   <div className="space-y-2 mt-3.5">
-                    <Link to="/owner/properties/add" className="block">
+                    <Link to="/owner/properties/new" className="block">
                       <Button size="sm" variant="primary" className="w-full justify-start rounded-lg text-xs" leftIcon={<Plus className="w-3.5 h-3.5" />}>
                         Add New Property
                       </Button>

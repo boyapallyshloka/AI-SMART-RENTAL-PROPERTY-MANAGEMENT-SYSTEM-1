@@ -55,7 +55,6 @@ export const getMyAgreements = async () => {
  *
  * Backend RentalAgreementRequest fields:
  * - applicationId: Long (@NotNull)
- * - moveInDate: ISO local date (optional; defaults to the application's preferred date)
  * - dueDay: Integer (1-31, optional)
  * - noticePeriodDays: Integer (>= 0, optional)
  * - termsAndConditions: String (optional)
@@ -71,7 +70,6 @@ export const getMyAgreements = async () => {
 export const createAgreement = async (payload) => {
   const requestBody = {
     applicationId: Number(payload.applicationId),
-    moveInDate: payload.moveInDate || undefined,
     dueDay:
       payload.dueDay != null && payload.dueDay !== ''
         ? Number(payload.dueDay)

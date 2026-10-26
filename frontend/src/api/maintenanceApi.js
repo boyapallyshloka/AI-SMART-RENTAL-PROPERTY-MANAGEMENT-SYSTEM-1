@@ -14,7 +14,6 @@ export const MAINTENANCE_CATEGORIES = [
   'AC',
   'APPLIANCE',
   'CLEANING',
-  'CARPENTRY',
   'STRUCTURAL',
   'OTHER',
 ]
@@ -179,30 +178,6 @@ export const updateMaintenanceCost = async (ticketId, costData) => {
  */
 export const getMaintenanceWorkers = async () => {
   return axiosClient.get('/maintenance-workers')
-}
-
-/**
- * POST /api/maintenance-workers
- * Create a technician.
- */
-export const createMaintenanceWorker = async (worker) => {
-  return axiosClient.post('/maintenance-workers', worker)
-}
-
-/**
- * PUT /api/maintenance-workers/{workerId}
- * Update a technician.
- */
-export const updateMaintenanceWorker = async (workerId, worker) => {
-  return axiosClient.put(`/maintenance-workers/${workerId}`, worker)
-}
-
-/**
- * DELETE /api/maintenance-workers/{workerId}
- * Remove a technician.
- */
-export const deleteMaintenanceWorker = async (workerId) => {
-  return axiosClient.delete(`/maintenance-workers/${workerId}`)
 }
 
 /**

@@ -19,7 +19,7 @@ import { resolveImageUrl } from '../../api/propertyApi'
  * Enterprise PropertyCard Component for SmartEstate
  * Displays key details of a rental property for tenant browsing.
  * Strictly adheres to backend Property contract:
- * - apartment bedroom/bathroom values come from Unit; direct-rental House/Villa bedrooms come from Property.
+ * - monthlyRent, securityDeposit, bedrooms, bathrooms belong to Unit and are hidden when absent.
  * - uses real backend image URLs and IDs.
  *
  * @param {Object} props
@@ -33,6 +33,7 @@ export default function PropertyCard({
   onSelect,
   isFavorite: controlledFavorite,
   onToggleFavorite,
+  showFavorite = true,
 }) {
   const [internalFavorite, setInternalFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
@@ -71,14 +72,8 @@ export default function PropertyCard({
   } = property
 
   const realId = propertyId ?? id
-  const rawDisplayName = String(propertyName || name || '').trim()
-  const displayName = /^(string|null|undefined)$/i.test(rawDisplayName)
-    ? 'Property listing'
-    : rawDisplayName || 'Unnamed Property'
+  const displayName = propertyName || name || 'Unnamed Property'
   const displayType = propertyType || type
-  const usesUnitPricing = !['HOUSE', 'VILLA'].includes(
-    String(displayType || '').toUpperCase()
-  )
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation()
@@ -167,8 +162,8 @@ export default function PropertyCard({
   const displayArea = totalArea ?? area
   const hasBeds = bedrooms !== undefined && bedrooms !== null
   const hasBaths = bathrooms !== undefined && bathrooms !== null
-  const hasArea = displayArea !== undefined && displayArea !== null && Number(displayArea) >= 1
-  const hasYear = yearBuilt !== undefined && yearBuilt !== null && Number(yearBuilt) > 0
+  const hasArea = displayArea !== undefined && displayArea !== null && Number(displayArea) > 0
+  const hasYear = yearBuilt !== undefined && yearBuilt !== null
   const displayLocation = location || address || city || ''
 
   // Furnishing and Parking
@@ -229,7 +224,7 @@ export default function PropertyCard({
           )}
 
           {/* Favorite Toggle Button */}
-          <button
+          {showFavorite && <button
             type="button"
             onClick={handleFavoriteClick}
             aria-label={isFav ? 'Remove from favorites' : 'Save to favorites'}
@@ -240,7 +235,7 @@ export default function PropertyCard({
                 isFav ? 'fill-[#B94A48] text-[#B94A48]' : ''
               }`}
             />
-          </button>
+          </button>}
         </div>
 
         {/* Bottom Property Type Pill */}
@@ -260,7 +255,7 @@ export default function PropertyCard({
           <div className="flex items-baseline justify-between">
             <div className="flex items-baseline gap-1">
               <span className="text-xl font-bold tracking-tight text-[#315A7D]">
-                {usesUnitPricing ? `From ${formattedRent}` : formattedRent}
+                {formattedRent}
               </span>
               <span className="text-xs text-[#5B6875] font-medium">/ month</span>
             </div>

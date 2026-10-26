@@ -5,8 +5,6 @@ import { ROLES } from '../../utils/roles'
 import {
   getManagerAssignedProperties,
   getManagerAssignedPropertyById,
-  getManagerAssignedPropertyDetails,
-  mapOwnerPropertyDetailsToUi,
 } from '../../api/propertyApi'
 import {
   Button,
@@ -31,7 +29,6 @@ import {
   RotateCcw,
   FileText,
   Shield,
-  MapPin,
 } from 'lucide-react'
 
 // Date Formatter
@@ -102,7 +99,6 @@ export default function ManagerPropertiesPage() {
   const navigate = useNavigate()
 
   const [properties, setProperties] = useState([])
-  const [propertyImageErrors, setPropertyImageErrors] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [errorType, setErrorType] = useState(null)
@@ -131,19 +127,7 @@ export default function ManagerPropertiesPage() {
     try {
       const res = await getManagerAssignedProperties()
       const data = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : []
-      const enrichedProperties = await Promise.all(data.map(async (property) => {
-        const id = property.propertyId || property.id
-        if (!id) return property
-        try {
-          const detailsResponse = await getManagerAssignedPropertyDetails(id)
-          const details = detailsResponse?.data || detailsResponse
-          return mapOwnerPropertyDetailsToUi(details, property) || property
-        } catch (detailsError) {
-          console.warn(`[Manager] Could not load image/address for property #${id}:`, detailsError)
-          return property
-        }
-      }))
-      setProperties(enrichedProperties)
+      setProperties(data)
     } catch (err) {
       console.error('[Manager] Failed to load assigned properties:', err)
       const status = err?.status
@@ -415,28 +399,12 @@ export default function ManagerPropertiesPage() {
         ) : (
           /* Assigned Properties Cards Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredProperties.map((prop) => {
-              const propertyImage = prop.imageUrl || prop.images?.find((image) => image?.isPrimary)?.imageUrl || prop.images?.[0]?.imageUrl
-              const showPropertyImage = propertyImage && !propertyImageErrors[prop.propertyId]
-              const propertyAddress = prop.locationDisplay || prop.fullLocation || prop.address || 'Address not available'
-              return (
+            {filteredProperties.map((prop) => (
               <div
                 key={prop.propertyId}
                 className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
-                  {showPropertyImage ? (
-                    <img
-                      src={propertyImage}
-                      alt={`${prop.propertyName || 'Property'}`}
-                      className="h-40 w-full rounded-lg object-cover border border-[#D9E0E6]"
-                      onError={() => setPropertyImageErrors((previous) => ({ ...previous, [prop.propertyId]: true }))}
-                    />
-                  ) : (
-                    <div className="h-40 w-full rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D]">
-                      <Building2 className="w-10 h-10" aria-label="No property image available" />
-                    </div>
-                  )}
                   {/* Top Bar: Type & Status */}
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-[11px] font-bold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
@@ -453,10 +421,6 @@ export default function ManagerPropertiesPage() {
                     <span className="text-xs text-[#5B6875] font-medium">
                       {formatPropertyType(prop.propertyType)}
                     </span>
-                    <p className="mt-1 flex items-start gap-1 text-xs text-[#5B6875]">
-                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#315A7D]" />
-                      <span className="line-clamp-2">{propertyAddress}</span>
-                    </p>
                   </div>
 
                   {/* Description */}
@@ -523,7 +487,7 @@ export default function ManagerPropertiesPage() {
                   </Button>
                 </div>
               </div>
-            )})}
+            ))}
           </div>
         )}
       </div>

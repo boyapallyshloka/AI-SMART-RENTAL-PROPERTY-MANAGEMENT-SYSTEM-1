@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Bell, Check, Clock, AlertCircle } from 'lucide-react'
 import { useNotifications } from "../../context/notificationcontext"
 
 export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false)
-  const navigate = useNavigate()
 
   const {
     notifications,
@@ -14,7 +12,9 @@ export default function NotificationBell() {
     markAllAsRead,
     loading,
   } = useNotifications()
-
+  console.log("Bell notifications:", notifications)
+  console.log("Bell unread count:", unreadCount)
+  console.log("Bell loading:", loading)
   const dropdownRef = useRef(null)
 
   useEffect(() => {
@@ -46,22 +46,6 @@ export default function NotificationBell() {
     if (!notification.read) {
       await markAsRead(notification.notificationId)
     }
-
-    if (notification.referenceType === 'PROPERTY' && notification.referenceId) {
-      if (notification.type === 'PROPERTY_SUBMITTED') {
-        navigate('/admin/owner-verification#property-review')
-        setIsOpen(false)
-      } else if (notification.type === 'PROPERTY_APPROVED') {
-        navigate(`/owner/properties/${notification.referenceId}`)
-        setIsOpen(false)
-      }
-    }
-  }
-
-  const getNotificationAction = (notification) => {
-    if (notification.type === 'PROPERTY_SUBMITTED') return 'Open property review'
-    if (notification.type === 'PROPERTY_APPROVED') return 'View property'
-    return null
   }
 
   // Format backend createdAt value
@@ -150,8 +134,8 @@ export default function NotificationBell() {
                   key={item.notificationId}
                   onClick={() => handleNotificationClick(item)}
                   className={`p-3.5 flex items-start gap-3 transition-colors hover:bg-[#F7F8FA] cursor-pointer ${!item.read
-                      ? 'bg-white'
-                      : 'bg-[#EAF2F7]/50'
+                    ? 'bg-white'
+                    : 'bg-[#EAF2F7]/50'
                     }`}
                 >
                   {/* Notification Icon */}
@@ -180,11 +164,6 @@ export default function NotificationBell() {
                         {formatNotificationTime(item.createdAt)}
                       </span>
                     </div>
-                    {getNotificationAction(item) && (
-                      <p className="mt-1 text-[11px] font-semibold text-[#315A7D]">
-                        {getNotificationAction(item)} →
-                      </p>
-                    )}
                   </div>
 
                   {/* Unread Indicator */}

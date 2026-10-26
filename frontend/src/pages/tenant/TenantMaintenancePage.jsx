@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {
@@ -56,13 +56,17 @@ export default function TenantMaintenancePage() {
   )
   const [fetchError, setFetchError] = useState('')
 
+  // 🤖 1. Initialize our Push Notification URL Query Hook
+  const [searchParams] = useSearchParams()
+
   const loadTenantRequests = async () => {
     setLoading(true)
     setFetchError('')
 
     try {
+      // 1. Gather live property and unit infrastructure data streams from the server
       const [maintRes, publicPropsRes, appsRes] = await Promise.allSettled([
-        getMaintenanceRequests(),
+        getMainMaintenanceRequests(),
         getPublicProperties(),
         getMyApplications(),
       ])
@@ -73,8 +77,8 @@ export default function TenantMaintenancePage() {
         allBackendRequests = Array.isArray(val)
           ? val
           : Array.isArray(val?.data)
-          ? val.data
-          : []
+            ? val.data
+            : []
         setRequests(allBackendRequests)
       } else {
         const err = maintRes.reason
@@ -86,15 +90,15 @@ export default function TenantMaintenancePage() {
         setRequests([])
       }
 
-      // Build property ID -> Property Name mapping
+      // Build property ID -> Property Name mapping dictionaries
       const mapping = {}
 
       if (publicPropsRes.status === 'fulfilled') {
         const props = Array.isArray(publicPropsRes.value)
           ? publicPropsRes.value
           : Array.isArray(publicPropsRes.value?.data)
-          ? publicPropsRes.value.data
-          : []
+            ? publicPropsRes.value.data
+            : []
         props.forEach((p) => {
           const pId = p.propertyId ?? p.id
           const pName = p.propertyName ?? p.name ?? p.title
@@ -109,8 +113,8 @@ export default function TenantMaintenancePage() {
         const apps = Array.isArray(appsRes.value)
           ? appsRes.value
           : Array.isArray(appsRes.value?.data)
-          ? appsRes.value.data
-          : []
+            ? appsRes.value.data
+            : []
         apps.forEach((a) => {
           const pId = a.propertyId
           const pName = a.propertyName
@@ -121,7 +125,7 @@ export default function TenantMaintenancePage() {
         })
       }
 
-      // If any request has a propertyId not yet resolved in mapping, fetch its public property details
+      // Resolve secondary missing properties in background thread pools
       const missingPropIds = [
         ...new Set(
           allBackendRequests
@@ -146,7 +150,7 @@ export default function TenantMaintenancePage() {
                 mapping[Number(id)] = name
               }
             } catch (err) {
-              // Silently ignore
+              // Ignore failure silences
             }
           })
         )
@@ -165,11 +169,29 @@ export default function TenantMaintenancePage() {
     }
   }
 
+  // 1. Trigger initial fetch sequence on component creation lifecycle mount
   useEffect(() => {
     loadTenantRequests()
   }, [])
 
-  // If selectedTicket has a propertyId not yet in propertyMap, resolve it dynamically
+  // 🤖 2. Notification Deep Link Parameter Interceptor Loop
+  useEffect(() => {
+    if (loading || requests.length === 0 || selectedTicket) return;
+
+    const targetTicketId = searchParams.get('ticket');
+    if (!targetTicketId) return;
+
+    const matchedRequest = requests.find(req =>
+      String(req.requestId || req.id || req.ticketNumber) === String(targetTicketId)
+    );
+
+    if (matchedRequest) {
+      console.log(`🎯 Notification Deep Link: Auto-launching layout drawer for ticket: ${targetTicketId}`);
+      setSelectedTicket(matchedRequest);
+    }
+  }, [loading, requests, searchParams, selectedTicket]);
+
+  // 3. Resolve fallback properties dynamically for single active ticket layout drawers
   useEffect(() => {
     if (
       selectedTicket?.propertyId &&
@@ -192,10 +214,11 @@ export default function TenantMaintenancePage() {
             }))
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }, [selectedTicket, propertyMap])
 
+  // 4. UI presentation utility hooks and filters
   const getPropertyDisplayName = (ticket) => {
     if (!ticket) return ''
     const pId = ticket.propertyId
@@ -233,7 +256,6 @@ export default function TenantMaintenancePage() {
     })),
   ]
 
-  // Filtered requests based on search, status, and priority
   const filteredRequests = requests.filter((req) => {
     const query = searchQuery.toLowerCase().trim()
     const ticketIdStr = String(req.requestId || req.id || req.ticketNumber || '').toLowerCase()

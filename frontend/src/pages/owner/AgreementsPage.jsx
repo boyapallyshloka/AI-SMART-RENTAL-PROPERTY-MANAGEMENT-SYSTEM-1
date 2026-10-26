@@ -150,13 +150,13 @@ export default function AgreementsPage() {
             app?.tenantName ||
             (agr.tenantId ? `Tenant #${agr.tenantId}` : null),
           tenantEmail: app?.tenantEmail || '',
-          propertyName: app?.propertyName || agr.propertyName || null,
+          propertyName: app?.propertyName || null,
           buildingName: app?.buildingName || null,
           unit: app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : agr.unitId
             ? `Unit #${agr.unitId}`
-            : 'Entire property',
+            : '—',
           status: agr.status ?? null,
         }
       })

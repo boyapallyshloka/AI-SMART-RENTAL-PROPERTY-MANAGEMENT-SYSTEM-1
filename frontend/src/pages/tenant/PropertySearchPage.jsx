@@ -341,6 +341,8 @@ function filterProperties(properties = [], filters = {}) {
 function sortProperties(properties = [], sortBy = 'ai_match') {
   const sorted = [...properties]
   switch (sortBy) {
+    case 'newest':
+      return sorted.sort((a, b) => (b.propertyId || b.id || 0) - (a.propertyId || a.id || 0))
     case 'price_asc':
       return sorted.sort((a, b) => (a.monthlyRent || 0) - (b.monthlyRent || 0))
     case 'price_desc':
@@ -363,7 +365,7 @@ function sortProperties(properties = [], sortBy = 'ai_match') {
 export default function PropertySearchPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const isUserTenant = isTenant(user?.role)
+  const isUserTenant = Boolean(user && isTenant(user.role))
 
   // Canonical Tenant ID Ref (tenants.tenant_id, NOT users.id)
   const resolvedTenantIdRef = useRef(
@@ -947,9 +949,9 @@ export default function PropertySearchPage() {
 
   useEffect(() => {
     if (isFirstRender.current) {
+      const timer = setTimeout(() => loadProperties(INITIAL_FILTERS), 0)
       isFirstRender.current = false
-      loadProperties(INITIAL_FILTERS)
-      return
+      return () => clearTimeout(timer)
     }
 
     const timer = setTimeout(() => {
@@ -1008,12 +1010,7 @@ export default function PropertySearchPage() {
     return { total, avgRent, topMatch }
   }, [rawProperties, aiRecommendations])
 
-  return (
-    <DashboardLayout
-      defaultRole="tenant"
-      activeItem="find-properties"
-      pageTitle="Find Properties"
-    >
+  const pageContent = (
       <div className="space-y-7 pb-12">
         {/* ========================================================= */}
         {/* SECTION 1 — YOUR PREFERENCES ("Find Your Next Home")      */}
@@ -1565,6 +1562,11 @@ export default function PropertySearchPage() {
           />
         </div>
       </div>
+  )
+
+  return (
+    <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Find Properties">
+      {pageContent}
     </DashboardLayout>
   )
 }

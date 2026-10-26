@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { ROLES } from '../../utils/roles'
 import {
@@ -92,6 +92,7 @@ export default function ManagerMaintenancePage() {
   const [selectedTicket, setSelectedTicket] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
+  const [searchParams] = useSearchParams();
 
   // Cache/lookup maps for Property Name and Unit Number
   const [propertyMap, setPropertyMap] = useState({})
@@ -248,19 +249,56 @@ export default function ManagerMaintenancePage() {
     fetchTickets()
   }, [])
 
-  // Load human-readable details for property, unit, and tenant when modal opens
+
+  useEffect(() => {
+    if (loading || requests.length === 0 || selectedTicket) return;
+
+    const targetTicketId = searchParams.get('ticket');
+    if (!targetTicketId) return;
+
+    const matchedRequest = requests.find(req =>
+      String(req.requestId || req.id || req.ticketNumber) === String(targetTicketId)
+    );
+
+    if (matchedRequest) {
+      console.log(`🎯 Manager Deep Link Hook: Auto-opening ticket drawer for ID: ${targetTicketId}`);
+      setSelectedTicket(matchedRequest);
+
+      // Resolve the modal info inline safely to completely bypass initialization errors
+      setModalPropertyName(matchedRequest.propertyName || propertyMap[matchedRequest.propertyId] || '')
+      setModalUnitNumber(matchedRequest.unitNumber || unitMap[matchedRequest.unitId] || '')
+
+      setModalTenantName(matchedRequest.tenantName || matchedRequest.user?.name || 'Tenant')
+    }
+  }, [loading, requests, searchParams, selectedTicket, propertyMap, unitMap]);
+
+
+
+  // 3. This is your next function in the file (make sure it looks like this)
   const loadTicketEntities = async (ticketData) => {
     if (!ticketData) return
 
     setModalPropertyName(ticketData.propertyName || propertyMap[ticketData.propertyId] || '')
-    setModalUnitNumber(
-      ticketData.unitNumber
-        ? String(ticketData.unitNumber)
-        : unitMap[ticketData.unitId]
-          ? String(unitMap[ticketData.unitId])
-          : ''
-    )
-    setModalTenantName(ticketData.tenantName || '')
+    setModalUnitNumber(ticketData.unitNumber || unitMap[ticketData.unitId] || '')
+    setModalTenantName(ticketData.tenantName || ticketData.user?.name || 'Tenant')
+
+    // Load human-readable details for property, unit, and tenant when modal opens
+    // 3. This is your single, clean function (No duplicate nesting loops!)
+    const loadTicketEntities = async (ticketData) => {
+      if (!ticketData) return
+
+      setModalPropertyName(ticketData.propertyName || propertyMap[ticketData.propertyId] || '')
+
+      setModalUnitNumber(
+        ticketData.unitNumber
+          ? String(ticketData.unitNumber)
+          : unitMap[ticketData.unitId]
+            ? String(unitMap[ticketData.unitId])
+            : ''
+      )
+
+      setModalTenantName(ticketData.tenantName || ticketData.user?.name || 'Tenant')
+    }
 
     const { propertyId, unitId, tenantId } = ticketData
 

@@ -51,7 +51,7 @@ const PARKING_OPTIONS = [
  * OwnerPropertyForm Component
  * Contract-aligned form supporting create and update for backend PropertyRequest
  *
- * Backend Supported Fields:
+ * Backend Supported Fields (7 only):
  * 1. propertyName (string, required)
  * 2. propertyType (enum: APARTMENT, HOUSE, VILLA, PG, HOSTEL, COMMERCIAL, required)
  * 3. description (string, optional)
@@ -59,9 +59,9 @@ const PARKING_OPTIONS = [
  * 5. furnishingStatus (enum: UNFURNISHED, SEMI_FURNISHED, FULLY_FURNISHED, optional)
  * 6. parkingAvailable (boolean, required)
  * 7. yearBuilt (integer, non-negative, optional)
- * 8. bedrooms, bathrooms, floorNumber, totalFloors and rental values for direct-rental houses and villas
  *
  * Excluded from form & submission:
+ * - bedrooms, bathrooms, monthlyRent, securityDeposit (legacy fields)
  * - ownerId, status, propertyId/id (system/lifecycle fields)
  */
 export default function OwnerPropertyForm({
@@ -122,12 +122,6 @@ export default function OwnerPropertyForm({
       parking: mappedParking,
       yearBuilt: rawYear != null ? String(rawYear) : '',
       year: rawYear != null ? String(rawYear) : '',
-      monthlyRent: data?.monthlyRent != null ? String(data.monthlyRent) : '',
-      securityDeposit: data?.securityDeposit != null ? String(data.securityDeposit) : '',
-      bedrooms: data?.bedrooms != null ? String(data.bedrooms) : '',
-      bathrooms: data?.bathrooms != null ? String(data.bathrooms) : '',
-      floorNumber: '0',
-      totalFloors: data?.totalFloors != null ? String(data.totalFloors) : '1',
     }
   }
 
@@ -229,28 +223,6 @@ export default function OwnerPropertyForm({
       }
     }
 
-    if (['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase())) {
-      const bedrooms = Number(formData.bedrooms)
-      if (formData.bedrooms === '' || !Number.isInteger(bedrooms) || bedrooms < 1) {
-        errs.bedrooms = 'Enter at least 1 bedroom for rent prediction'
-      }
-      const bathrooms = Number(formData.bathrooms)
-      if (formData.bathrooms === '' || !Number.isInteger(bathrooms) || bathrooms < 1) {
-        errs.bathrooms = 'Enter at least 1 bathroom for rent prediction'
-      }
-      const totalFloors = Number(formData.totalFloors)
-      if (formData.totalFloors === '' || !Number.isInteger(totalFloors) || totalFloors < 1) {
-        errs.totalFloors = 'Enter a valid total floors count (at least 1)'
-      }
-      const rent = Number(formData.monthlyRent)
-      if (initialData && formData.monthlyRent !== '' && (!Number.isFinite(rent) || rent <= 0)) {
-        errs.monthlyRent = 'Enter a monthly rental value greater than zero'
-      }
-      if (formData.securityDeposit !== '' && (!Number.isFinite(Number(formData.securityDeposit)) || Number(formData.securityDeposit) < 0)) {
-        errs.securityDeposit = 'Security deposit must be zero or greater'
-      }
-    }
-
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -280,22 +252,6 @@ export default function OwnerPropertyForm({
           : formData.year !== '' && formData.year != null && !isNaN(Number(formData.year))
           ? parseInt(formData.year, 10)
           : undefined,
-      monthlyRent: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && formData.monthlyRent !== ''
-        ? Number(formData.monthlyRent)
-        : undefined,
-      bedrooms: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && formData.bedrooms !== ''
-        ? Number(formData.bedrooms)
-        : undefined,
-      bathrooms: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && formData.bathrooms !== ''
-        ? Number(formData.bathrooms)
-        : undefined,
-      floorNumber: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) ? 0 : undefined,
-      totalFloors: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && formData.totalFloors !== ''
-        ? Number(formData.totalFloors)
-        : undefined,
-      securityDeposit: ['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && formData.securityDeposit !== ''
-        ? Number(formData.securityDeposit)
-        : undefined,
     }
 
     // Filter out undefined fields so the payload strictly contains ONLY defined PropertyRequest fields
@@ -401,26 +357,6 @@ export default function OwnerPropertyForm({
           />
         </div>
       </div>
-
-      {['HOUSE', 'VILLA'].includes(String(formData.propertyType || formData.type).toUpperCase()) && (
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 sm:p-8 shadow-sm space-y-5">
-          <div className="border-b border-[#D9E0E6] pb-4">
-            <h2 className="text-base font-semibold text-[#243447]">Direct Rental Details</h2>
-            <p className="mt-1 text-xs text-[#5B6875]">Houses and villas are rented as one property. No building, floor, or unit records are needed.</p>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <Input label="Bedrooms / BHK" type="number" min="1" step="1" placeholder="e.g. 3" value={formData.bedrooms} onChange={(event) => handleChange('bedrooms', event.target.value)} error={errors.bedrooms} required />
-            <Input label="Bathrooms" type="number" min="1" step="1" placeholder="e.g. 2" value={formData.bathrooms} onChange={(event) => handleChange('bathrooms', event.target.value)} error={errors.bathrooms} required />
-            <Input label="Total Floors" type="number" min="1" step="1" placeholder="e.g. 2" value={formData.totalFloors} onChange={(event) => handleChange('totalFloors', event.target.value)} error={errors.totalFloors} required />
-            {initialData && (
-              <>
-                <Input label="Monthly Rent (₹)" type="number" min="1" step="0.01" value={formData.monthlyRent} onChange={(event) => handleChange('monthlyRent', event.target.value)} error={errors.monthlyRent} />
-                <Input label="Security Deposit (₹)" type="number" min="0" step="0.01" value={formData.securityDeposit} onChange={(event) => handleChange('securityDeposit', event.target.value)} error={errors.securityDeposit} />
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Amenities are associated after the property is created. */}
       {!initialData && (

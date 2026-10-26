@@ -68,11 +68,6 @@ const STATUS_CONFIG = {
     badge: 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]',
     dot: 'bg-[#B7791F]',
   },
-  pending_approval: {
-    label: 'Pending Approval',
-    badge: 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]',
-    dot: 'bg-[#B7791F]',
-  },
   'pending signature': {
     label: 'Pending Signature',
     badge: 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]',
