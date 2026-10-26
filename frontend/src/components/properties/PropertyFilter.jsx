@@ -58,6 +58,7 @@ export default function PropertyFilter({
   onResetFilters,
   totalResults,
   availableCities = [],
+  showAiMatchFilter = true,
 }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [showAdvanced, setShowAdvanced] = useState(false)
@@ -104,6 +105,7 @@ export default function PropertyFilter({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5B6875]" />
             <input
               type="text"
+              aria-label="Search properties"
               value={filters.searchQuery || ''}
               onChange={handleTextChange}
               placeholder="Search by neighborhood, city, or property name..."
@@ -124,6 +126,7 @@ export default function PropertyFilter({
           <div className="relative min-w-[160px]">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5B6875] pointer-events-none" />
             <select
+              aria-label="Filter by location"
               value={filters.city || 'All Locations'}
               onChange={(e) => handleFieldChange('city', e.target.value)}
               className="w-full pl-8 pr-8 py-2 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] text-[#243447] text-sm focus:outline-none focus:bg-white focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D] appearance-none cursor-pointer"
@@ -142,6 +145,7 @@ export default function PropertyFilter({
           <div className="relative min-w-[150px]">
             <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5B6875] pointer-events-none" />
             <select
+              aria-label="Filter by property type"
               value={filters.propertyType || 'All Types'}
               onChange={(e) => handleFieldChange('propertyType', e.target.value)}
               className="w-full pl-8 pr-8 py-2 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] text-[#243447] text-sm focus:outline-none focus:bg-white focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D] appearance-none cursor-pointer"
@@ -211,6 +215,7 @@ export default function PropertyFilter({
                   </span>
                   <input
                     type="number"
+                    aria-label="Minimum monthly rent"
                     min="0"
                     step="100"
                     placeholder="Min"
@@ -226,6 +231,7 @@ export default function PropertyFilter({
                   </span>
                   <input
                     type="number"
+                    aria-label="Maximum monthly rent"
                     min="0"
                     step="100"
                     placeholder="Max"
@@ -271,6 +277,7 @@ export default function PropertyFilter({
                 Furnishing
               </label>
               <select
+                aria-label="Filter by furnishing"
                 value={filters.furnishing || 'All Furnishing'}
                 onChange={(e) => handleFieldChange('furnishing', e.target.value)}
                 className="w-full px-2.5 py-1.5 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] text-xs text-[#243447] focus:bg-white focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D]"
@@ -290,6 +297,7 @@ export default function PropertyFilter({
                 Parking
               </label>
               <select
+                aria-label="Filter by parking availability"
                 value={filters.parking || 'All Parking'}
                 onChange={(e) => handleFieldChange('parking', e.target.value)}
                 className="w-full px-2.5 py-1.5 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] text-xs text-[#243447] focus:bg-white focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D]"
@@ -304,7 +312,7 @@ export default function PropertyFilter({
           </div>
 
           {/* AI Match Score Minimum Option (Clean, Restrained) */}
-          <div className="mt-4 pt-3 border-t border-[#D9E0E6] flex flex-wrap items-center justify-between gap-3 text-xs">
+          {showAiMatchFilter && <div className="mt-4 pt-3 border-t border-[#D9E0E6] flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-[#315A7D]" />
               <span className="font-semibold text-[#5B6875]">
@@ -346,7 +354,7 @@ export default function PropertyFilter({
                 Clear all filters ({activeCount})
               </button>
             )}
-          </div>
+          </div>}
         </div>
       </div>
     </div>

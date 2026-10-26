@@ -6,6 +6,8 @@ import ResolveRouter from "../components/ResolveRouter";
 
 // Auth Pages
 import LoginPage from '../pages/auth/LoginPage'
+import WelcomePage from '../pages/WelcomePage'
+import PublicPropertyDetailsPage from '../pages/PublicPropertyDetailsPage'
 import RegisterPage from '../pages/auth/RegisterPage'
 import VerifyEmailPage from '../pages/auth/VerifyEmailPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage'
@@ -81,7 +83,7 @@ import RoleRoute from './RoleRoute'
 import { ROLES, getDashboardPath, isPropertyOwner, isPropertyManager, normalizeRole } from '../utils/roles'
 
 /**
- * Root Redirector: Sends authenticated user to their role dashboard or /login
+ * Root entry: keep role-based dashboard routing and show the welcome page to guests.
  */
 function RootRedirect() {
   const { user, loading } = useAuth()
@@ -89,7 +91,7 @@ function RootRedirect() {
   if (loading) return null
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <WelcomePage />
   }
 
   const destination = getDashboardPath(user.role)
@@ -155,6 +157,10 @@ export default function AppRoutes() {
     <Routes>
       {/* Root entry */}
       <Route path="/" element={<RootRedirect />} />
+
+      {/* Public property browsing */}
+      <Route path="/properties" element={<Navigate to="/#property-listings" replace />} />
+      <Route path="/properties/:propertyId" element={<PublicPropertyDetailsPage />} />
 
       {/* Public Auth Routes */}
       <Route path="/login" element={<LoginPage />} />

@@ -882,8 +882,8 @@ export const updateManagerAssignedProperty = async (
  * Role: TENANT
  * @returns {Promise<Array<Object>>} Lightweight mapped property cards
  */
-export const getPublicProperties = async () => {
-  const response = await axiosClient.get('/properties/public')
+export const getPublicProperties = async ({ skipAuthToken = false } = {}) => {
+  const response = await axiosClient.get('/properties/public', { skipAuthToken })
   const data = Array.isArray(response) ? response : response?.data || []
   return data.map(mapBackendPropertyToUi)
 }
@@ -905,7 +905,7 @@ export const getPublicProperties = async () => {
  * @param {Object} [filters={}]
  * @returns {Promise<Array<Object>>} Mapped property search results
  */
-export const searchPublicProperties = async (filters = {}) => {
+export const searchPublicProperties = async (filters = {}, { skipAuthToken = false } = {}) => {
   const params = {}
 
   if (filters.searchQuery && String(filters.searchQuery).trim()) {
@@ -961,7 +961,10 @@ export const searchPublicProperties = async (filters = {}) => {
     }
   }
 
-  const response = await axiosClient.get('/properties/public/search', { params })
+  const response = await axiosClient.get('/properties/public/search', {
+    params,
+    skipAuthToken,
+  })
   const data = Array.isArray(response) ? response : response?.data || []
   return data.map(mapBackendPropertyToUi)
 }
@@ -975,8 +978,8 @@ export const searchPublicProperties = async (filters = {}) => {
  * @param {number|string} propertyId
  * @returns {Promise<Object>} PropertyDetailsResponse
  */
-export const getPublicPropertyDetails = async (propertyId) => {
-  return axiosClient.get(`/properties/public/${propertyId}`)
+export const getPublicPropertyDetails = async (propertyId, { skipAuthToken = false } = {}) => {
+  return axiosClient.get(`/properties/public/${propertyId}`, { skipAuthToken })
 }
 
 

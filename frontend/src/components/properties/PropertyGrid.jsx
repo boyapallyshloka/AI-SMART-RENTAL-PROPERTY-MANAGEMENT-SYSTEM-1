@@ -29,6 +29,8 @@ export default function PropertyGrid({
   onResetFilters,
   favoriteIds = [],
   onToggleFavorite,
+  showFavorites = true,
+  showPersonalizedSort = true,
   isLoading = false,
 }) {
   // Loading State handler
@@ -105,7 +107,9 @@ export default function PropertyGrid({
             </span>
           </h2>
           <p className="text-xs text-[#5B6875] mt-0.5">
-            Ranked with personalized tenant preferences and market indicators
+            {showPersonalizedSort
+              ? 'Ranked with personalized tenant preferences and market indicators'
+              : 'Browse current public property listings'}
           </p>
         </div>
 
@@ -117,11 +121,16 @@ export default function PropertyGrid({
               Sort by:
             </span>
             <select
+              aria-label="Sort properties"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
               className="text-xs font-medium py-1.5 px-2.5 rounded-md border border-[#D9E0E6] bg-white text-[#243447] focus:outline-none focus:border-[#315A7D] cursor-pointer"
             >
-              <option value="ai_match">Recommended Match</option>
+              {showPersonalizedSort ? (
+                <option value="ai_match">Recommended Match</option>
+              ) : (
+                <option value="newest">Newest Listings</option>
+              )}
               <option value="price_asc">Price: Low to High</option>
               <option value="price_desc">Price: High to Low</option>
               <option value="bedrooms_desc">Most Bedrooms</option>
@@ -140,6 +149,7 @@ export default function PropertyGrid({
             onSelect={onSelectProperty}
             isFavorite={favoriteIds.includes(property.id)}
             onToggleFavorite={onToggleFavorite}
+            showFavorite={showFavorites}
           />
         ))}
       </div>

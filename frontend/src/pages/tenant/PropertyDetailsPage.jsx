@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
+import PublicLayout from '../../layouts/PublicLayout'
 import PropertyDetailsSection from '../../components/properties/PropertyDetailsSection'
-import { getPublicPropertyDetails, resolveImageUrl } from '../../api/propertyApi'
+import { getPublicPropertyDetails as getPublicDetails } from '../../api/publicPropertyApi'
+import { getPublicPropertyDetails as getTenantDetails } from '../../api/propertyApi'
+import { resolveImageUrl } from '../../api/propertyApi'
+import { useAuth } from '../../context/AuthContext'
+import { isTenant } from '../../utils/roles'
 import {
   ArrowLeft,
   MapPin,
@@ -22,12 +27,17 @@ export default function PropertyDetailsPage({
   propertyId: propPropertyId,
   onBack,
   onSelectSimilar,
+  publicMode = false,
 }) {
-  const { id: routeId } = useParams()
+  const { id: routeId, propertyId: publicRouteId } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { user } = useAuth()
+  const isUserTenant = !publicMode && Boolean(user && isTenant(user.role))
+  const PageLayout = publicMode ? PublicLayout : DashboardLayout
 
   // Target property ID from route param or props
-  const activeId = propPropertyId || routeId || propFromProps?.propertyId || propFromProps?.id
+  const activeId = propPropertyId || routeId || publicRouteId || propFromProps?.propertyId || propFromProps?.id
 
   // State
   const [details, setDetails] = useState(
@@ -45,6 +55,7 @@ export default function PropertyDetailsPage({
   const [error, setError] = useState(null)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [copiedLink, setCopiedLink] = useState(false)
+  const requestedIdRef = useRef(null)
 
   // Fetch real property details from backend
   const loadDetails = useCallback(async () => {
@@ -59,7 +70,7 @@ export default function PropertyDetailsPage({
     setError(null)
 
     try {
-      const data = await getPublicPropertyDetails(activeId)
+      const data = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
       if (data && data.property) {
         setDetails({
           property: data.property,
@@ -84,10 +95,12 @@ export default function PropertyDetailsPage({
     } finally {
       setIsLoading(false)
     }
-  }, [activeId, propFromProps])
+  }, [activeId, propFromProps, publicMode])
 
   useEffect(() => {
     setActiveImageIndex(0)
+    if (requestedIdRef.current === activeId) return
+    requestedIdRef.current = activeId
     loadDetails()
   }, [loadDetails, activeId])
 
@@ -117,8 +130,36 @@ export default function PropertyDetailsPage({
     if (onBack) {
       onBack()
     } else {
-      navigate('/tenant/properties')
+      if (publicMode) {
+        navigate('/#property-listings', {
+          state: { publicFilters: location.state?.publicFilters },
+        })
+      } else {
+        navigate('/tenant/properties')
+      }
     }
+  }
+
+  const handleApply = (unitId) => {
+    const propertyId = property.propertyId || activeId
+    const requestedUnitId = unitId || new URLSearchParams(location.search).get('unitId')
+    const query = new URLSearchParams({ propertyId: String(propertyId) })
+    if (requestedUnitId) query.set('unitId', requestedUnitId)
+    const applicationPath = `/tenant/applications/new?${query.toString()}`
+
+    if (!user) {
+      navigate('/login', {
+        state: {
+          from: {
+            pathname: '/tenant/applications/new',
+            search: `?${query.toString()}`,
+          },
+        },
+      })
+      return
+    }
+
+    navigate(applicationPath)
   }
 
   const handleShare = () => {
@@ -159,7 +200,7 @@ export default function PropertyDetailsPage({
   // ---------------------------------------------------------------------------
   if (isLoading) {
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-screen space-y-6 pb-20 animate-pulse">
           {/* Top Bar Skeleton */}
           <div className="flex items-center justify-between py-2 border-b border-[#D9E0E6]">
@@ -195,7 +236,7 @@ export default function PropertyDetailsPage({
             </div>
           </div>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
@@ -207,7 +248,7 @@ export default function PropertyDetailsPage({
     const is404 = error.isNotFound || error.status === 404
 
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto">
           {is403 ? (
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6] mb-4">
@@ -233,9 +274,13 @@ export default function PropertyDetailsPage({
 
           <p className="text-sm text-[#5B6875] mt-2 leading-relaxed">
             {is403
-              ? "You do not currently have permission to access this property's full details. Please ensure you are logged in with the appropriate tenant account or try again."
+              ? publicMode
+                ? 'The public property details endpoint is not available to guests. The backend must allow unauthenticated GET access to published property details.'
+                : "You do not currently have permission to access this property's full details. Please ensure you are logged in with the appropriate tenant account or try again."
               : is404
               ? 'The rental property you requested does not exist or may have been removed by its owner.'
+              : error.status === 401 || error.status === 403
+              ? `The public property details endpoint returned ${error.status}. The backend must allow unauthenticated GET access to published property details.`
               : error.message || 'An unexpected error occurred while communicating with the server.'}
           </p>
 
@@ -260,7 +305,7 @@ export default function PropertyDetailsPage({
             </button>
           </div>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
@@ -269,7 +314,7 @@ export default function PropertyDetailsPage({
   // ---------------------------------------------------------------------------
   if (!details || !details.property) {
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] mb-3">
             <Building2 className="h-7 w-7" />
@@ -287,14 +332,14 @@ export default function PropertyDetailsPage({
             <span>Browse Properties</span>
           </button>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
   const { property, address, amenities, buildings } = details
 
   return (
-    <DashboardLayout
+    <PageLayout
       defaultRole="tenant"
       activeItem="find-properties"
       pageTitle={property.propertyName || 'Property Details'}
@@ -417,7 +462,7 @@ export default function PropertyDetailsPage({
               onSelectUnit={(unit) => {
                 const propId = property.propertyId || activeId
                 const unitId = unit.unitId || unit.id
-                navigate(`/tenant/applications/new?propertyId=${propId}&unitId=${unitId}`)
+                handleApply(unitId)
               }}
             />
           </div>
@@ -486,7 +531,7 @@ export default function PropertyDetailsPage({
                   </div>
                 )}
 
-                {property.ownerName && (
+                {isUserTenant && property.ownerName && (
                   <div className="flex items-center justify-between py-1">
                     <span>Property Manager</span>
                     <span className="font-semibold text-[#243447]">{property.ownerName}</span>
@@ -499,8 +544,7 @@ export default function PropertyDetailsPage({
                 <button
                   type="button"
                   onClick={() => {
-                    const propId = property.propertyId || activeId
-                    navigate(`/tenant/applications/new?propertyId=${propId}`)
+                    handleApply()
                   }}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[#315A7D] hover:bg-[#274B68] px-5 py-3 text-sm font-semibold text-white shadow-2xs transition-colors cursor-pointer"
                 >
@@ -525,6 +569,6 @@ export default function PropertyDetailsPage({
         </div>
 
       </div>
-    </DashboardLayout>
+    </PageLayout>
   )
 }
