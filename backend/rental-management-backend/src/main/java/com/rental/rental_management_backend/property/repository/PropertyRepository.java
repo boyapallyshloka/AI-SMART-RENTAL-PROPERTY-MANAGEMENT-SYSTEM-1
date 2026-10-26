@@ -70,6 +70,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findByStatus(PropertyStatus status);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
+    List<Property> findByStatusAndSubmittedForApprovalTrue(PropertyStatus status);
+
+    @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByStatusIn(List<PropertyStatus> statuses);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
@@ -107,7 +110,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("""
         SELECT DISTINCT p
         FROM Property p
-        WHERE (p.status = :status OR p.status = com.rental.rental_management_backend.property.enums.PropertyStatus.PUBLISHED)
+        WHERE p.status = :status
 
         AND (
             COALESCE(:searchQuery, '') = ''
@@ -281,7 +284,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         p.securityDeposit
     )
     FROM Property p
-    WHERE (p.status = :status OR p.status = com.rental.rental_management_backend.property.enums.PropertyStatus.PUBLISHED)
+    WHERE p.status = :status
     """)
     List<PropertyCardResponse> findAvailablePropertyCards(
             @Param("status") PropertyStatus status);

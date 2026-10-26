@@ -48,12 +48,6 @@ public class PropertyRequest {
     @PositiveOrZero(message = "Year built cannot be negative")
     private Integer yearBuilt;
 
-    @PositiveOrZero(message = "Monthly rent cannot be negative")
-    private BigDecimal monthlyRent;
-
-    @PositiveOrZero(message = "Security deposit cannot be negative")
-    private BigDecimal securityDeposit;
-
     public PropertyRequest() {
     }
 
@@ -161,11 +155,4 @@ public class PropertyRequest {
         this.yearBuilt = yearBuilt;
     }
 
-    public BigDecimal getMonthlyRent() { return monthlyRent; }
-
-    public void setMonthlyRent(BigDecimal monthlyRent) { this.monthlyRent = monthlyRent; }
-
-    public BigDecimal getSecurityDeposit() { return securityDeposit; }
-
-    public void setSecurityDeposit(BigDecimal securityDeposit) { this.securityDeposit = securityDeposit; }
 }

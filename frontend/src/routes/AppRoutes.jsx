@@ -67,7 +67,6 @@ import AuditLogsPage from '../pages/admin/AuditLogsPage'
 import AIMonitoringPage from '../pages/admin/AIMonitoringPage'
 import SystemSettingsPage from '../pages/admin/SystemSettingsPage'
 import AdminReportsPage from '../pages/admin/AdminReportsPage'
-import PropertyApprovalPage from '../pages/admin/PropertyApprovalPage'
 
 // UI Showcase Page
 
@@ -313,7 +312,7 @@ export default function AppRoutes() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="users" element={<UserManagementPage />} />
                 <Route path="owner-verification" element={<OwnerVerificationPage />} />
-                <Route path="property-approvals" element={<PropertyApprovalPage />} />
+                <Route path="property-approvals" element={<Navigate to="/admin/owner-verification#property-review" replace />} />
                 <Route path="tenant-document-review" element={<TenantDocumentReviewPage />} />
                 <Route path="reports" element={<AdminReportsPage />} />
                 <Route path="audit-logs" element={<AuditLogsPage />} />

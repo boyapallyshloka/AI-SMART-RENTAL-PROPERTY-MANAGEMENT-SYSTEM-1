@@ -182,8 +182,7 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
      * TENANT FLOW:
      *
      * Exposes full property details only when the property is publicly
-     * rentable. PUBLISHED is used by the publication-verification flow,
-     * while AVAILABLE remains supported for existing listings.
+     * rentable.
      */
     private PropertyDetailsResponse getPropertyDetailsForTenant(
             Long propertyId) {
@@ -195,8 +194,7 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
                                         "Property not found with ID: "
                                                 + propertyId));
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE
-                && property.getStatus() != PropertyStatus.PUBLISHED) {
+        if (property.getStatus() != PropertyStatus.AVAILABLE) {
 
             throw new ResourceNotFoundException(
                     "Property not found or not available for browsing with ID: "

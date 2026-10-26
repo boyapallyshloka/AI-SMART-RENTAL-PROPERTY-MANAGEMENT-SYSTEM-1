@@ -226,17 +226,17 @@ export default function OwnerPropertyTable({
                         <select
                           aria-label="Change property status"
                           value={prop.status}
-                          disabled={updatingStatusId === prop.id || updatingStatusId === prop.propertyId}
+                          disabled={prop.submittedForApproval || prop.status === 'OCCUPIED' || updatingStatusId === prop.id || updatingStatusId === prop.propertyId}
                           onChange={(e) => onStatusChange(prop.id, e.target.value)}
                           className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
                         >
                           {CANONICAL_PROPERTY_STATUSES.map((st) => (
-                            <option key={st} value={st}>
-                              {st === 'AVAILABLE'
-                                ? 'Approved'
-                                : st === 'UNDER_MAINTENANCE'
-                                  ? 'Under Maintenance'
-                                  : st.charAt(0) + st.slice(1).toLowerCase()}
+                            <option key={st} value={st} disabled={(st === 'OCCUPIED' && prop.status !== 'OCCUPIED') || (st === 'DRAFT' && prop.status !== 'DRAFT') || (prop.status === 'DRAFT' && st !== 'DRAFT')}>
+                              {st === 'DRAFT' && prop.submittedForApproval
+                                ? 'Pending administrator review'
+                                : st === 'NOT_AVAILABLE'
+                                ? 'Not available'
+                                : st.charAt(0) + st.slice(1).toLowerCase()}
                             </option>
                           ))}
                         </select>

@@ -49,7 +49,7 @@ export default function NotificationBell() {
 
     if (notification.referenceType === 'PROPERTY' && notification.referenceId) {
       if (notification.type === 'PROPERTY_SUBMITTED') {
-        navigate('/admin/property-approvals')
+        navigate('/admin/owner-verification#property-review')
         setIsOpen(false)
       } else if (notification.type === 'PROPERTY_APPROVED') {
         navigate(`/owner/properties/${notification.referenceId}`)

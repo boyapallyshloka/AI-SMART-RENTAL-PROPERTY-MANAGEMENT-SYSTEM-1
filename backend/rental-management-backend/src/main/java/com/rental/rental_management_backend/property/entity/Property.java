@@ -2,7 +2,6 @@ package com.rental.rental_management_backend.property.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.math.BigDecimal;
 
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
@@ -87,18 +86,13 @@ public class Property {
     @Column(name = "year_built")
     private Integer yearBuilt;
 
-    @PositiveOrZero(message = "Monthly rent cannot be negative")
-    @Column(name = "monthly_rent", precision = 12, scale = 2)
-    private BigDecimal monthlyRent;
-
-    @PositiveOrZero(message = "Security deposit cannot be negative")
-    @Column(name = "security_deposit", precision = 12, scale = 2)
-    private BigDecimal securityDeposit;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
     private PropertyStatus status = PropertyStatus.DRAFT;
+
+    @Column(name = "submitted_for_approval", nullable = false, columnDefinition = "boolean not null default false")
+    private boolean submittedForApproval;
 
     // Property owner
     @ManyToOne(fetch = FetchType.EAGER)
@@ -246,20 +240,20 @@ public class Property {
         this.yearBuilt = yearBuilt;
     }
 
-    public BigDecimal getMonthlyRent() { return monthlyRent; }
-
-    public void setMonthlyRent(BigDecimal monthlyRent) { this.monthlyRent = monthlyRent; }
-
-    public BigDecimal getSecurityDeposit() { return securityDeposit; }
-
-    public void setSecurityDeposit(BigDecimal securityDeposit) { this.securityDeposit = securityDeposit; }
-
     public PropertyStatus getStatus() {
         return status;
     }
 
     public void setStatus(PropertyStatus status) {
         this.status = status;
+    }
+
+    public boolean isSubmittedForApproval() {
+        return submittedForApproval;
+    }
+
+    public void setSubmittedForApproval(boolean submittedForApproval) {
+        this.submittedForApproval = submittedForApproval;
     }
 
     public User getOwner() {

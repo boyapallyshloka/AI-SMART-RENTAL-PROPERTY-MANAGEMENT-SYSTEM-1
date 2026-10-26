@@ -3,11 +3,7 @@ package com.rental.rental_management_backend.property.enums;
 public enum PropertyStatus {
 
     DRAFT,
-    PENDING_APPROVAL,
-    APPROVED,
     AVAILABLE,
-    PUBLISHED,
+    NOT_AVAILABLE,
     OCCUPIED,
-    UNDER_MAINTENANCE,
-    INACTIVE
 }

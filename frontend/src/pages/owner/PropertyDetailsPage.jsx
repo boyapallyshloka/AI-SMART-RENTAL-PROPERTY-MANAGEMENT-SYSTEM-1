@@ -4,13 +4,10 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 import {
   getPropertyDetails,
   getPropertyById,
+  updateProperty,
   deleteProperty,
   updatePropertyStatus,
-<<<<<<< HEAD
-  updateProperty,
-=======
   submitPropertyForApproval,
->>>>>>> origin/backend/dev1
   removePropertyManager,
   CANONICAL_PROPERTY_STATUSES,
   mapBackendPropertyToUi,
@@ -508,6 +505,29 @@ export default function PropertyDetailsPage() {
     }
   }
 
+  const handleSubmitForApproval = async () => {
+    if (!property?.id || isSubmittingForApproval) return
+    setIsSubmittingForApproval(true)
+    try {
+      const response = await submitPropertyForApproval(property.id)
+      const submitted = response?.data ?? response
+      setProperty((current) => current
+        ? { ...current, status: submitted?.status || 'DRAFT', submittedForApproval: true }
+        : current)
+      setToastMessage('Property submitted for administrator approval.')
+      setTimeout(() => setToastMessage(''), 4000)
+    } catch (err) {
+      console.error(`Failed to submit property ID ${property.id} for approval:`, err)
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          'Could not submit this property. Confirm that the required title deed has been uploaded.'
+      )
+    } finally {
+      setIsSubmittingForApproval(false)
+    }
+  }
+
   const handleStatusChange = async (newStatus) => {
     if (!property?.id || isUpdatingStatus) return
     if (newStatus === property.status) return
@@ -516,30 +536,7 @@ export default function PropertyDetailsPage() {
       return
     }
 
-    const handleSubmitForApproval = async () => {
-      if (!property?.id || isSubmittingForApproval) return
-      setIsSubmittingForApproval(true)
-      try {
-        const response = await submitPropertyForApproval(property.id)
-        const submitted = response?.data ?? response
-        setProperty((current) => current
-          ? { ...current, status: submitted?.status || 'PENDING_APPROVAL' }
-          : current)
-        setToastMessage('Property submitted for administrator approval.')
-        setTimeout(() => setToastMessage(''), 4000)
-      } catch (err) {
-        console.error(`Failed to submit property ID ${property.id} for approval:`, err)
-        alert(
-          err?.response?.data?.message ||
-            err?.message ||
-            'Could not submit this property. Confirm that the required title deed has been uploaded.'
-        )
-      } finally {
-        setIsSubmittingForApproval(false)
-      }
-    }
-
-    if ((newStatus === 'AVAILABLE' || newStatus === 'PUBLISHED') && publishEligibility && !publishEligibility.eligible) {
+    if (newStatus === 'AVAILABLE' && publishEligibility && !publishEligibility.eligible) {
       const reasonList = publishEligibility.reasons?.length
         ? '\n• ' + publishEligibility.reasons.join('\n• ')
         : '\n• Proof of Ownership (Title Deed) must be approved by Super Admin.'
@@ -1652,7 +1649,7 @@ export default function PropertyDetailsPage() {
                     aria-label="Change property status"
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    disabled={isUpdatingStatus || property.status === 'PENDING_APPROVAL'}
+                    disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED'}
                     className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
@@ -1662,14 +1659,15 @@ export default function PropertyDetailsPage() {
                       </option>
                     )}
                     {CANONICAL_PROPERTY_STATUSES.map((st) => {
-                      const isPubStatus = st === 'AVAILABLE' || st === 'PUBLISHED'
+                      const isPubStatus = st === 'AVAILABLE'
                       const isLocked =
                         (isPubStatus && publishEligibility && !publishEligibility.eligible) ||
+                        (st === 'OCCUPIED' && property.status !== 'OCCUPIED') ||
                         (st === 'DRAFT' && property.status !== 'DRAFT')
                       return (
                         <option key={st} value={st} disabled={isLocked}>
-                          {st === 'UNDER_MAINTENANCE'
-                            ? 'Maintenance'
+                          {st === 'NOT_AVAILABLE'
+                            ? 'Not available'
                             : st.charAt(0) + st.slice(1).toLowerCase()}
                           {isLocked ? ' (Approval Required)' : ''}
                         </option>
@@ -1686,12 +1684,17 @@ export default function PropertyDetailsPage() {
                 <span className="text-xs text-[#5B6875] font-mono">
                   ID: {property.id}
                 </span>
-                {property.status === 'DRAFT' && (
+                {property.submittedForApproval && (
+                  <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
+                    Pending administrator review
+                  </span>
+                )}
+                {property.status === 'DRAFT' && !property.submittedForApproval && (
                   <Button
                     variant="primary"
                     size="sm"
                     onClick={handleSubmitForApproval}
-                    disabled={isSubmittingForApproval}
+                    disabled={isSubmittingForApproval || property.submittedForApproval}
                   >
                     {isSubmittingForApproval ? 'Submitting…' : 'Submit for approval'}
                   </Button>

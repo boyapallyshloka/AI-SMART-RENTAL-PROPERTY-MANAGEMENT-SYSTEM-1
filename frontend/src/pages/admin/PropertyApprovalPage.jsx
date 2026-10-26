@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CheckCircle2, Download, FileText, RefreshCw } from 'lucide-react'
-import DashboardLayout from '../../layouts/DashboardLayout'
 import { Button, EmptyState, Loader } from '../../components/ui'
+import PropertyDocumentReviewPage from './PropertyDocumentReviewPage'
 import {
   approveProperty,
   getPendingPropertyApprovals,
@@ -68,7 +68,7 @@ export default function PropertyApprovalPage() {
       setProperties((current) =>
         current.filter((item) => item.propertyId !== property.propertyId)
       )
-      setNotice(`"${property.propertyName}" has been approved.`)
+      setNotice(`"${property.propertyName}" has been approved and is now published and available for rent.`)
     } catch (approveError) {
       console.error(`Failed to approve property ${property.propertyId}:`, approveError)
       setError(
@@ -105,19 +105,12 @@ export default function PropertyApprovalPage() {
   }
 
   return (
-    <DashboardLayout
-      defaultRole="admin"
-      activeItem="owner-verification"
-      pageTitle="Property Approval"
-    >
-      <div className="space-y-6">
+      <div id="property-review" className="scroll-mt-6 space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#243447]">
-              Property Approval
-            </h1>
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">Property Review</h2>
             <p className="mt-1 text-sm text-[#5B6875]">
-              Review property details and deeds before approving each submission.
+              Review submitted property details and approve them after the required documents are verified.
             </p>
           </div>
           <Button
@@ -245,7 +238,7 @@ export default function PropertyApprovalPage() {
                     {!deedApproved && (
                       <p className="mt-3 text-xs text-[#8A5B16]">
                         Approve the required title deed in{' '}
-                        <Link className="font-semibold underline" to="/admin/owner-verification">
+                        <Link className="font-semibold underline" to="/admin/owner-verification#property-document-verification">
                           property document review
                         </Link>{' '}
                         before approving this property.
@@ -257,7 +250,9 @@ export default function PropertyApprovalPage() {
             })}
           </div>
         )}
+        <section id="property-document-verification" className="ml-3 scroll-mt-6 space-y-4 border-l-2 border-[#D9E0E6] pl-4 sm:ml-5 sm:pl-6">
+          <PropertyDocumentReviewPage onDecision={loadSubmissions} />
+        </section>
       </div>
-    </DashboardLayout>
   )
 }

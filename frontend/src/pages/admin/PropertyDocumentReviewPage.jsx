@@ -44,7 +44,7 @@ const formatDate = (isoString) => {
   })
 }
 
-export default function PropertyDocumentReviewPage() {
+export default function PropertyDocumentReviewPage({ onDecision } = {}) {
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -106,6 +106,7 @@ export default function PropertyDocumentReviewPage() {
         `Approved ${PROPERTY_DOCUMENT_TYPE_LABELS[approvingDoc.documentType] || approvingDoc.documentType} for property "${approvingDoc.propertyName}".`
       )
       setApprovingDoc(null)
+      await onDecision?.()
     } catch (err) {
       console.error('Failed to approve property document:', err)
       setError(
@@ -144,6 +145,7 @@ export default function PropertyDocumentReviewPage() {
       )
       setRejectingDoc(null)
       setRejectionReason('')
+      await onDecision?.()
     } catch (err) {
       console.error('Failed to reject property document:', err)
       setRejectionError(
@@ -225,9 +227,9 @@ export default function PropertyDocumentReviewPage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#243447]">
-                Property Document Review
-              </h1>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">
+                Property Document Verification
+              </h3>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#315A7D] text-white">
                 {documents.length} Pending
               </span>

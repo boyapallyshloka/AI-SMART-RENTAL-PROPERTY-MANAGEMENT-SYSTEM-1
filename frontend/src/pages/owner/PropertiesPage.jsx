@@ -169,10 +169,9 @@ export default function PropertiesPage() {
     { value: 'all', label: 'All Statuses' },
     ...CANONICAL_PROPERTY_STATUSES.map((s) => ({
       value: s,
-      label:
-        s === 'UNDER_MAINTENANCE'
-          ? 'Under Maintenance'
-          : s.charAt(0) + s.slice(1).toLowerCase(),
+      label: s === 'NOT_AVAILABLE'
+        ? 'Not available'
+        : s.charAt(0) + s.slice(1).toLowerCase(),
     })),
   ]
 

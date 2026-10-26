@@ -37,11 +37,9 @@ public class PropertyResponse {
 
     private Integer yearBuilt;
 
-    private BigDecimal monthlyRent;
-
-    private BigDecimal securityDeposit;
-
     private PropertyStatus status;
+
+    private boolean submittedForApproval;
 
     private Long ownerId;
 
@@ -174,20 +172,20 @@ public class PropertyResponse {
         this.yearBuilt = yearBuilt;
     }
 
-    public BigDecimal getMonthlyRent() { return monthlyRent; }
-
-    public void setMonthlyRent(BigDecimal monthlyRent) { this.monthlyRent = monthlyRent; }
-
-    public BigDecimal getSecurityDeposit() { return securityDeposit; }
-
-    public void setSecurityDeposit(BigDecimal securityDeposit) { this.securityDeposit = securityDeposit; }
-
     public PropertyStatus getStatus() {
         return status;
     }
 
     public void setStatus(PropertyStatus status) {
         this.status = status;
+    }
+
+    public boolean isSubmittedForApproval() {
+        return submittedForApproval;
+    }
+
+    public void setSubmittedForApproval(boolean submittedForApproval) {
+        this.submittedForApproval = submittedForApproval;
     }
 
     public Long getOwnerId() {

@@ -244,7 +244,7 @@ export default function PropertyDocumentsSection({
   }
 
   const isEligible = eligibility?.eligible === true
-  const isPublicStatus = propertyStatus === 'AVAILABLE' || propertyStatus === 'PUBLISHED'
+  const isPublicStatus = propertyStatus === 'AVAILABLE'
 
   return (
     <div className="space-y-6">

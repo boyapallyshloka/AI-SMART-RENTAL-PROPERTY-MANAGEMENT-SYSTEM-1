@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
-import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.rental.enums.RentalApplicationStatus;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
 
@@ -54,10 +53,6 @@ public class RentalApplication {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "unit_id", nullable = true)
     private Unit unit;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "property_id")
-    private Property property;
 
     @Column(name = "application_date", nullable = false)
     private LocalDate applicationDate;
@@ -152,10 +147,6 @@ public class RentalApplication {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
-
-    public Property getProperty() { return property; }
-
-    public void setProperty(Property property) { this.property = property; }
 
     public LocalDate getApplicationDate() {
         return applicationDate;
