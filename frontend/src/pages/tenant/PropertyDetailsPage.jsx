@@ -344,7 +344,7 @@ export default function PropertyDetailsPage({
       activeItem="find-properties"
       pageTitle={property.propertyName || 'Property Details'}
     >
-      <div className="min-h-screen space-y-6 pb-20">
+      <div className={`${publicMode ? 'mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8' : 'min-h-screen pb-20'} space-y-6`}>
         {/* 1. Navigation Top Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 py-2 border-b border-[#D9E0E6]">
           <button
@@ -395,7 +395,7 @@ export default function PropertyDetailsPage({
           {imageList.length > 0 ? (
             <>
               {/* Main Display Image */}
-              <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] shadow-2xs">
+              <div className="relative aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full overflow-hidden rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] shadow-sm">
                 <img
                   src={imageList[activeImageIndex] || imageList[0]}
                   alt={`${property.propertyName} preview`}
@@ -438,7 +438,7 @@ export default function PropertyDetailsPage({
             </>
           ) : (
             /* Clean placeholder when no images are uploaded */
-            <div className="aspect-[16/9] md:aspect-[21/9] w-full rounded-lg bg-[#F7F8FA] border-2 border-dashed border-[#D9E0E6] flex flex-col items-center justify-center text-center p-6 space-y-2">
+            <div className="aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full rounded-xl bg-[#F7F8FA] border-2 border-dashed border-[#D9E0E6] flex flex-col items-center justify-center text-center p-6 space-y-2">
               <div className="p-4 rounded-full bg-[#EAF2F7] text-[#315A7D]">
                 <Building className="w-8 h-8" />
               </div>
@@ -482,7 +482,9 @@ export default function PropertyDetailsPage({
                   {property.propertyName}
                 </h3>
                 <p className="text-xs text-[#5B6875]">
-                  Unit-level pricing, layouts, and availability are listed under Buildings & Units below.
+                  {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase())
+                    ? 'Rental details and home specifications for this property.'
+                    : 'Unit-level pricing, layouts, and availability are listed under Buildings & Units below.'}
                 </p>
               </div>
 
@@ -503,6 +505,37 @@ export default function PropertyDetailsPage({
                     <span className="font-semibold text-[#243447]">
                       {property.totalArea.toLocaleString('en-IN')} sq ft
                     </span>
+                  </div>
+                )}
+
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.monthlyRent != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Monthly Rent</span>
+                    <span className="font-semibold text-[#315A7D]">₹{Number(property.monthlyRent).toLocaleString('en-IN')} / mo</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.securityDeposit != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Security Deposit</span>
+                    <span className="font-semibold text-[#243447]">₹{Number(property.securityDeposit).toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bedrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bedrooms / BHK</span>
+                    <span className="font-semibold text-[#243447]">{property.bedrooms} BHK</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bathrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bathrooms</span>
+                    <span className="font-semibold text-[#243447]">{property.bathrooms}</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.totalFloors != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Total Floors</span>
+                    <span className="font-semibold text-[#243447]">{property.totalFloors}</span>
                   </div>
                 )}
 

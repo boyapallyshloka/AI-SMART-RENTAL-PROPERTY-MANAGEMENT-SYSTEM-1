@@ -130,6 +130,7 @@ export default function PropertyDetailsSection({
       ? 'Available'
       : status.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
     : null
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(String(propertyType || type || '').toUpperCase())
 
   // Address fields
   const hasAddress =
@@ -327,8 +328,8 @@ export default function PropertyDetailsSection({
         )}
       </div>
 
-      {/* 5. Buildings -> Floors -> Units Structural Hierarchy */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-6 shadow-2xs space-y-6">
+      {/* Apartment inventory is unit based; houses and villas rent directly. */}
+      {!isDirectRental && <div className="rounded-lg border border-[#D9E0E6] bg-white p-6 shadow-2xs space-y-6">
         <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-4">
           <div>
             <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
@@ -519,7 +520,7 @@ export default function PropertyDetailsSection({
             <span>No building or unit structures are currently listed under this property.</span>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   )
 }

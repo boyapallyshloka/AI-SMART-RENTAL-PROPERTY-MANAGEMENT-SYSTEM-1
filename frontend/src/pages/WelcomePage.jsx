@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AlertCircle, ArrowRight, Building2, MapPin, RefreshCw, ShieldCheck } from 'lucide-react'
+import { AlertCircle, ArrowRight, BadgeCheck, Building2, MapPin, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react'
 import PublicLayout from '../layouts/PublicLayout'
 import propertyImage from '../assets/owner-hero-bg.jpg'
 import PropertyFilter from '../components/properties/PropertyFilter'
@@ -106,6 +106,20 @@ export default function WelcomePage() {
     [properties, sortBy]
   )
 
+  const featuredProperty = sortedProperties[0] || null
+  const featuredImage = typeof featuredProperty?.imageUrl === 'string'
+    ? featuredProperty.imageUrl
+    : typeof featuredProperty?.primaryImage === 'string'
+      ? featuredProperty.primaryImage
+      : featuredProperty?.primaryImage?.imageUrl || ''
+  const featuredAddress = featuredProperty?.address || featuredProperty?.propertyAddress || {}
+  const featuredCity = featuredProperty?.city ||
+    featuredAddress?.city ||
+    (typeof featuredProperty?.location === 'string'
+      ? featuredProperty.location
+      : [featuredProperty?.location?.area, featuredProperty?.location?.city].filter(Boolean).join(', '))
+  const featuredRent = Number(featuredProperty?.monthlyRent)
+
   const scrollToListings = () => {
     document.getElementById('property-listings')?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -115,46 +129,94 @@ export default function WelcomePage() {
   return (
     <PublicLayout>
       <main>
-        <section className="relative isolate flex min-h-[min(720px,calc(100svh-64px))] items-center overflow-hidden bg-[#243447]">
+        <section className="relative isolate flex min-h-[min(720px,calc(100svh-64px))] items-center overflow-hidden bg-[#182B3C]">
           <img
             src={propertyImage}
             alt="Contemporary apartments surrounded by landscaped gardens"
-            className="absolute inset-0 -z-20 h-full w-full object-cover"
+            className="absolute inset-0 -z-20 h-full w-full scale-[1.02] object-cover"
           />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#172B3A]/90 via-[#172B3A]/65 to-[#172B3A]/15" />
-          <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 lg:px-12">
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(20,38,53,.94)_0%,rgba(20,38,53,.82)_42%,rgba(20,38,53,.26)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgba(20,38,53,.38),transparent_45%)]" />
+          <div className="pointer-events-none absolute -right-20 top-10 -z-10 h-80 w-80 rounded-full border border-white/15 lg:right-[8%] lg:top-16 lg:h-[30rem] lg:w-[30rem]" />
+          <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.08fr_.92fr] lg:px-12 lg:py-16">
             <div className="max-w-2xl animate-[fade-in_700ms_ease-out_both]">
-              <p className="mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/85">
-                <MapPin className="h-4 w-4" /> A smarter way to rent
+              <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/90 shadow-lg backdrop-blur-md">
+                <Sparkles className="h-4 w-4 text-[#D7E8C8]" /> A smarter way to rent
               </p>
-              <h1 className="font-serif text-5xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
-                Find a place that feels like yours.
+              <h1 className="font-serif text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-[4.5rem]">
+                Find a home that feels like <span className="text-[#D7E8C8]">you.</span>
               </h1>
               <p className="mt-6 max-w-xl text-base leading-7 text-white/85 sm:text-lg">
-                SmartEstate brings thoughtfully managed rental homes and clear property details together, so your next move starts with confidence.
+                Explore thoughtfully managed homes, compare the details, and find the right place for your next chapter.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={scrollToListings}
-                  className="inline-flex min-h-12 items-center gap-2 rounded-md bg-white px-6 py-3 text-sm font-bold text-[#243447] shadow-lg transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#243447]"
+                  className="group inline-flex min-h-12 items-center gap-2 rounded-md bg-white px-6 py-3 text-sm font-bold text-[#243447] shadow-xl shadow-black/20 transition-all hover:-translate-y-0.5 hover:bg-[#F2F6F8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#243447]"
                 >
-                  Find Properties <ArrowRight className="h-4 w-4" />
+                  Explore homes <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
                 <Link
                   to="/login"
-                  className="inline-flex min-h-12 items-center rounded-md border border-white/55 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  className="inline-flex min-h-12 items-center rounded-md border border-white/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/75 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
-                  Existing user? Sign in
+                  Sign in
                 </Link>
               </div>
-              <div className="mt-10 flex items-center gap-2 text-sm text-white/80">
-                <ShieldCheck className="h-4 w-4 text-[#B8D7C2]" />
-                <span>Explore public listings before creating an account</span>
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/85">
+                <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#D7E8C8]" /> Browse before signing in</span>
+                <span className="inline-flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-[#D7E8C8]" /> {isLoading ? 'Available homes' : `${sortedProperties.length} homes to explore`}</span>
+              </div>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[430px] animate-[fade-in_900ms_ease-out_both] lg:ml-auto lg:mr-2">
+              <div className="absolute -inset-4 rounded-[2rem] bg-white/10 blur-2xl" />
+              <div className="relative overflow-hidden rounded-2xl border border-white/35 bg-white/15 p-2 shadow-2xl shadow-black/30 backdrop-blur-xl">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#DCE6EC]">
+                  {featuredImage ? (
+                    <img src={featuredImage} alt={featuredProperty?.propertyName || featuredProperty?.name || 'Featured rental home'} className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+                  ) : (
+                    <div className="flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#DCE8ED] via-[#F5F7F8] to-[#BCCED6] text-[#315A7D]">
+                      <Building2 className="h-12 w-12" />
+                      <span className="text-sm font-semibold">Homes worth coming home to</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#172B3A]/80 to-transparent" />
+                  <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#315A7D] shadow-lg">
+                    <Sparkles className="h-3.5 w-3.5" /> A place to start
+                  </span>
+                  <span className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white">
+                    <MapPin className="h-3.5 w-3.5" /> {featuredCity || 'Explore homes across your city'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-4 sm:px-4">
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">{String(featuredProperty?.propertyType || '').replace(/_/g, ' ') || 'SmartEstate selection'}</p>
+                    <h2 className="mt-1 truncate text-lg font-semibold text-white">
+                      {featuredProperty?.propertyName || featuredProperty?.name || (isLoading ? 'Finding homes for you…' : 'Your next home is out there')}
+                    </h2>
+                  </div>
+                  {Number.isFinite(featuredRent) && featuredRent > 0 && (
+                    <p className="shrink-0 text-right text-sm font-bold text-white">
+                      ₹{featuredRent.toLocaleString('en-IN')}<span className="ml-1 text-[10px] font-medium text-white/70">/mo</span>
+                    </p>
+                  )}
+                </div>
+                {featuredProperty && (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/properties/${featuredProperty.propertyId ?? featuredProperty.id}`, { state: { publicFilters: filters } })}
+                    className="mx-3 mb-3 inline-flex items-center gap-1.5 rounded-md px-1 text-xs font-semibold text-white/90 transition-colors hover:text-white sm:mx-4"
+                  >
+                    View this home <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#172B3A]/45 to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#172B3A]/30 to-transparent" />
         </section>
 
         <section
