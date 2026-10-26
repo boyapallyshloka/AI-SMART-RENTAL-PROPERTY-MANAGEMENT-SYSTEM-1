@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.rental.rental_management_backend.User.Repository.UserRepository;
+import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.ai.client.FastApiRentPredictionClient;
 import com.rental.rental_management_backend.ai.dto.RentPredictionPreviewRequestDTO;
 import com.rental.rental_management_backend.ai.dto.RentPredictionRequestDTO;
@@ -39,17 +44,21 @@ public class RentPredictionServiceImpl implements RentPredictionService {
 
     private final PropertyAmenityRepository propertyAmenityRepository;
 
+    private final UserRepository userRepository;
+
     private final FastApiRentPredictionClient fastApiRentPredictionClient;
 
     public RentPredictionServiceImpl(
             FloorRepository floorRepository,
             PropertyAddressRepository propertyAddressRepository,
             PropertyAmenityRepository propertyAmenityRepository,
+            UserRepository userRepository,
             FastApiRentPredictionClient fastApiRentPredictionClient) {
 
         this.floorRepository = floorRepository;
         this.propertyAddressRepository = propertyAddressRepository;
         this.propertyAmenityRepository = propertyAmenityRepository;
+        this.userRepository = userRepository;
         this.fastApiRentPredictionClient = fastApiRentPredictionClient;
     }
 
@@ -132,6 +141,25 @@ public class RentPredictionServiceImpl implements RentPredictionService {
         }
 
         Property property = building.getProperty();
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("User is not authenticated");
+        }
+
+        User authenticatedUser = userRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new AccessDeniedException(
+                        "Authenticated user not found"));
+
+        if (property.getOwner() == null
+                || property.getOwner().getId() == null
+                || !property.getOwner().getId().equals(
+                        authenticatedUser.getId())) {
+            throw new AccessDeniedException(
+                    "You do not have access to this floor");
+        }
 
         // ---------------------------------------------------------
         // 5. Load Property Address

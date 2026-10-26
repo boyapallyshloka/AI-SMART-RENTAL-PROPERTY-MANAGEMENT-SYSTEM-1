@@ -47,6 +47,12 @@ public class Receipt {
     @Column(name = "amount_paid", nullable = false, precision = 12, scale = 2)
     private BigDecimal amountPaid;
 
+    @Column(name = "rent_amount", precision = 12, scale = 2)
+    private BigDecimal rentAmount;
+
+    @Column(name = "late_fee", precision = 12, scale = 2)
+    private BigDecimal lateFee;
+
     @Column(name = "invoice_total_amount", nullable = false, precision = 12, scale = 2)
     private BigDecimal invoiceTotalAmount;
 
@@ -137,6 +143,22 @@ public class Receipt {
 
     public void setAmountPaid(BigDecimal amountPaid) {
         this.amountPaid = amountPaid;
+    }
+
+    public BigDecimal getRentAmount() {
+        return rentAmount;
+    }
+
+    public void setRentAmount(BigDecimal rentAmount) {
+        this.rentAmount = rentAmount;
+    }
+
+    public BigDecimal getLateFee() {
+        return lateFee;
+    }
+
+    public void setLateFee(BigDecimal lateFee) {
+        this.lateFee = lateFee;
     }
 
     public BigDecimal getInvoiceTotalAmount() {

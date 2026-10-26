@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -56,6 +58,15 @@ public interface RentalAgreementRepository
 
     Optional<RentalAgreement>
     findByRentalApplication_ApplicationId(Long applicationId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        SELECT agreement
+        FROM RentalAgreement agreement
+        WHERE agreement.agreementId = :agreementId
+        """)
+    Optional<RentalAgreement> findByIdForInvoiceCreation(
+            @Param("agreementId") Long agreementId);
 
     @EntityGraph(attributePaths = {
             "rentalApplication",

@@ -7,7 +7,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +44,8 @@ import com.rental.rental_management_backend.payment.service.PaymentService;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
 import com.rental.rental_management_backend.rental.enums.InvoiceStatus;
 import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
+import com.rental.rental_management_backend.rental.service.RentInvoiceLateFeeCalculator;
+import com.rental.rental_management_backend.rental.service.RentInvoicePdfService;
 
 import com.rental.rental_management_backend.tenant.entity.Tenant;
 import com.rental.rental_management_backend.tenant.repository.TenantRepository;
@@ -59,7 +66,14 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 @Transactional
 public class PaymentServiceImpl implements PaymentService {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(PaymentServiceImpl.class);
+
+    private final EntityManager entityManager;
+
     private final PaymentRepository paymentRepository;
+
+    private final PaymentFailureStatusService paymentFailureStatusService;
 
     private final RentInvoiceRepository rentInvoiceRepository;
 
@@ -70,6 +84,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final UnitRepository unitRepository;
 
     private final ReceiptService receiptService;
+
+    private final RentInvoicePdfService rentInvoicePdfService;
 
     private final RazorpayClient razorpayClient;
 
@@ -89,7 +105,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentServiceImpl(
 
+            EntityManager entityManager,
+
             PaymentRepository paymentRepository,
+
+            PaymentFailureStatusService paymentFailureStatusService,
 
             RentInvoiceRepository rentInvoiceRepository,
 
@@ -101,6 +121,8 @@ public class PaymentServiceImpl implements PaymentService {
 
             ReceiptService receiptService,
 
+            RentInvoicePdfService rentInvoicePdfService,
+
             RazorpayClient razorpayClient,
 
             NotificationService notificationService,
@@ -109,7 +131,11 @@ public class PaymentServiceImpl implements PaymentService {
 
             UserAuthEmailDispatcher userAuthEmailDispatcher) {
 
+        this.entityManager = entityManager;
+
         this.paymentRepository = paymentRepository;
+
+        this.paymentFailureStatusService = paymentFailureStatusService;
 
         this.rentInvoiceRepository = rentInvoiceRepository;
 
@@ -120,6 +146,8 @@ public class PaymentServiceImpl implements PaymentService {
         this.unitRepository = unitRepository;
 
         this.receiptService = receiptService;
+
+        this.rentInvoicePdfService = rentInvoicePdfService;
 
         this.razorpayClient = razorpayClient;
 
@@ -159,6 +187,8 @@ public class PaymentServiceImpl implements PaymentService {
                         new RuntimeException(
                                 "Rent invoice not found"));
 
+        entityManager.refresh(invoice, LockModeType.PESSIMISTIC_WRITE);
+
         if (!invoice.getTenantId().equals(
                 tenant.getTenantId())) {
 
@@ -176,6 +206,10 @@ public class PaymentServiceImpl implements PaymentService {
                     "Cancelled invoice cannot be paid");
         }
 
+        BigDecimal previousTotalAmount = invoice.getTotalAmount();
+        boolean invoiceAmountsUpdated =
+                refreshLateFeeBeforePayment(invoice);
+
         BigDecimal alreadyPaid =
                 getSuccessfullyPaidAmount(
                         invoice.getInvoiceId());
@@ -187,11 +221,27 @@ public class PaymentServiceImpl implements PaymentService {
                                 2,
                                 RoundingMode.HALF_UP);
 
+        if (remainingAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException(
+                    "Invoice is already fully paid");
+        }
+
+        BigDecimal previousRemainingAmount =
+                previousTotalAmount
+                        .subtract(alreadyPaid)
+                        .setScale(2, RoundingMode.HALF_UP);
+
         BigDecimal requestedAmount =
                 request.getAmount()
                         .setScale(
                                 2,
                                 RoundingMode.HALF_UP);
+
+        // Treat a request for the old full balance as a full-payment request.
+        if (invoiceAmountsUpdated
+                && requestedAmount.compareTo(previousRemainingAmount) == 0) {
+            requestedAmount = remainingAmount;
+        }
 
         if (requestedAmount.compareTo(
                 BigDecimal.ZERO) <= 0) {
@@ -269,6 +319,8 @@ public class PaymentServiceImpl implements PaymentService {
                         new RuntimeException(
                                 "Rent invoice not found"));
 
+        entityManager.refresh(invoice, LockModeType.PESSIMISTIC_WRITE);
+
         // --------------------------------------------------------
         // Tenant ownership validation
         // --------------------------------------------------------
@@ -300,6 +352,10 @@ public class PaymentServiceImpl implements PaymentService {
         // Calculate remaining invoice amount
         // --------------------------------------------------------
 
+        BigDecimal previousTotalAmount = invoice.getTotalAmount();
+        boolean invoiceAmountsUpdated =
+                refreshLateFeeBeforePayment(invoice);
+
         BigDecimal alreadyPaid =
                 getSuccessfullyPaidAmount(
                         invoice.getInvoiceId());
@@ -311,11 +367,27 @@ public class PaymentServiceImpl implements PaymentService {
                                 2,
                                 RoundingMode.HALF_UP);
 
+        if (remainingAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException(
+                    "Invoice is already fully paid");
+        }
+
+        BigDecimal previousRemainingAmount =
+                previousTotalAmount
+                        .subtract(alreadyPaid)
+                        .setScale(2, RoundingMode.HALF_UP);
+
         BigDecimal requestedAmount =
                 request.getAmount()
                         .setScale(
                                 2,
                                 RoundingMode.HALF_UP);
+
+        // Treat a request for the old full balance as a full-payment request.
+        if (invoiceAmountsUpdated
+                && requestedAmount.compareTo(previousRemainingAmount) == 0) {
+            requestedAmount = remainingAmount;
+        }
 
         if (requestedAmount.compareTo(
                 BigDecimal.ZERO) <= 0) {
@@ -566,13 +638,13 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (!signatureValid) {
 
+                paymentFailureStatusService.markFailed(
+                        payment.getPaymentId());
                 payment.setPaymentStatus(
                         PaymentStatus.FAILED);
 
                 payment.setUpdatedAt(
                         LocalDateTime.now());
-
-                paymentRepository.save(payment);
 
                 // ====================================================
                 // NOTIFICATION: PAYMENT FAILED
@@ -595,52 +667,8 @@ public class PaymentServiceImpl implements PaymentService {
                     razorpayClient.payments.fetch(
                             request.getRazorpayPaymentId());
 
-            // ----------------------------------------------------
-            // Get actual payment method
-            // ----------------------------------------------------
-
             String razorpayMethod =
                     razorpayPayment.get("method");
-
-            if (razorpayMethod != null) {
-
-                switch (razorpayMethod.toLowerCase()) {
-
-                    case "upi":
-
-                        payment.setPaymentMethod(
-                                PaymentMethod.UPI);
-
-                        break;
-
-                    case "card":
-
-                        payment.setPaymentMethod(
-                                PaymentMethod.CARD);
-
-                        break;
-
-                    case "netbanking":
-
-                        payment.setPaymentMethod(
-                                PaymentMethod.NET_BANKING);
-
-                        break;
-
-                    case "wallet":
-
-                        payment.setPaymentMethod(
-                                PaymentMethod.WALLET);
-
-                        break;
-
-                    default:
-
-                        payment.setPaymentMethod(null);
-
-                        break;
-                }
-            }
 
             // ----------------------------------------------------
             // Verify Razorpay order ID
@@ -696,6 +724,55 @@ public class PaymentServiceImpl implements PaymentService {
             // Save Razorpay payment ID
             // ----------------------------------------------------
 
+            RentInvoice invoice =
+                    payment.getInvoice();
+            entityManager.refresh(
+                    invoice,
+                    LockModeType.PESSIMISTIC_WRITE);
+            entityManager.refresh(payment);
+
+            if (payment.getPaymentStatus() == PaymentStatus.SUCCESS) {
+                return mapToResponse(payment);
+            }
+
+            if (invoice.getStatus() == InvoiceStatus.PAID) {
+                throw new RuntimeException(
+                        "Invoice is already fully paid");
+            }
+
+            refreshLateFeeBeforePayment(invoice);
+
+            BigDecimal alreadyPaid =
+                    getSuccessfullyPaidAmount(invoice.getInvoiceId());
+            BigDecimal currentRemaining =
+                    invoice.getTotalAmount()
+                            .subtract(alreadyPaid)
+                            .max(BigDecimal.ZERO);
+            if (payment.getAmount().compareTo(currentRemaining) > 0) {
+                throw new RuntimeException(
+                        "Payment amount exceeds the remaining invoice amount");
+            }
+
+            if (razorpayMethod != null) {
+                switch (razorpayMethod.toLowerCase()) {
+                    case "upi":
+                        payment.setPaymentMethod(PaymentMethod.UPI);
+                        break;
+                    case "card":
+                        payment.setPaymentMethod(PaymentMethod.CARD);
+                        break;
+                    case "netbanking":
+                        payment.setPaymentMethod(PaymentMethod.NET_BANKING);
+                        break;
+                    case "wallet":
+                        payment.setPaymentMethod(PaymentMethod.WALLET);
+                        break;
+                    default:
+                        payment.setPaymentMethod(null);
+                        break;
+                }
+            }
+
             payment.setRazorpayPaymentId(
                     request.getRazorpayPaymentId());
 
@@ -719,7 +796,7 @@ public class PaymentServiceImpl implements PaymentService {
             // ----------------------------------------------------
 
             updateInvoiceStatus(
-                    payment.getInvoice());
+                    invoice);
 
             // ----------------------------------------------------
             // Create Receipt
@@ -743,13 +820,13 @@ public class PaymentServiceImpl implements PaymentService {
              * Mark payment as FAILED and notify tenant.
              */
 
+            paymentFailureStatusService.markFailed(
+                    payment.getPaymentId());
             payment.setPaymentStatus(
                     PaymentStatus.FAILED);
 
             payment.setUpdatedAt(
                     LocalDateTime.now());
-
-            paymentRepository.save(payment);
 
             notifyPaymentFailed(
                     payment,
@@ -1232,6 +1309,42 @@ public class PaymentServiceImpl implements PaymentService {
         return paidAmount == null ? BigDecimal.ZERO : paidAmount;
     }
 
+    private boolean refreshLateFeeBeforePayment(RentInvoice invoice) {
+        boolean invoiceAmountsUpdated =
+                RentInvoiceLateFeeCalculator.recalculate(
+                        invoice,
+                        RentInvoiceLateFeeCalculator.currentDate());
+        if (!invoiceAmountsUpdated) {
+            return false;
+        }
+
+        rentInvoiceRepository.saveAndFlush(invoice);
+
+        try {
+            String updatedInvoiceDocument =
+                    rentInvoicePdfService.generateInvoicePdf(invoice);
+            if (updatedInvoiceDocument != null
+                    && !updatedInvoiceDocument.isBlank()) {
+                invoice.setInvoiceDocument(updatedInvoiceDocument);
+                rentInvoiceRepository.save(invoice);
+            } else {
+                logger.error(
+                        "Invoice PDF regeneration returned an empty document reference "
+                                + "for invoice {}. Financial changes were saved; "
+                                + "the existing invoice document was retained.",
+                        invoice.getInvoiceId());
+            }
+        } catch (RuntimeException exception) {
+            logger.error(
+                    "Failed to regenerate PDF for invoice {} during payment preparation. "
+                            + "Financial changes were saved; the existing invoice document was retained.",
+                    invoice.getInvoiceId(),
+                    exception);
+        }
+
+        return true;
+    }
+
 
     // ============================================================
     // UPDATE INVOICE STATUS
@@ -1257,7 +1370,9 @@ public class PaymentServiceImpl implements PaymentService {
                 BigDecimal.ZERO) > 0) {
 
             invoice.setStatus(
-                    InvoiceStatus.PARTIALLY_PAID);
+                    invoice.getStatus() == InvoiceStatus.OVERDUE
+                            ? InvoiceStatus.OVERDUE
+                            : InvoiceStatus.PARTIALLY_PAID);
 
         } else {
 
