@@ -53,10 +53,7 @@ public class FastApiRentalDemandClient {
                 .retrieve()
                 .body(RentalDemandResponseDTO.class);
 
-        System.out.println("Received success: "
-                + (response == null ? null : response.getSuccess()));
-        System.out.println("Received predictedDemandCount: "
-                + (response == null ? null : response.getPredictedDemandCount()));
+        System.out.println("Received success: " + (response != null));
         System.out.println("Received demandLevel: "
                 + (response == null ? null : response.getDemandLevel()));
         System.out.println("Received city: "

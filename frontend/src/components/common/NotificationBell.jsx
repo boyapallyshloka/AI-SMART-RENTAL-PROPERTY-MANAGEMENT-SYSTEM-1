@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Bell, Check, Clock, AlertCircle } from 'lucide-react'
 import { useNotifications } from "../../context/notificationcontext"
-import { registerPushSubscription } from "../../api/pushApi"
-import { createBrowserPushSubscription } from "../../utils/browserPush"
 
 export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false)
@@ -41,20 +39,6 @@ export default function NotificationBell() {
   // Mark all notifications as read
   const markAllRead = async () => {
     await markAllAsRead()
-  }
-
-  const enableBrowserPush = async () => {
-    setPushBusy(true)
-    setPushMessage('')
-    try {
-      const subscription = await createBrowserPushSubscription()
-      await registerPushSubscription(subscription)
-      setPushMessage('Browser notifications are enabled.')
-    } catch (error) {
-      setPushMessage(error?.message || 'Could not enable browser notifications.')
-    } finally {
-      setPushBusy(false)
-    }
   }
 
   // Mark one notification as read
@@ -196,19 +180,6 @@ export default function NotificationBell() {
             <span className="text-[11px] text-[#5B6875]">
               Real-time property notifications
             </span>
-            <button
-              type="button"
-              onClick={enableBrowserPush}
-              disabled={pushBusy}
-              className="mt-2 block w-full text-xs font-medium text-[#315A7D] hover:underline disabled:opacity-60"
-            >
-              {pushBusy ? 'Enabling…' : 'Enable browser notifications'}
-            </button>
-            {pushMessage && (
-              <p role="status" className="mt-1 text-[11px] text-[#5B6875]">
-                {pushMessage}
-              </p>
-            )}
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useNotifications } from '../../context/notificationcontext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {
   createMaintenanceRequest,
@@ -34,6 +35,7 @@ import {
 
 export default function CreateMaintenanceRequestPage() {
   const { user } = useAuth()
+  const { refreshNotifications } = useNotifications()
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
 
@@ -267,6 +269,7 @@ export default function CreateMaintenanceRequestPage() {
 
       const createdResponse = await createMaintenanceRequest(formData)
       const newTicketId = createdResponse?.requestId || createdResponse?.id
+      await refreshNotifications()
 
       // Redirect to tenant maintenance portal with confirmation banner
       navigate('/tenant/maintenance', {
