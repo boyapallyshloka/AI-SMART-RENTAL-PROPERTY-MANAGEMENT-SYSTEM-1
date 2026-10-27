@@ -1,0 +1,66 @@
+{
+  "model_version": "v1.0",
+  "approach": "regression-only",
+  "model": "GradientBoostingRegressor",
+  "target": "next_month_demand",
+  "dataset_path": "C:\\Users\\sreej\\Desktop\\anasol _manualproject\\AI-SMART-RENTAL-PROPERTY-MANAGEMENT-SYSTEM\\ai-service\\m3_rental_demand\\processed\\training_data.csv",
+  "dataset_type": "synthetic",
+  "target_provenance": "ESTIMATED",
+  "features": [
+    "city",
+    "area_locality",
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count"
+  ],
+  "split": {
+    "strategy": "chronological by month",
+    "training_rows": 5321,
+    "validation_rows": 1878,
+    "testing_rows": 1878,
+    "training_period": [
+      "2024-01-01",
+      "2025-05-01"
+    ],
+    "validation_period": [
+      "2025-06-01",
+      "2025-11-01"
+    ],
+    "testing_period": [
+      "2025-12-01",
+      "2026-05-01"
+    ]
+  },
+  "validation_metrics": {
+    "mae": 6.3218,
+    "rmse": 8.4126,
+    "r2": 0.8369,
+    "actual_mean": 61.1006,
+    "predicted_mean": 59.6188
+  },
+  "test_metrics": {
+    "mae": 6.3234,
+    "rmse": 8.3693,
+    "r2": 0.8363,
+    "actual_mean": 61.3994,
+    "predicted_mean": 60.1754
+  },
+  "baseline": {
+    "test_mean_predictor": {
+      "mae": 16.8999,
+      "rmse": 21.2615,
+      "r2": -0.0564,
+      "actual_mean": 61.3994,
+      "predicted_mean": 56.4854
+    }
+  },
+  "warning": "Training targets are synthetic estimates. These metrics do not establish real-world rental-demand accuracy."
+}

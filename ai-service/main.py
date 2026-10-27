@@ -1,5 +1,7 @@
 import logging
+from dotenv import load_dotenv
 
+load_dotenv()
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse

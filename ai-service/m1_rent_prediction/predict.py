@@ -3,15 +3,13 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 MODEL_PATH = (
     BASE_DIR
     / "models"
-    / "m1_model_pipeline.joblib"
+    / "m1_model_pipeline_onehot_candidate.joblib"
 )
-
 
 def load_model():
     """Load the complete fitted M1 pipeline."""

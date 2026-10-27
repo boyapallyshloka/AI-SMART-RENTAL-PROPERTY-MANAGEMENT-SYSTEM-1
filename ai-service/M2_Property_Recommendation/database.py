@@ -202,8 +202,7 @@ def load_live_properties() -> pd.DataFrame:
         JOIN units u
             ON u.floor_id = f.floor_id
 
-        WHERE p.status = 'AVAILABLE'
-
+        WHERE p.status IN ('AVAILABLE', 'PUBLISHED')
           AND u.status = 'VACANT'
 
           AND u.monthly_rent IS NOT NULL

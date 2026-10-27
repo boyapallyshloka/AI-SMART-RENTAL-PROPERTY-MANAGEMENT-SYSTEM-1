@@ -1,3 +1,4 @@
+
 from pydantic import BaseModel, Field
 
 from scout.intent import ScoutOperation, ScoutSource
@@ -5,7 +6,12 @@ from scout.intent import ScoutOperation, ScoutSource
 
 class ScoutChatRequest(BaseModel):
     message: str
-    tenant_id: str | None = Field(default=None, min_length=1)
+
+
+
+class ScoutPropertyRequest(BaseModel):
+    message: str
+
 
 
 class ScoutChatResponse(BaseModel):

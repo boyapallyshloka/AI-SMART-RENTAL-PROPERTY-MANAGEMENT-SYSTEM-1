@@ -1,0 +1,439 @@
+
+import json
+
+import joblib
+import numpy as np
+import pandas as pd
+
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import GradientBoostingRegressor, RandomForestClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    mean_absolute_error,
+    mean_squared_error,
+    precision_score,
+    recall_score,
+    r2_score,
+)
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+
+from m3_rental_demand.config import (
+    MODULE_DIR,
+    ARTIFACTS_DIR,
+    REPORTS_DIR,
+    DATE_COLUMN,
+    TARGET_COLUMN,
+    MODEL_PATH,
+    MODEL_VERSION,
+)
+
+DATA_PATH = MODULE_DIR / "processed" / "training_data.csv"
+REPORT_PATH = REPORTS_DIR / "model_evaluation.json"
+
+CATEGORICAL_FEATURES = ["city", "area_locality"]
+
+NUMERIC_FEATURES = [
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count",
+]
+
+FEATURES = CATEGORICAL_FEATURES + NUMERIC_FEATURES
+RANDOM_STATE = 42
+
+
+def build_preprocessor():
+    return ColumnTransformer([
+        (
+            "numeric",
+            Pipeline([
+                ("imputer", SimpleImputer(strategy="median")),
+            ]),
+            NUMERIC_FEATURES,
+        ),
+        (
+            "categorical",
+            Pipeline([
+                ("imputer", SimpleImputer(strategy="most_frequent")),
+                ("encoder", OneHotEncoder(handle_unknown="ignore")),
+            ]),
+            CATEGORICAL_FEATURES,
+        ),
+    ])
+
+
+def build_classifier():
+    return Pipeline([
+        ("preprocessor", build_preprocessor()),
+        (
+            "model",
+            RandomForestClassifier(
+                n_estimators=200,
+                min_samples_leaf=3,
+                class_weight="balanced",
+                random_state=RANDOM_STATE,
+                n_jobs=-1,
+            ),
+        ),
+    ])
+
+
+def build_regressor():
+    return Pipeline([
+        ("preprocessor", build_preprocessor()),
+        (
+            "model",
+            GradientBoostingRegressor(
+                n_estimators=100,
+                learning_rate=0.05,
+                max_depth=2,
+                loss="huber",
+                random_state=RANDOM_STATE,
+            ),
+        ),
+    ])
+
+
+def regression_metrics(y_true, predictions):
+    y_true = np.asarray(y_true, dtype=float)
+    predictions = np.maximum(0, np.asarray(predictions, dtype=float))
+
+    return {
+        "mae": round(float(mean_absolute_error(y_true, predictions)), 4),
+        "rmse": round(float(np.sqrt(mean_squared_error(y_true, predictions))), 4),
+        "r2": round(float(r2_score(y_true, predictions)), 4),
+        "actual_mean": round(float(y_true.mean()), 4),
+        "predicted_mean": round(float(predictions.mean()), 4),
+        "actual_positive_rate": round(float((y_true > 0).mean()), 4),
+        "predicted_positive_rate": round(float((predictions > 0).mean()), 4),
+        "actual_zero_count": int((y_true == 0).sum()),
+        "predicted_zero_count": int((predictions == 0).sum()),
+    }
+
+
+def main():
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+
+    if not DATA_PATH.exists():
+        raise FileNotFoundError(
+            f"Prepared dataset not found: {DATA_PATH}\n"
+            "Run feature_engineering.py first."
+        )
+
+    df = pd.read_csv(DATA_PATH)
+
+    required = FEATURES + [DATE_COLUMN, TARGET_COLUMN]
+    missing = [column for column in required if column not in df.columns]
+
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+
+    df = df.drop(columns=["target_provenance"], errors="ignore")
+    df[DATE_COLUMN] = pd.to_datetime(df[DATE_COLUMN], errors="coerce")
+    df[TARGET_COLUMN] = pd.to_numeric(df[TARGET_COLUMN], errors="coerce")
+    df = df.dropna(subset=[DATE_COLUMN, TARGET_COLUMN]).copy()
+
+    target = df[TARGET_COLUMN].to_numpy(dtype=float)
+
+    if not np.isfinite(target).all() or (target < 0).any():
+        raise ValueError("Target must contain finite, non-negative counts.")
+
+    if not np.allclose(target, np.round(target)):
+        raise ValueError("Target must contain integer demand counts.")
+
+    df[TARGET_COLUMN] = df[TARGET_COLUMN].astype(int)
+    df = df.sort_values(DATE_COLUMN).reset_index(drop=True)
+
+    print("Loaded dataset:", DATA_PATH)
+    print("Total valid rows:", len(df))
+    print("Target distribution:")
+    print(df[TARGET_COLUMN].value_counts().sort_index().to_dict())
+
+    # Chronological split: 60% train, 20% validation, 20% test.
+    months = sorted(df[DATE_COLUMN].unique())
+
+    if len(months) < 3:
+        raise ValueError("At least 3 distinct months are required.")
+
+    train_end_index = max(1, int(len(months) * 0.60))
+    validation_end_index = max(
+        train_end_index + 1,
+        int(len(months) * 0.80),
+    )
+    validation_end_index = min(validation_end_index, len(months) - 1)
+
+    train_end = pd.Timestamp(months[train_end_index])
+    validation_end = pd.Timestamp(months[validation_end_index])
+
+    train_df = df[df[DATE_COLUMN] < train_end].copy()
+    validation_df = df[
+        (df[DATE_COLUMN] >= train_end)
+        & (df[DATE_COLUMN] < validation_end)
+    ].copy()
+    test_df = df[df[DATE_COLUMN] >= validation_end].copy()
+
+    if train_df.empty or validation_df.empty or test_df.empty:
+        raise ValueError("A chronological partition is empty.")
+
+    X_train = train_df[FEATURES]
+    X_val = validation_df[FEATURES]
+    X_test = test_df[FEATURES]
+
+    y_train = train_df[TARGET_COLUMN].to_numpy()
+    y_val = validation_df[TARGET_COLUMN].to_numpy()
+    y_test = test_df[TARGET_COLUMN].to_numpy()
+
+    print("\nChronological split:")
+    for name, part in [
+        ("Training", train_df),
+        ("Validation", validation_df),
+        ("Testing", test_df),
+    ]:
+        print(
+            f"{name} rows: {len(part)} | "
+            f"{part[DATE_COLUMN].min().date()} to "
+            f"{part[DATE_COLUMN].max().date()} | "
+            f"zero-demand rate: "
+            f"{(part[TARGET_COLUMN] == 0).mean():.4f}"
+        )
+
+    # Stage 1: classify demand as zero or positive.
+    print("\nTraining Stage 1: demand classifier...")
+    classifier = build_classifier()
+    classifier.fit(X_train, (y_train > 0).astype(int))
+
+    # Stage 2: predict demand count using positive-demand rows only.
+    print("Training Stage 2: positive-demand count regressor...")
+    positive_train = y_train > 0
+
+    if positive_train.sum() < 2:
+        raise ValueError("Not enough positive-demand training rows.")
+
+    regressor = build_regressor()
+    regressor.fit(X_train.loc[positive_train], y_train[positive_train])
+
+    # Tune threshold on validation data only.
+    # Balance classification errors and demand-count MAE.
+    val_probabilities = classifier.predict_proba(X_val)[:, 1]
+    val_counts = np.maximum(0, regressor.predict(X_val))
+
+    actual_positive = y_val > 0
+    actual_zero = ~actual_positive
+    threshold_results = []
+
+    for threshold in np.arange(0.10, 0.91, 0.01):
+        predicted_positive = val_probabilities >= threshold
+
+        false_positive = int(
+            np.sum(actual_zero & predicted_positive)
+        )
+        false_negative = int(
+            np.sum(actual_positive & ~predicted_positive)
+        )
+
+        fpr = false_positive / max(int(np.sum(actual_zero)), 1)
+        fnr = false_negative / max(int(np.sum(actual_positive)), 1)
+
+        candidate_predictions = np.where(
+            predicted_positive, val_counts, 0.0
+        )
+        candidate_mae = float(
+            mean_absolute_error(y_val, candidate_predictions)
+        )
+
+        threshold_results.append({
+            "threshold": float(threshold),
+            "mae": candidate_mae,
+            "fpr": float(fpr),
+            "fnr": float(fnr),
+            "balanced_error": float((fpr + fnr) / 2),
+            "false_positives": false_positive,
+            "false_negatives": false_negative,
+            "predicted_positive_rate": float(
+                np.mean(predicted_positive)
+            ),
+        })
+
+    results_df = pd.DataFrame(threshold_results)
+
+    # Equal-weight ranking of count MAE and balanced classification error.
+    results_df["mae_rank"] = results_df["mae"].rank(pct=True)
+    results_df["error_rank"] = (
+        results_df["balanced_error"].rank(pct=True)
+    )
+    results_df["combined_score"] = (
+        0.5 * results_df["mae_rank"]
+        + 0.5 * results_df["error_rank"]
+    )
+
+    best_row = results_df.loc[
+        results_df["combined_score"].idxmin()
+    ]
+    best_threshold = float(best_row["threshold"])
+
+    print("\nTop 10 balanced validation thresholds:")
+    print(
+        results_df.sort_values("combined_score")
+        .head(10)
+        .round(4)
+        .to_string(index=False)
+    )
+
+    print("\nSelected threshold:", round(best_threshold, 2))
+    print("Selected validation MAE:", round(float(best_row["mae"]), 4))
+    print("Validation false-positive rate:", round(float(best_row["fpr"]), 4))
+    print("Validation false-negative rate:", round(float(best_row["fnr"]), 4))
+
+    validation_predictions = np.where(
+        val_probabilities >= best_threshold,
+        val_counts,
+        0.0,
+    )
+
+    # Evaluate once on the held-out test period.
+    test_probabilities = classifier.predict_proba(X_test)[:, 1]
+    test_counts = np.maximum(0, regressor.predict(X_test))
+
+    test_predictions = np.where(
+        test_probabilities >= best_threshold,
+        test_counts,
+        0.0,
+    )
+    rounded_test_predictions = np.rint(test_predictions).astype(int)
+
+    actual_classes = (y_test > 0).astype(int)
+    predicted_classes = (
+        test_probabilities >= best_threshold
+    ).astype(int)
+
+    classifier_metrics = {
+        "accuracy": round(
+            float(accuracy_score(actual_classes, predicted_classes)), 4
+        ),
+        "precision": round(
+            float(precision_score(
+                actual_classes, predicted_classes, zero_division=0
+            )), 4
+        ),
+        "recall": round(
+            float(recall_score(
+                actual_classes, predicted_classes, zero_division=0
+            )), 4
+        ),
+        "f1": round(
+            float(f1_score(
+                actual_classes, predicted_classes, zero_division=0
+            )), 4
+        ),
+        "selected_threshold": round(best_threshold, 2),
+        "false_positives": int(
+            np.sum((actual_classes == 0) & (predicted_classes == 1))
+        ),
+        "false_negatives": int(
+            np.sum((actual_classes == 1) & (predicted_classes == 0))
+        ),
+        "true_negatives": int(
+            np.sum((actual_classes == 0) & (predicted_classes == 0))
+        ),
+        "true_positives": int(
+            np.sum((actual_classes == 1) & (predicted_classes == 1))
+        ),
+        "actual_zero_rows": int((actual_classes == 0).sum()),
+        "actual_zero_rows_predicted_zero": int(
+            ((actual_classes == 0) & (predicted_classes == 0)).sum()
+        ),
+    }
+
+    zero_baseline = np.zeros(len(y_test))
+    mean_baseline = np.full(len(y_test), float(y_train.mean()))
+
+    report = {
+        "model_version": MODEL_VERSION,
+        "approach": (
+            "two-stage classification and regression "
+            "with balanced threshold selection"
+        ),
+        "classifier": "RandomForestClassifier",
+        "regressor": "GradientBoostingRegressor",
+        "target": TARGET_COLUMN,
+        "features": FEATURES,
+        "categorical_features": CATEGORICAL_FEATURES,
+        "numeric_features": NUMERIC_FEATURES,
+        "split_type": "chronological train-validation-test",
+        "rows": {
+            "total": int(len(df)),
+            "train": int(len(train_df)),
+            "validation": int(len(validation_df)),
+            "test": int(len(test_df)),
+        },
+        "validation_selected_threshold": round(best_threshold, 2),
+        "validation_threshold_selection": {
+            "method": (
+                "equal-weight rank of MAE and "
+                "balanced classification error"
+            ),
+            "mae": round(float(best_row["mae"]), 4),
+            "false_positive_rate": round(float(best_row["fpr"]), 4),
+            "false_negative_rate": round(float(best_row["fnr"]), 4),
+            "balanced_error": round(float(best_row["balanced_error"]), 4),
+        },
+        "validation_metrics": regression_metrics(
+            y_val, validation_predictions
+        ),
+        "test_metrics": regression_metrics(y_test, test_predictions),
+        "test_rounded_count_metrics": regression_metrics(
+            y_test, rounded_test_predictions
+        ),
+        "test_classifier_metrics": classifier_metrics,
+        "zero_baseline_metrics": regression_metrics(
+            y_test, zero_baseline
+        ),
+        "training_mean_baseline_metrics": regression_metrics(
+            y_test, mean_baseline
+        ),
+    }
+
+    artifact = {
+        "classifier": classifier,
+        "regressor": regressor,
+        "threshold": best_threshold,
+        "features": FEATURES,
+        "categorical_features": CATEGORICAL_FEATURES,
+        "numeric_features": NUMERIC_FEATURES,
+        "target": TARGET_COLUMN,
+        "model_version": MODEL_VERSION,
+        "approach": "two-stage classification and regression",
+    }
+
+    with open(REPORT_PATH, "w", encoding="utf-8") as file:
+        json.dump(report, file, indent=2)
+
+    joblib.dump(artifact, MODEL_PATH)
+
+    print("\n--- TWO-STAGE MODEL RESULTS ---")
+    print("Selected validation threshold:", round(best_threshold, 2))
+    print("Validation metrics:", report["validation_metrics"])
+    print("Test metrics:", report["test_metrics"])
+    print("Rounded test-count metrics:", report["test_rounded_count_metrics"])
+    print("Test classifier metrics:", classifier_metrics)
+    print("Zero baseline metrics:", report["zero_baseline_metrics"])
+    print("Training-mean baseline metrics:", report["training_mean_baseline_metrics"])
+    print("\nModel saved to:", MODEL_PATH)
+    print("Evaluation report saved to:", REPORT_PATH)
+    print("\nUpdate inference code before using this artifact in the API.")
+
+
+if __name__ == "__main__":
+    main()
