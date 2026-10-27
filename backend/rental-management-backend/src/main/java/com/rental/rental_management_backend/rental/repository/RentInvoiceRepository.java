@@ -19,8 +19,10 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
 
     @Override
     @EntityGraph(attributePaths = {
-            "rentalAgreement.property",
-            "rentalAgreement.unit.floor.building.property"
+            "rentalAgreement.property.owner",
+            "rentalAgreement.property.propertyManager.user",
+            "rentalAgreement.unit.floor.building.property.owner",
+            "rentalAgreement.unit.floor.building.property.propertyManager.user"
     })
     Optional<RentInvoice> findById(Long invoiceId);
 
@@ -30,6 +32,50 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
             "rentalAgreement.unit.floor.building.property"
     })
     List<RentInvoice> findAll();
+
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property",
+            "rentalAgreement.unit.floor.building.property"
+    })
+    @Query("""
+            SELECT DISTINCT invoice
+            FROM RentInvoice invoice
+            JOIN invoice.rentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE directProperty.owner.id = :userId
+               OR (
+                    directProperty IS NULL
+                    AND unitProperty.owner.id = :userId
+               )
+            """)
+    List<RentInvoice> findAllForPropertyOwner(
+            @Param("userId") Long userId);
+
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property",
+            "rentalAgreement.unit.floor.building.property"
+    })
+    @Query("""
+            SELECT DISTINCT invoice
+            FROM RentInvoice invoice
+            JOIN invoice.rentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE directProperty.propertyManager.user.id = :userId
+               OR (
+                    directProperty IS NULL
+                    AND unitProperty.propertyManager.user.id = :userId
+               )
+            """)
+    List<RentInvoice> findAllForPropertyManager(
+            @Param("userId") Long userId);
 
     Optional<RentInvoice> findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
             Long agreementId,
