@@ -1,100 +1,95 @@
+from collections.abc import Mapping
+from datetime import date
+from typing import Any
 
 import joblib
 import numpy as np
 import pandas as pd
 
-from m3_rental_demand.config import MODEL_PATH, MODEL_VERSION
+from .config import FEATURE_COLUMNS, MODEL_PATH, MODEL_VERSION, TARGET_COLUMN
+from .preprocessing import validate_inference_record
 
 
-def _normalize_input(data):
-    aliases = {
-        "areaLocality": "area_locality",
-        "propertyCount": "property_count",
-        "applicationCount": "application_count",
-        "agreementStartCount": "agreement_start_count",
-        "averageMonthlyRent": "average_monthly_rent",
-        "demandLag1Month": "demand_lag_1_month",
-        "demandLag2Month": "demand_lag_2_month",
-        "demandGrowth1Month": "demand_growth_1_month",
-        "occupancyRate": "occupancy_rate",
-        "vacancyRate": "vacancy_rate",
-        "availableUnitCount": "available_unit_count",
-    }
+class M3Inference:
+    """Load and serve the serialized M3 demand model."""
 
-    normalized = dict(data)
-    for source, destination in aliases.items():
-        if source in normalized and destination not in normalized:
-            normalized[destination] = normalized[source]
+    def __init__(self, model_path=MODEL_PATH) -> None:
+        if not model_path.exists():
+            raise FileNotFoundError(
+                f"M3 model artifact not found: {model_path}. "
+                "Train the model before requesting predictions."
+            )
 
-    return normalized
+        artifact = joblib.load(model_path)
+        if artifact.get("target") != TARGET_COLUMN:
+            raise ValueError(
+                f"M3 artifact target must be {TARGET_COLUMN!r}."
+            )
+        if artifact.get("features") != FEATURE_COLUMNS:
+            raise ValueError("M3 artifact feature schema does not match.")
 
+        self.model = artifact["pipeline"]
+        self.model_version = artifact.get("model_version", MODEL_VERSION)
+        self.demand_level_thresholds = artifact["demand_level_thresholds"]
 
-def _demand_level(count):
-    if count <= 2:
-        return "LOW"
-    if count <= 5:
-        return "MEDIUM"
-    return "HIGH"
-
-
-def predict_rental_demand(request_data):
-    if not MODEL_PATH.exists():
-        raise FileNotFoundError(
-            f"Model artifact not found: {MODEL_PATH}. Train the model first."
+    def predict(self, record: Mapping[str, Any]) -> dict[str, Any]:
+        validated = validate_inference_record(record)
+        features = pd.DataFrame(
+            [{field: validated[field] for field in FEATURE_COLUMNS}],
+            columns=FEATURE_COLUMNS,
         )
 
-    artifact = joblib.load(MODEL_PATH)
-    approach = artifact.get("approach")
+        raw_prediction = float(self.model.predict(features)[0])
+        if not np.isfinite(raw_prediction):
+            raise ValueError("The model returned a non-finite prediction.")
 
-    if approach != "regression-only":
-        raise ValueError(
-            f"Unsupported model approach: {approach!r}. "
-            "Expected a regression-only artifact. Retrain the model."
+        predicted_count = max(0, int(round(raw_prediction)))
+        low_max = self.demand_level_thresholds["low_max"]
+        medium_max = self.demand_level_thresholds["medium_max"]
+        if predicted_count <= low_max:
+            demand_level = "LOW"
+        elif predicted_count <= medium_max:
+            demand_level = "MEDIUM"
+        else:
+            demand_level = "HIGH"
+
+        forecast_month = date(
+            validated["year"],
+            validated["month"],
+            1,
         )
+        if forecast_month.month == 12:
+            forecast_period = f"{forecast_month.year + 1:04d}-01"
+        else:
+            forecast_period = (
+                f"{forecast_month.year:04d}-{forecast_month.month + 1:02d}"
+            )
 
-    data = _normalize_input(request_data)
-    features = artifact["features"]
+        return {
+            "success": True,
+            "city": validated["city"],
+            "areaLocality": validated["area_locality"],
+            "propertyType": validated["property_type"],
+            "forecastPeriod": forecast_period,
+            "predictedDemandCount": predicted_count,
+            "demandUnit": "demand units",
+            "demandLevel": demand_level,
+            "modelVersion": self.model_version,
+            "target": TARGET_COLUMN,
+        }
 
-    missing = [name for name in features if name not in data]
-    if missing:
-        raise ValueError(f"Missing prediction features: {missing}")
 
-    row = pd.DataFrame(
-        [{name: data[name] for name in features}],
-        columns=features,
-    )
+_inference_instance: M3Inference | None = None
 
-    regressor = artifact["regressor"]
-    raw_prediction = float(regressor.predict(row)[0])
 
-    if not np.isfinite(raw_prediction):
-        raise ValueError("The model returned a non-finite prediction.")
+def get_inference() -> M3Inference:
+    """Return the shared, lazily loaded M3 inference service."""
 
-    predicted_count = max(0, int(round(raw_prediction)))
+    global _inference_instance
+    if _inference_instance is None:
+        _inference_instance = M3Inference()
+    return _inference_instance
 
-    month = int(data["month"])
-    year = int(data["year"])
 
-    if not 1 <= month <= 12:
-        raise ValueError("month must be between 1 and 12.")
-
-    if year < 1:
-        raise ValueError("year must be a positive integer.")
-
-    forecast_month = month + 1
-    forecast_year = year
-
-    if forecast_month > 12:
-        forecast_month = 1
-        forecast_year += 1
-
-    return {
-        "success": True,
-        "city": data["city"],
-        "areaLocality": data["area_locality"],
-        "month": forecast_month,
-        "year": forecast_year,
-        "predictedDemandCount": predicted_count,
-        "demandLevel": _demand_level(predicted_count),
-        "modelVersion": artifact.get("model_version", MODEL_VERSION),
-    }
+def predict_rental_demand(record: Mapping[str, Any]) -> dict[str, Any]:
+    return get_inference().predict(record)

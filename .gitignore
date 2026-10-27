@@ -24,7 +24,11 @@ __pycache__/
 Thumbs.db
 # Avenue360 shared datasets
 ai-service/data/processed/
+ai-service/data/raw/
+ai-service/data/ml 
+ai-service/m1_rent_prediction/data/ml
 
 # Archives
 *.zip
 /.metadata/
+

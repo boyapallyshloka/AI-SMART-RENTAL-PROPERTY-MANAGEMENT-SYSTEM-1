@@ -1,28 +1,68 @@
-
 from pathlib import Path
 
-# Module and project directories
+
 MODULE_DIR = Path(__file__).resolve().parent
 AI_SERVICE_DIR = MODULE_DIR.parent
-PROJECT_ROOT = AI_SERVICE_DIR.parent
+DATASET_PATH = (
+    AI_SERVICE_DIR
+    / "data"
+    / "ml"
+    / "M3_Rental_Demand_Property_Type_2024_2026 (1).csv"
+)
 
-# Original dataset
-DATA_DIR = AI_SERVICE_DIR / "data" / "ML"
-DATASET_PATH = DATA_DIR / "M3_Rental_Demand_Data.csv"
+ARTIFACT_DIR = MODULE_DIR / "artifacts"
+MODEL_PATH = ARTIFACT_DIR / "model_pipeline.joblib"
+METADATA_PATH = ARTIFACT_DIR / "model_metadata.json"
 
-# Output directories
-ARTIFACTS_DIR = MODULE_DIR / "artifacts"
-PLOTS_DIR = MODULE_DIR / "plots"
-REPORTS_DIR = MODULE_DIR / "reports"
-TESTS_DIR = MODULE_DIR / "tests"
-
-# Trained model artifact
-MODEL_PATH = ARTIFACTS_DIR / "model_pipeline.joblib"
-
-# Model version
-MODEL_VERSION = "v1.0"
-
-
-# Dataset date and target columns
-DATE_COLUMN = "year_month"
 TARGET_COLUMN = "next_month_demand"
+MODEL_VERSION = "M3-v2.0"
+
+SUPPORTED_PROPERTY_TYPES = (
+    "APARTMENT",
+    "VILLA",
+    "INDEPENDENT_HOUSE",
+)
+
+CATEGORICAL_FEATURES = [
+    "city",
+    "area_locality",
+    "property_type",
+]
+
+NUMERICAL_FEATURES = [
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count",
+]
+
+FEATURE_COLUMNS = CATEGORICAL_FEATURES + NUMERICAL_FEATURES
+IDENTIFIER_COLUMNS = CATEGORICAL_FEATURES
+DATE_SPLIT_TRAIN_END = "2025-12"
+DATE_SPLIT_TEST_START = "2026-01"
+
+REQUIRED_DATASET_COLUMNS = [
+    "city",
+    "area_locality",
+    "property_type",
+    "year",
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count",
+    TARGET_COLUMN,
+]

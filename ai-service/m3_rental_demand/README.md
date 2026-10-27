@@ -1,196 +1,142 @@
-# M3 - Rental Demand Prediction Module
+# M3 Rental Demand Prediction
 
-This module implements the **M3 Rental Demand Prediction** service for the Avenue360 AI Smart Rental Property Management System, conforming to **Avenue360 ML Standard v1.1**.
+M3 predicts the next-period demand count using the canonical dataset's
+`next_month_demand` target. The target's generation provenance is unverified;
+results are development evaluations and must not be represented as verified
+real-world forecasting accuracy.
 
----
+## Dataset and model contract
 
-## 1. What the Module Does
-The M3 module forecasts next-month rental demand count for properties across Indian cities and micro-markets (localities). It enables property managers and landlords to anticipate leasing velocity, plan vacancy mitigation, and adjust pricing and marketing campaigns proactively before high-demand or low-demand cycles hit.
+The module reads the existing file
+`ai-services/data/ml/M3_Rental_Demand_Property_Type_2024_2026 (1).csv`.
+It does not copy or alter the dataset. The sole target is
+`next_month_demand`.
 
----
+Model inputs:
 
-## 2. Dataset & Version Used
-- **Dataset Source**: `data/ml/M3_Rental_Demand.csv` (Avenue360 Master Rental Dataset).
-- **Type**: Hybrid operational development dataset combining real listing data and controlled operational leasing activity.
-- **Records & Scope**: 61,412 records spanning major metropolitan areas (Bangalore, Mumbai, Delhi, Chennai, Hyderabad, Kolkata).
-- **Time Range**: `2024-01` through `2025-11` (records from `2025-12` onward represent placeholder horizons excluded from training to prevent distortion).
-- **Splitting Strategy**: Strict time-based splitting:
-  - **Train Set**: `2024-01` to `2025-06`
-  - **Test/Validation Set**: `2025-07` to `2025-11`
-  - Zero leakage between past training intervals and future evaluation intervals.
+| Field | Meaning and validation |
+| --- | --- |
+| `city` | Non-blank city |
+| `area_locality` | Non-blank locality |
+| `property_type` | `APARTMENT`, `VILLA`, or `INDEPENDENT_HOUSE` |
+| `month` | Current observation month, 1–12 |
+| `property_count` | Non-negative whole count |
+| `application_count` | Non-negative whole count for the current observation month |
+| `agreement_start_count` | Non-negative whole count for the current observation month |
+| `average_monthly_rent` | Non-negative rent in the dataset's currency units |
+| `demand_lag_1_month` | Previous calendar month's observed application count |
+| `demand_lag_2_month` | Application count from two calendar months earlier |
+| `demand_growth_1_month` | Current versus previous application change, rounded to four decimals |
+| `occupancy_rate` | Fraction from 0 to 1, not a percentage |
+| `vacancy_rate` | Fraction from 0 to 1, not a percentage |
+| `available_unit_count` | Non-negative whole count |
 
----
+`year` is required for forecast-period reporting and splitting, but is not a
+model feature. All numeric features above must be available at the current
+observation cutoff. The backend must supply the complete record; selecting a
+property type alone is not enough to generate a prediction.
 
-## 3. Target and Features
+During training, the CSV lag and growth values are replaced by features
+recomputed from observed `application_count` values within each
+city/locality/property-type series. A lag is set missing if the exact calendar
+month is absent; those rows are excluded from training rather than given
+fabricated history. Growth is `(current - previous) / previous`, rounded to four
+decimals. If previous applications are zero, growth is zero when current
+applications are also zero; otherwise it is the current count, matching the
+existing backend's zero-denominator rule. The first two months of each series
+therefore do not have complete training history.
 
-### Target
-- **`next_month_demand`** (Integer): Number of prospective tenant applications/demand units anticipated in the locality during the subsequent month.
+## Training and evaluation
 
-### Raw Input Features
-| Feature | Type | Description |
-| :--- | :--- | :--- |
-| `city` | String | Metropolitan city name (e.g., Bangalore, Mumbai, Delhi) |
-| `area_locality` | String | Specific micro-market locality within the city |
-| `month` | Integer | Calendar month of the prediction window (1 to 12) |
-| `property_count` | Integer | Total rental units tracked in the micro-market |
-| `application_count` | Integer | Tenant applications submitted in the current month |
-| `agreement_start_count`| Integer | Number of newly executed rental agreements |
-| `average_monthly_rent` | Float | Locality average monthly rent in INR |
-| `demand_lag_1_month` | Integer | Recorded demand from previous month |
-| `demand_lag_2_month` | Integer | Recorded demand from 2 months prior |
-| `demand_growth_1_month`| Float | Month-over-month demand growth rate |
-| `occupancy_rate` | Float | Locality occupancy rate |
-| `vacancy_rate` | Float | Locality vacancy rate |
-| `available_unit_count` | Integer | Immediately vacant/available rental units |
+The model is the previous M3 regression algorithm and configuration:
 
-### Categorical Features (Encoded Internally by Pipeline)
-- **`city`**: One-hot encoded across metropolitan city categories.
-- **`area_locality`**: One-hot encoded across micro-market localities with `handle_unknown="ignore"`.
-- **`month`**: Calendar month derived from `year_month` if not passed directly.
-
----
-
-## 4. Preprocessing & Feature Engineering Applied
-Per Avenue360 ML Standard v1.1, all preprocessing logic is bundled directly inside the model pipeline (`RentalDemandPipeline` in `pipeline.py`):
-1. **Fitted Categorical OneHotEncoder (`ColumnTransformer`)**:
-   - `city` and `area_locality` are transformed into one-hot features via `OneHotEncoder(handle_unknown="ignore", sparse_output=True)`.
-   - The encoder is fitted strictly on the training split to eliminate data leakage.
-   - Unseen localities at inference time gracefully encode to zeros without runtime exceptions.
-2. **Temporal Feature Derivation**:
-   - Derives calendar month numbers from composite date formats (`YYYY-MM`) to capture seasonality.
-3. **Imbalance & Hurdle Preprocessing**:
-   - Zero-demand inflation is addressed by generating a binary indicator target (`y > 0`) for Stage 1 classification and sample weighting via `compute_sample_weight("balanced")`.
-
----
-
-## 5. Model Used and Why
-
-### Architecture: Two-Stage Hurdle Model
-1. **Stage 1 - Classifier**:
-   - **Algorithm**: `GradientBoostingClassifier(n_estimators=200, random_state=42)`
-   - **Weighting**: Balanced sample weights to handle zero-demand class imbalance.
-   - **Threshold**: Calibrated decision threshold (`threshold = 0.50`) tuned to maximize test F1-score.
-2. **Stage 2 - Regressor**:
-   - **Algorithm**: `GradientBoostingRegressor(n_estimators=200, random_state=42)`
-   - **Training Subset**: Trained exclusively on positive demand instances (`demand > 0`).
-3. **Inference Combination**:
-   $$\text{Final Demand} = \mathbb{I}(P(\text{demand} > 0) \ge \text{threshold}) \times \max(0, \hat{y}_{\text{regressor}})$$
-
-### Selection Rationale
-Rental demand is heavily zero-inflated (many micro-markets see periods of zero transaction activity). Standard regression models suffer from:
-- Predicting non-sensical fractional noise (e.g. 0.12 demand units) on zero-activity zones.
-- Under-predicting actual bursts during peak leasing periods.
-The two-stage hurdle approach cleanly decouples the decision of **whether demand will occur** from **the magnitude of demand**, leading to significantly superior precision and zero-demand suppression.
-
----
-
-## 6. Metrics Achieved
-Metrics recorded from strict time-based out-of-time evaluation (`2025-07` to `2025-11`):
-
-| Metric | Score |
-| :--- | :--- |
-| **MAE** | `0.4771` |
-| **RMSE** | `0.7866` |
-| **Binarized Accuracy** | `70.60%` |
-| **Binarized F1-Score** | `0.5519` |
-| **Recall (Demand > 0)** | `63.98%` |
-| **Precision (Demand > 0)**| `48.52%` |
-| **Calibrated Threshold** | `0.50` |
-
----
-
-## 7. How to Train
-To train the unified pipeline and generate the model artifact:
-
-```bash
-# From workspace root
-python ai-service/m3_rental_demand/train_model.py
-
-# Or from inside ai-service/
-cd ai-service
-python m3_rental_demand/train_model.py
+```text
+GradientBoostingRegressor(
+    n_estimators=100,
+    learning_rate=0.05,
+    max_depth=2,
+    loss="huber",
+    random_state=42,
+)
 ```
 
-This generates:
-- `artifacts/model_pipeline.joblib` (the primary unified pipeline artifact).
-- `artifacts/metrics_final.json` (recorded validation performance metrics).
-- Legacy artifacts `model_m3_classifier.pkl` and `model_m3_regressor.pkl` for backward compatibility.
+Numeric fields use median imputation. City, locality, and property type use
+most-frequent imputation and one-hot encoding with unseen categories ignored.
+The time split trains on observations through December 2025 and evaluates on
+January–December 2026. The baseline predicts current `application_count`.
+Metrics include MAE, RMSE, R², and per-property-type results. Demand-level
+labels use the training-target 1/3 and 2/3 quantiles recorded in model
+metadata.
 
----
+From the repository's `ai-services` directory:
 
-## 8. How to Start the API
-Run the Uvicorn ASGI server:
-
-```bash
-# From ai-service directory
-uvicorn m3_rental_demand.api:app --host 0.0.0.0 --port 8000 --reload
+```powershell
+.\.venv\Scripts\python.exe -m m3_rental_demand.train_model
+.\.venv\Scripts\python.exe -m pytest m3_rental_demand\tests -q
+.\.venv\Scripts\python.exe -m uvicorn main:app --reload
 ```
 
-Interactive OpenAPI documentation is available at `http://localhost:8000/docs`.
+The last command starts the existing shared AI service, whose M3 router
+registration already points to this module. No shared application files were
+changed.
 
----
+The trained pipeline is saved to
+`ai-services/m3_rental_demand/artifacts/model_pipeline.joblib`; actual metrics,
+feature schema, split periods, and target provenance note are recorded in
+`artifacts/model_metadata.json`.
 
-## 9. Exact Endpoint
+## API contract
 
-```http
-POST /predict-demand
-```
+The module exposes a router for the shared AI service; no shared application
+files are changed. When the existing AI service includes this router, the
+endpoints are:
 
----
+- `GET /m3/health`
+- `POST /m3/predict-rental-demand`
 
-## 10. Request and Response Schemas
+Request fields accept snake_case or camelCase. Example snake_case payload:
 
-### Request Schema (`application/json`)
 ```json
 {
-  "city": "Bangalore",
-  "area_locality": "A Narayanapura, Mahadevapura",
-  "month": 6,
-  "property_count": 50,
-  "application_count": 12,
+  "city": "Hyderabad",
+  "area_locality": "Gachibowli",
+  "property_type": "VILLA",
+  "year": 2026,
+  "month": 11,
+  "property_count": 39,
+  "application_count": 6,
   "agreement_start_count": 3,
-  "average_monthly_rent": 25000.0,
-  "demand_lag_1_month": 2,
-  "demand_lag_2_month": 1,
-  "demand_growth_1_month": 0.5,
-  "occupancy_rate": 85.0,
-  "vacancy_rate": 15.0,
+  "average_monthly_rent": 25000,
+  "demand_lag_1_month": 5,
+  "demand_lag_2_month": 4,
+  "demand_growth_1_month": 0.2,
+  "occupancy_rate": 0.78,
+  "vacancy_rate": 0.22,
   "available_unit_count": 8
 }
 ```
 
-### Success Response Schema (`200 OK`)
-```json
-{
-  {
-  "success": true,
-  "city": "Hyderabad",
-  "areaLocality": "Gachibowli",
-  "month": 9,
-  "predictedDemandCount": 8,
-  "demandLevel": "HIGH",
-  "modelVersion": "v1.0"
-}
-}
-```
+The backend must calculate all inputs for the selected property type. In
+particular, existing locality-wide aggregates must be extended or replaced
+with type-filtered aggregates before these fields can represent the dataset's
+type-specific rows.
 
-### Error Response Schema (`400 Bad Request` or `500 Internal Server Error`)
-```json
-{
-  "success": false,
-  "errorCode": "INVALID_INPUT",
-  "message": "Validation failed: city: field required"
-}
-```
+Successful responses include `success`, `city`, `areaLocality`,
+`propertyType`, `forecastPeriod`, non-negative integer `predictedDemandCount`,
+`demandUnit`, `demandLevel`, `modelVersion`, and `target`. The prediction is
+rounded to a whole count for compatibility with the previous M3 output.
+Invalid input returns `INVALID_INPUT`; a missing trained artifact returns
+`MODEL_NOT_FOUND`.
 
-Standard Error Codes:
-- `INVALID_INPUT`: Request payload missing required fields or having invalid types/ranges.
-- `MODEL_NOT_FOUND`: Model pipeline artifact file is missing.
-- `PREDICTION_ERROR`: Internal failure while executing prediction pipeline.
-- `INTERNAL_ERROR`: Unhandled internal server error (never exposes Python stack traces).
+## Known limitations
 
----
-
-## 11. Current Model Version
-- **Model Version**: `1.0`
-- **Artifact**: `artifacts/model_pipeline.joblib`
+- `next_month_demand` is used as the sole target, but its generation method is
+  not verified and it is not consistently equal to the following month's
+  `application_count`.
+- The dataset covers Hyderabad only and uses controlled/generated data;
+  results do not establish accuracy for other markets or operational data.
+- The current Java workflow aggregates by locality, not property type, and
+  emits occupancy/vacancy percentages. Integration must filter the aggregates
+  by property type and send rates on the dataset's 0-to-1 scale.
+- Backend property type `HOUSE` must map to dataset category
+  `INDEPENDENT_HOUSE`.

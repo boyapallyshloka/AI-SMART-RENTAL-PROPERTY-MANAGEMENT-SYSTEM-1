@@ -1,0 +1,121 @@
+{
+  "model_version": "M3-v2.0",
+  "target": "next_month_demand",
+  "features": [
+    "city",
+    "area_locality",
+    "property_type",
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count"
+  ],
+  "categorical_features": [
+    "city",
+    "area_locality",
+    "property_type"
+  ],
+  "numerical_features": [
+    "month",
+    "property_count",
+    "application_count",
+    "agreement_start_count",
+    "average_monthly_rent",
+    "demand_lag_1_month",
+    "demand_lag_2_month",
+    "demand_growth_1_month",
+    "occupancy_rate",
+    "vacancy_rate",
+    "available_unit_count"
+  ],
+  "algorithm": "sklearn.ensemble.GradientBoostingRegressor",
+  "hyperparameters": {
+    "n_estimators": 100,
+    "learning_rate": 0.05,
+    "max_depth": 2,
+    "loss": "huber",
+    "random_state": 42
+  },
+  "dataset": "C:\\Anasol project\\AI-SMART-RENTAL-PROPERTY-MANAGEMENT-SYSTEM-1\\ai-services\\data\\ml\\M3_Rental_Demand_Property_Type_2024_2026 (1).csv",
+  "dataset_rows": 2160,
+  "usable_rows": 2040,
+  "rows_excluded_for_unavailable_history": 120,
+  "train_rows": 1320,
+  "test_rows": 720,
+  "train_period": {
+    "start": "2024-03",
+    "end": "2025-12"
+  },
+  "test_period": {
+    "start": "2026-01",
+    "end": "2026-12"
+  },
+  "required_test_start": "2026-01",
+  "required_train_end": "2025-12",
+  "metrics": {
+    "model": {
+      "mae": 5.945628238373187,
+      "rmse": 11.178128890394674,
+      "r2": 0.9630817207642943
+    },
+    "baseline_current_application_count": {
+      "mae": 8.079166666666667,
+      "rmse": 13.423186821483355,
+      "r2": 0.946762887289613
+    },
+    "by_property_type": {
+      "APARTMENT": {
+        "rows": 240,
+        "model": {
+          "mae": 11.846730454903593,
+          "rmse": 18.464953228521637,
+          "r2": 0.8994732376203256
+        },
+        "baseline_current_application_count": {
+          "mae": 17.841666666666665,
+          "rmse": 22.32562055875118,
+          "r2": 0.8530422986190713
+        }
+      },
+      "INDEPENDENT_HOUSE": {
+        "rows": 240,
+        "model": {
+          "mae": 3.6699369630973973,
+          "rmse": 5.038843223419574,
+          "r2": 0.862884193291561
+        },
+        "baseline_current_application_count": {
+          "mae": 4.2375,
+          "rmse": 5.726037023980896,
+          "r2": 0.8229344248139323
+        }
+      },
+      "VILLA": {
+        "rows": 240,
+        "model": {
+          "mae": 2.3202172971185697,
+          "rmse": 2.916720368690715,
+          "r2": 0.6752645210750912
+        },
+        "baseline_current_application_count": {
+          "mae": 2.158333333333333,
+          "rmse": 3.053686296920494,
+          "r2": 0.6440500047714477
+        }
+      }
+    }
+  },
+  "demand_level_thresholds": {
+    "low_max": 10.0,
+    "medium_max": 37.0
+  },
+  "target_provenance": "The supplied next_month_demand is used as the sole development target. Its generation provenance is unverified.",
+  "trained_at_utc": "2026-10-26T18:35:57.984049+00:00"
+}
