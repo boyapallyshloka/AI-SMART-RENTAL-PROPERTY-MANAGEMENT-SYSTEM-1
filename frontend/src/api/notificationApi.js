@@ -3,20 +3,17 @@ import axiosClient from './axiosClient';
 // Get all notifications for the logged-in user
 // Get all notifications
 export const getNotifications = async () => {
-    const response = await axiosClient.get('/notifications');
-    return response.data;
+    return axiosClient.get('/notifications');
 };
 
 // Get unread notifications
 export const getUnreadNotifications = async () => {
-    const response = await axiosClient.get('/notifications/unread');
-    return response.data;
+    return axiosClient.get('/notifications/unread');
 };
 
 // Get unread notification count
 export const getUnreadCount = async () => {
-    const response = await axiosClient.get('/notifications/unread/count');
-    return response.data;
+    return axiosClient.get('/notifications/unread/count');
 };
 
 // Mark one notification as read

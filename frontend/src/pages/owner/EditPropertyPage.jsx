@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
+import RentalDemandPrediction from
+  '../../components/properties/RentalDemandPrediction'
 import OwnerPropertyForm from '../../components/properties/OwnerPropertyForm'
 import {
   getPropertyById,
@@ -188,3 +190,5 @@ export default function EditPropertyPage() {
     </DashboardLayout>
   )
 }
+        {/* Rental Demand Prediction */}
+        <RentalDemandPrediction />

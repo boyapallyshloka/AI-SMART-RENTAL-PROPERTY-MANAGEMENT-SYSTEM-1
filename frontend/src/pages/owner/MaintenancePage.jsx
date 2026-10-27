@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import DashboardLayout from '../../layouts/DashboardLayout'
 
@@ -119,6 +119,8 @@ const formatPropertyName = (name) => {
 }
 
 export default function MaintenancePage() {
+
+  const navigate = useNavigate()
 
   const [requests, setRequests] = useState([])
 
@@ -316,7 +318,7 @@ export default function MaintenancePage() {
 
   // 🤖 2. THE NEW PUSH NOTIFICATION DEEP LINK INTERCEPTOR LOOP
   useEffect(() => {
-    if (loading || requests.length === 0 || selectedTicket) return;
+    if (loading || requests.length === 0) return;
 
     const targetTicketId = searchParams.get('ticket');
     if (!targetTicketId) return;
@@ -326,10 +328,12 @@ export default function MaintenancePage() {
     );
 
     if (matchedRequest) {
-      console.log(`🎯 AI Deep Link Hook: Auto-opening owner ticket details panel for ID: ${targetTicketId}`);
-      setSelectedTicket(matchedRequest);
+      const ticketId = matchedRequest.requestId || matchedRequest.id || matchedRequest.ticketNumber
+      if (ticketId != null) {
+        navigate(`/owner/maintenance/${ticketId}`, { replace: true })
+      }
     }
-  }, [loading, requests, searchParams, selectedTicket]);
+  }, [loading, requests, searchParams, navigate]);
 
   /**
    * Helper to format human-readable Property and Unit display for a maintenance ticket.
@@ -353,6 +357,64 @@ export default function MaintenancePage() {
     return `${propDisplay}${unitDisplay}`
   }
 
+  const isHistoryRequest = (request) =>
+    ['COMPLETED', 'CANCELLED'].includes(String(request.status || '').toUpperCase())
+
+  const activeCount = requests.filter((request) => !isHistoryRequest(request)).length
+  const historyCount = requests.filter(isHistoryRequest).length
+  const statusOptions = [
+    { value: 'all', label: 'All Statuses' },
+    ...MAINTENANCE_STATUSES.map((status) => ({
+      value: status,
+      label: formatStatusLabel(status),
+    })),
+  ]
+  const priorityOptions = [
+    { value: 'all', label: 'All Priorities' },
+    ...MAINTENANCE_PRIORITIES.map((priority) => ({
+      value: priority,
+      label: formatPriorityLabel(priority),
+    })),
+  ]
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() || statusFilter !== 'all' || priorityFilter !== 'all'
+  )
+  const resetFilters = () => {
+    setSearchQuery('')
+    setStatusFilter('all')
+    setPriorityFilter('all')
+  }
+  const normalizedSearch = searchQuery.trim().toLowerCase()
+  const filteredRequests = requests.filter((request) => {
+    const isHistory = isHistoryRequest(request)
+    if (activeTab === 'active' && isHistory) return false
+    if (activeTab === 'history' && !isHistory) return false
+    if (statusFilter !== 'all' && String(request.status || '').toUpperCase() !== statusFilter) {
+      return false
+    }
+    if (priorityFilter !== 'all' && String(request.priority || '').toUpperCase() !== priorityFilter) {
+      return false
+    }
+    if (!normalizedSearch) return true
+
+    const searchableText = [
+      request.requestId,
+      request.id,
+      request.ticketNumber,
+      request.category,
+      request.description,
+      request.priority,
+      formatPriorityLabel(request.priority),
+      request.status,
+      formatStatusLabel(request.status),
+      getDisplayLocation(request),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+
+    return searchableText.includes(normalizedSearch)
+  })
 
   return (
 

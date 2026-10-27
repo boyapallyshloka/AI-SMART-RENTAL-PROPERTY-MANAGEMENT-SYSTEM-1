@@ -5,6 +5,7 @@ import React, {
     useEffect,
     useState,
     useCallback,
+    useRef,
 } from "react";
 
 import { useAuth } from "./AuthContext";
@@ -27,37 +28,59 @@ export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const inFlightRefreshRef = useRef(null);
+    const activeUserKey = user?.userId ?? user?.id ?? user?.email ?? null;
+    const activeUserKeyRef = useRef(activeUserKey);
+    activeUserKeyRef.current = activeUserKey;
+    const previousUserKeyRef = useRef(activeUserKey);
 
     // Fetch all notifications
-    const fetchNotifications = useCallback(async () => {
+    const fetchNotifications = useCallback(async (requestUserKey = activeUserKeyRef.current) => {
         try {
-            setLoading(true);
+            if (activeUserKeyRef.current === requestUserKey) {
+                setLoading(true);
+            }
 
             const data = await getNotifications();
-            console.log("Notifications returned to context:", data);
 
-            setNotifications(
-                Array.isArray(data) ? data : []
-            );
+            if (activeUserKeyRef.current === requestUserKey) {
+                setNotifications(
+                    Array.isArray(data)
+                        ? data
+                        : Array.isArray(data?.data)
+                            ? data.data
+                            : []
+                );
+            }
         } catch (error) {
+            if (activeUserKeyRef.current === requestUserKey) {
+                setError(error?.message || "Unable to load notifications.");
+            }
             console.error(
                 "Failed to fetch notifications:",
                 error
             );
         } finally {
-            setLoading(false);
+            if (activeUserKeyRef.current === requestUserKey) {
+                setLoading(false);
+            }
         }
     }, []);
 
 
     // Fetch unread notification count
-    const fetchUnreadCount = useCallback(async () => {
+    const fetchUnreadCount = useCallback(async (requestUserKey = activeUserKeyRef.current) => {
         try {
             const data = await getUnreadCount();
-            console.log("unread count returned to context:", data);
 
-            setUnreadCount(Number(data) || 0);
+            if (activeUserKeyRef.current === requestUserKey) {
+                setUnreadCount(Number(data?.count ?? data) || 0);
+            }
         } catch (error) {
+            if (activeUserKeyRef.current === requestUserKey) {
+                setError(error?.message || "Unable to load unread notification count.");
+            }
             console.error(
                 "Failed to fetch unread notification count:",
                 error
@@ -67,11 +90,33 @@ export const NotificationProvider = ({ children }) => {
 
     // Refresh notifications and unread count
     const refreshNotifications = useCallback(async () => {
-        await Promise.all([
-            fetchNotifications(),
-            fetchUnreadCount(),
+        const userKey = activeUserKey;
+        if (userKey == null) {
+            return;
+        }
+        const activeRefresh = inFlightRefreshRef.current;
+        if (activeRefresh?.userKey === userKey) {
+            return activeRefresh.promise;
+        }
+
+        setError("");
+        const refreshPromise = Promise.all([
+            fetchNotifications(userKey),
+            fetchUnreadCount(userKey),
         ]);
-    }, [fetchNotifications, fetchUnreadCount]);
+        inFlightRefreshRef.current = {
+            userKey,
+            promise: refreshPromise,
+        };
+
+        try {
+            await refreshPromise;
+        } finally {
+            if (inFlightRefreshRef.current?.promise === refreshPromise) {
+                inFlightRefreshRef.current = null;
+            }
+        }
+    }, [activeUserKey, fetchNotifications, fetchUnreadCount]);
 
     // Mark one notification as read
     const markAsRead = async (notificationId) => {
@@ -90,6 +135,7 @@ export const NotificationProvider = ({ children }) => {
                 count > 0 ? count - 1 : 0
             );
         } catch (error) {
+            setError(error?.message || "Unable to mark notification as read.");
             console.error(
                 "Failed to mark notification as read:",
                 error
@@ -111,6 +157,7 @@ export const NotificationProvider = ({ children }) => {
 
             setUnreadCount(0);
         } catch (error) {
+            setError(error?.message || "Unable to mark notifications as read.");
             console.error(
                 "Failed to mark all notifications as read:",
                 error
@@ -120,7 +167,20 @@ export const NotificationProvider = ({ children }) => {
 
     // Automatically refresh after authentication
     useEffect(() => {
-        if (authLoading || !user) {
+        if (authLoading) {
+            return;
+        }
+
+        if (previousUserKeyRef.current !== activeUserKey) {
+            previousUserKeyRef.current = activeUserKey;
+            setNotifications([]);
+            setUnreadCount(0);
+            setError("");
+            inFlightRefreshRef.current = null;
+        }
+
+        if (!user) {
+            setLoading(false);
             return;
         }
 
@@ -148,6 +208,7 @@ export const NotificationProvider = ({ children }) => {
                 notifications,
                 unreadCount,
                 loading,
+                error,
                 fetchNotifications,
                 fetchUnreadCount,
                 refreshNotifications,

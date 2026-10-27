@@ -32,7 +32,7 @@ import PaymentDetailsPage from '../pages/owner/PaymentDetailsPage'
 import MaintenancePage from '../pages/owner/MaintenancePage'
 import MaintenanceDetailsPage from '../pages/owner/MaintenanceDetailsPage'
 import ReportsPage from '../pages/owner/ReportsPage'
-import AIInsightsPage from '../pages/owner/AIInsightsPage'
+
 import AgreementsPage from '../pages/owner/AgreementsPage'
 import CreateAgreementPage from '../pages/owner/CreateAgreementPage'
 import OwnerProfilePage from '../pages/owner/OwnerProfilePage'
@@ -265,7 +265,7 @@ export default function AppRoutes() {
                 <Route path="maintenance" element={<MaintenancePage />} />
                 <Route path="maintenance/:id" element={<MaintenanceDetailsPage />} />
                 <Route path="reports" element={<ReportsPage />} />
-                <Route path="ai-insights" element={<AIInsightsPage />} />
+  
                 <Route path="agreements" element={<AgreementsPage />} />
                 <Route path="agreements/new" element={<CreateAgreementPage />} />
                 <Route path="profile" element={<OwnerProfilePage />} />

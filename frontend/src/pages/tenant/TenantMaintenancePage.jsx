@@ -66,7 +66,7 @@ export default function TenantMaintenancePage() {
     try {
       // 1. Gather live property and unit infrastructure data streams from the server
       const [maintRes, publicPropsRes, appsRes] = await Promise.allSettled([
-        getMainMaintenanceRequests(),
+        getMaintenanceRequests(),
         getPublicProperties(),
         getMyApplications(),
       ])

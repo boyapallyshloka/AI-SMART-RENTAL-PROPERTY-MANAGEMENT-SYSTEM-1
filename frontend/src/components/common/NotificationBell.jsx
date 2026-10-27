@@ -11,10 +11,9 @@ export default function NotificationBell() {
     markAsRead,
     markAllAsRead,
     loading,
+    error,
+    refreshNotifications,
   } = useNotifications()
-  console.log("Bell notifications:", notifications)
-  console.log("Bell unread count:", unreadCount)
-  console.log("Bell loading:", loading)
   const dropdownRef = useRef(null)
 
   useEffect(() => {
@@ -118,12 +117,25 @@ export default function NotificationBell() {
           {/* Notification List */}
           <div className="max-h-80 overflow-y-auto divide-y divide-[#D9E0E6]">
 
+            {error && (
+              <div className="flex items-start justify-between gap-3 border-b border-[#F8B4B4] bg-[#FDF2F2] p-3 text-xs text-[#9B1C1C]" role="alert">
+                <span>{error}</span>
+                <button
+                  type="button"
+                  onClick={refreshNotifications}
+                  className="shrink-0 font-semibold underline underline-offset-2"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
             {/* Loading */}
             {loading ? (
               <div className="p-6 text-center text-sm text-[#5B6875]">
                 Loading notifications...
               </div>
-            ) : notifications.length === 0 ? (
+            ) : error && notifications.length === 0 ? null : notifications.length === 0 ? (
               /* No notifications */
               <div className="p-6 text-center text-sm text-[#5B6875]">
                 No notifications right now
@@ -178,7 +190,7 @@ export default function NotificationBell() {
           {/* Footer */}
           <div className="p-2 border-t border-[#D9E0E6] bg-[#F7F8FA] text-center">
             <span className="text-[11px] text-[#5B6875]">
-              Real-time property notifications
+              Refreshes automatically every 10 seconds
             </span>
           </div>
         </div>

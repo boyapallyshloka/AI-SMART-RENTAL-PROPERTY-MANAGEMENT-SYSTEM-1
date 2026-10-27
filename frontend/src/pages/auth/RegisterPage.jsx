@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext'
 import AuthLayout from '../../layouts/AuthLayout'
 import { Button, Input, Select } from '../../components/ui'
 import {
+  Eye,
+  EyeOff,
   Mail,
   Lock,
   User,
@@ -34,7 +36,9 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('')
   const [gender, setGender] = useState('OTHER')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [role, setRole] = useState(ROLES.TENANT)
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
@@ -170,7 +174,6 @@ export default function RegisterPage() {
       setIsLoading(false)
     }
   }
-
   // Waiting for Approval state view for PROPERTY_OWNER
   if (isPendingApproval) {
     return (
@@ -393,7 +396,7 @@ export default function RegisterPage() {
 
         <Input
           label="Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder="At least 8 characters"
           value={password}
           onChange={(e) => {
@@ -405,6 +408,20 @@ export default function RegisterPage() {
               setErrors((prev) => ({ ...prev, password: '' }))
             }
           }}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="pointer-events-auto text-[#5B6875] hover:text-[#315A7D]"
+            >
+              {showPassword ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          }
           required
         />
         <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
@@ -432,7 +449,7 @@ export default function RegisterPage() {
 
         <Input
           label="Confirm Password"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'}
           placeholder="Repeat your password"
           value={confirmPassword}
           onChange={(e) => {
@@ -445,6 +462,22 @@ export default function RegisterPage() {
           }}
           error={errors.confirmPassword}
           leftIcon={<Lock className="w-4 h-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((visible) => !visible)}
+              aria-label={
+                showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'
+              }
+              className="pointer-events-auto text-[#5B6875] hover:text-[#315A7D]"
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          }
           required
         />
         {confirmPassword && (
@@ -460,6 +493,7 @@ export default function RegisterPage() {
               : '✗ Passwords do not match'}
           </p>
         )}
+        
 
         <Button
           type="submit"
