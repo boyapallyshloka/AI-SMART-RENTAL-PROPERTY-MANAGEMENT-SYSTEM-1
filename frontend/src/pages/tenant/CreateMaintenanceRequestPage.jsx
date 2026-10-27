@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
-import axiosClient from '../../api/axiosClient'
 import {
   createMaintenanceRequest,
   MAINTENANCE_CATEGORIES,
@@ -10,10 +9,6 @@ import {
   formatCategoryLabel,
   formatPriorityLabel,
 } from '../../api/maintenanceApi'
-import {
-  getPublicProperties,
-  getPublicPropertyDetails,
-} from '../../api/propertyApi'
 import { getMyAgreements } from '../../api/agreementApi'
 import { getMyApplications } from '../../api/applicationApi'
 import {
@@ -72,6 +67,10 @@ export default function CreateMaintenanceRequestPage() {
   const [errors, setErrors] = useState({})
   const [apiError, setApiError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const selectedProperty = properties.find(
+    (property) => String(property.propertyId ?? property.id) === String(propertyId)
+  )
+  const isDirectRental = Boolean(selectedProperty?.directRental)
 
   // Attempt to load properties from backend and match tenant agreement/application
   useEffect(() => {
@@ -107,71 +106,41 @@ export default function CreateMaintenanceRequestPage() {
           }
         })
 
-        // Prefer active agreement
-        const activeAgr =
-          rawAgreements.find(
-            (a) => String(a.status).toUpperCase() === 'ACTIVE'
-          ) || rawAgreements[0]
-
-        if (activeAgr) {
-          const matchedApp = activeAgr.applicationId
-            ? appMap.get(Number(activeAgr.applicationId))
-            : null
-
-          tenantMatch = {
-            propertyId: matchedApp?.propertyId || activeAgr.propertyId,
-            propertyName: matchedApp?.propertyName,
-            unitId: activeAgr.unitId || matchedApp?.unitId,
-            unitNumber: matchedApp?.unitNumber
-              ? String(matchedApp.unitNumber)
-              : activeAgr.unitId
-              ? String(activeAgr.unitId)
-              : undefined,
-          }
-        } else {
-          // If no agreements, check approved/first application
-          const approvedApp =
-            rawApps.find((a) => (a.status || '').toUpperCase() === 'APPROVED') ||
-            rawApps[0]
-
-          if (approvedApp) {
-            tenantMatch = {
-              propertyId: approvedApp.propertyId,
-              propertyName: approvedApp.propertyName,
-              unitId: approvedApp.unitId,
-              unitNumber: approvedApp.unitNumber ? String(approvedApp.unitNumber) : undefined,
+        const today = new Date().toISOString().slice(0, 10)
+        const rentalOptions = rawAgreements
+          .filter((agreement) =>
+            String(agreement?.status || '').toUpperCase() === 'ACTIVE' &&
+            (!agreement.startDate || agreement.startDate <= today) &&
+            (!agreement.endDate || agreement.endDate >= today)
+          )
+          .map((agreement) => {
+            const matchedApp = agreement.applicationId
+              ? appMap.get(Number(agreement.applicationId))
+              : null
+            const agreedUnitId = agreement.unitId ?? matchedApp?.unitId ?? null
+            const agreedPropertyId = agreement.propertyId ?? matchedApp?.propertyId
+            if (agreedPropertyId == null) return null
+            return {
+              id: agreedPropertyId,
+              propertyId: agreedPropertyId,
+              propertyName: agreement.propertyName || matchedApp?.propertyName || `Property #${agreedPropertyId}`,
+              propertyType: matchedApp?.propertyType || (agreedUnitId == null ? 'HOUSE' : 'APARTMENT'),
+              unitId: agreedUnitId,
+              unitNumber: matchedApp?.unitNumber || (agreedUnitId != null ? String(agreedUnitId) : ''),
+              directRental: agreedUnitId == null,
             }
-          }
+          })
+          .filter(Boolean)
+        tenantMatch = rentalOptions[0] || null
+        if (isMounted) {
+          setProperties(rentalOptions)
+          setPropertyId(tenantMatch ? String(tenantMatch.propertyId) : '')
+          setPropertyName(tenantMatch?.propertyName || '')
+          setUnitId(tenantMatch?.unitId == null ? '' : String(tenantMatch.unitId))
+          setUnitNumber(String(tenantMatch?.unitNumber || ''))
         }
       } catch (err) {
-        // Silently fallback if agreement/app call fails
-      }
-
-      try {
-        const publicProps = await getPublicProperties()
-        const propList = Array.isArray(publicProps) ? publicProps : []
-        if (isMounted && propList.length > 0) {
-          setProperties(propList)
-
-          if (tenantMatch?.propertyId) {
-            const matchedId = String(tenantMatch.propertyId)
-            setPropertyId(matchedId)
-            setPropertyName(tenantMatch.propertyName || 'Selected Property')
-            if (tenantMatch.unitId) {
-              setUnitId(String(tenantMatch.unitId))
-            }
-            if (tenantMatch.unitNumber) {
-              setUnitNumber(String(tenantMatch.unitNumber))
-            }
-          } else {
-            const firstProp = propList[0]
-            const firstId = String(firstProp.propertyId || firstProp.id)
-            setPropertyId(firstId)
-            setPropertyName(firstProp.propertyName || firstProp.name || 'Selected Property')
-          }
-        }
-      } catch (err) {
-        console.warn('Failed to load public properties:', err)
+        console.warn('Failed to load tenant rental agreements:', err)
       }
     }
 
@@ -181,126 +150,37 @@ export default function CreateMaintenanceRequestPage() {
     }
   }, [tenantEmail, tenantName])
 
-  // Fetch actual property details and extract units whenever propertyId changes
+  // Read the selected rental's unit directly from its active agreement.
   useEffect(() => {
     if (!propertyId) {
       setUnits([])
       setUnitId('')
       setUnitNumber('')
+      setIsLoadingUnits(false)
       return
     }
-
-    let isMounted = true
-    const loadUnitsForProperty = async () => {
-      setIsLoadingUnits(true)
-      try {
-        const data = await getPublicPropertyDetails(propertyId)
-        if (!isMounted) return
-
-        // Flatten units across buildings -> floors -> units
-        let rawUnits = []
-        if (Array.isArray(data?.buildings)) {
-          for (const b of data.buildings) {
-            if (Array.isArray(b?.floors)) {
-              for (const f of b.floors) {
-                if (Array.isArray(f?.units)) {
-                  for (const u of f.units) {
-                    const uid = u.unitId ?? u.id
-                    const uNum = u.unitNumber ?? u.unitNo ?? u.number
-                    if (uid != null) {
-                      rawUnits.push({
-                        unitId: String(uid),
-                        unitNumber: uNum != null ? String(uNum) : String(uid),
-                        buildingName: b?.building?.buildingName,
-                        floorName:
-                          f?.floor?.floorName ||
-                          (f?.floor?.floorNumber != null ? `Floor ${f.floor.floorNumber}` : null),
-                        status: u.status,
-                      })
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // Fallback if data has flat units array
-        if (rawUnits.length === 0 && Array.isArray(data?.units)) {
-          for (const u of data.units) {
-            const uid = u.unitId ?? u.id
-            const uNum = u.unitNumber ?? u.unitNo ?? u.number
-            if (uid != null) {
-              rawUnits.push({
-                unitId: String(uid),
-                unitNumber: uNum != null ? String(uNum) : String(uid),
-                status: u.status,
-              })
-            }
-          }
-        }
-
-        setUnits(rawUnits)
-
-        if (rawUnits.length > 0) {
-          // If current unitId matches one of the loaded units, keep it
-          const existingMatch = rawUnits.find(
-            (u) => String(u.unitId) === String(unitId)
-          )
-
-          // Or match by unitNumber string (e.g. "201" or "Unit 201")
-          const cleanTargetNum = String(unitNumber || '')
-            .trim()
-            .toLowerCase()
-            .replace(/^unit\s*#?/i, '')
-            .replace(/^townhome\s*#?/i, '')
-            .replace(/^loft\s*#?/i, '')
-            .replace(/^apartment\s*#?/i, '')
-            .replace(/^#/i, '')
-            .trim()
-
-          const numberMatch =
-            !existingMatch && cleanTargetNum
-              ? rawUnits.find((u) => {
-                const cleanUNum = String(u.unitNumber || '')
-                  .trim()
-                  .toLowerCase()
-                  .replace(/^unit\s*#?/i, '')
-                  .replace(/^townhome\s*#?/i, '')
-                  .replace(/^loft\s*#?/i, '')
-                  .replace(/^apartment\s*#?/i, '')
-                  .replace(/^#/i, '')
-                  .trim()
-                return cleanUNum === cleanTargetNum
-              })
-              : null
-
-          const targetUnit = existingMatch || numberMatch || rawUnits[0]
-          setUnitId(String(targetUnit.unitId))
-          setUnitNumber(String(targetUnit.unitNumber))
-        } else {
-          setUnitId('')
-          setUnitNumber('')
-        }
-      } catch (err) {
-        console.warn(`Failed to load details for property ${propertyId}:`, err)
-        if (isMounted) {
-          setUnits([])
-          setUnitId('')
-          setUnitNumber('')
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingUnits(false)
-        }
+    const rental = properties.find(
+      (property) => String(property.propertyId ?? property.id) === String(propertyId)
+    )
+    if (rental?.directRental) {
+      setUnits([])
+      setUnitId('')
+      setUnitNumber('')
+    } else if (rental?.unitId != null) {
+      const agreedUnit = {
+        unitId: String(rental.unitId),
+        unitNumber: String(rental.unitNumber || rental.unitId),
       }
+      setUnits([agreedUnit])
+      setUnitId(agreedUnit.unitId)
+      setUnitNumber(agreedUnit.unitNumber)
+    } else {
+      setUnits([])
+      setUnitId('')
+      setUnitNumber('')
     }
-
-    loadUnitsForProperty()
-    return () => {
-      isMounted = false
-    }
-  }, [propertyId])
+    setIsLoadingUnits(false)
+  }, [propertyId, properties])
 
   // Category dropdown options (canonical backend enums)
   const categoryOptions = MAINTENANCE_CATEGORIES.map((cat) => ({
@@ -353,7 +233,7 @@ export default function CreateMaintenanceRequestPage() {
     if (!priority) errs.priority = 'Please select a priority level'
     if (!description.trim()) errs.description = 'Please describe the issue or repair needed'
     if (!propertyId || isNaN(Number(propertyId))) errs.propertyId = 'Valid Property ID is required'
-    if (!unitId || isNaN(Number(unitId))) errs.unitId = 'Valid Unit ID is required'
+    if (!isDirectRental && (!unitId || isNaN(Number(unitId)))) errs.unitId = 'Valid Unit ID is required'
 
     setErrors(errs)
     return Object.keys(errs).length === 0
@@ -368,12 +248,12 @@ export default function CreateMaintenanceRequestPage() {
 
     try {
       // Build FormData payload strictly matching backend createRequest:
-      // @RequestParam Long propertyId, @RequestParam Long unitId,
+      // @RequestParam Long propertyId, optional @RequestParam Long unitId,
       // @RequestParam MaintenanceCategory category, @RequestParam String description,
       // @RequestParam MaintenancePriority priority, @RequestParam MultipartFile image
       const formData = new FormData()
       formData.append('propertyId', propertyId)
-      formData.append('unitId', unitId)
+      if (!isDirectRental) formData.append('unitId', unitId)
       formData.append('category', category)
       formData.append(
         'description',
@@ -518,24 +398,18 @@ export default function CreateMaintenanceRequestPage() {
                     })}
                   </select>
                 ) : (
-                  <div className="space-y-1">
-                    <Input
-                      placeholder="Property ID (e.g. 1)"
-                      value={propertyId}
-                      onChange={(e) => {
-                        setPropertyId(e.target.value)
-                        if (errors.propertyId) {
-                          setErrors((prev) => ({ ...prev, propertyId: undefined }))
-                        }
-                      }}
-                      error={errors.propertyId}
-                      required
-                    />
+                  <div className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-sm text-[#5B6875]">
+                    No active rental agreement was found. Maintenance requests can only be submitted for a current rental.
                   </div>
                 )}
               </div>
 
-              <div>
+              {isDirectRental && (
+                <div className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-sm text-[#5B6875]">
+                  This is a whole-house rental. The request will be attached to the property, so no unit number is needed.
+                </div>
+              )}
+              <div className={isDirectRental ? 'hidden' : ''}>
                 <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                   Unit Number
                 </label>
@@ -595,7 +469,7 @@ export default function CreateMaintenanceRequestPage() {
                           ? `Unit ${String(unitNumber).replace(/^Unit\s*/i, '')}`
                           : 'No units listed for this property'
                       }
-                      required
+                      required={!isDirectRental}
                     />
                   </div>
                 )}

@@ -232,9 +232,11 @@ export default function OwnerPropertyTable({
                         >
                           {CANONICAL_PROPERTY_STATUSES.map((st) => (
                             <option key={st} value={st}>
-                              {st === 'UNDER_MAINTENANCE'
-                                ? 'Under Maintenance'
-                                : st.charAt(0) + st.slice(1).toLowerCase()}
+                              {st === 'AVAILABLE'
+                                ? 'Approved'
+                                : st === 'UNDER_MAINTENANCE'
+                                  ? 'Under Maintenance'
+                                  : st.charAt(0) + st.slice(1).toLowerCase()}
                             </option>
                           ))}
                         </select>

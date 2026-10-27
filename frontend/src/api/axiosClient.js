@@ -27,13 +27,23 @@ axiosClient.interceptors.request.use(
   (config) => {
     // 1. Dynamic JWT attachment
     try {
-      const token =
-        localStorage.getItem('token') ||
-        localStorage.getItem('smartestate_token') ||
-        localStorage.getItem('homesphere_token')
+      const skipAuthToken = config.skipAuthToken
 
-      if (token && token.trim()) {
-        config.headers.Authorization = `Bearer ${token.trim()}`
+      if (skipAuthToken) {
+        if (typeof config.headers?.delete === 'function') {
+          config.headers.delete('Authorization')
+        } else if (config.headers) {
+          delete config.headers.Authorization
+        }
+      } else {
+        const token =
+          localStorage.getItem('token') ||
+          localStorage.getItem('smartestate_token') ||
+          localStorage.getItem('homesphere_token')
+
+        if (token && token.trim()) {
+          config.headers.Authorization = `Bearer ${token.trim()}`
+        }
       }
     } catch (e) {
       // Ignore storage access errors in non-browser/restricted environments
@@ -89,15 +99,19 @@ axiosClient.interceptors.response.use(
     switch (status) {
       case 401:
         // Unauthorized: token expired or invalid credentials
-        message = 'Your session has expired. Please sign in again.'
-        try {
-          localStorage.removeItem('token')
-          localStorage.removeItem('smartestate_token')
-          localStorage.removeItem('smartestate_user')
-          localStorage.removeItem('homesphere_token')
-          localStorage.removeItem('homesphere_user')
-        } catch (e) {
-          // Ignore storage cleanup error in restricted environments
+        if (error.config?.skipAuthToken) {
+          message = 'The public endpoint requires backend unauthenticated GET access.'
+        } else {
+          message = 'Your session has expired. Please sign in again.'
+          try {
+            localStorage.removeItem('token')
+            localStorage.removeItem('smartestate_token')
+            localStorage.removeItem('smartestate_user')
+            localStorage.removeItem('homesphere_token')
+            localStorage.removeItem('homesphere_user')
+          } catch (e) {
+            // Ignore storage cleanup error in restricted environments
+          }
         }
         break
 

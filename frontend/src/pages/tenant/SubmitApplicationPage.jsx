@@ -41,6 +41,8 @@ const formatInr = (amount) => {
   }).format(amount)
 }
 
+const isDirectRentalType = (type) => ['HOUSE', 'VILLA'].includes(String(type || '').toUpperCase())
+
 export default function SubmitApplicationPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -289,20 +291,30 @@ export default function SubmitApplicationPage() {
       try {
         const data = await getPublicPropertyDetails(selectedPropertyId)
         if (!isMounted) return
-        setPropertyDetails(data)
+        setPropertyDetails({
+          ...data,
+          address: data?.address || (data?.location ? {
+            area: data.location.area,
+            city: data.location.city,
+            state: data.location.state,
+          } : null),
+        })
 
-        // Flatten units across buildings -> floors -> units
-        const rawUnits = (data?.buildings || []).flatMap((b) =>
-          (b.floors || []).flatMap((f) =>
-            (f.units || []).map((u) => ({
-              ...u,
-              buildingName: b.building?.buildingName,
-              floorName:
-                f.floor?.floorName ||
-                (f.floor?.floorNumber != null ? `Floor ${f.floor.floorNumber}` : null),
-            }))
-          )
-        )
+        // The public endpoint returns apartment inventory as availableUnits;
+        // retain support for the older nested response while it is still used.
+        const rawUnits = Array.isArray(data?.availableUnits)
+          ? data.availableUnits.map((unit) => ({ ...unit, status: unit.status || 'VACANT' }))
+          : (data?.buildings || []).flatMap((b) =>
+              (b.floors || []).flatMap((f) =>
+                (f.units || []).map((u) => ({
+                  ...u,
+                  buildingName: b.building?.buildingName,
+                  floorName:
+                    f.floor?.floorName ||
+                    (f.floor?.floorNumber != null ? `Floor ${f.floor.floorNumber}` : null),
+                }))
+              )
+            )
         setUnits(rawUnits)
 
         // Pre-select unit if urlUnitId is present, or choose first unit
@@ -344,6 +356,10 @@ export default function SubmitApplicationPage() {
       (p) => String(p.propertyId || p.id) === String(selectedPropertyId)
     )
   }, [properties, selectedPropertyId])
+
+  const isDirectRental = isDirectRentalType(
+    propertyDetails?.property?.propertyType || selectedProperty?.propertyType
+  )
 
   const selectedUnitObj = useMemo(() => {
     return units.find((u) => String(u.unitId) === String(selectedUnitId))
@@ -395,7 +411,7 @@ export default function SubmitApplicationPage() {
       errs.property = 'Please select a property'
     }
 
-    if (!selectedUnitId) {
+    if (!isDirectRental && !selectedUnitId) {
       errs.unit = 'Please select a specific unit to apply for'
     }
 
@@ -488,7 +504,8 @@ export default function SubmitApplicationPage() {
 
       // 2. Strictly submit only fields supported by backend RentalApplicationCreateRequest
       const payload = {
-        unitId: Number(selectedUnitId),
+        propertyId: Number(selectedPropertyId),
+        unitId: isDirectRental ? null : Number(selectedUnitId),
         monthlyIncome: monthlyIncome.trim() ? Number(monthlyIncome) : null,
         employerOccupation: employer.trim() || null,
         preferredMoveInDate: moveInDate || null,
@@ -506,7 +523,7 @@ export default function SubmitApplicationPage() {
       const appStatus = result?.status || 'status not returned by the server'
 
       setSuccessMessage(
-        `Your rental application ${appId} for Unit ${selectedUnitObj?.unitNumber || ''} at ${selectedProperty?.propertyName || 'the property'
+        `Your rental application ${appId} for ${isDirectRental ? 'the whole property' : `Unit ${selectedUnitObj?.unitNumber || ''}`} at ${selectedProperty?.propertyName || 'the property'
         } has been submitted successfully! Status: ${appStatus}. Redirecting to your applications...`
       )
 
@@ -617,10 +634,10 @@ export default function SubmitApplicationPage() {
           <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
             <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
               <Building2 className="w-4 h-4 text-[#315A7D]" />
-              1. Target Property & Unit
+              {isDirectRental ? '1. Target Property' : '1. Target Property & Unit'}
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className={`grid grid-cols-1 ${isDirectRental ? '' : 'sm:grid-cols-2'} gap-4`}>
               <div>
                 <Select
                   label="Select Property"
@@ -633,18 +650,34 @@ export default function SubmitApplicationPage() {
                 />
               </div>
 
-              <div>
-                <Select
-                  label="Select Unit"
-                  options={unitOptions}
-                  value={selectedUnitId}
-                  onChange={(e) => setSelectedUnitId(e.target.value)}
-                  error={errors.unit}
-                  disabled={isLoadingDetails || units.length === 0}
-                  required
-                />
-              </div>
+              {!isDirectRental && (
+                <div>
+                  <Select
+                    label="Select Unit"
+                    options={unitOptions}
+                    value={selectedUnitId}
+                    onChange={(e) => setSelectedUnitId(e.target.value)}
+                    error={errors.unit}
+                    disabled={isLoadingDetails || units.length === 0}
+                    required
+                  />
+                </div>
+              )}
             </div>
+
+            {isDirectRental && selectedProperty && (
+              <div className="rounded-md border border-[#315A7D]/20 bg-[#EAF2F7]/50 p-3.5 text-xs text-[#5B6875]">
+                <p className="font-semibold text-sm text-[#315A7D]">Whole-property rental</p>
+                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+                  {(propertyDetails?.property?.monthlyRent ?? selectedProperty.monthlyRent) != null && (
+                    <span>Monthly rent: <strong>{formatInr(propertyDetails?.property?.monthlyRent ?? selectedProperty.monthlyRent)}</strong></span>
+                  )}
+                  {(propertyDetails?.property?.securityDeposit ?? selectedProperty.securityDeposit) != null && (
+                    <span>Security deposit: <strong>{formatInr(propertyDetails?.property?.securityDeposit ?? selectedProperty.securityDeposit)}</strong></span>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Selected Property Details banner */}
             {selectedProperty && (

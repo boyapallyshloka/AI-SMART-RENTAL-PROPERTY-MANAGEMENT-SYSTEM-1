@@ -147,7 +147,8 @@ export const getMaintenanceRequestById = async (id) => {
  * POST /api/maintenance
  * Create a new maintenance request (Tenant only)
  * Consumes: multipart/form-data
- * Expects FormData with propertyId, unitId, category, description, priority, and optional image
+ * Expects FormData with propertyId, category, description, priority, and optional image.
+ * Include unitId for apartment/unit-based rentals; omit it for HOUSE/VILLA rentals.
  */
 export const createMaintenanceRequest = async (formData) => {
   return axiosClient.post('/maintenance', formData)
@@ -164,11 +165,30 @@ export const updateMaintenanceStatus = async (ticketId, status) => {
 }
 
 /**
+ * PATCH /api/maintenance/{ticketId}/cost
+ * Save the repair amount and who is responsible for it.
+ * Body: { cost: number, costResponsibility: 'OWNER_PAID' | 'TENANT_PAID' }
+ */
+export const updateMaintenanceCost = async (ticketId, costData) => {
+  return axiosClient.patch(`/maintenance/${ticketId}/cost`, costData)
+}
+
+/**
  * GET /api/maintenance-workers
  * Fetch all registered maintenance technicians
  */
 export const getMaintenanceWorkers = async () => {
   return axiosClient.get('/maintenance-workers')
+}
+
+/** Create a technician available for maintenance assignments. */
+export const createMaintenanceWorker = async (worker) => {
+  return axiosClient.post('/maintenance-workers', worker)
+}
+
+/** Remove a technician from the maintenance roster. */
+export const deleteMaintenanceWorker = async (workerId) => {
+  return axiosClient.delete(`/maintenance-workers/${workerId}`)
 }
 
 /**

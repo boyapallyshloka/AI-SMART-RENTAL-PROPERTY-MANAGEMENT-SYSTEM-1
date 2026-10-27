@@ -33,6 +33,7 @@ export default function PropertyCard({
   onSelect,
   isFavorite: controlledFavorite,
   onToggleFavorite,
+  showFavorite = true,
 }) {
   const [internalFavorite, setInternalFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
@@ -223,7 +224,7 @@ export default function PropertyCard({
           )}
 
           {/* Favorite Toggle Button */}
-          <button
+          {showFavorite && <button
             type="button"
             onClick={handleFavoriteClick}
             aria-label={isFav ? 'Remove from favorites' : 'Save to favorites'}
@@ -234,7 +235,7 @@ export default function PropertyCard({
                 isFav ? 'fill-[#B94A48] text-[#B94A48]' : ''
               }`}
             />
-          </button>
+          </button>}
         </div>
 
         {/* Bottom Property Type Pill */}

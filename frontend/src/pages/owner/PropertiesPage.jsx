@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
+import RentalDemandPrediction from '../../components/properties/RentalDemandPrediction'
 import PropertySummaryCard from '../../components/properties/PropertySummaryCard'
 import OwnerPropertyTable from '../../components/properties/OwnerPropertyTable'
 import {
@@ -234,6 +235,7 @@ export default function PropertiesPage() {
 
         {/* Portfolio KPI Summary */}
         <PropertySummaryCard properties={properties} />
+        <RentalDemandPrediction />
 
         {/* Filter Bar */}
         <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-5 shadow-sm space-y-4">

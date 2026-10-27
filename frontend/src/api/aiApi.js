@@ -105,6 +105,15 @@ export const predictUnitRent = async ({ floorId, area, bedrooms, bathrooms }) =>
   )
 }
 
+/** Predict rent from saved details for a directly rentable House or Villa. */
+export const predictPropertyRent = async (propertyId) => {
+  return axiosClient.post(
+    '/ai/rent-prediction/predict-property',
+    { propertyId: Number(propertyId) },
+    { timeout: 60000 }
+  )
+}
+
 export const predictRent = predictUnitRent
 
 

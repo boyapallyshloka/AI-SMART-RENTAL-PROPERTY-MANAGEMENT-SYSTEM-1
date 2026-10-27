@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import DashboardLayout from '../../layouts/DashboardLayout'
 
@@ -119,6 +119,8 @@ const formatPropertyName = (name) => {
 }
 
 export default function MaintenancePage() {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [requests, setRequests] = useState([])
 
@@ -135,6 +137,18 @@ export default function MaintenancePage() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const hasFetchedRef = useRef(false)
+
+  useEffect(() => {
+    if (loading || requests.length === 0) return
+    const targetTicketId = searchParams.get('ticket')
+    if (!targetTicketId) return
+
+    const matchedRequest = requests.find((request) =>
+      String(request.requestId || request.id || request.ticketNumber) === String(targetTicketId)
+    )
+    const ticketId = matchedRequest?.requestId || matchedRequest?.id || matchedRequest?.ticketNumber
+    if (ticketId != null) navigate(`/owner/maintenance/${ticketId}`, { replace: true })
+  }, [loading, requests, searchParams, navigate])
 
   // Cache/lookup maps for Property Name and Unit Number
 
