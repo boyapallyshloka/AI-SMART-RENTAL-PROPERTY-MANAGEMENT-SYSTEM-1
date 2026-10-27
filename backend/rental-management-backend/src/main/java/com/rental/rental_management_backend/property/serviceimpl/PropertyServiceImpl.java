@@ -1,10 +1,7 @@
 
 package com.rental.rental_management_backend.property.serviceimpl;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,16 +21,14 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyResponse;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.PropertyManager;
-import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
-import com.rental.rental_management_backend.property.enums.UnitStatus;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
-import com.rental.rental_management_backend.property.repository.UnitRepository;
 import com.rental.rental_management_backend.property.service.PropertyService;
 import com.rental.rental_management_backend.s3.service.S3Service;
 
@@ -44,7 +39,6 @@ public class PropertyServiceImpl implements PropertyService {
 	private final PropertyRepository propertyRepository;
 	private final UserRepository userRepository;
 	private final PropertyManagerRepository propertyManagerRepository;
-	private final UnitRepository unitRepository;
 	private final PropertyNotificationDispatcher notificationDispatcher;
 	private final S3Service s3Service;
 	private final com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService;
@@ -54,7 +48,6 @@ public class PropertyServiceImpl implements PropertyService {
 	        PropertyRepository propertyRepository,
 	        UserRepository userRepository,
 	        PropertyManagerRepository propertyManagerRepository,
-	        UnitRepository unitRepository,
 	        PropertyNotificationDispatcher notificationDispatcher,
 	        S3Service s3Service,
 	        com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService,
@@ -63,7 +56,6 @@ public class PropertyServiceImpl implements PropertyService {
 	    this.propertyRepository = propertyRepository;
 	    this.userRepository = userRepository;
 	    this.propertyManagerRepository = propertyManagerRepository;
-	    this.unitRepository = unitRepository;
 	    this.notificationDispatcher = notificationDispatcher;
 	    this.s3Service = s3Service;
 	    this.propertyDocumentService = propertyDocumentService;
@@ -228,7 +220,7 @@ private String toPublicImageUrl(String imageUrl) {
 
     @Override
     @Transactional(readOnly = true)
-    public PropertyResponse getPublicPropertyById(Long propertyId) {
+    public PublicPropertyResponse getPublicPropertyById(Long propertyId) {
 
         Property property =
                 propertyRepository
@@ -246,7 +238,7 @@ private String toPublicImageUrl(String imageUrl) {
             );
         }
 
-        return convertToResponse(property);
+        return toPublicResponse(property);
     }
 
     @Override
@@ -730,7 +722,7 @@ private String toPublicImageUrl(String imageUrl) {
     }
     @Override
     @Transactional(readOnly = true)
-    public List<PropertyResponse> searchAvailableProperties(
+    public List<PublicPropertyResponse> searchAvailableProperties(
             String searchQuery,
             String city,
             PropertyType propertyType,
@@ -767,7 +759,8 @@ private String toPublicImageUrl(String imageUrl) {
             );
         }
 
-        List<Property> properties = propertyRepository.searchAvailableProperties(
+        List<PropertyRepository.PublicPropertySearchResult> properties =
+                propertyRepository.searchAvailableProperties(
                 PropertyStatus.AVAILABLE,
                 searchQuery,
                 city,
@@ -779,41 +772,35 @@ private String toPublicImageUrl(String imageUrl) {
                 bedrooms
         );
 
-        if (properties.isEmpty()) {
-            return List.of();
-        }
-
-        List<Long> propertyIds = properties.stream()
-                .map(Property::getPropertyId)
-                .toList();
-
-        Map<Long, List<Unit>> vacantUnitsByProperty = unitRepository
-                .findByPropertyIdsAndStatus(propertyIds, UnitStatus.VACANT)
-                .stream()
-                .collect(Collectors.groupingBy(
-                        unit -> unit.getFloor().getBuilding().getProperty().getPropertyId()));
-
         return properties.stream()
-                .map(property -> {
-                    PropertyResponse response = convertToResponse(property);
-                    if (property.getPropertyType() != PropertyType.HOUSE
-                            && property.getPropertyType() != PropertyType.VILLA) {
-                        List<Unit> vacantUnits = vacantUnitsByProperty.getOrDefault(
-                                property.getPropertyId(), List.of());
-                        response.setMonthlyRent(vacantUnits.stream()
-                                .map(Unit::getMonthlyRent)
-                                .filter(value -> value != null && value.signum() > 0)
-                                .min(BigDecimal::compareTo)
-                                .orElse(null));
-                        response.setSecurityDeposit(vacantUnits.stream()
-                                .map(Unit::getSecurityDeposit)
-                                .filter(value -> value != null && value.signum() > 0)
-                                .min(BigDecimal::compareTo)
-                                .orElse(null));
-                    }
-                    return response;
-                })
+                .map(result -> toPublicResponse(
+                        result.getProperty(),
+                        toPublicImageUrl(result.getImageUrl())))
                 .toList();
+    }
+
+    private PublicPropertyResponse toPublicResponse(Property property) {
+        return toPublicResponse(property, null);
+    }
+
+    private PublicPropertyResponse toPublicResponse(
+            Property property,
+            String imageUrl) {
+        return new PublicPropertyResponse(
+                property.getPropertyId(),
+                property.getPropertyName(),
+                property.getPropertyType(),
+                property.getDescription(),
+                property.getMonthlyRent(),
+                property.getSecurityDeposit(),
+                property.getTotalArea(),
+                property.getBedrooms(),
+                property.getBathrooms(),
+                property.getFurnishingStatus(),
+                property.getParkingAvailable(),
+                property.getYearBuilt(),
+                property.getStatus(),
+                imageUrl);
     }
     private String normalize(String value) {
 

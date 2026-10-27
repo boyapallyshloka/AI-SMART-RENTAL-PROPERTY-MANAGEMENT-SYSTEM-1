@@ -147,7 +147,8 @@ export const getMaintenanceRequestById = async (id) => {
  * POST /api/maintenance
  * Create a new maintenance request (Tenant only)
  * Consumes: multipart/form-data
- * Expects FormData with propertyId, unitId, category, description, priority, and optional image
+ * Expects FormData with propertyId, category, description, priority, and optional image.
+ * Include unitId for apartment/unit-based rentals; omit it for HOUSE/VILLA rentals.
  */
 export const createMaintenanceRequest = async (formData) => {
   return axiosClient.post('/maintenance', formData)
@@ -178,6 +179,16 @@ export const updateMaintenanceCost = async (ticketId, costData) => {
  */
 export const getMaintenanceWorkers = async () => {
   return axiosClient.get('/maintenance-workers')
+}
+
+/** Create a technician available for maintenance assignments. */
+export const createMaintenanceWorker = async (worker) => {
+  return axiosClient.post('/maintenance-workers', worker)
+}
+
+/** Remove a technician from the maintenance roster. */
+export const deleteMaintenanceWorker = async (workerId) => {
+  return axiosClient.delete(`/maintenance-workers/${workerId}`)
 }
 
 /**

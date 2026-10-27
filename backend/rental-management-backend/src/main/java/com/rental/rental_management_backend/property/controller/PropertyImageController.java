@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rental.rental_management_backend.property.dto.PropertyImageResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyImageResponse;
 import com.rental.rental_management_backend.property.service.PropertyImageService;
 
 @RestController
@@ -83,7 +84,7 @@ public class PropertyImageController {
 
     @GetMapping("/public/{propertyId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<List<PropertyImageResponse>>
+    public ResponseEntity<List<PublicPropertyImageResponse>>
             getPublicImagesByProperty(
                     @PathVariable Long propertyId) {
 

@@ -22,6 +22,51 @@ import {
   Check,
 } from 'lucide-react'
 
+function adaptPublicPropertyDetails(data) {
+  const location = data?.location || {}
+  const address = data?.address || data?.property?.address || {
+    area: location.area,
+    city: location.city,
+    state: location.state,
+  }
+
+  // The public API returns vacant units as a flat list, while the existing
+  // details UI renders them in its Building -> Floor -> Unit layout.
+  const buildingsByName = new Map()
+  for (const availableUnit of Array.isArray(data?.availableUnits) ? data.availableUnits : []) {
+    const buildingName = availableUnit.buildingName || 'Building'
+    const floorKey = availableUnit.floorNumber ?? 'unspecified'
+    if (!buildingsByName.has(buildingName)) {
+      buildingsByName.set(buildingName, { buildingName, floorsByNumber: new Map() })
+    }
+    const building = buildingsByName.get(buildingName)
+    if (!building.floorsByNumber.has(floorKey)) {
+      building.floorsByNumber.set(floorKey, {
+        floor: {
+          floorNumber: availableUnit.floorNumber,
+          floorName: availableUnit.floorNumber != null ? `Floor ${availableUnit.floorNumber}` : 'Floor',
+        },
+        units: [],
+      })
+    }
+    building.floorsByNumber.get(floorKey).units.push({
+      ...availableUnit,
+      status: availableUnit.status || 'VACANT',
+    })
+  }
+
+  const buildings = [...buildingsByName.values()].map((building) => ({
+    building: { buildingName: building.buildingName },
+    floors: [...building.floorsByNumber.values()],
+  }))
+
+  return {
+    ...data,
+    address,
+    buildings: Array.isArray(data?.buildings) ? data.buildings : buildings,
+  }
+}
+
 export default function PropertyDetailsPage({
   property: propFromProps,
   propertyId: propPropertyId,
@@ -70,7 +115,8 @@ export default function PropertyDetailsPage({
     setError(null)
 
     try {
-      const data = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
+      const response = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
+      const data = publicMode ? adaptPublicPropertyDetails(response) : response
       if (data && data.property) {
         setDetails({
           property: data.property,

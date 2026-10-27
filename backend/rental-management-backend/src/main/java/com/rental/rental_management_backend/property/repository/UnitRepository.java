@@ -54,19 +54,6 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             UnitStatus status);
 
     List<Unit> findByStatus(UnitStatus status);
-
-    @Query("""
-        SELECT u
-        FROM Unit u
-        JOIN FETCH u.floor f
-        JOIN FETCH f.building b
-        JOIN FETCH b.property p
-        WHERE b.property.propertyId IN :propertyIds
-          AND u.status = :status
-        """)
-    List<Unit> findByPropertyIdsAndStatus(
-            @Param("propertyIds") List<Long> propertyIds,
-            @Param("status") UnitStatus status);
  
  // M3 Rental Demand Prediction
 
@@ -79,6 +66,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             ON pa.property = b.property
         WHERE LOWER(pa.city) = LOWER(:city)
           AND LOWER(pa.area) = LOWER(:area)
+          AND b.property.propertyType =
+              com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
         """)
     long countUnitsForRentalDemand(
             @Param("city") String city,
@@ -94,6 +83,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             ON pa.property = b.property
         WHERE LOWER(pa.city) = LOWER(:city)
           AND LOWER(pa.area) = LOWER(:area)
+          AND b.property.propertyType =
+              com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
           AND u.status = :status
         """)
     long countUnitsByStatusForRentalDemand(
@@ -111,8 +102,26 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             ON pa.property = b.property
         WHERE LOWER(pa.city) = LOWER(:city)
           AND LOWER(pa.area) = LOWER(:area)
+          AND b.property.propertyType =
+              com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
         """)
     BigDecimal averageMonthlyRentForRentalDemand(
+            @Param("city") String city,
+            @Param("area") String area);
+
+    @Query("""
+        SELECT COUNT(u.monthlyRent)
+        FROM Unit u
+        JOIN u.floor f
+        JOIN f.building b
+        JOIN PropertyAddress pa
+            ON pa.property = b.property
+        WHERE LOWER(pa.city) = LOWER(:city)
+          AND LOWER(pa.area) = LOWER(:area)
+          AND b.property.propertyType =
+              com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
+        """)
+    long countPricedUnitsForRentalDemand(
             @Param("city") String city,
             @Param("area") String area);
 }

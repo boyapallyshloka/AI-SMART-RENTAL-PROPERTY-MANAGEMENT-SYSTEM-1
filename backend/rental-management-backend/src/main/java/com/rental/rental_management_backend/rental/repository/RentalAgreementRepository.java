@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -57,6 +59,15 @@ public interface RentalAgreementRepository
     Optional<RentalAgreement>
     findByRentalApplication_ApplicationId(Long applicationId);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        SELECT agreement
+        FROM RentalAgreement agreement
+        WHERE agreement.agreementId = :agreementId
+        """)
+    Optional<RentalAgreement> findByIdForInvoiceCreation(
+            @Param("agreementId") Long agreementId);
+
     @EntityGraph(attributePaths = {
             "rentalApplication",
             "tenant.user",
@@ -81,17 +92,41 @@ public interface RentalAgreementRepository
  // M3 Rental Demand Prediction
 
     @Query("""
-        SELECT COUNT(ra)
+        SELECT COUNT(DISTINCT ra)
         FROM RentalAgreement ra
-        JOIN ra.unit u
-        JOIN u.floor f
-        JOIN f.building b
-        JOIN PropertyAddress pa
-            ON pa.property = b.property
-        WHERE LOWER(pa.city) = LOWER(:city)
-          AND LOWER(pa.area) = LOWER(:area)
+        LEFT JOIN ra.property directProperty
+        LEFT JOIN ra.unit unit
+        LEFT JOIN unit.floor floor
+        LEFT JOIN floor.building building
+        LEFT JOIN building.property unitProperty
+        LEFT JOIN PropertyAddress directAddress
+            ON directAddress.property = directProperty
+        LEFT JOIN PropertyAddress unitAddress
+            ON unitAddress.property = unitProperty
+        WHERE (
+              (
+                  directProperty.propertyType IN (
+                      com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
+                      com.rental.rental_management_backend.property.enums.PropertyType.VILLA
+                  )
+                  AND LOWER(directAddress.city) = LOWER(:city)
+                  AND LOWER(directAddress.area) = LOWER(:area)
+              )
+              OR
+              (
+                  unitProperty.propertyType =
+                      com.rental.rental_management_backend.property.enums.PropertyType.APARTMENT
+                  AND LOWER(unitAddress.city) = LOWER(:city)
+                  AND LOWER(unitAddress.area) = LOWER(:area)
+              )
+        )
           AND ra.startDate >= :startDate
           AND ra.startDate < :endDate
+          AND ra.status IN (
+              com.rental.rental_management_backend.rental.enums.AgreementStatus.ACTIVE,
+              com.rental.rental_management_backend.rental.enums.AgreementStatus.EXPIRED,
+              com.rental.rental_management_backend.rental.enums.AgreementStatus.TERMINATED
+          )
         """)
     long countAgreementStartsForRentalDemand(
             @Param("city") String city,

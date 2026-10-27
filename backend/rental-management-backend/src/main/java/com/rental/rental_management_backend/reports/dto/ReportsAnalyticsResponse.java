@@ -26,7 +26,13 @@ public record ReportsAnalyticsResponse(
             BigDecimal recordedExpenses,
             BigDecimal maintenanceCost,
             BigDecimal estimatedNetIncome,
-            long maintenanceRequests) {
+            long maintenanceRequests,
+            long totalDirectProperties,
+            long occupiedDirectProperties,
+            long vacantDirectProperties,
+            long totalRentableInventory,
+            long occupiedRentableInventory,
+            BigDecimal rentableInventoryOccupancyRatePercent) {
     }
 
     public record PropertyIncome(
@@ -39,7 +45,13 @@ public record ReportsAnalyticsResponse(
             long totalUnits,
             long occupiedUnits,
             long vacantUnits,
-            BigDecimal occupancyRatePercent) {
+            BigDecimal occupancyRatePercent,
+            long totalDirectProperties,
+            long occupiedDirectProperties,
+            long vacantDirectProperties,
+            long totalRentableInventory,
+            long occupiedRentableInventory,
+            BigDecimal rentableInventoryOccupancyRatePercent) {
     }
 
     public record MonthlyTrend(YearMonth month, BigDecimal incomeCollected) {

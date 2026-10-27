@@ -19,7 +19,6 @@ public class MaintenanceRequestRequest {
     @NotNull(message = "Property ID is required")
     private Long propertyId;
 
-    @NotNull(message = "Unit ID is required")
     private Long unitId;
 
     @NotNull(message = "Maintenance category is required")

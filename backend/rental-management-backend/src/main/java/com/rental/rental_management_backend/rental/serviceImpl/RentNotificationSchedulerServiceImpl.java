@@ -1,9 +1,15 @@
 
 package com.rental.rental_management_backend.rental.serviceImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +21,13 @@ import com.rental.rental_management_backend.email.EmailService;
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
 import com.rental.rental_management_backend.notification.enums.NotificationType;
 import com.rental.rental_management_backend.notification.service.NotificationService;
+import com.rental.rental_management_backend.payment.enums.PaymentStatus;
+import com.rental.rental_management_backend.payment.repository.PaymentRepository;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
 import com.rental.rental_management_backend.rental.enums.InvoiceStatus;
 import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
+import com.rental.rental_management_backend.rental.service.RentInvoiceLateFeeCalculator;
+import com.rental.rental_management_backend.rental.service.RentInvoicePdfService;
 import com.rental.rental_management_backend.rental.service.RentNotificationSchedulerService;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
 import com.rental.rental_management_backend.tenant.repository.TenantRepository;
@@ -26,7 +36,16 @@ import com.rental.rental_management_backend.tenant.repository.TenantRepository;
 public class RentNotificationSchedulerServiceImpl
         implements RentNotificationSchedulerService {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(RentNotificationSchedulerServiceImpl.class);
+
+    private final EntityManager entityManager;
+
     private final RentInvoiceRepository rentInvoiceRepository;
+
+    private final RentInvoicePdfService rentInvoicePdfService;
+
+    private final PaymentRepository paymentRepository;
 
     private final TenantRepository tenantRepository;
 
@@ -37,14 +56,25 @@ public class RentNotificationSchedulerServiceImpl
     private final UserAuthEmailDispatcher userAuthEmailDispatcher;
 
     public RentNotificationSchedulerServiceImpl(
+            EntityManager entityManager,
             RentInvoiceRepository rentInvoiceRepository,
+            RentInvoicePdfService rentInvoicePdfService,
+            PaymentRepository paymentRepository,
             TenantRepository tenantRepository,
             NotificationService notificationService,
             EmailService emailService,
             UserAuthEmailDispatcher userAuthEmailDispatcher) {
 
+        this.entityManager = entityManager;
+
         this.rentInvoiceRepository =
                 rentInvoiceRepository;
+
+        this.rentInvoicePdfService =
+                rentInvoicePdfService;
+
+        this.paymentRepository =
+                paymentRepository;
 
         this.tenantRepository =
                 tenantRepository;
@@ -73,14 +103,14 @@ public class RentNotificationSchedulerServiceImpl
     // =========================================================
 
     @Override
-    @Scheduled(
-            cron = "0 0 9 * * *",
-            zone = "Asia/Kolkata"
-    )
+   @Scheduled(
+    cron = "0 0 9 * * *",
+    zone = "Asia/Kolkata"
+)
     @Transactional
     public void processRentNotifications() {
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = RentInvoiceLateFeeCalculator.currentDate();
 
         List<RentInvoice> invoices =
                 rentInvoiceRepository.findAll();
@@ -130,7 +160,7 @@ public class RentNotificationSchedulerServiceImpl
 
             if (invoice.getDueDate().isBefore(today)) {
 
-                processOverdueInvoice(invoice);
+                processOverdueInvoice(invoice, today);
             }
         }
     }
@@ -192,45 +222,73 @@ public class RentNotificationSchedulerServiceImpl
     // =========================================================
 
     private void processOverdueInvoice(
-            RentInvoice invoice) {
+            RentInvoice invoice,
+            LocalDate currentDate) {
 
-        // -----------------------------------------------------
-        // If already OVERDUE, don't send another notification.
-        // -----------------------------------------------------
+        entityManager.refresh(invoice, LockModeType.PESSIMISTIC_WRITE);
 
-        if (invoice.getStatus() == InvoiceStatus.OVERDUE) {
-            return;
-        }
-
-        // -----------------------------------------------------
-        // Only PENDING and PARTIALLY_PAID invoices
-        // can become OVERDUE.
-        // -----------------------------------------------------
-
-        if (invoice.getStatus() != InvoiceStatus.PENDING
-                && invoice.getStatus()
-                        != InvoiceStatus.PARTIALLY_PAID) {
+        InvoiceStatus currentStatus = invoice.getStatus();
+        if (currentStatus != InvoiceStatus.PENDING
+                && currentStatus != InvoiceStatus.PARTIALLY_PAID
+                && currentStatus != InvoiceStatus.OVERDUE) {
 
             return;
         }
 
-        // -----------------------------------------------------
-        // Change invoice status
-        // -----------------------------------------------------
+        BigDecimal successfulPayments =
+                paymentRepository.sumAmountByInvoiceIdAndPaymentStatus(
+                        invoice.getInvoiceId(),
+                        PaymentStatus.SUCCESS);
+        successfulPayments = successfulPayments == null
+                ? BigDecimal.ZERO
+                : successfulPayments;
 
-        invoice.setStatus(
-                InvoiceStatus.OVERDUE
-        );
+        BigDecimal currentTotal = invoice.getTotalAmount();
+        if (currentTotal != null
+                && successfulPayments.compareTo(currentTotal) >= 0) {
+            invoice.setStatus(InvoiceStatus.PAID);
+            rentInvoiceRepository.saveAndFlush(invoice);
+            return;
+        }
 
-        rentInvoiceRepository.save(
-                invoice
-        );
+        boolean newlyOverdue = currentStatus != InvoiceStatus.OVERDUE;
 
-        // -----------------------------------------------------
-        // Send overdue notification
-        // -----------------------------------------------------
+        if (newlyOverdue) {
+            invoice.setStatus(InvoiceStatus.OVERDUE);
+        }
 
-        notifyRentOverdue(invoice);
+        rentInvoiceRepository.saveAndFlush(invoice);
+
+        if (newlyOverdue) {
+            regenerateInvoicePdfSafely(invoice);
+        }
+
+        if (newlyOverdue) {
+            notifyRentOverdue(invoice);
+        }
+    }
+
+    private void regenerateInvoicePdfSafely(RentInvoice invoice) {
+        String updatedInvoiceDocument;
+        try {
+            updatedInvoiceDocument =
+                    rentInvoicePdfService.generateInvoicePdf(invoice);
+            if (updatedInvoiceDocument == null
+                    || updatedInvoiceDocument.isBlank()) {
+                throw new IllegalStateException(
+                        "Invoice PDF generation returned an empty document reference");
+            }
+        } catch (RuntimeException exception) {
+            logger.error(
+                    "Failed to regenerate PDF for overdue rent invoice {}. "
+                            + "Financial changes were saved; the existing invoice document was retained.",
+                    invoice.getInvoiceId(),
+                    exception);
+            return;
+        }
+
+        invoice.setInvoiceDocument(updatedInvoiceDocument);
+        rentInvoiceRepository.save(invoice);
     }
 
     // =========================================================

@@ -22,6 +22,9 @@ import com.rental.rental_management_backend.property.dto.PropertyAddressResponse
 import com.rental.rental_management_backend.property.dto.PropertyDetailsResponse;
 import com.rental.rental_management_backend.property.dto.PropertyImageResponse;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyDetailsResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyImageResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyResponse;
 import com.rental.rental_management_backend.property.dto.UnitResponse;
 import com.rental.rental_management_backend.property.entity.Amenity;
 import com.rental.rental_management_backend.property.entity.Building;
@@ -32,6 +35,8 @@ import com.rental.rental_management_backend.property.entity.PropertyAmenity;
 import com.rental.rental_management_backend.property.entity.PropertyImage;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
+import com.rental.rental_management_backend.property.enums.PropertyType;
+import com.rental.rental_management_backend.property.enums.UnitStatus;
 import com.rental.rental_management_backend.property.repository.BuildingRepository;
 import com.rental.rental_management_backend.property.repository.FloorRepository;
 import com.rental.rental_management_backend.property.repository.PropertyAddressRepository;
@@ -157,9 +162,108 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public PropertyDetailsResponse getPublicPropertyDetails(Long propertyId) {
+    public PublicPropertyDetailsResponse getPublicPropertyDetails(Long propertyId) {
+        Property property = propertyRepository.findDetailsById(propertyId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + propertyId));
 
-        return getPropertyDetailsForTenant(propertyId);
+        if (property.getStatus() != PropertyStatus.AVAILABLE) {
+            throw new ResourceNotFoundException(
+                    "Property not found or not available for browsing with ID: "
+                            + propertyId);
+        }
+
+        List<PublicPropertyDetailsResponse.AvailableUnit> availableUnits =
+                getPublicAvailableUnits(property);
+
+        List<String> amenities = propertyAmenityRepository
+                .findByProperty(property)
+                .stream()
+                .map(PropertyAmenity::getAmenity)
+                .filter(amenity -> amenity != null)
+                .map(Amenity::getAmenityName)
+                .toList();
+
+        List<PublicPropertyImageResponse> images = propertyImageRepository
+                .findByProperty(property)
+                .stream()
+                .map(this::convertImageToResponse)
+                .map(image -> new PublicPropertyImageResponse(
+                        image.getImageUrl(),
+                        image.getImageType(),
+                        image.getIsPrimary()))
+                .toList();
+
+        PublicPropertyDetailsResponse.PublicLocation location =
+                propertyAddressRepository.findByProperty(property)
+                        .map(address ->
+                                new PublicPropertyDetailsResponse.PublicLocation(
+                                        address.getArea(),
+                                        address.getCity(),
+                                        address.getState()))
+                        .orElse(null);
+
+        return new PublicPropertyDetailsResponse(
+                toPublicPropertyResponse(property),
+                location,
+                availableUnits,
+                amenities,
+                images);
+    }
+
+    private List<PublicPropertyDetailsResponse.AvailableUnit>
+            getPublicAvailableUnits(Property property) {
+        if (property.getPropertyType() == PropertyType.HOUSE
+                || property.getPropertyType() == PropertyType.VILLA) {
+            return List.of();
+        }
+
+        List<Building> buildings = buildingRepository.findByProperty(property);
+        if (buildings.isEmpty()) {
+            return List.of();
+        }
+
+        List<Floor> floors = floorRepository.findByBuildingIn(buildings);
+        if (floors.isEmpty()) {
+            return List.of();
+        }
+
+        return unitRepository.findByFloorIn(floors).stream()
+                .filter(unit -> unit.getStatus() == UnitStatus.VACANT)
+                .map(unit -> {
+                    Floor floor = unit.getFloor();
+                    Building building = floor == null
+                            ? null
+                            : floor.getBuilding();
+                    return new PublicPropertyDetailsResponse.AvailableUnit(
+                            unit.getUnitId(),
+                            unit.getUnitNumber(),
+                            building == null ? null : building.getBuildingName(),
+                            floor == null ? null : floor.getFloorNumber(),
+                            unit.getArea(),
+                            unit.getBedrooms(),
+                            unit.getBathrooms(),
+                            unit.getMonthlyRent(),
+                            unit.getSecurityDeposit());
+                })
+                .toList();
+    }
+
+    private PublicPropertyResponse toPublicPropertyResponse(Property property) {
+        return new PublicPropertyResponse(
+                property.getPropertyId(),
+                property.getPropertyName(),
+                property.getPropertyType(),
+                property.getDescription(),
+                property.getMonthlyRent(),
+                property.getSecurityDeposit(),
+                property.getTotalArea(),
+                property.getBedrooms(),
+                property.getBathrooms(),
+                property.getFurnishingStatus(),
+                property.getParkingAvailable(),
+                property.getYearBuilt(),
+                property.getStatus());
     }
 
     /**

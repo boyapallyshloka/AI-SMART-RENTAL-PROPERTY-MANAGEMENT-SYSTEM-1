@@ -273,6 +273,49 @@ export const resolveImageUrl = (url) => {
   return `${backendBase}${trimmed.startsWith('/') ? '' : '/'}${trimmed}`
 }
 
+const PUBLIC_LOCATION_CACHE_MS = 60_000
+let publicLocationIndex = new Map()
+let publicLocationIndexUpdatedAt = 0
+let publicLocationRequest = null
+
+const rememberPublicLocations = (properties) => {
+  publicLocationIndex = new Map(
+    (Array.isArray(properties) ? properties : [])
+      .map((property) => {
+        const id = property?.propertyId ?? property?.id
+        const rawAddress = property?.address ?? property?.propertyAddress
+        const address = typeof rawAddress === 'string'
+          ? rawAddress.trim()
+          : [rawAddress?.addressLine1, rawAddress?.addressLine2, rawAddress?.area, rawAddress?.city, rawAddress?.state]
+              .filter(Boolean)
+              .join(', ')
+        const city = property?.city || rawAddress?.city || (address ? address.split(',').at(-1).trim() : '')
+        return id == null ? null : [String(id), { address, city, state: property?.state || rawAddress?.state || '' }]
+      })
+      .filter(Boolean)
+  )
+  publicLocationIndexUpdatedAt = Date.now()
+}
+
+const getPublicLocationIndex = async (skipAuthToken) => {
+  if (publicLocationIndex.size && Date.now() - publicLocationIndexUpdatedAt < PUBLIC_LOCATION_CACHE_MS) {
+    return publicLocationIndex
+  }
+  if (!publicLocationRequest) {
+    publicLocationRequest = axiosClient
+      .get('/properties/public', { skipAuthToken })
+      .then((response) => {
+        const properties = Array.isArray(response) ? response : response?.data || []
+        rememberPublicLocations(properties)
+        return publicLocationIndex
+      })
+      .finally(() => {
+        publicLocationRequest = null
+      })
+  }
+  return publicLocationRequest
+}
+
 /**
  * Maps Spring Boot PropertyResponse to the shape expected by UI components
  * Backend fields:
@@ -307,6 +350,13 @@ export const mapBackendPropertyToUi = (prop) => {
     : prop.parking != null
       ? mapParkingAvailableToBackend(prop.parking)
       : null
+  const rawAddress = prop.address || prop.propertyAddress || ''
+  const addressText = typeof rawAddress === 'string'
+    ? rawAddress
+    : [rawAddress.addressLine1, rawAddress.addressLine2, rawAddress.area, rawAddress.city, rawAddress.state]
+        .filter(Boolean)
+        .join(', ')
+  const city = prop.city || rawAddress?.city || (addressText ? addressText.split(',').at(-1).trim() : '')
 
   return {
     ...prop,
@@ -346,9 +396,9 @@ export const mapBackendPropertyToUi = (prop) => {
       prop.propertyManager?.phone ??
       null,
     // Address fields: keep in current fallback/empty state until Phase 4 Address integration
-    address: prop.address || '',
-    city: prop.city || '',
-    state: prop.state || '',
+    address: addressText,
+    city,
+    state: prop.state || rawAddress?.state || '',
     zipCode: prop.zipCode || '',
     // Specs (legacy fields no longer returned by backend Property API)
     bedrooms: prop.bedrooms != null ? Number(prop.bedrooms) : null,
@@ -885,6 +935,7 @@ export const updateManagerAssignedProperty = async (
 export const getPublicProperties = async ({ skipAuthToken = false } = {}) => {
   const response = await axiosClient.get('/properties/public', { skipAuthToken })
   const data = Array.isArray(response) ? response : response?.data || []
+  rememberPublicLocations(data)
   return data.map(mapBackendPropertyToUi)
 }
 
@@ -966,7 +1017,19 @@ export const searchPublicProperties = async (filters = {}, { skipAuthToken = fal
     skipAuthToken,
   })
   const data = Array.isArray(response) ? response : response?.data || []
-  return data.map(mapBackendPropertyToUi)
+  const locations = await getPublicLocationIndex(skipAuthToken)
+  return data.map((property) => {
+    const mapped = mapBackendPropertyToUi(property)
+    const location = locations.get(String(mapped?.propertyId ?? mapped?.id))
+    if (!location) return mapped
+    return {
+      ...mapped,
+      address: mapped.address || location.address,
+      city: mapped.city || location.city,
+      state: mapped.state || location.state,
+      location: mapped.location || location.address || location.city,
+    }
+  })
 }
 
 /**
@@ -981,5 +1044,18 @@ export const searchPublicProperties = async (filters = {}, { skipAuthToken = fal
 export const getPublicPropertyDetails = async (propertyId, { skipAuthToken = false } = {}) => {
   return axiosClient.get(`/properties/public/${propertyId}`, { skipAuthToken })
 }
+
+/** Admin review APIs for properties submitted by their owners. */
+export const submitPropertyForApproval = async (propertyId) =>
+  axiosClient.post(`/owner/properties/${propertyId}/submit-for-approval`)
+
+export const getPendingPropertyApprovals = async () =>
+  axiosClient.get('/admin/properties/pending-approval')
+
+export const getPropertyForAdminReview = async (propertyId) =>
+  axiosClient.get(`/admin/properties/${propertyId}`)
+
+export const approveProperty = async (propertyId) =>
+  axiosClient.patch(`/admin/properties/${propertyId}/approve`)
 
 
