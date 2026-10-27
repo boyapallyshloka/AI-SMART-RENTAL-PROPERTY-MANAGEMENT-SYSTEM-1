@@ -115,8 +115,7 @@ export default function PropertyDetailsPage({
     setError(null)
 
     try {
-      const response = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
-      const data = publicMode ? adaptPublicPropertyDetails(response) : response
+      const data = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
       if (data && data.property) {
         setDetails({
           property: data.property,
