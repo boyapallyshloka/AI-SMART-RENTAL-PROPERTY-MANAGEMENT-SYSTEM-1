@@ -44,7 +44,7 @@ const formatDate = (isoString) => {
   })
 }
 
-export default function PropertyDocumentReviewPage() {
+export default function PropertyDocumentReviewPage({ onDecision } = {}) {
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -106,6 +106,7 @@ export default function PropertyDocumentReviewPage() {
         `Approved ${PROPERTY_DOCUMENT_TYPE_LABELS[approvingDoc.documentType] || approvingDoc.documentType} for property "${approvingDoc.propertyName}".`
       )
       setApprovingDoc(null)
+      await onDecision?.()
     } catch (err) {
       console.error('Failed to approve property document:', err)
       setError(
@@ -144,6 +145,7 @@ export default function PropertyDocumentReviewPage() {
       )
       setRejectingDoc(null)
       setRejectionReason('')
+      await onDecision?.()
     } catch (err) {
       console.error('Failed to reject property document:', err)
       setRejectionError(

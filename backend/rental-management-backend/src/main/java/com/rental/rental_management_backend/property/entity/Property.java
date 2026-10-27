@@ -59,6 +59,22 @@ public class Property {
     @Column(name = "total_area")
     private Double totalArea;
 
+    @PositiveOrZero(message = "Bedrooms cannot be negative")
+    @Column(name = "bedrooms")
+    private Integer bedrooms;
+
+    @PositiveOrZero(message = "Bathrooms cannot be negative")
+    @Column(name = "bathrooms")
+    private Integer bathrooms;
+
+    @PositiveOrZero(message = "Floor number cannot be negative")
+    @Column(name = "floor_number")
+    private Integer floorNumber;
+
+    @PositiveOrZero(message = "Total floors cannot be negative")
+    @Column(name = "total_floors")
+    private Integer totalFloors;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "furnishing_status", length = 30)
     private FurnishingStatus furnishingStatus;
@@ -74,6 +90,9 @@ public class Property {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
     private PropertyStatus status = PropertyStatus.DRAFT;
+
+    @Column(name = "submitted_for_approval", nullable = false, columnDefinition = "boolean not null default false")
+    private boolean submittedForApproval;
 
     // Property owner
     @ManyToOne(fetch = FetchType.EAGER)
@@ -165,6 +184,38 @@ public class Property {
         this.totalArea = totalArea;
     }
 
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(Integer floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public Integer getTotalFloors() {
+        return totalFloors;
+    }
+
+    public void setTotalFloors(Integer totalFloors) {
+        this.totalFloors = totalFloors;
+    }
+
     public FurnishingStatus getFurnishingStatus() {
         return furnishingStatus;
     }
@@ -195,6 +246,14 @@ public class Property {
 
     public void setStatus(PropertyStatus status) {
         this.status = status;
+    }
+
+    public boolean isSubmittedForApproval() {
+        return submittedForApproval;
+    }
+
+    public void setSubmittedForApproval(boolean submittedForApproval) {
+        this.submittedForApproval = submittedForApproval;
     }
 
     public User getOwner() {

@@ -23,6 +23,14 @@ public class PropertyResponse {
 
     private Double totalArea;
 
+    private Integer bedrooms;
+
+    private Integer bathrooms;
+
+    private Integer floorNumber;
+
+    private Integer totalFloors;
+
     private FurnishingStatus furnishingStatus;
 
     private Boolean parkingAvailable;
@@ -30,6 +38,8 @@ public class PropertyResponse {
     private Integer yearBuilt;
 
     private PropertyStatus status;
+
+    private boolean submittedForApproval;
 
     private Long ownerId;
 
@@ -106,6 +116,38 @@ public class PropertyResponse {
         this.totalArea = totalArea;
     }
 
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(Integer floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public Integer getTotalFloors() {
+        return totalFloors;
+    }
+
+    public void setTotalFloors(Integer totalFloors) {
+        this.totalFloors = totalFloors;
+    }
+
     public FurnishingStatus getFurnishingStatus() {
         return furnishingStatus;
     }
@@ -136,6 +178,14 @@ public class PropertyResponse {
 
     public void setStatus(PropertyStatus status) {
         this.status = status;
+    }
+
+    public boolean isSubmittedForApproval() {
+        return submittedForApproval;
+    }
+
+    public void setSubmittedForApproval(boolean submittedForApproval) {
+        this.submittedForApproval = submittedForApproval;
     }
 
     public Long getOwnerId() {

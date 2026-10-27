@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
+import PublicLayout from '../../layouts/PublicLayout'
 import PropertyDetailsSection from '../../components/properties/PropertyDetailsSection'
-import { getPublicPropertyDetails, resolveImageUrl } from '../../api/propertyApi'
+import { getPublicPropertyDetails as getPublicDetails } from '../../api/publicPropertyApi'
+import { getPublicPropertyDetails as getTenantDetails } from '../../api/propertyApi'
+import { resolveImageUrl } from '../../api/propertyApi'
+import { useAuth } from '../../context/AuthContext'
+import { isTenant } from '../../utils/roles'
 import {
   ArrowLeft,
   MapPin,
@@ -17,17 +22,67 @@ import {
   Check,
 } from 'lucide-react'
 
+function adaptPublicPropertyDetails(data) {
+  const location = data?.location || {}
+  const address = data?.address || data?.property?.address || {
+    area: location.area,
+    city: location.city,
+    state: location.state,
+  }
+
+  // The public API returns vacant units as a flat list, while the existing
+  // details UI renders them in its Building -> Floor -> Unit layout.
+  const buildingsByName = new Map()
+  for (const availableUnit of Array.isArray(data?.availableUnits) ? data.availableUnits : []) {
+    const buildingName = availableUnit.buildingName || 'Building'
+    const floorKey = availableUnit.floorNumber ?? 'unspecified'
+    if (!buildingsByName.has(buildingName)) {
+      buildingsByName.set(buildingName, { buildingName, floorsByNumber: new Map() })
+    }
+    const building = buildingsByName.get(buildingName)
+    if (!building.floorsByNumber.has(floorKey)) {
+      building.floorsByNumber.set(floorKey, {
+        floor: {
+          floorNumber: availableUnit.floorNumber,
+          floorName: availableUnit.floorNumber != null ? `Floor ${availableUnit.floorNumber}` : 'Floor',
+        },
+        units: [],
+      })
+    }
+    building.floorsByNumber.get(floorKey).units.push({
+      ...availableUnit,
+      status: availableUnit.status || 'VACANT',
+    })
+  }
+
+  const buildings = [...buildingsByName.values()].map((building) => ({
+    building: { buildingName: building.buildingName },
+    floors: [...building.floorsByNumber.values()],
+  }))
+
+  return {
+    ...data,
+    address,
+    buildings: Array.isArray(data?.buildings) ? data.buildings : buildings,
+  }
+}
+
 export default function PropertyDetailsPage({
   property: propFromProps,
   propertyId: propPropertyId,
   onBack,
   onSelectSimilar,
+  publicMode = false,
 }) {
-  const { id: routeId } = useParams()
+  const { id: routeId, propertyId: publicRouteId } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { user } = useAuth()
+  const isUserTenant = !publicMode && Boolean(user && isTenant(user.role))
+  const PageLayout = publicMode ? PublicLayout : DashboardLayout
 
   // Target property ID from route param or props
-  const activeId = propPropertyId || routeId || propFromProps?.propertyId || propFromProps?.id
+  const activeId = propPropertyId || routeId || publicRouteId || propFromProps?.propertyId || propFromProps?.id
 
   // State
   const [details, setDetails] = useState(
@@ -45,6 +100,7 @@ export default function PropertyDetailsPage({
   const [error, setError] = useState(null)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [copiedLink, setCopiedLink] = useState(false)
+  const requestedIdRef = useRef(null)
 
   // Fetch real property details from backend
   const loadDetails = useCallback(async () => {
@@ -59,7 +115,8 @@ export default function PropertyDetailsPage({
     setError(null)
 
     try {
-      const data = await getPublicPropertyDetails(activeId)
+      const response = await (publicMode ? getPublicDetails : getTenantDetails)(activeId)
+      const data = publicMode ? adaptPublicPropertyDetails(response) : response
       if (data && data.property) {
         setDetails({
           property: data.property,
@@ -84,10 +141,12 @@ export default function PropertyDetailsPage({
     } finally {
       setIsLoading(false)
     }
-  }, [activeId, propFromProps])
+  }, [activeId, propFromProps, publicMode])
 
   useEffect(() => {
     setActiveImageIndex(0)
+    if (requestedIdRef.current === activeId) return
+    requestedIdRef.current = activeId
     loadDetails()
   }, [loadDetails, activeId])
 
@@ -117,8 +176,36 @@ export default function PropertyDetailsPage({
     if (onBack) {
       onBack()
     } else {
-      navigate('/tenant/properties')
+      if (publicMode) {
+        navigate('/#property-listings', {
+          state: { publicFilters: location.state?.publicFilters },
+        })
+      } else {
+        navigate('/tenant/properties')
+      }
     }
+  }
+
+  const handleApply = (unitId) => {
+    const propertyId = property.propertyId || activeId
+    const requestedUnitId = unitId || new URLSearchParams(location.search).get('unitId')
+    const query = new URLSearchParams({ propertyId: String(propertyId) })
+    if (requestedUnitId) query.set('unitId', requestedUnitId)
+    const applicationPath = `/tenant/applications/new?${query.toString()}`
+
+    if (!user) {
+      navigate('/login', {
+        state: {
+          from: {
+            pathname: '/tenant/applications/new',
+            search: `?${query.toString()}`,
+          },
+        },
+      })
+      return
+    }
+
+    navigate(applicationPath)
   }
 
   const handleShare = () => {
@@ -159,7 +246,7 @@ export default function PropertyDetailsPage({
   // ---------------------------------------------------------------------------
   if (isLoading) {
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-screen space-y-6 pb-20 animate-pulse">
           {/* Top Bar Skeleton */}
           <div className="flex items-center justify-between py-2 border-b border-[#D9E0E6]">
@@ -195,7 +282,7 @@ export default function PropertyDetailsPage({
             </div>
           </div>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
@@ -207,7 +294,7 @@ export default function PropertyDetailsPage({
     const is404 = error.isNotFound || error.status === 404
 
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto">
           {is403 ? (
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6] mb-4">
@@ -233,9 +320,13 @@ export default function PropertyDetailsPage({
 
           <p className="text-sm text-[#5B6875] mt-2 leading-relaxed">
             {is403
-              ? "You do not currently have permission to access this property's full details. Please ensure you are logged in with the appropriate tenant account or try again."
+              ? publicMode
+                ? 'The public property details endpoint is not available to guests. The backend must allow unauthenticated GET access to published property details.'
+                : "You do not currently have permission to access this property's full details. Please ensure you are logged in with the appropriate tenant account or try again."
               : is404
               ? 'The rental property you requested does not exist or may have been removed by its owner.'
+              : error.status === 401 || error.status === 403
+              ? `The public property details endpoint returned ${error.status}. The backend must allow unauthenticated GET access to published property details.`
               : error.message || 'An unexpected error occurred while communicating with the server.'}
           </p>
 
@@ -260,7 +351,7 @@ export default function PropertyDetailsPage({
             </button>
           </div>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
@@ -269,7 +360,7 @@ export default function PropertyDetailsPage({
   // ---------------------------------------------------------------------------
   if (!details || !details.property) {
     return (
-      <DashboardLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
+      <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] mb-3">
             <Building2 className="h-7 w-7" />
@@ -287,19 +378,19 @@ export default function PropertyDetailsPage({
             <span>Browse Properties</span>
           </button>
         </div>
-      </DashboardLayout>
+      </PageLayout>
     )
   }
 
   const { property, address, amenities, buildings } = details
 
   return (
-    <DashboardLayout
+    <PageLayout
       defaultRole="tenant"
       activeItem="find-properties"
       pageTitle={property.propertyName || 'Property Details'}
     >
-      <div className="min-h-screen space-y-6 pb-20">
+      <div className={`${publicMode ? 'mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8' : 'min-h-screen pb-20'} space-y-6`}>
         {/* 1. Navigation Top Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 py-2 border-b border-[#D9E0E6]">
           <button
@@ -350,7 +441,7 @@ export default function PropertyDetailsPage({
           {imageList.length > 0 ? (
             <>
               {/* Main Display Image */}
-              <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] shadow-2xs">
+              <div className="relative aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full overflow-hidden rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] shadow-sm">
                 <img
                   src={imageList[activeImageIndex] || imageList[0]}
                   alt={`${property.propertyName} preview`}
@@ -393,7 +484,7 @@ export default function PropertyDetailsPage({
             </>
           ) : (
             /* Clean placeholder when no images are uploaded */
-            <div className="aspect-[16/9] md:aspect-[21/9] w-full rounded-lg bg-[#F7F8FA] border-2 border-dashed border-[#D9E0E6] flex flex-col items-center justify-center text-center p-6 space-y-2">
+            <div className="aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full rounded-xl bg-[#F7F8FA] border-2 border-dashed border-[#D9E0E6] flex flex-col items-center justify-center text-center p-6 space-y-2">
               <div className="p-4 rounded-full bg-[#EAF2F7] text-[#315A7D]">
                 <Building className="w-8 h-8" />
               </div>
@@ -417,7 +508,7 @@ export default function PropertyDetailsPage({
               onSelectUnit={(unit) => {
                 const propId = property.propertyId || activeId
                 const unitId = unit.unitId || unit.id
-                navigate(`/tenant/applications/new?propertyId=${propId}&unitId=${unitId}`)
+                handleApply(unitId)
               }}
             />
           </div>
@@ -437,7 +528,9 @@ export default function PropertyDetailsPage({
                   {property.propertyName}
                 </h3>
                 <p className="text-xs text-[#5B6875]">
-                  Unit-level pricing, layouts, and availability are listed under Buildings & Units below.
+                  {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase())
+                    ? 'Rental details and home specifications for this property.'
+                    : 'Unit-level pricing, layouts, and availability are listed under Buildings & Units below.'}
                 </p>
               </div>
 
@@ -458,6 +551,37 @@ export default function PropertyDetailsPage({
                     <span className="font-semibold text-[#243447]">
                       {property.totalArea.toLocaleString('en-IN')} sq ft
                     </span>
+                  </div>
+                )}
+
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.monthlyRent != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Monthly Rent</span>
+                    <span className="font-semibold text-[#315A7D]">₹{Number(property.monthlyRent).toLocaleString('en-IN')} / mo</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.securityDeposit != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Security Deposit</span>
+                    <span className="font-semibold text-[#243447]">₹{Number(property.securityDeposit).toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bedrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bedrooms / BHK</span>
+                    <span className="font-semibold text-[#243447]">{property.bedrooms} BHK</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bathrooms != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Bathrooms</span>
+                    <span className="font-semibold text-[#243447]">{property.bathrooms}</span>
+                  </div>
+                )}
+                {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.totalFloors != null && (
+                  <div className="flex items-center justify-between py-1">
+                    <span>Total Floors</span>
+                    <span className="font-semibold text-[#243447]">{property.totalFloors}</span>
                   </div>
                 )}
 
@@ -486,7 +610,7 @@ export default function PropertyDetailsPage({
                   </div>
                 )}
 
-                {property.ownerName && (
+                {isUserTenant && property.ownerName && (
                   <div className="flex items-center justify-between py-1">
                     <span>Property Manager</span>
                     <span className="font-semibold text-[#243447]">{property.ownerName}</span>
@@ -499,8 +623,7 @@ export default function PropertyDetailsPage({
                 <button
                   type="button"
                   onClick={() => {
-                    const propId = property.propertyId || activeId
-                    navigate(`/tenant/applications/new?propertyId=${propId}`)
+                    handleApply()
                   }}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[#315A7D] hover:bg-[#274B68] px-5 py-3 text-sm font-semibold text-white shadow-2xs transition-colors cursor-pointer"
                 >
@@ -525,6 +648,6 @@ export default function PropertyDetailsPage({
         </div>
 
       </div>
-    </DashboardLayout>
+    </PageLayout>
   )
 }

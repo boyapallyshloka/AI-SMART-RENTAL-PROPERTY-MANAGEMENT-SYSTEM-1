@@ -4,6 +4,7 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 import {
   getPropertyDetails,
   getPropertyById,
+  updateProperty,
   deleteProperty,
   updatePropertyStatus,
   submitPropertyForApproval,
@@ -12,6 +13,7 @@ import {
   mapBackendPropertyToUi,
   resolveImageUrl,
 } from '../../api/propertyApi'
+import { predictPropertyRent } from '../../api/aiApi'
 import {
   getAddress,
   createAddress,
@@ -174,6 +176,33 @@ export default function PropertyDetailsPage() {
   const [isUnassignConfirmOpen, setIsUnassignConfirmOpen] = useState(false)
   const [isUnassigningManager, setIsUnassigningManager] = useState(false)
   const [managerActionError, setManagerActionError] = useState(null)
+  const [directRentalForm, setDirectRentalForm] = useState({
+    monthlyRent: '', securityDeposit: '', totalArea: '', yearBuilt: '', bedrooms: '', bathrooms: '', totalFloors: '1',
+  })
+  const [isSavingDirectRental, setIsSavingDirectRental] = useState(false)
+  const [directRentalSaveStatus, setDirectRentalSaveStatus] = useState('')
+  const directRentalSaveTimerRef = React.useRef(null)
+  const directRentalReadyRef = React.useRef(false)
+  const directRentalLatestFormRef = React.useRef(directRentalForm)
+  directRentalLatestFormRef.current = directRentalForm
+  const [directRentalError, setDirectRentalError] = useState(null)
+  const [isPredictingRent, setIsPredictingRent] = useState(false)
+  const [rentPrediction, setRentPrediction] = useState(null)
+  const [rentPredictionError, setRentPredictionError] = useState(null)
+
+  useEffect(() => {
+    if (!property) return
+    setDirectRentalForm({
+      monthlyRent: property.monthlyRent != null ? String(property.monthlyRent) : '',
+      securityDeposit: property.securityDeposit != null ? String(property.securityDeposit) : '',
+      totalArea: property.totalArea != null ? String(property.totalArea) : '',
+      yearBuilt: property.yearBuilt != null ? String(property.yearBuilt) : '',
+      bedrooms: property.bedrooms != null ? String(property.bedrooms) : '',
+      bathrooms: property.bathrooms != null ? String(property.bathrooms) : '',
+      totalFloors: property.totalFloors != null ? String(property.totalFloors) : '1',
+    })
+    directRentalReadyRef.current = true
+  }, [property?.id, property?.monthlyRent, property?.securityDeposit, property?.totalArea, property?.yearBuilt, property?.bedrooms, property?.bathrooms, property?.totalFloors])
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -476,6 +505,29 @@ export default function PropertyDetailsPage() {
     }
   }
 
+  const handleSubmitForApproval = async () => {
+    if (!property?.id || isSubmittingForApproval) return
+    setIsSubmittingForApproval(true)
+    try {
+      const response = await submitPropertyForApproval(property.id)
+      const submitted = response?.data ?? response
+      setProperty((current) => current
+        ? { ...current, status: submitted?.status || 'DRAFT', submittedForApproval: true }
+        : current)
+      setToastMessage('Property submitted for administrator approval.')
+      setTimeout(() => setToastMessage(''), 4000)
+    } catch (err) {
+      console.error(`Failed to submit property ID ${property.id} for approval:`, err)
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          'Could not submit this property. Confirm that the required title deed has been uploaded.'
+      )
+    } finally {
+      setIsSubmittingForApproval(false)
+    }
+  }
+
   const handleStatusChange = async (newStatus) => {
     if (!property?.id || isUpdatingStatus) return
     if (newStatus === property.status) return
@@ -484,30 +536,7 @@ export default function PropertyDetailsPage() {
       return
     }
 
-    const handleSubmitForApproval = async () => {
-      if (!property?.id || isSubmittingForApproval) return
-      setIsSubmittingForApproval(true)
-      try {
-        const response = await submitPropertyForApproval(property.id)
-        const submitted = response?.data ?? response
-        setProperty((current) => current
-          ? { ...current, status: submitted?.status || 'PENDING_APPROVAL' }
-          : current)
-        setToastMessage('Property submitted for administrator approval.')
-        setTimeout(() => setToastMessage(''), 4000)
-      } catch (err) {
-        console.error(`Failed to submit property ID ${property.id} for approval:`, err)
-        alert(
-          err?.response?.data?.message ||
-            err?.message ||
-            'Could not submit this property. Confirm that the required title deed has been uploaded.'
-        )
-      } finally {
-        setIsSubmittingForApproval(false)
-      }
-    }
-
-    if ((newStatus === 'AVAILABLE' || newStatus === 'PUBLISHED') && publishEligibility && !publishEligibility.eligible) {
+    if (newStatus === 'AVAILABLE' && publishEligibility && !publishEligibility.eligible) {
       const reasonList = publishEligibility.reasons?.length
         ? '\n• ' + publishEligibility.reasons.join('\n• ')
         : '\n• Proof of Ownership (Title Deed) must be approved by Super Admin.'
@@ -538,7 +567,7 @@ export default function PropertyDetailsPage() {
       addressLine1: '',
       addressLine2: '',
       area: '',
-      areaType: '',
+      areaType: 'BUILT_UP_AREA',
       city: '',
       state: '',
       country: '',
@@ -569,7 +598,7 @@ export default function PropertyDetailsPage() {
       addressLine1: addressData.addressLine1 || '',
       addressLine2: addressData.addressLine2 || '',
       area: addressData.area || '',
-      areaType: addressData.areaType || '',
+      areaType: addressData.areaType || 'BUILT_UP_AREA',
       city: addressData.city || '',
       state: addressData.state || '',
       country: addressData.country || '',
@@ -1067,6 +1096,118 @@ export default function PropertyDetailsPage() {
     }
   }
 
+  const handleSaveDirectRental = async (form = directRentalForm, { quiet = false } = {}) => {
+    if (!property || isSavingDirectRental) return false
+    const submittedFormSnapshot = JSON.stringify(form)
+    const bedrooms = Number(form.bedrooms)
+    const bathrooms = Number(form.bathrooms)
+    const floorNumber = 0
+    const totalFloors = Number(form.totalFloors)
+    const monthlyRent = Number(form.monthlyRent)
+    const securityDeposit = form.securityDeposit === ''
+      ? 0
+      : Number(form.securityDeposit)
+    const totalArea = Number(form.totalArea)
+    const yearBuilt = Number(form.yearBuilt)
+
+    if (!Number.isFinite(monthlyRent) || monthlyRent <= 0) {
+      if (!quiet) setDirectRentalError('Enter a monthly rent greater than zero.')
+      return false
+    }
+    if (!Number.isInteger(bedrooms) || bedrooms <= 0 || !Number.isInteger(bathrooms) || bathrooms <= 0) {
+      if (!quiet) setDirectRentalError('Enter valid bedroom and bathroom counts to support M1 rent prediction.')
+      return false
+    }
+    if (!Number.isInteger(totalFloors) || totalFloors < 1) {
+      if (!quiet) setDirectRentalError('Enter a valid total floors count.')
+      return false
+    }
+    if (!Number.isFinite(totalArea) || totalArea <= 0) {
+      if (!quiet) setDirectRentalError('Enter a property area greater than zero for rent prediction.')
+      return false
+    }
+    if (!Number.isInteger(yearBuilt) || yearBuilt < 1800 || yearBuilt > new Date().getFullYear()) {
+      if (!quiet) setDirectRentalError('Enter a valid year built for rent prediction.')
+      return false
+    }
+    if (!Number.isFinite(securityDeposit) || securityDeposit < 0) {
+      if (!quiet) setDirectRentalError('Security deposit must be zero or greater.')
+      return false
+    }
+
+    setIsSavingDirectRental(true)
+    if (!quiet) setDirectRentalError(null)
+    setDirectRentalSaveStatus('Saving…')
+    try {
+      await updateProperty(id, {
+        propertyName: property.name,
+        propertyType: property.propertyType,
+        description: property.description,
+        totalArea,
+        bedrooms,
+        bathrooms,
+        floorNumber,
+        totalFloors,
+        furnishingStatus: property.furnishingStatus,
+        parkingAvailable: property.parkingAvailable,
+        yearBuilt,
+        monthlyRent,
+        securityDeposit,
+      })
+      setRentPrediction(null)
+      if (JSON.stringify(directRentalLatestFormRef.current) === submittedFormSnapshot) {
+        setDirectRentalSaveStatus('Saved automatically')
+      } else {
+        setDirectRentalSaveStatus('Saving latest changes…')
+        setTimeout(() => handleSaveDirectRental(directRentalLatestFormRef.current, { quiet: true }), 0)
+      }
+      return true
+    } catch (err) {
+      const message = err?.response?.data?.message || err?.message || 'Could not save rental details.'
+      setDirectRentalSaveStatus('Save failed')
+      if (!quiet) setDirectRentalError(message)
+      return false
+    } finally {
+      setIsSavingDirectRental(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!['HOUSE', 'VILLA'].includes(String(property?.propertyType || property?.type || '').toUpperCase()) || !directRentalReadyRef.current) return undefined
+    if (directRentalSaveTimerRef.current) clearTimeout(directRentalSaveTimerRef.current)
+    setDirectRentalSaveStatus('Unsaved changes')
+    directRentalSaveTimerRef.current = setTimeout(() => {
+      handleSaveDirectRental(directRentalForm, { quiet: true })
+    }, 800)
+    return () => {
+      if (directRentalSaveTimerRef.current) clearTimeout(directRentalSaveTimerRef.current)
+    }
+  }, [directRentalForm, property?.propertyType, property?.type])
+
+  const handlePredictPropertyRent = async () => {
+    if (!property?.id || isPredictingRent) return
+    if (directRentalSaveStatus !== 'Saved automatically') {
+      const saved = await handleSaveDirectRental(directRentalForm)
+      if (!saved) return
+      setDirectRentalSaveStatus('Saved automatically')
+    }
+    setIsPredictingRent(true)
+    setRentPredictionError(null)
+    setRentPrediction(null)
+    try {
+      const response = await predictPropertyRent(property.id)
+      const data = response?.data || response
+      setRentPrediction(data?.predictedRent ?? data?.predicted_rent ?? null)
+      if (data?.predictedRent == null && data?.predicted_rent == null) {
+        setRentPredictionError('The prediction service did not return a rental value.')
+      }
+    } catch (err) {
+      setRentPredictionError(err?.response?.data?.message || err?.message || 'Could not predict rent. Check the saved address and property details.')
+    } finally {
+      setIsPredictingRent(false)
+    }
+  }
+
   const loadImages = async (propertyId) => {
     const targetId = propertyId || id
     if (!targetId) return
@@ -1377,6 +1518,9 @@ export default function PropertyDetailsPage() {
     ? Math.round((occupied / total) * 100)
     : null
   const currentImage = propertyImages[selectedImageIndex] || propertyImages[0] || null
+  const isDirectRentalProperty = ['HOUSE', 'VILLA'].includes(
+    String(property.propertyType || property.type || '').toUpperCase()
+  )
 
   return (
     <DashboardLayout
@@ -1449,18 +1593,20 @@ export default function PropertyDetailsPage() {
             >
               {property.propertyManagerId ? 'Manage PM' : 'Assign Manager'}
             </Button>
-            <Link
-              to={`/owner/buildings/new?propertyId=${id}`}
-              state={{ propertyId: id, propertyName: property.name }}
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+            {!isDirectRentalProperty && (
+              <Link
+                to={`/owner/buildings/new?propertyId=${id}`}
+                state={{ propertyId: id, propertyName: property.name }}
               >
-                Add Building
-              </Button>
-            </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+                >
+                  Add Building
+                </Button>
+              </Link>
+            )}
             <Link to={`/owner/properties/${property.id}/edit`}>
               <Button
                 variant="primary"
@@ -1503,7 +1649,7 @@ export default function PropertyDetailsPage() {
                     aria-label="Change property status"
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    disabled={isUpdatingStatus || property.status === 'PENDING_APPROVAL'}
+                    disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED'}
                     className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
@@ -1513,14 +1659,15 @@ export default function PropertyDetailsPage() {
                       </option>
                     )}
                     {CANONICAL_PROPERTY_STATUSES.map((st) => {
-                      const isPubStatus = st === 'AVAILABLE' || st === 'PUBLISHED'
+                      const isPubStatus = st === 'AVAILABLE'
                       const isLocked =
                         (isPubStatus && publishEligibility && !publishEligibility.eligible) ||
+                        (st === 'OCCUPIED' && property.status !== 'OCCUPIED') ||
                         (st === 'DRAFT' && property.status !== 'DRAFT')
                       return (
                         <option key={st} value={st} disabled={isLocked}>
-                          {st === 'UNDER_MAINTENANCE'
-                            ? 'Maintenance'
+                          {st === 'NOT_AVAILABLE'
+                            ? 'Not available'
                             : st.charAt(0) + st.slice(1).toLowerCase()}
                           {isLocked ? ' (Approval Required)' : ''}
                         </option>
@@ -1537,12 +1684,17 @@ export default function PropertyDetailsPage() {
                 <span className="text-xs text-[#5B6875] font-mono">
                   ID: {property.id}
                 </span>
-                {property.status === 'DRAFT' && (
+                {property.submittedForApproval && (
+                  <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
+                    Pending administrator review
+                  </span>
+                )}
+                {property.status === 'DRAFT' && !property.submittedForApproval && (
                   <Button
                     variant="primary"
                     size="sm"
                     onClick={handleSubmitForApproval}
-                    disabled={isSubmittingForApproval}
+                    disabled={isSubmittingForApproval || property.submittedForApproval}
                   >
                     {isSubmittingForApproval ? 'Submitting…' : 'Submit for approval'}
                   </Button>
@@ -1608,6 +1760,11 @@ export default function PropertyDetailsPage() {
                 {property.totalArea != null ? Number(property.totalArea).toLocaleString() : '—'}
                 <span className="text-xs text-[#5B6875] font-normal"> sq ft</span>
               </p>
+              {isDirectRentalProperty && property.bedrooms != null && (
+                <p className="text-xs text-[#5B6875] mt-0.5">
+                  {property.bedrooms === 0 ? 'Studio' : `${property.bedrooms} BHK`}
+                </p>
+              )}
               {property.yearBuilt && (
                 <p className="text-xs text-[#5B6875] mt-0.5">
                   Year Built: {property.yearBuilt}
@@ -2325,6 +2482,92 @@ export default function PropertyDetailsPage() {
               )}
             </div>
 
+            {isDirectRentalProperty && (
+              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-5">
+                <div className="border-b border-[#D9E0E6] pb-3">
+                  <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                    <Home className="w-4 h-4 text-[#315A7D]" />
+                    Rental Details &amp; M1 Rent Prediction
+                  </h2>
+                  <p className="mt-1 text-xs text-[#5B6875]">
+                    Changes save automatically. For the whole house or villa, its floor is treated as ground level; enter the total number of floors.
+                  </p>
+                </div>
+
+                {directRentalError && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">{directRentalError}</div>
+                )}
+
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[
+                      ['monthlyRent', 'Monthly Rent (₹)', 'number', '1'],
+                      ['securityDeposit', 'Security Deposit (₹)', 'number', '0'],
+                      ['totalArea', 'Property Area (sq ft)', 'number', '1'],
+                      ['yearBuilt', 'Year Built', 'number', '1800'],
+                      ['bedrooms', 'Bedrooms / BHK', 'number', '1'],
+                      ['bathrooms', 'Bathrooms', 'number', '1'],
+                      ['totalFloors', 'Total Floors', 'number', '1'],
+                    ].map(([field, label, type, min]) => (
+                      <label key={field} className="block text-xs font-medium text-[#5B6875]">
+                        {label}
+                        <input
+                          type={type}
+                          min={min}
+                          step={field === 'monthlyRent' || field === 'securityDeposit' ? '0.01' : '1'}
+                          value={directRentalForm[field]}
+                          onChange={(event) => {
+                            setDirectRentalForm((previous) => ({ ...previous, [field]: event.target.value }))
+                            setDirectRentalError(null)
+                          }}
+                          className="mt-1 w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447] outline-none focus:border-[#315A7D]"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                  <Button type="submit" variant="primary" size="sm" disabled={isSavingDirectRental}>
+                    {isSavingDirectRental ? 'Saving…' : 'Save Rental Details'}
+                  </Button>
+                  <p className="text-xs text-[#5B6875]" role="status">
+                    {isSavingDirectRental ? 'Saving…' : directRentalSaveStatus}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-[#C8D8E5] bg-[#F3F8FB] p-4 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-[#243447] flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-[#315A7D]" /> M1 Rent Prediction
+                      </h3>
+                      <p className="mt-1 text-xs text-[#5B6875]">
+                        Uses the saved property address, area, BHK, bathrooms, floor, furnishing, parking, year built, and amenities.
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handlePredictPropertyRent}
+                      disabled={isPredictingRent || isSavingDirectRental}
+                      leftIcon={<Sparkles className="w-3.5 h-3.5" />}
+                    >
+                      {isPredictingRent ? 'Predicting…' : 'Predict Rent'}
+                    </Button>
+                  </div>
+                  {rentPredictionError && <p className="text-xs text-red-700">{rentPredictionError}</p>}
+                  {rentPrediction != null && (
+                    <div className="rounded-lg border border-[#C6DEC8] bg-[#EDF7EE] px-4 py-3">
+                      <p className="text-xs font-medium text-[#2A583B]">Estimated monthly rent</p>
+                      <p className="mt-0.5 text-xl font-bold text-[#243447]">{formatCurrency(rentPrediction)} <span className="text-xs font-medium">/ month</span></p>
+                    </div>
+                  )}
+                  {!addressData && (
+                    <p className="text-xs text-amber-800">Add and save the property address above before requesting a prediction.</p>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Property Specs */}
             <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm">
               <h2 className="text-base font-semibold text-[#243447] mb-4">
@@ -2655,8 +2898,8 @@ export default function PropertyDetailsPage() {
               </p>
             </div>
 
-            {/* Buildings & Structures */}
-            <div id="buildings-section" className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
+            {/* Apartment buildings use the hierarchy; houses and villas rent directly. */}
+            {!isDirectRentalProperty && <div id="buildings-section" className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-[#315A7D]" />
@@ -2848,7 +3091,7 @@ export default function PropertyDetailsPage() {
                   </Link>
                 </div>
               )}
-            </div>
+            </div>}
             {/* Property Documents & Admin Verification Section */}
             <PropertyDocumentsSection
               propertyId={property.id}
@@ -3068,6 +3311,14 @@ export default function PropertyDetailsPage() {
                     {property.totalArea != null ? `${Number(property.totalArea).toLocaleString()} sq ft` : '—'}
                   </span>
                 </div>
+                {isDirectRentalProperty && (
+                  <div className="flex justify-between pt-2">
+                    <span className="text-[#5B6875]">Bedrooms / BHK:</span>
+                    <span className="font-semibold text-[#243447]">
+                      {property.bedrooms != null ? (property.bedrooms === 0 ? 'Studio' : `${property.bedrooms} BHK`) : '—'}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Year Built:</span>
                   <span className="font-semibold text-[#243447]">
@@ -3112,19 +3363,21 @@ export default function PropertyDetailsPage() {
                 >
                   {property.propertyManagerId ? 'Replace Property Manager' : 'Assign Property Manager'}
                 </Button>
-                <Link
-                  to={`/owner/buildings/new?propertyId=${property.id}`}
-                  state={{ propertyId: property.id, propertyName: property.name }}
-                  className="block"
-                >
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+                {!isDirectRentalProperty && (
+                  <Link
+                    to={`/owner/buildings/new?propertyId=${property.id}`}
+                    state={{ propertyId: property.id, propertyName: property.name }}
+                    className="block"
                   >
-                    Add Building ({propertyBuildings.length} active)
-                  </Button>
-                </Link>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+                    >
+                      Add Building ({propertyBuildings.length} active)
+                    </Button>
+                  </Link>
+                )}
                 <Link to={`/owner/properties/${property.id}/edit`} className="block">
                   <Button variant="primary" className="w-full justify-start" leftIcon={<Edit className="w-4 h-4" />}>
                     Edit Listing Details

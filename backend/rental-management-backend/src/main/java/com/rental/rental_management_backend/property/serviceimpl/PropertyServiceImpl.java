@@ -21,6 +21,7 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyResponse;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
@@ -74,9 +75,15 @@ public class PropertyServiceImpl implements PropertyService {
             applyPropertyRentalDetails(property, request, false);
 	    property.setDescription(request.getDescription());
 	    property.setTotalArea(request.getTotalArea());
+	    property.setBedrooms(request.getBedrooms());
+	    property.setBathrooms(request.getBathrooms());
+	    property.setFloorNumber(request.getFloorNumber());
+	    property.setTotalFloors(request.getTotalFloors());
 	    property.setFurnishingStatus(request.getFurnishingStatus());
 	    property.setParkingAvailable(request.getParkingAvailable());
 	    property.setYearBuilt(request.getYearBuilt());
+	    property.setMonthlyRent(request.getMonthlyRent());
+	    property.setSecurityDeposit(request.getSecurityDeposit());
 
 	    // Owner comes from the authenticated JWT user.
 	    property.setOwner(owner);
@@ -122,7 +129,7 @@ public class PropertyServiceImpl implements PropertyService {
         }
 
         if (user.getRole() == RoleType.TENANT) {
-            return propertyRepository.findByStatusIn(List.of(PropertyStatus.AVAILABLE, PropertyStatus.PUBLISHED))
+            return propertyRepository.findByStatusIn(List.of(PropertyStatus.AVAILABLE))
                     .stream()
                     .map(this::convertToResponse)
                     .toList();
@@ -213,7 +220,7 @@ private String toPublicImageUrl(String imageUrl) {
 
     @Override
     @Transactional(readOnly = true)
-    public PropertyResponse getPublicPropertyById(Long propertyId) {
+    public PublicPropertyResponse getPublicPropertyById(Long propertyId) {
 
         Property property =
                 propertyRepository
@@ -224,14 +231,14 @@ private String toPublicImageUrl(String imageUrl) {
                                                 + propertyId
                                 ));
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE && property.getStatus() != PropertyStatus.PUBLISHED) {
+        if (property.getStatus() != PropertyStatus.AVAILABLE) {
 
             throw new RuntimeException(
                     "Property is not available for tenants"
             );
         }
 
-        return convertToResponse(property);
+        return toPublicResponse(property);
     }
 
     @Override
@@ -251,7 +258,7 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
-        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+        if (property.isSubmittedForApproval()) {
             throw new IllegalStateException(
                     "Property details cannot be changed while it is pending administrator review");
         }
@@ -266,11 +273,23 @@ private String toPublicImageUrl(String imageUrl) {
 
         property.setTotalArea(request.getTotalArea());
 
+        property.setBedrooms(request.getBedrooms());
+
+        property.setBathrooms(request.getBathrooms());
+
+        property.setFloorNumber(request.getFloorNumber());
+
+        property.setTotalFloors(request.getTotalFloors());
+
         property.setFurnishingStatus(request.getFurnishingStatus());
 
         property.setParkingAvailable(request.getParkingAvailable());
 
         property.setYearBuilt(request.getYearBuilt());
+
+        property.setMonthlyRent(request.getMonthlyRent());
+
+        property.setSecurityDeposit(request.getSecurityDeposit());
 
         /*
          * Owner and status are intentionally not changed
@@ -298,7 +317,7 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
-        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+        if (property.isSubmittedForApproval()) {
             throw new IllegalStateException(
                     "A property cannot be deleted while it is pending administrator review");
         }
@@ -330,15 +349,13 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
-        if (status == PropertyStatus.PENDING_APPROVAL
-                || status == PropertyStatus.APPROVED) {
-            throw new IllegalArgumentException(
-                    "Use the property submission and administrator approval actions to change this status");
-        }
-
-        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+        if (property.isSubmittedForApproval()) {
             throw new IllegalStateException(
                     "Properties pending administrator review cannot be changed by the owner");
+        }
+        if (status == PropertyStatus.OCCUPIED) {
+            throw new IllegalArgumentException(
+                    "Occupied status is managed by the rental agreement workflow");
         }
         if (property.getStatus() == PropertyStatus.DRAFT
                 && status != PropertyStatus.DRAFT) {
@@ -351,8 +368,15 @@ private String toPublicImageUrl(String imageUrl) {
                     "An approved property cannot be moved back to draft by the owner");
         }
 
-        // Enforce document approval before a property can transition to PUBLISHED or AVAILABLE
-        if (status == PropertyStatus.AVAILABLE || status == PropertyStatus.PUBLISHED) {
+        if (property.getStatus() != PropertyStatus.AVAILABLE
+                && property.getStatus() != PropertyStatus.NOT_AVAILABLE
+                && status != PropertyStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "Only approved properties can be marked available or not available");
+        }
+
+        // Documents must remain approved before an approved listing can be made available.
+        if (status == PropertyStatus.AVAILABLE) {
             propertyDocumentService.validatePropertyPublishEligibility(property);
         }
 
@@ -374,7 +398,7 @@ private String toPublicImageUrl(String imageUrl) {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Property not found or you do not have permission"));
 
-        if (property.getStatus() == PropertyStatus.PENDING_APPROVAL) {
+        if (property.isSubmittedForApproval()) {
             return convertToResponse(property);
         }
         if (property.getStatus() != PropertyStatus.DRAFT) {
@@ -390,7 +414,7 @@ private String toPublicImageUrl(String imageUrl) {
                     "No active administrators are available to review property submissions");
         }
 
-        property.setStatus(PropertyStatus.PENDING_APPROVAL);
+        property.setSubmittedForApproval(true);
         Property submittedProperty = propertyRepository.save(property);
         String ownerName = owner.getFirstName() + " " + owner.getLastName();
         for (User admin : admins) {
@@ -416,7 +440,7 @@ private String toPublicImageUrl(String imageUrl) {
     @Transactional(readOnly = true)
     public List<PropertyResponse> getPendingApprovalProperties() {
         requireAdministrator();
-        return propertyRepository.findByStatus(PropertyStatus.PENDING_APPROVAL)
+        return propertyRepository.findByStatusAndSubmittedForApprovalTrue(PropertyStatus.DRAFT)
                 .stream()
                 .map(this::convertToResponse)
                 .toList();
@@ -439,16 +463,19 @@ private String toPublicImageUrl(String imageUrl) {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Property not found with ID: " + id));
 
-        if (property.getStatus() == PropertyStatus.APPROVED) {
+        if (property.getStatus() == PropertyStatus.AVAILABLE
+                && !property.isSubmittedForApproval()) {
             return convertToResponse(property);
         }
-        if (property.getStatus() != PropertyStatus.PENDING_APPROVAL) {
+        if (property.getStatus() != PropertyStatus.DRAFT
+                || !property.isSubmittedForApproval()) {
             throw new IllegalStateException(
                     "Only properties pending approval can be approved");
         }
 
         propertyDocumentService.validatePropertyPublishEligibility(property);
-        property.setStatus(PropertyStatus.APPROVED);
+        property.setStatus(PropertyStatus.AVAILABLE);
+        property.setSubmittedForApproval(false);
         Property approvedProperty = propertyRepository.save(property);
         notificationService.notifyUserOnce(
                 property.getOwner().getId(),
@@ -457,7 +484,7 @@ private String toPublicImageUrl(String imageUrl) {
                 "Property approved",
                 "Your property \"" + property.getPropertyName() + "\" (ID: "
                         + property.getPropertyId()
-                        + ") has been approved. Status: APPROVED.",
+                        + ") has been approved and is now published and available for rent.",
                 property.getPropertyId(),
                 "PROPERTY",
                 "property-approved-" + property.getPropertyId());
@@ -560,6 +587,14 @@ private String toPublicImageUrl(String imageUrl) {
                 property.getTotalArea()
         );
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
+        response.setFloorNumber(property.getFloorNumber());
+
+        response.setTotalFloors(property.getTotalFloors());
+
         response.setFurnishingStatus(
                 property.getFurnishingStatus()
         );
@@ -572,9 +607,13 @@ private String toPublicImageUrl(String imageUrl) {
                 property.getYearBuilt()
         );
 
+        response.setMonthlyRent(property.getMonthlyRent());
+        response.setSecurityDeposit(property.getSecurityDeposit());
+
         response.setStatus(
                 property.getStatus()
         );
+        response.setSubmittedForApproval(property.isSubmittedForApproval());
 
         if (property.getOwner() != null) {
 
@@ -683,7 +722,7 @@ private String toPublicImageUrl(String imageUrl) {
     }
     @Override
     @Transactional(readOnly = true)
-    public List<PropertyResponse> searchAvailableProperties(
+    public List<PublicPropertyResponse> searchAvailableProperties(
             String searchQuery,
             String city,
             PropertyType propertyType,
@@ -720,7 +759,8 @@ private String toPublicImageUrl(String imageUrl) {
             );
         }
 
-        List<Property> properties = propertyRepository.searchAvailableProperties(
+        List<PropertyRepository.PublicPropertySearchResult> properties =
+                propertyRepository.searchAvailableProperties(
                 PropertyStatus.AVAILABLE,
                 searchQuery,
                 city,
@@ -733,8 +773,34 @@ private String toPublicImageUrl(String imageUrl) {
         );
 
         return properties.stream()
-                .map(this::convertToResponse)
+                .map(result -> toPublicResponse(
+                        result.getProperty(),
+                        toPublicImageUrl(result.getImageUrl())))
                 .toList();
+    }
+
+    private PublicPropertyResponse toPublicResponse(Property property) {
+        return toPublicResponse(property, null);
+    }
+
+    private PublicPropertyResponse toPublicResponse(
+            Property property,
+            String imageUrl) {
+        return new PublicPropertyResponse(
+                property.getPropertyId(),
+                property.getPropertyName(),
+                property.getPropertyType(),
+                property.getDescription(),
+                property.getMonthlyRent(),
+                property.getSecurityDeposit(),
+                property.getTotalArea(),
+                property.getBedrooms(),
+                property.getBathrooms(),
+                property.getFurnishingStatus(),
+                property.getParkingAvailable(),
+                property.getYearBuilt(),
+                property.getStatus(),
+                imageUrl);
     }
     private String normalize(String value) {
 

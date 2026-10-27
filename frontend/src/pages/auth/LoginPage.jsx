@@ -28,6 +28,10 @@ const isDestinationValidForRole = (pathname, role) => {
     return false
   }
 
+  if (pathname === '/properties' || /^\/properties\/[^/]+$/.test(pathname)) {
+    return true
+  }
+
   if (canonicalRole === ROLES.PROPERTY_MANAGER) {
     return pathname.startsWith('/manager/') || pathname === '/manager'
   }
@@ -86,12 +90,13 @@ export default function LoginPage() {
     try {
       const result = await login(email, password)
       if (result.success) {
-        const savedDestination = location.state?.from?.pathname
+        const savedDestination = location.state?.from
+        const savedPathname = savedDestination?.pathname
 
         // Only honor saved destination if it is valid for the authenticated user's role
         const destination =
-          isDestinationValidForRole(savedDestination, result.user.role)
-            ? savedDestination
+          isDestinationValidForRole(savedPathname, result.user.role)
+            ? `${savedPathname}${savedDestination.search || ''}${savedDestination.hash || ''}`
             : getDashboardPath(result.user.role)
 
         navigate(destination, { replace: true })

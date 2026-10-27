@@ -150,6 +150,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findByStatus(PropertyStatus status);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
+    List<Property> findByStatusAndSubmittedForApprovalTrue(PropertyStatus status);
+
+    @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByStatusIn(List<PropertyStatus> statuses);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
@@ -185,9 +188,33 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
      * to the SAME vacant unit.
      */
     @Query("""
-        SELECT DISTINCT p
+        SELECT DISTINCT
+            p AS property,
+            COALESCE(
+                (
+                    SELECT primaryImage.imageUrl
+                    FROM PropertyImage primaryImage
+                    WHERE primaryImage.property = p
+                      AND primaryImage.imageId = (
+                          SELECT MIN(primaryImageId.imageId)
+                          FROM PropertyImage primaryImageId
+                          WHERE primaryImageId.property = p
+                            AND primaryImageId.isPrimary = true
+                      )
+                ),
+                (
+                    SELECT fallbackImage.imageUrl
+                    FROM PropertyImage fallbackImage
+                    WHERE fallbackImage.property = p
+                      AND fallbackImage.imageId = (
+                          SELECT MIN(fallbackImageId.imageId)
+                          FROM PropertyImage fallbackImageId
+                          WHERE fallbackImageId.property = p
+                      )
+                )
+            ) AS imageUrl
         FROM Property p
-        WHERE (p.status = :status OR p.status = com.rental.rental_management_backend.property.enums.PropertyStatus.PUBLISHED)
+        WHERE p.status = :status
 
         AND (
             COALESCE(:searchQuery, '') = ''
@@ -295,7 +322,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         )
         """)
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
-    List<Property> searchAvailableProperties(
+    List<PublicPropertySearchResult> searchAvailableProperties(
 
             @Param("status")
             PropertyStatus status,
@@ -325,6 +352,12 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             Integer bedrooms
     );
 
+    interface PublicPropertySearchResult {
+        Property getProperty();
+
+        String getImageUrl();
+    }
+
     @Query("""
     SELECT new com.rental.rental_management_backend.property.dto.PropertyCardResponse(
         p.propertyId,
@@ -332,8 +365,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         CAST(p.propertyType AS string),
         CAST(p.status AS string),
         p.totalArea,
+        p.bedrooms,
         p.yearBuilt,
-        (SELECT CONCAT(CONCAT(propertyAddress.addressLine1, ', '), propertyAddress.city)
+        (SELECT CONCAT(CONCAT(propertyAddress.area, ', '), propertyAddress.city)
          FROM PropertyAddress propertyAddress
          WHERE propertyAddress.property = p),
         COALESCE(
@@ -360,7 +394,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         p.securityDeposit
     )
     FROM Property p
-    WHERE (p.status = :status OR p.status = com.rental.rental_management_backend.property.enums.PropertyStatus.PUBLISHED)
+    WHERE p.status = :status
     """)
     List<PropertyCardResponse> findAvailablePropertyCards(
             @Param("status") PropertyStatus status);
@@ -383,6 +417,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             CAST(p.propertyType AS string),
             CAST(p.status AS string),
             p.totalArea,
+            p.bedrooms,
             p.yearBuilt,
             (
                 SELECT CONCAT(CONCAT(a.addressLine1, ', '), a.city)

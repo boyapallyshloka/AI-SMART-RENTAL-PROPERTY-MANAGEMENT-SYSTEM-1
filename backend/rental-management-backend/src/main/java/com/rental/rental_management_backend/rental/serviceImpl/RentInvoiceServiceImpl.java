@@ -31,6 +31,7 @@ import com.rental.rental_management_backend.payment.enums.PaymentStatus;
 import com.rental.rental_management_backend.payment.repository.PaymentRepository;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.rental.dto.RentInvoiceLateFeeRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceResponse;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
@@ -170,6 +171,64 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                 billingPeriod,
                 LocalDate.now(),
                 false);
+    }
+
+    @Override
+    @Transactional
+    public RentInvoiceResponse updateLateFee(
+            Long invoiceId,
+            RentInvoiceLateFeeRequest request) {
+
+        User user = getAuthenticatedUser();
+        if (user.getRole() != RoleType.PROPERTY_OWNER
+                && user.getRole() != RoleType.PROPERTY_MANAGER
+                && user.getRole() != RoleType.SUPER_ADMIN) {
+            throw new AccessDeniedException(
+                    "You are not authorized to update invoice late fees");
+        }
+
+        RentInvoice invoice = rentInvoiceRepository
+                .findByIdForUpdate(invoiceId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Invoice not found"));
+
+        if (!hasPropertyAccess(invoice.getRentalAgreement(), user)) {
+            throw new ResourceNotFoundException("Invoice not found");
+        }
+
+        if (invoice.getStatus() == InvoiceStatus.PAID) {
+            throw new IllegalArgumentException(
+                    "Late fee cannot be changed for a paid invoice");
+        }
+
+        invoice.setLateFee(request.getLateFee());
+        invoice.setTotalAmount(
+                invoice.getRentAmount().add(request.getLateFee()));
+        rentInvoiceRepository.saveAndFlush(invoice);
+
+        try {
+            String updatedInvoiceDocument =
+                    rentInvoicePdfService.generateInvoicePdf(invoice);
+            if (updatedInvoiceDocument == null
+                    || updatedInvoiceDocument.isBlank()) {
+                logger.error(
+                        "Invoice PDF regeneration returned an empty document reference "
+                                + "for invoice {}. Financial changes were saved; "
+                                + "the existing invoice document was retained.",
+                        invoiceId);
+            } else {
+                invoice.setInvoiceDocument(updatedInvoiceDocument);
+                rentInvoiceRepository.save(invoice);
+            }
+        } catch (RuntimeException exception) {
+            logger.error(
+                    "Failed to regenerate PDF for invoice {} after manual late-fee update. "
+                            + "Financial changes were saved; the existing invoice document was retained.",
+                    invoiceId,
+                    exception);
+        }
+
+        return mapToResponse(invoice);
     }
 
     @Override
@@ -911,6 +970,13 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         response.setUnitId(
                 invoice.getUnitId()
         );
+
+        if (invoice.getRentalAgreement().getProperty() != null) {
+            response.setPropertyId(
+                    invoice.getRentalAgreement().getProperty().getPropertyId());
+            response.setPropertyName(
+                    invoice.getRentalAgreement().getProperty().getPropertyName());
+        }
 
         response.setBillingMonth(
                 invoice.getBillingMonth()

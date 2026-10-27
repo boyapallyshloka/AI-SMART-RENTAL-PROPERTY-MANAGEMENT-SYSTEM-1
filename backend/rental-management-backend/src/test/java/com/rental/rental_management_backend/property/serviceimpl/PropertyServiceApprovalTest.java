@@ -92,7 +92,7 @@ class PropertyServiceApprovalTest {
     }
 
     @Test
-    void ownerSubmissionMovesDraftToPendingAndNotifiesActiveAdminsOnce() {
+    void ownerSubmissionKeepsDraftStatusFlagsReviewAndNotifiesActiveAdminsOnce() {
         authenticate(owner.getEmail());
         when(userRepository.findByEmail(owner.getEmail())).thenReturn(Optional.of(owner));
         when(propertyRepository.findByPropertyIdAndOwnerForUpdate(72L, owner))
@@ -103,7 +103,8 @@ class PropertyServiceApprovalTest {
 
         PropertyResponse result = propertyService.submitPropertyForApproval(72L);
 
-        assertEquals(PropertyStatus.PENDING_APPROVAL, result.getStatus());
+        assertEquals(PropertyStatus.DRAFT, result.getStatus());
+        org.junit.jupiter.api.Assertions.assertTrue(result.isSubmittedForApproval());
         verify(propertyDocumentService).validatePropertySubmissionEligibility(property);
         verify(notificationService).notifyUserOnce(
                 eq(admin.getId()),
@@ -130,7 +131,8 @@ class PropertyServiceApprovalTest {
     @Test
     void approvalRequiresAdministratorAndApprovedRequiredDocuments() {
         authenticate(admin.getEmail());
-        property.setStatus(PropertyStatus.PENDING_APPROVAL);
+        property.setStatus(PropertyStatus.DRAFT);
+        property.setSubmittedForApproval(true);
         when(userRepository.findByEmail(admin.getEmail())).thenReturn(Optional.of(admin));
         when(propertyRepository.findByPropertyIdForUpdate(72L))
                 .thenReturn(Optional.of(property));
@@ -138,7 +140,8 @@ class PropertyServiceApprovalTest {
 
         PropertyResponse result = propertyService.approveProperty(72L);
 
-        assertEquals(PropertyStatus.APPROVED, result.getStatus());
+        assertEquals(PropertyStatus.AVAILABLE, result.getStatus());
+        org.junit.jupiter.api.Assertions.assertFalse(result.isSubmittedForApproval());
         verify(propertyDocumentService).validatePropertyPublishEligibility(property);
         verify(notificationService).notifyUserOnce(
                 eq(owner.getId()),
@@ -149,6 +152,12 @@ class PropertyServiceApprovalTest {
                 eq(72L),
                 eq("PROPERTY"),
                 eq("property-approved-72"));
+
+        // Repeated approval requests return the published property without a second alert.
+        PropertyResponse repeated = propertyService.approveProperty(72L);
+        assertEquals(PropertyStatus.AVAILABLE, repeated.getStatus());
+        verify(notificationService, org.mockito.Mockito.times(1)).notifyUserOnce(
+                eq(owner.getId()), any(), any(), any(), any(), any(), any(), any());
     }
 
     @Test
@@ -161,7 +170,7 @@ class PropertyServiceApprovalTest {
         assertThrows(AccessDeniedException.class,
                 () -> propertyService.approveProperty(72L));
         assertThrows(IllegalArgumentException.class,
-                () -> propertyService.updatePropertyStatus(72L, PropertyStatus.APPROVED));
+                () -> propertyService.updatePropertyStatus(72L, PropertyStatus.OCCUPIED));
         verify(notificationService, never()).notifyUserOnce(
                 any(), any(), any(), any(), any(), any(), any(), any());
     }
@@ -184,6 +193,25 @@ class PropertyServiceApprovalTest {
     }
 
     @Test
+    void ownerCanToggleAnApprovedPropertyBetweenAvailableAndNotAvailable() {
+        authenticate(owner.getEmail());
+        property.setStatus(PropertyStatus.AVAILABLE);
+        when(userRepository.findByEmail(owner.getEmail())).thenReturn(Optional.of(owner));
+        when(propertyRepository.findByPropertyIdAndOwner(72L, owner))
+                .thenReturn(Optional.of(property));
+        when(propertyRepository.save(property)).thenReturn(property);
+
+        PropertyResponse unavailable = propertyService.updatePropertyStatus(
+                72L, PropertyStatus.NOT_AVAILABLE);
+        assertEquals(PropertyStatus.NOT_AVAILABLE, unavailable.getStatus());
+
+        PropertyResponse available = propertyService.updatePropertyStatus(
+                72L, PropertyStatus.AVAILABLE);
+        assertEquals(PropertyStatus.AVAILABLE, available.getStatus());
+        verify(propertyDocumentService).validatePropertyPublishEligibility(property);
+    }
+
+    @Test
     void ownerCannotEditOrDeleteWhilePropertyIsUnderReview() {
         authenticate(owner.getEmail());
         ownerPropertyPending();
@@ -197,7 +225,8 @@ class PropertyServiceApprovalTest {
     }
 
     private void ownerPropertyPending() {
-        property.setStatus(PropertyStatus.PENDING_APPROVAL);
+        property.setStatus(PropertyStatus.DRAFT);
+        property.setSubmittedForApproval(true);
         when(userRepository.findByEmail(owner.getEmail())).thenReturn(Optional.of(owner));
         when(propertyRepository.findByPropertyIdAndOwner(72L, owner))
                 .thenReturn(Optional.of(property));

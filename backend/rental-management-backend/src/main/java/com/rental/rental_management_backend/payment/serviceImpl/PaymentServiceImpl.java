@@ -44,8 +44,6 @@ import com.rental.rental_management_backend.payment.service.PaymentService;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
 import com.rental.rental_management_backend.rental.enums.InvoiceStatus;
 import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
-import com.rental.rental_management_backend.rental.service.RentInvoiceLateFeeCalculator;
-import com.rental.rental_management_backend.rental.service.RentInvoicePdfService;
 
 import com.rental.rental_management_backend.tenant.entity.Tenant;
 import com.rental.rental_management_backend.tenant.repository.TenantRepository;
@@ -85,8 +83,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final ReceiptService receiptService;
 
-    private final RentInvoicePdfService rentInvoicePdfService;
-
     private final RazorpayClient razorpayClient;
 
     // Notification service
@@ -121,8 +117,6 @@ public class PaymentServiceImpl implements PaymentService {
 
             ReceiptService receiptService,
 
-            RentInvoicePdfService rentInvoicePdfService,
-
             RazorpayClient razorpayClient,
 
             NotificationService notificationService,
@@ -146,8 +140,6 @@ public class PaymentServiceImpl implements PaymentService {
         this.unitRepository = unitRepository;
 
         this.receiptService = receiptService;
-
-        this.rentInvoicePdfService = rentInvoicePdfService;
 
         this.razorpayClient = razorpayClient;
 
@@ -206,10 +198,6 @@ public class PaymentServiceImpl implements PaymentService {
                     "Cancelled invoice cannot be paid");
         }
 
-        BigDecimal previousTotalAmount = invoice.getTotalAmount();
-        boolean invoiceAmountsUpdated =
-                refreshLateFeeBeforePayment(invoice);
-
         BigDecimal alreadyPaid =
                 getSuccessfullyPaidAmount(
                         invoice.getInvoiceId());
@@ -226,22 +214,11 @@ public class PaymentServiceImpl implements PaymentService {
                     "Invoice is already fully paid");
         }
 
-        BigDecimal previousRemainingAmount =
-                previousTotalAmount
-                        .subtract(alreadyPaid)
-                        .setScale(2, RoundingMode.HALF_UP);
-
         BigDecimal requestedAmount =
                 request.getAmount()
                         .setScale(
                                 2,
                                 RoundingMode.HALF_UP);
-
-        // Treat a request for the old full balance as a full-payment request.
-        if (invoiceAmountsUpdated
-                && requestedAmount.compareTo(previousRemainingAmount) == 0) {
-            requestedAmount = remainingAmount;
-        }
 
         if (requestedAmount.compareTo(
                 BigDecimal.ZERO) <= 0) {
@@ -352,10 +329,6 @@ public class PaymentServiceImpl implements PaymentService {
         // Calculate remaining invoice amount
         // --------------------------------------------------------
 
-        BigDecimal previousTotalAmount = invoice.getTotalAmount();
-        boolean invoiceAmountsUpdated =
-                refreshLateFeeBeforePayment(invoice);
-
         BigDecimal alreadyPaid =
                 getSuccessfullyPaidAmount(
                         invoice.getInvoiceId());
@@ -372,22 +345,11 @@ public class PaymentServiceImpl implements PaymentService {
                     "Invoice is already fully paid");
         }
 
-        BigDecimal previousRemainingAmount =
-                previousTotalAmount
-                        .subtract(alreadyPaid)
-                        .setScale(2, RoundingMode.HALF_UP);
-
         BigDecimal requestedAmount =
                 request.getAmount()
                         .setScale(
                                 2,
                                 RoundingMode.HALF_UP);
-
-        // Treat a request for the old full balance as a full-payment request.
-        if (invoiceAmountsUpdated
-                && requestedAmount.compareTo(previousRemainingAmount) == 0) {
-            requestedAmount = remainingAmount;
-        }
 
         if (requestedAmount.compareTo(
                 BigDecimal.ZERO) <= 0) {
@@ -739,8 +701,6 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new RuntimeException(
                         "Invoice is already fully paid");
             }
-
-            refreshLateFeeBeforePayment(invoice);
 
             BigDecimal alreadyPaid =
                     getSuccessfullyPaidAmount(invoice.getInvoiceId());
@@ -1308,43 +1268,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         return paidAmount == null ? BigDecimal.ZERO : paidAmount;
     }
-
-    private boolean refreshLateFeeBeforePayment(RentInvoice invoice) {
-        boolean invoiceAmountsUpdated =
-                RentInvoiceLateFeeCalculator.recalculate(
-                        invoice,
-                        RentInvoiceLateFeeCalculator.currentDate());
-        if (!invoiceAmountsUpdated) {
-            return false;
-        }
-
-        rentInvoiceRepository.saveAndFlush(invoice);
-
-        try {
-            String updatedInvoiceDocument =
-                    rentInvoicePdfService.generateInvoicePdf(invoice);
-            if (updatedInvoiceDocument != null
-                    && !updatedInvoiceDocument.isBlank()) {
-                invoice.setInvoiceDocument(updatedInvoiceDocument);
-                rentInvoiceRepository.save(invoice);
-            } else {
-                logger.error(
-                        "Invoice PDF regeneration returned an empty document reference "
-                                + "for invoice {}. Financial changes were saved; "
-                                + "the existing invoice document was retained.",
-                        invoice.getInvoiceId());
-            }
-        } catch (RuntimeException exception) {
-            logger.error(
-                    "Failed to regenerate PDF for invoice {} during payment preparation. "
-                            + "Financial changes were saved; the existing invoice document was retained.",
-                    invoice.getInvoiceId(),
-                    exception);
-        }
-
-        return true;
-    }
-
 
     // ============================================================
     // UPDATE INVOICE STATUS

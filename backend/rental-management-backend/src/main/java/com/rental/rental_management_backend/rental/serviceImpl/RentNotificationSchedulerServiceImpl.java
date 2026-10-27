@@ -235,11 +235,6 @@ public class RentNotificationSchedulerServiceImpl
             return;
         }
 
-        boolean invoiceAmountsUpdated =
-                RentInvoiceLateFeeCalculator.recalculate(
-                        invoice,
-                        currentDate);
-
         BigDecimal successfulPayments =
                 paymentRepository.sumAmountByInvoiceIdAndPaymentStatus(
                         invoice.getInvoiceId(),
@@ -253,9 +248,6 @@ public class RentNotificationSchedulerServiceImpl
                 && successfulPayments.compareTo(currentTotal) >= 0) {
             invoice.setStatus(InvoiceStatus.PAID);
             rentInvoiceRepository.saveAndFlush(invoice);
-            if (invoiceAmountsUpdated) {
-                regenerateInvoicePdfSafely(invoice);
-            }
             return;
         }
 
@@ -267,7 +259,7 @@ public class RentNotificationSchedulerServiceImpl
 
         rentInvoiceRepository.saveAndFlush(invoice);
 
-        if (invoiceAmountsUpdated || newlyOverdue) {
+        if (newlyOverdue) {
             regenerateInvoicePdfSafely(invoice);
         }
 

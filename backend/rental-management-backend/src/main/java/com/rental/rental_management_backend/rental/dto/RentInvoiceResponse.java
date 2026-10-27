@@ -30,6 +30,8 @@ private Long propertyId;
 
 private Long unitId;
 
+private String propertyName;
+
 private Integer billingMonth;
 
 private Integer billingYear;
@@ -124,6 +126,14 @@ public Long getUnitId() {
 
 public void setUnitId(Long unitId) {
     this.unitId = unitId;
+}
+
+public String getPropertyName() {
+    return propertyName;
+}
+
+public void setPropertyName(String propertyName) {
+    this.propertyName = propertyName;
 }
 
 

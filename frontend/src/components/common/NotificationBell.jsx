@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Bell, Check, Clock, AlertCircle } from 'lucide-react'
 import { useNotifications } from "../../context/notificationcontext"
 import { registerPushSubscription } from "../../api/pushApi"
@@ -7,9 +6,6 @@ import { createBrowserPushSubscription } from "../../utils/browserPush"
 
 export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false)
-  const [pushMessage, setPushMessage] = useState('')
-  const [pushBusy, setPushBusy] = useState(false)
-  const navigate = useNavigate()
 
   const {
     notifications,
@@ -66,22 +62,6 @@ export default function NotificationBell() {
     if (!notification.read) {
       await markAsRead(notification.notificationId)
     }
-
-    if (notification.referenceType === 'PROPERTY' && notification.referenceId) {
-      if (notification.type === 'PROPERTY_SUBMITTED') {
-        navigate('/admin/property-approvals')
-        setIsOpen(false)
-      } else if (notification.type === 'PROPERTY_APPROVED') {
-        navigate(`/owner/properties/${notification.referenceId}`)
-        setIsOpen(false)
-      }
-    }
-  }
-
-  const getNotificationAction = (notification) => {
-    if (notification.type === 'PROPERTY_SUBMITTED') return 'Open property review'
-    if (notification.type === 'PROPERTY_APPROVED') return 'View property'
-    return null
   }
 
   // Format backend createdAt value
@@ -200,11 +180,6 @@ export default function NotificationBell() {
                         {formatNotificationTime(item.createdAt)}
                       </span>
                     </div>
-                    {getNotificationAction(item) && (
-                      <p className="mt-1 text-[11px] font-semibold text-[#315A7D]">
-                        {getNotificationAction(item)} →
-                      </p>
-                    )}
                   </div>
 
                   {/* Unread Indicator */}

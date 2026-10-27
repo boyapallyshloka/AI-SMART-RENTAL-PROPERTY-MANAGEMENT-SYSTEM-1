@@ -50,8 +50,8 @@ public class MaintenanceRequest {
     private Property property;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "unit_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "unit_id", nullable = true)
     private Unit unit;
 
 

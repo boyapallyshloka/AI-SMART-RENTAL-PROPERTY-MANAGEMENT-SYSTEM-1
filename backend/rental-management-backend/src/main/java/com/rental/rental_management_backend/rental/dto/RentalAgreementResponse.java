@@ -19,6 +19,8 @@ public class RentalAgreementResponse {
 
     private Long unitId;
 
+    private String propertyName;
+
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -89,6 +91,9 @@ public class RentalAgreementResponse {
     public void setUnitId(Long unitId) {
         this.unitId = unitId;
     }
+
+    public String getPropertyName() { return propertyName; }
+    public void setPropertyName(String propertyName) { this.propertyName = propertyName; }
 
     public LocalDate getStartDate() {
         return startDate;

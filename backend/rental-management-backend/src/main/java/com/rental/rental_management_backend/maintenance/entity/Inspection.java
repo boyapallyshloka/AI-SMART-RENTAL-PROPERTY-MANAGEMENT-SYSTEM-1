@@ -13,17 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "property_inspections")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Inspection {
 
     @Id
@@ -45,4 +37,24 @@ public class Inspection {
     private Boolean hasIssuesRequiringAttention;
 
     private String notes;
+
+    public Inspection() {
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Property getProperty() { return property; }
+    public void setProperty(Property property) { this.property = property; }
+    public LocalDate getInspectionDate() { return inspectionDate; }
+    public void setInspectionDate(LocalDate inspectionDate) { this.inspectionDate = inspectionDate; }
+    public String getInspectorName() { return inspectorName; }
+    public void setInspectorName(String inspectorName) { this.inspectorName = inspectorName; }
+    public Boolean getPassed() { return passed; }
+    public void setPassed(Boolean passed) { this.passed = passed; }
+    public Boolean getHasIssuesRequiringAttention() { return hasIssuesRequiringAttention; }
+    public void setHasIssuesRequiringAttention(Boolean hasIssuesRequiringAttention) {
+        this.hasIssuesRequiringAttention = hasIssuesRequiringAttention;
+    }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }

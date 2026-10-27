@@ -6,6 +6,8 @@ import ResolveRouter from "../components/ResolveRouter";
 
 // Auth Pages
 import LoginPage from '../pages/auth/LoginPage'
+import WelcomePage from '../pages/WelcomePage'
+import PublicPropertyDetailsPage from '../pages/PublicPropertyDetailsPage'
 import RegisterPage from '../pages/auth/RegisterPage'
 import VerifyEmailPage from '../pages/auth/VerifyEmailPage'
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage'
@@ -56,6 +58,8 @@ import ManagerBuildingDetailsPage from '../pages/manager/ManagerBuildingDetailsP
 import ManagerApplicationsPage from '../pages/manager/ManagerApplicationsPage'
 import ManagerApplicationDetailsPage from '../pages/manager/ManagerApplicationDetailsPage'
 import ManagerMaintenancePage from '../pages/manager/ManagerMaintenancePage'
+import ManagerTechniciansPage from '../pages/manager/ManagerTechniciansPage'
+import ManagerInspectionsPage from '../pages/manager/ManagerInspectionsPage'
 import ManagerProfilePage from '../pages/manager/ManagerProfilePage'
 
 // Admin Dashboard Pages
@@ -67,7 +71,6 @@ import AuditLogsPage from '../pages/admin/AuditLogsPage'
 import AIMonitoringPage from '../pages/admin/AIMonitoringPage'
 import SystemSettingsPage from '../pages/admin/SystemSettingsPage'
 import AdminReportsPage from '../pages/admin/AdminReportsPage'
-import PropertyApprovalPage from '../pages/admin/PropertyApprovalPage'
 
 // UI Showcase Page
 
@@ -83,7 +86,7 @@ import NotificationResolvePage from './NotificationResolvePage'
 import { ROLES, getDashboardPath, isPropertyOwner, isPropertyManager, normalizeRole } from '../utils/roles'
 
 /**
- * Root Redirector: Sends authenticated user to their role dashboard or /login
+ * Root entry: keep role-based dashboard routing and show the welcome page to guests.
  */
 function RootRedirect() {
   const { user, loading } = useAuth()
@@ -91,7 +94,7 @@ function RootRedirect() {
   if (loading) return null
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <WelcomePage />
   }
 
   const destination = getDashboardPath(user.role)
@@ -157,6 +160,10 @@ export default function AppRoutes() {
     <Routes>
       {/* Root entry */}
       <Route path="/" element={<RootRedirect />} />
+
+      {/* Public property browsing */}
+      <Route path="/properties" element={<Navigate to="/#property-listings" replace />} />
+      <Route path="/properties/:propertyId" element={<PublicPropertyDetailsPage />} />
 
       {/* Public Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
@@ -324,7 +331,7 @@ export default function AppRoutes() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="users" element={<UserManagementPage />} />
                 <Route path="owner-verification" element={<OwnerVerificationPage />} />
-                <Route path="property-approvals" element={<PropertyApprovalPage />} />
+                <Route path="property-approvals" element={<Navigate to="/admin/owner-verification#property-review" replace />} />
                 <Route path="tenant-document-review" element={<TenantDocumentReviewPage />} />
                 <Route path="reports" element={<AdminReportsPage />} />
                 <Route path="audit-logs" element={<AuditLogsPage />} />
@@ -356,6 +363,8 @@ export default function AppRoutes() {
                 <Route path="applications" element={<ManagerApplicationsPage />} />
                 <Route path="applications/:id" element={<ManagerApplicationDetailsPage />} />
                 <Route path="maintenance" element={<ManagerMaintenancePage />} />
+                <Route path="maintenance/technicians" element={<ManagerTechniciansPage />} />
+                <Route path="inspections" element={<ManagerInspectionsPage />} />
                 <Route path="agreements" element={<AgreementsPage />} />
                 <Route path="agreements/new" element={<CreateAgreementPage />} />
                 <Route path="payments" element={<PaymentsPage />} />

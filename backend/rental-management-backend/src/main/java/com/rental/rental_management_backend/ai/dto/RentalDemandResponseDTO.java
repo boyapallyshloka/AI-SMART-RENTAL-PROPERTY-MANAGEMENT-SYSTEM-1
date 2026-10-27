@@ -20,33 +20,7 @@ public class RentalDemandResponseDTO {
     @JsonProperty("property_count")
     private Integer propertyCount;
 
-    @JsonProperty("application_count")
-    private Integer applicationCount;
-
-    @JsonProperty("agreement_start_count")
-    private Integer agreementStartCount;
-
-    @JsonProperty("average_monthly_rent")
-    private Double averageMonthlyRent;
-
-    @JsonProperty("demand_lag_1_month")
-    private Integer demandLag1Month;
-
-    @JsonProperty("demand_lag_2_month")
-    private Integer demandLag2Month;
-
-    @JsonProperty("demand_growth_1_month")
-    private Double demandGrowth1Month;
-
-    @JsonProperty("occupancy_rate")
-    private Double occupancyRate;
-
-    @JsonProperty("vacancy_rate")
-    private Double vacancyRate;
-
-    @JsonProperty("available_unit_count")
-    private Integer availableUnitCount;
-
+    private String modelVersion;
 
     public RentalDemandResponseDTO() {
     }

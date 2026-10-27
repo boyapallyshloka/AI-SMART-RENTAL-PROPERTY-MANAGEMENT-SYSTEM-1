@@ -1,4 +1,3 @@
-
 package com.rental.rental_management_backend.rental.dto;
 
 import java.time.LocalDate;

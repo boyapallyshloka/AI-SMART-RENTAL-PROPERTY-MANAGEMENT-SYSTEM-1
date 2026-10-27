@@ -5,8 +5,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,6 +28,17 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
             "rentalAgreement.unit.floor.building.property.propertyManager.user"
     })
     Optional<RentInvoice> findById(Long invoiceId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @EntityGraph(attributePaths = {
+            "rentalAgreement.property.owner",
+            "rentalAgreement.property.propertyManager.user",
+            "rentalAgreement.unit.floor.building.property.owner",
+            "rentalAgreement.unit.floor.building.property.propertyManager.user"
+    })
+    @Query("SELECT invoice FROM RentInvoice invoice WHERE invoice.invoiceId = :invoiceId")
+    Optional<RentInvoice> findByIdForUpdate(
+            @Param("invoiceId") Long invoiceId);
 
     @Override
     @EntityGraph(attributePaths = {
