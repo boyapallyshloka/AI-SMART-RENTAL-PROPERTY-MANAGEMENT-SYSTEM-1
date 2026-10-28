@@ -1,5 +1,5 @@
 
-# Avenue360 - AI Smart Rental Property Management System
+SmartEstate - AI Smart Rental Property Management System
 
 Avenue360 is a smart rental property management platform designed to simplify
 property discovery, rental management, and decision-making using modern web
