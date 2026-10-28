@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -213,22 +212,13 @@ public class PropertyProfitabilityServiceImpl
                     rentableUnitIds);
             BigDecimal collectedRent = collectedByMonth.get(month);
             BigDecimal expenseAmount = expenseByMonth.get(month);
-            BigDecimal currentMonthProfit =
-                    collectedRent.subtract(expenseAmount);
-            BigDecimal estimatedVacancyLoss = monthlyRent.multiply(
-                    ONE.subtract(occupancyRate));
-            BigDecimal revenueAfterVacancy =
-                    monthlyRent.subtract(estimatedVacancyLoss);
 
             history.add(new MonthlyValues(
                     month,
                     monthlyRent,
                     collectedRent,
                     expenseAmount,
-                    occupancyRate,
-                    currentMonthProfit,
-                    estimatedVacancyLoss,
-                    revenueAfterVacancy));
+                    occupancyRate));
         }
 
         if (history.isEmpty()) {
@@ -481,62 +471,30 @@ public class PropertyProfitabilityServiceImpl
             int yearBuilt,
             List<MonthlyValues> history) {
         MonthlyValues current = history.get(history.size() - 1);
-        List<MonthlyValues> threeMonths =
-                history.subList(Math.max(0, history.size() - 3), history.size());
-        List<MonthlyValues> sixMonths =
-                history.subList(Math.max(0, history.size() - 6), history.size());
-        MonthlyValues previous = history.size() < 2
-                ? null
-                : history.get(history.size() - 2);
+        List<M6ProfitabilityRequest.MonthlyFinancialRecord> monthlyHistory =
+                history.subList(
+                                Math.max(0, history.size() - HISTORY_MONTHS),
+                                history.size() - 1)
+                        .stream()
+                        .map(month -> new M6ProfitabilityRequest.MonthlyFinancialRecord(
+                                month.month().atDay(1),
+                                asDouble(month.monthlyRent()),
+                                asDouble(month.collectedRent()),
+                                asDouble(month.expenseAmount()),
+                                asDouble(month.occupancyRate())))
+                        .toList();
 
         return new M6ProfitabilityRequest(
                 city,
                 sizeSqft.doubleValue(),
                 bedroomsBhk.doubleValue(),
                 Math.max(0, current.month().getYear() - yearBuilt) * 1.0,
+                current.month().atDay(1),
                 asDouble(current.monthlyRent()),
                 asDouble(current.collectedRent()),
                 asDouble(current.expenseAmount()),
-                asDouble(current.currentMonthProfit()),
                 asDouble(current.occupancyRate()),
-                asDouble(current.estimatedVacancyLoss()),
-                asDouble(current.revenueAfterVacancy()),
-                asDouble(average(threeMonths, MonthlyValues::collectedRent)),
-                asDouble(average(threeMonths, MonthlyValues::expenseAmount)),
-                asDouble(average(threeMonths, MonthlyValues::currentMonthProfit)),
-                asDouble(average(threeMonths, MonthlyValues::occupancyRate)),
-                asDouble(average(threeMonths, MonthlyValues::estimatedVacancyLoss)),
-                asDouble(average(sixMonths, MonthlyValues::collectedRent)),
-                asDouble(average(sixMonths, MonthlyValues::expenseAmount)),
-                asDouble(average(sixMonths, MonthlyValues::currentMonthProfit)),
-                asDouble(average(sixMonths, MonthlyValues::occupancyRate)),
-                asDouble(average(sixMonths, MonthlyValues::estimatedVacancyLoss)),
-                asDouble(trend(history, previous, MonthlyValues::collectedRent)),
-                asDouble(trend(history, previous, MonthlyValues::expenseAmount)),
-                asDouble(trend(history, previous, MonthlyValues::currentMonthProfit)),
-                asDouble(trend(history, previous, MonthlyValues::occupancyRate)),
-                asDouble(trend(history, previous, MonthlyValues::estimatedVacancyLoss)));
-    }
-
-    private BigDecimal average(
-            List<MonthlyValues> months,
-            Function<MonthlyValues, BigDecimal> value) {
-        BigDecimal total = months.stream()
-                .map(value)
-                .reduce(ZERO, BigDecimal::add);
-        return total.divide(
-                BigDecimal.valueOf(months.size()), MathContext.DECIMAL128);
-    }
-
-    private BigDecimal trend(
-            List<MonthlyValues> history,
-            MonthlyValues previous,
-            Function<MonthlyValues, BigDecimal> value) {
-        if (previous == null) {
-            return ZERO;
-        }
-        return value.apply(history.get(history.size() - 1))
-                .subtract(value.apply(previous));
+                monthlyHistory);
     }
 
     private Map<YearMonth, BigDecimal> initializeMonthlyAmounts(
@@ -575,9 +533,6 @@ public class PropertyProfitabilityServiceImpl
             BigDecimal monthlyRent,
             BigDecimal collectedRent,
             BigDecimal expenseAmount,
-            BigDecimal occupancyRate,
-            BigDecimal currentMonthProfit,
-            BigDecimal estimatedVacancyLoss,
-            BigDecimal revenueAfterVacancy) {
+            BigDecimal occupancyRate) {
     }
 }
