@@ -1,6 +1,7 @@
 package com.rental.rental_management_backend.payment.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +74,35 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     BigDecimal sumAmountByInvoiceIdAndPaymentStatus(
             @Param("invoiceId") Long invoiceId,
             @Param("status") PaymentStatus status);
+
+    @Query("""
+            SELECT payment.paymentDate AS paymentDate,
+                   payment.amount AS amount
+            FROM Payment payment
+            JOIN payment.invoice invoice
+            JOIN invoice.rentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit agreementUnit
+            LEFT JOIN agreementUnit.floor agreementFloor
+            LEFT JOIN agreementFloor.building agreementBuilding
+            LEFT JOIN agreementBuilding.property unitProperty
+            WHERE payment.paymentStatus = :status
+              AND payment.paymentDate >= :startDateTime
+              AND payment.paymentDate < :endDateTime
+              AND (directProperty.propertyId = :propertyId
+                    OR unitProperty.propertyId = :propertyId)
+            """)
+    List<ProfitabilityPayment> findSuccessfulPaymentsForPropertyBetween(
+            @Param("propertyId") Long propertyId,
+            @Param("status") PaymentStatus status,
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime);
+
+    interface ProfitabilityPayment {
+        LocalDateTime getPaymentDate();
+
+        BigDecimal getAmount();
+    }
 
     // Find payment using Razorpay order ID
     Optional<Payment> findByRazorpayOrderId(String razorpayOrderId);

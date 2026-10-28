@@ -147,7 +147,10 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                     com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
                     com.rental.rental_management_backend.property.enums.PropertyType.VILLA
                 )
-                AND :bedrooms IS NULL
+                AND (
+                    :bedrooms IS NULL
+                    OR p.bedrooms = :bedrooms
+                )
                 AND (
                     :minRent IS NULL
                     OR p.monthlyRent >= :minRent

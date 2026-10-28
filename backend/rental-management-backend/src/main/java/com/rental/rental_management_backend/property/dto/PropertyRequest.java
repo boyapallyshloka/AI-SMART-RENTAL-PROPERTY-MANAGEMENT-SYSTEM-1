@@ -24,6 +24,12 @@ public class PropertyRequest {
     @DecimalMin(value = "0.0", message = "Security deposit cannot be negative")
     private BigDecimal securityDeposit;
 
+    @PositiveOrZero(message = "Bedrooms cannot be negative")
+    private Integer bedrooms;
+
+    @PositiveOrZero(message = "Bathrooms cannot be negative")
+    private Integer bathrooms;
+
     private String description;
 
     @PositiveOrZero(message = "Total area cannot be negative")
@@ -69,6 +75,22 @@ public class PropertyRequest {
 
     public void setSecurityDeposit(BigDecimal securityDeposit) {
         this.securityDeposit = securityDeposit;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
     }
 
     public String getDescription() {

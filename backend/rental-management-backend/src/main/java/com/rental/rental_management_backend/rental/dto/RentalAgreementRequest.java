@@ -12,6 +12,7 @@ public class RentalAgreementRequest {
     @NotNull(message = "Application ID is required")
     private Long applicationId;
 
+    @NotNull(message = "Due day is required")
     @Min(value = 1, message = "Due day must be between 1 and 31")
     @Max(value = 31, message = "Due day must be between 1 and 31")
     private Integer dueDay;

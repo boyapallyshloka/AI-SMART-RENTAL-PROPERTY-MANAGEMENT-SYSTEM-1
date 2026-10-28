@@ -33,8 +33,11 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
+import com.rental.rental_management_backend.rental.enums.AgreementStatus;
+import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 
 import com.rental.rental_management_backend.s3.service.S3Service;
 
@@ -54,6 +57,7 @@ public class MaintenanceRequestServiceImpl
     private final TenantRepository tenantRepository;
     private final PropertyRepository propertyRepository;
     private final UnitRepository unitRepository;
+    private final RentalAgreementRepository rentalAgreementRepository;
     private final MaintenanceImageService maintenanceImageService;
     private final S3Service s3Service;
     private final UserRepository userRepository;
@@ -76,6 +80,7 @@ public class MaintenanceRequestServiceImpl
             TenantRepository tenantRepository,
             PropertyRepository propertyRepository,
             UnitRepository unitRepository,
+            RentalAgreementRepository rentalAgreementRepository,
             MaintenanceImageService maintenanceImageService,
             S3Service s3Service,
             UserRepository userRepository,
@@ -94,6 +99,9 @@ public class MaintenanceRequestServiceImpl
 
         this.unitRepository =
                 unitRepository;
+
+        this.rentalAgreementRepository =
+                rentalAgreementRepository;
 
         this.maintenanceImageService =
                 maintenanceImageService;
@@ -196,17 +204,30 @@ public class MaintenanceRequestServiceImpl
                                         "Property not found with ID: "
                                                 + request.getPropertyId()));
 
-        // -----------------------------------------------------
-        // FIND UNIT
-        // -----------------------------------------------------
+        Unit unit = validateMaintenanceTarget(
+                property,
+                request.getUnitId());
 
-        Unit unit =
-                unitRepository
-                        .findById(request.getUnitId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Unit not found with ID: "
-                                                + request.getUnitId()));
+        boolean hasActiveAgreement;
+        if (isDirectRentalProperty(property)) {
+            hasActiveAgreement = rentalAgreementRepository
+                    .existsByTenant_TenantIdAndProperty_PropertyIdAndUnitIsNullAndStatus(
+                            tenant.getTenantId(),
+                            property.getPropertyId(),
+                            AgreementStatus.ACTIVE);
+        } else {
+            hasActiveAgreement = rentalAgreementRepository
+                    .existsByTenant_TenantIdAndUnit_UnitIdAndStatus(
+                            tenant.getTenantId(),
+                            unit.getUnitId(),
+                            AgreementStatus.ACTIVE);
+        }
+
+        if (!hasActiveAgreement) {
+            throw new AccessDeniedException(
+                    "Tenant does not have an ACTIVE rental agreement "
+                            + "for the requested property or unit");
+        }
 
         // -----------------------------------------------------
         // CREATE REQUEST
@@ -653,13 +674,9 @@ public class MaintenanceRequestServiceImpl
         // FIND UNIT
         // -----------------------------------------------------
 
-        Unit unit =
-                unitRepository
-                        .findById(request.getUnitId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Unit not found with ID: "
-                                                + request.getUnitId()));
+        Unit unit = validateMaintenanceTarget(
+                property,
+                request.getUnitId());
 
         // -----------------------------------------------------
         // TENANT HANDLING
@@ -1338,6 +1355,44 @@ public class MaintenanceRequestServiceImpl
                 .orElseThrow(() ->
                         new AccessDeniedException(
                                 "Logged-in user not found"));
+    }
+
+    private Unit validateMaintenanceTarget(
+            Property property,
+            Long unitId) {
+        if (isDirectRentalProperty(property)) {
+            if (unitId != null) {
+                throw new IllegalArgumentException(
+                        "HOUSE and VILLA maintenance requests cannot include a unit");
+            }
+            return null;
+        }
+
+        if (unitId == null) {
+            throw new IllegalArgumentException(
+                    "Unit ID is required for this property type");
+        }
+
+        Unit unit = unitRepository.findById(unitId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Unit not found with ID: " + unitId));
+
+        if (unit.getFloor() == null
+                || unit.getFloor().getBuilding() == null
+                || unit.getFloor().getBuilding().getProperty() == null
+                || !property.getPropertyId().equals(
+                        unit.getFloor().getBuilding().getProperty()
+                                .getPropertyId())) {
+            throw new AccessDeniedException(
+                    "Unit does not belong to the requested property");
+        }
+
+        return unit;
+    }
+
+    private boolean isDirectRentalProperty(Property property) {
+        return property.getPropertyType() == PropertyType.HOUSE
+                || property.getPropertyType() == PropertyType.VILLA;
     }
 
     // =========================================================

@@ -96,7 +96,7 @@ public class MaintenanceRequestController {
 
             @RequestParam Long propertyId,
 
-            @RequestParam Long unitId,
+            @RequestParam(required = false) Long unitId,
 
             @RequestParam MaintenanceCategory category,
 
@@ -191,7 +191,7 @@ public class MaintenanceRequestController {
 
             @RequestParam Long propertyId,
 
-            @RequestParam Long unitId,
+            @RequestParam(required = false) Long unitId,
 
             @RequestParam MaintenanceCategory category,
 
