@@ -1,0 +1,68 @@
+{
+    "module": "M4 Payment Risk Analysis",
+    "model": "Logistic Regression",
+    "model_artifact": "model_pipeline.joblib",
+    "model_version": "M4-v1.0",
+    "training_date": "2026-10-16T14:46:10",
+    "dataset": "M4_Payment_Risk_Engineered.csv",
+    "target": "risk_label",
+    "features": [
+        "monthly_income",
+        "historical_invoice_count",
+        "late_payment_count",
+        "missed_payment_count",
+        "avg_days_late",
+        "max_days_late",
+        "historical_outstanding",
+        "rent_to_income_ratio",
+        "payment_completion_ratio",
+        "recent_late_payment_count_3m",
+        "recent_missed_payment_count_3m",
+        "recent_avg_days_late_3m",
+        "recent_payment_completion_ratio_3m",
+        "recent_late_payment_count_6m",
+        "recent_missed_payment_count_6m",
+        "recent_avg_days_late_6m",
+        "recent_payment_completion_ratio_6m",
+        "late_payment_trend",
+        "missed_payment_trend",
+        "payment_completion_trend"
+    ],
+    "feature_count": 20,
+    "excluded_columns": [
+        "tenant_id",
+        "snapshot_month",
+        "data_split",
+        "future_bad_payment_ratio"
+    ],
+    "split_strategy": "chronological",
+    "selection_metric": "f1",
+    "validation_metrics": {
+        "accuracy": 0.7251621271076524,
+        "precision": 0.5794871794871795,
+        "recall": 0.6559597523219814,
+        "f1": 0.6153566890542749,
+        "roc_auc": 0.7818433675706559,
+        "pr_auc": 0.684718667703072
+    },
+    "test_metrics": {
+        "accuracy": 0.7491569390402075,
+        "precision": 0.6126938333934367,
+        "recall": 0.6639312231340367,
+        "f1": 0.6372843210802701,
+        "roc_auc": 0.8051976082374805,
+        "pr_auc": 0.7041047538056163
+    },
+    "preprocessing": [
+        "median imputation",
+        "RobustScaler"
+    ],
+    "algorithms_compared": [
+        "Logistic Regression",
+        "Decision Tree",
+        "Random Forest",
+        "Gradient Boosting",
+        "XGBoost",
+        "SVM"
+    ]
+}

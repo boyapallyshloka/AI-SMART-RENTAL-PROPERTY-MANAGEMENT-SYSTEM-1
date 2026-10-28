@@ -1,0 +1,148 @@
+{
+    "module": "M6 Property Profitability Prediction",
+    "module_id": "M6",
+    "version": "1.0",
+    "dataset": {
+        "file": "M6_Profitability_v2.csv",
+        "version": "v2",
+        "rows": 290000,
+        "properties": 10000,
+        "date_range": "2024-01-01 to 2026-05-01"
+    },
+    "targets": {
+        "regression": "next_month_profit",
+        "classification": "profitability_label"
+    },
+    "features": [
+        "city",
+        "size_sqft",
+        "bedrooms_bhk",
+        "property_age_years",
+        "monthly_rent",
+        "collected_rent",
+        "expense_amount",
+        "current_month_profit",
+        "occupancy_rate",
+        "estimated_vacancy_loss",
+        "revenue_after_estimated_vacancy_loss",
+        "collected_rent_3m_avg",
+        "expense_amount_3m_avg",
+        "current_month_profit_3m_avg",
+        "occupancy_rate_3m_avg",
+        "estimated_vacancy_loss_3m_avg",
+        "collected_rent_6m_avg",
+        "expense_amount_6m_avg",
+        "current_month_profit_6m_avg",
+        "occupancy_rate_6m_avg",
+        "estimated_vacancy_loss_6m_avg",
+        "collected_rent_trend",
+        "expense_amount_trend",
+        "current_month_profit_trend",
+        "occupancy_rate_trend",
+        "estimated_vacancy_loss_trend"
+    ],
+    "excluded_columns": [
+        "property_id",
+        "snapshot_month",
+        "next_month_profit",
+        "profitability_label",
+        "data_split"
+    ],
+    "categorical_features": [
+        "city"
+    ],
+    "numerical_features": [
+        "size_sqft",
+        "bedrooms_bhk",
+        "property_age_years",
+        "monthly_rent",
+        "collected_rent",
+        "expense_amount",
+        "current_month_profit",
+        "occupancy_rate",
+        "estimated_vacancy_loss",
+        "revenue_after_estimated_vacancy_loss",
+        "collected_rent_3m_avg",
+        "expense_amount_3m_avg",
+        "current_month_profit_3m_avg",
+        "occupancy_rate_3m_avg",
+        "estimated_vacancy_loss_3m_avg",
+        "collected_rent_6m_avg",
+        "expense_amount_6m_avg",
+        "current_month_profit_6m_avg",
+        "occupancy_rate_6m_avg",
+        "estimated_vacancy_loss_6m_avg",
+        "collected_rent_trend",
+        "expense_amount_trend",
+        "current_month_profit_trend",
+        "occupancy_rate_trend",
+        "estimated_vacancy_loss_trend"
+    ],
+    "preprocessing": {
+        "numerical": [
+            "SimpleImputer(strategy=median)",
+            "StandardScaler"
+        ],
+        "categorical": [
+            "SimpleImputer(strategy=most_frequent)",
+            "OneHotEncoder(handle_unknown=ignore)"
+        ],
+        "fit_strategy": "Training data only during model selection; train + validation for final model."
+    },
+    "split": {
+        "train_rows": 180000,
+        "validation_rows": 30000,
+        "test_rows": 80000,
+        "strategy": "chronological",
+        "train_period": "2024-01-01 to 2025-06-01",
+        "validation_period": "2025-07-01 to 2025-09-01",
+        "test_period": "2025-10-01 to 2026-05-01"
+    },
+    "regression": {
+        "candidate_models": [
+            "Linear Regression",
+            "Ridge Regression",
+            "Decision Tree Regressor",
+            "Random Forest Regressor",
+            "Gradient Boosting Regressor",
+            "Extra Trees Regressor"
+        ],
+        "selection_metric": "MAE",
+        "selected_model": "Extra Trees Regressor",
+        "test_metrics": {
+            "model": "Extra Trees Regressor",
+            "MAE": 4908.679563486597,
+            "RMSE": 26603.12738713076,
+            "R2": 0.6079970822041724
+        }
+    },
+    "classification": {
+        "candidate_models": [
+            "Logistic Regression",
+            "Decision Tree Classifier",
+            "Random Forest Classifier",
+            "Gradient Boosting Classifier",
+            "Extra Trees Classifier"
+        ],
+        "selection_metric": "F1",
+        "tie_breakers": [
+            "PR-AUC",
+            "ROC-AUC"
+        ],
+        "selected_model": "Extra Trees Classifier",
+        "test_metrics": {
+            "model": "Extra Trees Classifier",
+            "Accuracy": 0.9442875,
+            "Precision": 0.7272606028274207,
+            "Recall": 0.9674443360241285,
+            "F1": 0.8303323308843124,
+            "ROC-AUC": 0.9613911573595981,
+            "PR-AUC": 0.808279417484179
+        }
+    },
+    "training": {
+        "lag_features_used": false,
+        "test_used_for_model_selection": false,
+        "complete_pipeline_saved": true
+    }
+}

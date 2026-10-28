@@ -1,0 +1,4 @@
+data_split,rows,avg_next_month_profit,median_next_month_profit,min_next_month_profit,max_next_month_profit,positive_profit_rate
+test,80000,7148.647350374999,0.0,-34493.68,1839441.09,14.091249999999999
+train,180000,5013.708023555556,0.0,-53686.58,2550000.0,9.858333333333333
+validation,30000,7785.4464,0.0,-24901.43,2550000.0,15.126666666666665
