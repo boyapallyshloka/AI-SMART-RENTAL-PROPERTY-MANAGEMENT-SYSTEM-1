@@ -26,6 +26,7 @@ import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.rental.dto.RentalAgreementRequest;
 import com.rental.rental_management_backend.rental.dto.RentalAgreementResponse;
 import com.rental.rental_management_backend.rental.entity.RentalAgreement;
@@ -198,6 +199,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         agreement.setTenant(application.getTenant());
         agreement.setProperty(property);
         agreement.setUnit(unit);
+        agreement.setProperty(property);
 
         Integer leaseDurationMonths =
                 application.getPreferredLeaseDurationMonths();
@@ -1085,6 +1087,18 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
         if (agreement.getUnit() != null) {
             response.setUnitId(agreement.getUnit().getUnitId());
+        }
+        if (agreement.getProperty() != null) {
+            response.setPropertyId(agreement.getProperty().getPropertyId());
+            response.setPropertyName(agreement.getProperty().getPropertyName());
+        } else if (agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null
+                && agreement.getUnit().getFloor().getBuilding().getProperty() != null) {
+            Property unitProperty = agreement.getUnit().getFloor()
+                    .getBuilding().getProperty();
+            response.setPropertyId(unitProperty.getPropertyId());
+            response.setPropertyName(unitProperty.getPropertyName());
         }
 
         response.setStartDate(agreement.getStartDate());

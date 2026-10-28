@@ -162,7 +162,9 @@ export default function PaymentsPage() {
           return {
             ...agr,
             tenantName: app?.tenantName || (agr.tenantId ? `Tenant #${agr.tenantId}` : null),
-            propertyName: app?.propertyName || null,
+            propertyName: app?.propertyName || agr.propertyName || null,
+            propertyType: app?.propertyType || agr.propertyType || null,
+            directRental: ['HOUSE', 'VILLA'].includes(String(app?.propertyType || agr.propertyType || '').toUpperCase()) || (agr.unitId == null && agr.propertyId != null),
             unitNumber: app?.unitNumber || agr.unitId || '',
           }
         })
@@ -187,8 +189,10 @@ export default function PaymentsPage() {
             app?.tenantEmail ||
             tenantMap.get(Number(inv.tenantId))?.tenantEmail ||
             null,
-          propertyName: app?.propertyName || null,
-          unitNumber: app?.unitNumber
+          propertyName: app?.propertyName || inv.propertyName || agr?.propertyName || null,
+          unitNumber: ['HOUSE', 'VILLA'].includes(String(app?.propertyType || agr?.propertyType || '').toUpperCase()) || (inv.unitId == null && (agr?.propertyId != null || inv.propertyId != null))
+            ? 'Whole property'
+            : app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : inv.unitId
             ? `Unit #${inv.unitId}`
@@ -755,7 +759,7 @@ export default function PaymentsPage() {
                     <Select
                       options={activeAgreements.map((a) => ({
                         value: String(a.agreementId),
-                        label: `Agreement #${a.agreementId} — ${a.tenantName} (${a.propertyName} · Unit #${a.unitNumber || a.unitId})`,
+                        label: `Agreement #${a.agreementId} — ${a.tenantName} (${a.propertyName} · ${a.directRental ? 'Whole property' : `Unit #${a.unitNumber || a.unitId}`})`,
                       }))}
                       value={selectedAgreementId}
                       onChange={(e) => setSelectedAgreementId(e.target.value)}

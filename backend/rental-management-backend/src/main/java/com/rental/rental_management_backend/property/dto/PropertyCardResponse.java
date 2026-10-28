@@ -9,6 +9,7 @@ public class PropertyCardResponse {
     private String propertyType;
     private String status;
     private Double areaSqft;
+    private Integer bedrooms;
     private Integer yearBuilt;
     private String address;
     private String imageUrl;
@@ -25,6 +26,7 @@ public class PropertyCardResponse {
             String propertyType,
             String status,
             Double areaSqft,
+            Integer bedrooms,
             Integer yearBuilt,
             String address,
             String imageUrl,
@@ -34,10 +36,30 @@ public class PropertyCardResponse {
         this.propertyType = propertyType;
         this.status = status;
         this.areaSqft = areaSqft;
+        this.bedrooms = bedrooms;
         this.yearBuilt = yearBuilt;
         this.address = address;
         this.imageUrl = imageUrl;
         this.isFavorite = isFavorite;
+    }
+
+    public PropertyCardResponse(
+            Long id,
+            String propertyName,
+            String propertyType,
+            String status,
+            Double areaSqft,
+            Integer bedrooms,
+            Integer yearBuilt,
+            String address,
+            String imageUrl,
+            Boolean isFavorite,
+            BigDecimal monthlyRent,
+            BigDecimal securityDeposit) {
+        this(id, propertyName, propertyType, status, areaSqft, bedrooms,
+                yearBuilt, address, imageUrl, isFavorite);
+        this.monthlyRent = monthlyRent;
+        this.securityDeposit = securityDeposit;
     }
 
     public PropertyCardResponse(
@@ -52,10 +74,9 @@ public class PropertyCardResponse {
             Boolean isFavorite,
             BigDecimal monthlyRent,
             BigDecimal securityDeposit) {
-        this(id, propertyName, propertyType, status, areaSqft, yearBuilt,
-                address, imageUrl, isFavorite);
-        this.monthlyRent = monthlyRent;
-        this.securityDeposit = securityDeposit;
+        this(id, propertyName, propertyType, status, areaSqft, null,
+                yearBuilt, address, imageUrl, isFavorite, monthlyRent,
+                securityDeposit);
     }
 
     public Long getId() {
@@ -96,6 +117,14 @@ public class PropertyCardResponse {
 
     public void setAreaSqft(Double areaSqft) {
         this.areaSqft = areaSqft;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
     }
 
     public Integer getYearBuilt() {

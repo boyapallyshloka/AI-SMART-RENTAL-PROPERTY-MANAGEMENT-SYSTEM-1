@@ -14,8 +14,10 @@ import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.exception.ResourceNotFoundException;
 import com.rental.rental_management_backend.property.dto.PropertyImageResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyImageResponse;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.PropertyImage;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.repository.PropertyImageRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.service.PropertyImageService;
@@ -516,7 +518,7 @@ public class PropertyImageServiceImpl implements PropertyImageService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PropertyImageResponse> getPublicImagesByProperty(
+    public List<PublicPropertyImageResponse> getPublicImagesByProperty(
             Long propertyId) {
 
         Property property = propertyRepository
@@ -526,10 +528,19 @@ public class PropertyImageServiceImpl implements PropertyImageService {
                                 "Property not found with ID: "
                                         + propertyId));
 
+        if (property.getStatus() != PropertyStatus.AVAILABLE) {
+            throw new ResourceNotFoundException(
+                    "Property images are not available for browsing");
+        }
+
         return propertyImageRepository
                 .findByProperty(property)
                 .stream()
                 .map(this::mapToResponse)
+                .map(image -> new PublicPropertyImageResponse(
+                        image.getImageUrl(),
+                        image.getImageType(),
+                        image.getIsPrimary()))
                 .collect(Collectors.toList());
     }
 }

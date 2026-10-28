@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rental.rental_management_backend.property.dto.PropertyDetailsResponse;
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
-import com.rental.rental_management_backend.property.dto.PropertyResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyDetailsResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyResponse;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.service.PropertyDetailsService;
@@ -41,7 +41,7 @@ public class PropertyPublicController {
      * that are currently available for rental.
      */
     @GetMapping("/public")
-    @PreAuthorize("hasRole('TENANT')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<PropertyCardResponse>> getAvailableProperties() {
 
         return ResponseEntity.ok(
@@ -58,8 +58,8 @@ public class PropertyPublicController {
      * All parameters are optional.
      */
     @GetMapping("/public/search")
-    @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<PropertyResponse>> searchAvailableProperties(
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<PublicPropertyResponse>> searchAvailableProperties(
 
             @RequestParam(required = false)
             String searchQuery,
@@ -106,8 +106,8 @@ public class PropertyPublicController {
      * of one available property.
      */
     @GetMapping("/public/{propertyId}")
-    @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<PropertyDetailsResponse> getPublicPropertyDetails(
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<PublicPropertyDetailsResponse> getPublicPropertyDetails(
             @PathVariable Long propertyId) {
 
         return ResponseEntity.ok(

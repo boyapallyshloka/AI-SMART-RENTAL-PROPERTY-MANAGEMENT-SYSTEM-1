@@ -66,5 +66,15 @@ public interface NotificationService {
             Long referenceId,
             String referenceType
     );
-}
 
+    void notifyUserOnce(
+            Long userId,
+            NotificationType type,
+            NotificationPriority priority,
+            String title,
+            String message,
+            Long referenceId,
+            String referenceType,
+            String deduplicationKey
+    );
+}

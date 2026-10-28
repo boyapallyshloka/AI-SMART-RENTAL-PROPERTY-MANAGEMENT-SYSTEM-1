@@ -20,6 +20,12 @@ public class RentalDemandResponseDTO {
 
     private String areaLocality;
 
+    private Integer month;
+
+    private Integer year;
+
+    private String demandLevel;
+
     private String modelVersion;
 
     public RentalDemandResponseDTO() {
@@ -81,6 +87,30 @@ public class RentalDemandResponseDTO {
         this.areaLocality = areaLocality;
     }
 
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public String getDemandLevel() {
+        return demandLevel;
+    }
+
+    public void setDemandLevel(String demandLevel) {
+        this.demandLevel = demandLevel;
+    }
+
     public String getModelVersion() {
         return modelVersion;
     }
@@ -89,4 +119,3 @@ public class RentalDemandResponseDTO {
         this.modelVersion = modelVersion;
     }
 }
-

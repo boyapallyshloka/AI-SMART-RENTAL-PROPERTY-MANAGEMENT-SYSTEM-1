@@ -331,7 +331,7 @@ export default function CreateAgreementPage() {
     if (securityDeposit !== '' && Number(securityDeposit) < 0) {
       errs.securityDeposit = 'Security deposit cannot be negative'
     }
-    if (!dueDay || Number(dueDay) < 1 || Number(dueDay) > 31) {
+    if (!dueDay || !Number.isInteger(Number(dueDay)) || Number(dueDay) < 1 || Number(dueDay) > 31) {
       errs.dueDay = 'Due day must be between 1 and 31'
     }
     if (noticePeriodDays !== '' && Number(noticePeriodDays) < 0) {
@@ -358,7 +358,7 @@ export default function CreateAgreementPage() {
       monthlyRent: Number(monthlyRent),
       securityDeposit:
         securityDeposit !== '' ? Number(securityDeposit) : 0,
-      dueDay: Number(dueDay) || 1,
+      dueDay: Number(dueDay),
       noticePeriodDays:
         noticePeriodDays !== '' ? Number(noticePeriodDays) : 30,
       moveInDate: moveInDate || startDate || undefined,
@@ -367,7 +367,9 @@ export default function CreateAgreementPage() {
 
     let agreementId = null
     const tenantDisplay = selectedApp?.tenantName || 'Tenant'
-    const unitDisplay = selectedApp?.unitNumber
+    const unitDisplay = isDirectRentalApplication(selectedApp)
+      ? 'Whole property'
+      : selectedApp?.unitNumber
       ? `Unit #${selectedApp.unitNumber}`
       : 'Unit'
 
@@ -417,7 +419,9 @@ export default function CreateAgreementPage() {
     setDocumentUploadError(null)
 
     const tenantDisplay = selectedApp?.tenantName || 'Tenant'
-    const unitDisplay = selectedApp?.unitNumber
+    const unitDisplay = isDirectRentalApplication(selectedApp)
+      ? 'Whole property'
+      : selectedApp?.unitNumber
       ? `Unit #${selectedApp.unitNumber}`
       : 'Unit'
 
@@ -700,6 +704,7 @@ export default function CreateAgreementPage() {
                   <Select
                     label="Rent Due Day"
                     options={RENT_DUE_DAY_OPTIONS}
+                    required
                     value={dueDay}
                     onChange={(e) => setDueDay(e.target.value)}
                     helperText="Calendar day rent is due each billing cycle"

@@ -76,7 +76,7 @@ export const mapParkingAvailableToBackend = (parking) => {
  *   parking -> parkingAvailable (boolean)
  *   year / yearBuilt -> yearBuilt (integer)
  *
- * Current backend-supported PropertyRequest fields:
+ * Backend-supported PropertyRequest fields:
  *   - propertyName
  *   - propertyType
  *   - description
@@ -84,10 +84,11 @@ export const mapParkingAvailableToBackend = (parking) => {
  *   - furnishingStatus
  *   - parkingAvailable
  *   - yearBuilt
+ *   - bedrooms and bathrooms for HOUSE/VILLA direct rentals
  *
  * Strictly EXCLUDES response/status/legacy/UI-only fields:
  *   ownerId, ownerName, propertyId, id, status, createdAt, updatedAt,
- *   bedrooms, bathrooms, monthlyRent, securityDeposit,
+ *   monthlyRent, securityDeposit,
  *   address, city, state, zipCode, amenities, buildings, units, images, etc.
  */
 export const buildPropertyRequestPayload = (data = {}) => {
@@ -124,6 +125,14 @@ export const buildPropertyRequestPayload = (data = {}) => {
       ? Math.round(Number(rawYear))
       : undefined
 
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(propertyType)
+  const bedrooms = isDirectRental && data.bedrooms != null && data.bedrooms !== '' && Number.isInteger(Number(data.bedrooms))
+    ? Number(data.bedrooms)
+    : undefined
+  const bathrooms = isDirectRental && data.bathrooms != null && data.bathrooms !== '' && Number.isInteger(Number(data.bathrooms))
+    ? Number(data.bathrooms)
+    : undefined
+
   const payload = {
     propertyName: propertyName || undefined,
     propertyType,
@@ -132,6 +141,8 @@ export const buildPropertyRequestPayload = (data = {}) => {
     furnishingStatus,
     parkingAvailable,
     yearBuilt,
+    bedrooms,
+    bathrooms,
   }
 
   // Ensure ownerId, status, id, and all legacy/UI fields are NEVER included in request payload
@@ -142,8 +153,7 @@ export const buildPropertyRequestPayload = (data = {}) => {
   delete payload.status
   delete payload.createdAt
   delete payload.updatedAt
-  delete payload.bedrooms
-  delete payload.bathrooms
+
   delete payload.monthlyRent
   delete payload.securityDeposit
   delete payload.deposit

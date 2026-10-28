@@ -5,6 +5,7 @@ import java.util.List;
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyResponse;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
@@ -27,15 +28,23 @@ public interface PropertyService {
             PropertyStatus status
     );
 
+    PropertyResponse submitPropertyForApproval(Long id);
+
+    List<PropertyResponse> getPendingApprovalProperties();
+
+    PropertyResponse getPropertyForAdmin(Long id);
+
+    PropertyResponse approveProperty(Long id);
+
     // Public/Tenant property access
-    PropertyResponse getPublicPropertyById(Long propertyId);
+    PublicPropertyResponse getPublicPropertyById(Long propertyId);
 
     List<PropertyCardResponse> getAvailableProperties();
 
     /*
      * Tenant property search/filter
      */
-    List<PropertyResponse> searchAvailableProperties(
+    List<PublicPropertyResponse> searchAvailableProperties(
             String searchQuery,
             String city,
             PropertyType propertyType,

@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rental.rental_management_backend.rental.dto.RentInvoiceLateFeeRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceResponse;
 import com.rental.rental_management_backend.rental.service.RentInvoiceService;
@@ -45,6 +47,18 @@ public class RentInvoiceController {
                 response,
                 HttpStatus.CREATED
         );
+    }
+
+    @PatchMapping("/{invoiceId}/late-fee")
+    @PreAuthorize("hasAnyRole('PROPERTY_OWNER', 'PROPERTY_MANAGER', 'SUPER_ADMIN')")
+    public ResponseEntity<RentInvoiceResponse> updateLateFee(
+            @PathVariable Long invoiceId,
+            @Valid @RequestBody RentInvoiceLateFeeRequest request) {
+
+        RentInvoiceResponse response =
+                rentInvoiceService.updateLateFee(invoiceId, request);
+
+        return ResponseEntity.ok(response);
     }
 
     // Get logged-in tenant's invoices

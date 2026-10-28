@@ -51,7 +51,7 @@ const PARKING_OPTIONS = [
  * OwnerPropertyForm Component
  * Contract-aligned form supporting create and update for backend PropertyRequest
  *
- * Backend Supported Fields (7 only):
+ * Backend-supported fields:
  * 1. propertyName (string, required)
  * 2. propertyType (enum: APARTMENT, HOUSE, VILLA, PG, HOSTEL, COMMERCIAL, required)
  * 3. description (string, optional)
@@ -59,9 +59,10 @@ const PARKING_OPTIONS = [
  * 5. furnishingStatus (enum: UNFURNISHED, SEMI_FURNISHED, FULLY_FURNISHED, optional)
  * 6. parkingAvailable (boolean, required)
  * 7. yearBuilt (integer, non-negative, optional)
+ * 8. bedrooms and bathrooms (non-negative integers for HOUSE/VILLA)
  *
  * Excluded from form & submission:
- * - bedrooms, bathrooms, monthlyRent, securityDeposit (legacy fields)
+ * - monthlyRent, securityDeposit (saved in the rental details workflow)
  * - ownerId, status, propertyId/id (system/lifecycle fields)
  */
 export default function OwnerPropertyForm({
@@ -122,6 +123,8 @@ export default function OwnerPropertyForm({
       parking: mappedParking,
       yearBuilt: rawYear != null ? String(rawYear) : '',
       year: rawYear != null ? String(rawYear) : '',
+      bedrooms: data?.bedrooms != null ? String(data.bedrooms) : '',
+      bathrooms: data?.bathrooms != null ? String(data.bathrooms) : '',
     }
   }
 
@@ -149,6 +152,9 @@ export default function OwnerPropertyForm({
   const [formData, setFormData] = useState(() => getInitialFormData(initialData))
   const [errors, setErrors] = useState({})
   const [selectedAmenities, setSelectedAmenities] = useState(() => getInitialAmenities(initialData))
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(
+    String(formData.propertyType || formData.type || '').toUpperCase()
+  )
 
   useEffect(() => {
     if (initialData) {
@@ -223,6 +229,16 @@ export default function OwnerPropertyForm({
       }
     }
 
+    if (isDirectRental) {
+      for (const [field, label] of [['bedrooms', 'Bedrooms / BHK'], ['bathrooms', 'Bathrooms']]) {
+        const value = formData[field]
+        const numericValue = Number(value)
+        if (value === '' || value == null || !Number.isInteger(numericValue) || numericValue < 0) {
+          errs[field] = `${label} must be a whole number of 0 or more`
+        }
+      }
+    }
+
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -252,6 +268,8 @@ export default function OwnerPropertyForm({
           : formData.year !== '' && formData.year != null && !isNaN(Number(formData.year))
           ? parseInt(formData.year, 10)
           : undefined,
+      bedrooms: isDirectRental ? Number(formData.bedrooms) : undefined,
+      bathrooms: isDirectRental ? Number(formData.bathrooms) : undefined,
     }
 
     // Filter out undefined fields so the payload strictly contains ONLY defined PropertyRequest fields
@@ -328,6 +346,34 @@ export default function OwnerPropertyForm({
             onChange={(e) => handleChange('totalArea', e.target.value)}
             error={errors.totalArea || errors.area}
           />
+
+          {isDirectRental && (
+            <>
+              <Input
+                label="Bedrooms / BHK"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="e.g. 3"
+                value={formData.bedrooms}
+                onChange={(e) => handleChange('bedrooms', e.target.value)}
+                error={errors.bedrooms}
+                helperText="Enter 0 for a studio"
+                required
+              />
+              <Input
+                label="Bathrooms"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="e.g. 2"
+                value={formData.bathrooms}
+                onChange={(e) => handleChange('bathrooms', e.target.value)}
+                error={errors.bathrooms}
+                required
+              />
+            </>
+          )}
 
           <Input
             label="Year Built"

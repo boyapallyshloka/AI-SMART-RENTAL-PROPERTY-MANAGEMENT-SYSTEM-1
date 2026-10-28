@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rental.rental_management_backend.property.dto.PropertyImageResponse;
+import com.rental.rental_management_backend.property.dto.PublicPropertyImageResponse;
 
 
 public interface PropertyImageService {
@@ -28,5 +29,5 @@ public interface PropertyImageService {
             Boolean isPrimary);
 
     void deleteImage(Long imageId);
-    List<PropertyImageResponse> getPublicImagesByProperty(Long propertyId);
+    List<PublicPropertyImageResponse> getPublicImagesByProperty(Long propertyId);
 }

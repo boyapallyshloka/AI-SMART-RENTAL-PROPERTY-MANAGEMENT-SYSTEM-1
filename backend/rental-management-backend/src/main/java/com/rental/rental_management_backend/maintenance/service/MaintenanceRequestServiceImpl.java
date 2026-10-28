@@ -1,7 +1,8 @@
-
 package com.rental.rental_management_backend.maintenance.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -21,10 +22,11 @@ import com.rental.rental_management_backend.maintenance.dto.M5PredictionRequest;
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
-import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
+import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
 
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
@@ -33,8 +35,13 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
+
+import com.rental.rental_management_backend.rental.entity.RentalAgreement;
+import com.rental.rental_management_backend.rental.enums.AgreementStatus;
+import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 
 import com.rental.rental_management_backend.s3.service.S3Service;
 
@@ -54,6 +61,7 @@ public class MaintenanceRequestServiceImpl
     private final TenantRepository tenantRepository;
     private final PropertyRepository propertyRepository;
     private final UnitRepository unitRepository;
+    private final RentalAgreementRepository rentalAgreementRepository;
     private final MaintenanceImageService maintenanceImageService;
     private final S3Service s3Service;
     private final UserRepository userRepository;
@@ -76,6 +84,7 @@ public class MaintenanceRequestServiceImpl
             TenantRepository tenantRepository,
             PropertyRepository propertyRepository,
             UnitRepository unitRepository,
+            RentalAgreementRepository rentalAgreementRepository,
             MaintenanceImageService maintenanceImageService,
             S3Service s3Service,
             UserRepository userRepository,
@@ -94,6 +103,9 @@ public class MaintenanceRequestServiceImpl
 
         this.unitRepository =
                 unitRepository;
+
+        this.rentalAgreementRepository =
+                rentalAgreementRepository;
 
         this.maintenanceImageService =
                 maintenanceImageService;
@@ -196,17 +208,17 @@ public class MaintenanceRequestServiceImpl
                                         "Property not found with ID: "
                                                 + request.getPropertyId()));
 
-        // -----------------------------------------------------
-        // FIND UNIT
-        // -----------------------------------------------------
+        Unit unit = resolveUnitForProperty(
+                property,
+                request.getUnitId());
 
-        Unit unit =
-                unitRepository
-                        .findById(request.getUnitId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Unit not found with ID: "
-                                                + request.getUnitId()));
+        if (!hasCurrentRentalAgreement(
+                tenant,
+                property,
+                unit)) {
+            throw new AccessDeniedException(
+                    "You must have a current rental agreement for this property and unit to create a maintenance request");
+        }
 
         // -----------------------------------------------------
         // CREATE REQUEST
@@ -229,10 +241,6 @@ public class MaintenanceRequestServiceImpl
 
         maintenanceRequest.setPriority(
                 request.getPriority());
-
-        if (request.getPayer() != null) {
-            maintenanceRequest.setPayer(request.getPayer());
-        }
 
         maintenanceRequest.setStatus(
                 MaintenanceStatus.OPEN);
@@ -280,6 +288,115 @@ public class MaintenanceRequestServiceImpl
                 savedRequest);
 
         return mapToResponse(savedRequest);
+    }
+
+    private Unit resolveUnitForProperty(
+            Property property,
+            Long unitId) {
+
+        boolean directRentalProperty =
+                property.getPropertyType() == PropertyType.HOUSE
+                        || property.getPropertyType() == PropertyType.VILLA;
+
+        if (directRentalProperty) {
+            if (unitId != null) {
+                throw new IllegalArgumentException(
+                        "House/Villa maintenance requests must not include a unit ID");
+            }
+            return null;
+        }
+
+        if (unitId == null) {
+            throw new IllegalArgumentException(
+                    "Unit ID is required for this property type");
+        }
+
+        Unit unit = unitRepository
+                .findById(unitId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Unit not found with ID: " + unitId));
+
+        if (unit.getFloor() == null
+                || unit.getFloor().getBuilding() == null
+                || unit.getFloor().getBuilding().getProperty() == null
+                || property.getPropertyId() == null
+                || !property.getPropertyId().equals(
+                        unit.getFloor()
+                                .getBuilding()
+                                .getProperty()
+                                .getPropertyId())) {
+            throw new IllegalArgumentException(
+                    "Unit does not belong to the supplied property");
+        }
+
+        return unit;
+    }
+
+    private boolean hasCurrentRentalAgreement(
+            Tenant tenant,
+            Property property,
+            Unit unit) {
+
+        if (tenant.getUser() == null
+                || tenant.getUser().getEmail() == null
+                || tenant.getTenantId() == null
+                || property.getPropertyId() == null) {
+            return false;
+        }
+
+        LocalDate today = LocalDate.now();
+
+        return rentalAgreementRepository
+                .findByTenant_User_Email(tenant.getUser().getEmail())
+                .stream()
+                .anyMatch(agreement ->
+                        isCurrentRentalAgreement(
+                                agreement,
+                                tenant,
+                                property,
+                                unit,
+                                today));
+    }
+
+    private boolean isCurrentRentalAgreement(
+            RentalAgreement agreement,
+            Tenant tenant,
+            Property property,
+            Unit unit,
+            LocalDate today) {
+
+        Property agreementProperty = agreement.getProperty();
+        if (agreementProperty == null && agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null) {
+            agreementProperty = agreement.getUnit()
+                    .getFloor()
+                    .getBuilding()
+                    .getProperty();
+        }
+
+        if (agreement.getTenant() == null
+                || !tenant.getTenantId().equals(
+                        agreement.getTenant().getTenantId())
+                || agreement.getStatus() != AgreementStatus.ACTIVE
+                || agreement.getStartDate() == null
+                || agreement.getEndDate() == null
+                || today.isBefore(agreement.getStartDate())
+                || today.isAfter(agreement.getEndDate())
+                || agreementProperty == null
+                || !property.getPropertyId().equals(
+                        agreementProperty.getPropertyId())) {
+            return false;
+        }
+
+        if (unit == null) {
+            return agreement.getUnit() == null;
+        }
+
+        return agreement.getUnit() != null
+                && unit.getUnitId() != null
+                && unit.getUnitId().equals(
+                        agreement.getUnit().getUnitId());
     }
 
     // =========================================================
@@ -653,13 +770,9 @@ public class MaintenanceRequestServiceImpl
         // FIND UNIT
         // -----------------------------------------------------
 
-        Unit unit =
-                unitRepository
-                        .findById(request.getUnitId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Unit not found with ID: "
-                                                + request.getUnitId()));
+        Unit unit = resolveUnitForProperty(
+                property,
+                request.getUnitId());
 
         // -----------------------------------------------------
         // TENANT HANDLING
@@ -730,10 +843,6 @@ public class MaintenanceRequestServiceImpl
 
             existingRequest.setCost(
                     request.getCost());
-        }
-
-        if (request.getPayer() != null) {
-            existingRequest.setPayer(request.getPayer());
         }
 
         // -----------------------------------------------------
@@ -886,6 +995,10 @@ public class MaintenanceRequestServiceImpl
         // -----------------------------------------------------
 
         maintenanceRequest.setStatus(newStatus);
+        if (newStatus == MaintenanceStatus.COMPLETED
+                && maintenanceRequest.getCompletedDate() == null) {
+            maintenanceRequest.setCompletedDate(LocalDateTime.now());
+        }
 
         // -----------------------------------------------------
         // SAVE
@@ -908,6 +1021,53 @@ public class MaintenanceRequestServiceImpl
         }
 
         return mapToResponse(updatedRequest);
+    }
+
+    @Override
+    public MaintenanceRequestResponse updateCost(
+            Long ticketId,
+            MaintenanceCostUpdateRequest request) {
+
+        if (request == null || request.getCost() == null
+                || request.getCostResponsibility() == null) {
+            throw new IllegalArgumentException(
+                    "Repair amount and payer responsibility are required");
+        }
+        if (request.getCost().signum() < 0) {
+            throw new IllegalArgumentException("Repair amount cannot be negative");
+        }
+
+        MaintenanceRequest ticket = maintenanceRequestRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Maintenance request not found with ID: " + ticketId));
+        User user = getLoggedInUser();
+        RoleType role = user.getRole();
+
+        if (role == RoleType.PROPERTY_OWNER) {
+            if (ticket.getProperty() == null || ticket.getProperty().getOwner() == null
+                    || !user.getId().equals(ticket.getProperty().getOwner().getId())) {
+                throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+            }
+        } else if (role == RoleType.PROPERTY_MANAGER) {
+            if (ticket.getProperty() == null || ticket.getProperty().getPropertyManager() == null
+                    || ticket.getProperty().getPropertyManager().getUser() == null
+                    || !user.getId().equals(ticket.getProperty().getPropertyManager().getUser().getId())) {
+                throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+            }
+        } else if (role != RoleType.SUPER_ADMIN) {
+            throw new AccessDeniedException("You are not allowed to update this maintenance cost");
+        }
+
+        ticket.setCost(request.getCost());
+        ticket.setCostResponsibility(request.getCostResponsibility());
+        // Older completed tickets may predate completion-date tracking.
+        // Backfill the date when their cost allocation is next saved so
+        // they can be included in the matching reports period.
+        if (ticket.getStatus() == MaintenanceStatus.COMPLETED
+                && ticket.getCompletedDate() == null) {
+            ticket.setCompletedDate(LocalDateTime.now());
+        }
+        return mapToResponse(maintenanceRequestRepository.save(ticket));
     }
 
     // =========================================================
@@ -1446,10 +1606,8 @@ public class MaintenanceRequestServiceImpl
         response.setCost(
                 request.getCost());
 
-        response.setPayer(
-                request.getPayer() == null
-                        ? MaintenancePayer.OWNER_PAID
-                        : request.getPayer());
+        response.setCostResponsibility(
+                request.getCostResponsibility());
 
         return response;
     }

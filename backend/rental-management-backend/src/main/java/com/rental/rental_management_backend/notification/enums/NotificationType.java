@@ -32,5 +32,8 @@ public enum NotificationType {
 
     AGREEMENT_TERMINATED,
 
-    AI_ALERT
+    AI_ALERT,
+
+    PROPERTY_SUBMITTED,
+    PROPERTY_APPROVED
 }

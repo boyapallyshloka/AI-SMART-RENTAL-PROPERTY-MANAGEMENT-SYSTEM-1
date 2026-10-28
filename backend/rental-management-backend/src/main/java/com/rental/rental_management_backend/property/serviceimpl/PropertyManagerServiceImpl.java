@@ -222,6 +222,14 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
         response.setTotalArea(
                 property.getTotalArea());
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
+        response.setFloorNumber(property.getFloorNumber());
+
+        response.setTotalFloors(property.getTotalFloors());
+
         response.setFurnishingStatus(
                 property.getFurnishingStatus());
 
@@ -230,6 +238,9 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
 
         response.setYearBuilt(
                 property.getYearBuilt());
+
+        response.setMonthlyRent(property.getMonthlyRent());
+        response.setSecurityDeposit(property.getSecurityDeposit());
 
         response.setStatus(
                 property.getStatus());
@@ -315,6 +326,10 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
         applyPropertyRentalDetails(property, request);
         property.setDescription(request.getDescription());
         property.setTotalArea(request.getTotalArea());
+        property.setBedrooms(request.getBedrooms());
+        property.setBathrooms(request.getBathrooms());
+        property.setFloorNumber(request.getFloorNumber());
+        property.setTotalFloors(request.getTotalFloors());
         property.setFurnishingStatus(request.getFurnishingStatus());
         property.setParkingAvailable(request.getParkingAvailable());
         property.setYearBuilt(request.getYearBuilt());

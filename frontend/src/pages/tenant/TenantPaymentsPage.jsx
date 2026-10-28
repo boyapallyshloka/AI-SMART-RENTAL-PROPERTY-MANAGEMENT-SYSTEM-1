@@ -259,8 +259,10 @@ export default function TenantPaymentsPage() {
         return {
           ...inv,
           id: inv.invoiceId,
-          propertyName: app?.propertyName || null,
-          unitNumber: app?.unitNumber
+          propertyName: app?.propertyName || inv.propertyName || agr?.propertyName || null,
+          unitNumber: ['HOUSE', 'VILLA'].includes(String(app?.propertyType || agr?.propertyType || '').toUpperCase()) || (inv.unitId == null && (agr?.propertyId != null || inv.propertyId != null))
+            ? 'Whole property'
+            : app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : inv.unitId
             ? `Unit #${inv.unitId}`

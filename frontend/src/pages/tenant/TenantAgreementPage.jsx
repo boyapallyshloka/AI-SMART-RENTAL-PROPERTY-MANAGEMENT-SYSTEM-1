@@ -114,7 +114,9 @@ export default function TenantAgreementPage() {
             (agr.propertyId
               ? `Property #${agr.propertyId}`
               : null),
-          unit: app?.unitNumber
+          unit: ['HOUSE', 'VILLA'].includes(String(app?.propertyType || agr.propertyType || '').toUpperCase()) || (agr.unitId == null && agr.propertyId != null)
+            ? 'Whole property'
+            : app?.unitNumber
             ? `Unit #${app.unitNumber}`
             : agr.unitId
             ? `Unit #${agr.unitId}`

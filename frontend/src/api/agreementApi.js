@@ -55,7 +55,7 @@ export const getMyAgreements = async () => {
  *
  * Backend RentalAgreementRequest fields:
  * - applicationId: Long (@NotNull)
- * - dueDay: Integer (1-31, optional)
+ * - dueDay: Integer (1-31, required)
  * - noticePeriodDays: Integer (>= 0, optional)
  * - termsAndConditions: String (optional)
  * - moveInDate: LocalDate (optional; falls back to the application's preference)
@@ -68,12 +68,14 @@ export const getMyAgreements = async () => {
  * @returns {Promise<Object>} RentalAgreementResponse
  */
 export const createAgreement = async (payload) => {
+  const dueDay = Number(payload.dueDay)
+  if (!Number.isInteger(dueDay) || dueDay < 1 || dueDay > 31) {
+    throw new Error('Rent due day must be a whole number between 1 and 31')
+  }
+
   const requestBody = {
     applicationId: Number(payload.applicationId),
-    dueDay:
-      payload.dueDay != null && payload.dueDay !== ''
-        ? Number(payload.dueDay)
-        : undefined,
+    dueDay,
     noticePeriodDays:
       payload.noticePeriodDays != null && payload.noticePeriodDays !== ''
         ? Number(payload.noticePeriodDays)

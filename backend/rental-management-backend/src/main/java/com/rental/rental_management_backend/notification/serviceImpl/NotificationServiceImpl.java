@@ -43,6 +43,13 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationResponse createNotification(
             NotificationCreateRequest request) {
 
+        return createNotification(request, null);
+    }
+
+    private NotificationResponse createNotification(
+            NotificationCreateRequest request,
+            String deduplicationKey) {
+
         if (request == null) {
             throw new IllegalArgumentException(
                     "Notification request cannot be null");
@@ -80,6 +87,48 @@ public class NotificationServiceImpl implements NotificationService {
                         "User not found with ID: "
                                 + request.getUserId()));
 
+        if (deduplicationKey != null) {
+            var legacyNotification = notificationRepository
+                    .findByDeduplicationKey(deduplicationKey);
+            if (legacyNotification.isPresent()
+                    && Objects.equals(
+                            legacyNotification.get().getUser().getId(),
+                            user.getId())) {
+                return mapToResponse(legacyNotification.get());
+            }
+
+            String recipientDeduplicationKey =
+                    user.getId() + ":" + deduplicationKey;
+            if (recipientDeduplicationKey.length() > 255) {
+                throw new IllegalArgumentException(
+                        "Notification deduplication key is too long");
+            }
+
+            int inserted = notificationRepository
+                    .insertIfDeduplicationKeyAbsent(
+                            user.getId(),
+                            request.getType().name(),
+                            request.getPriority().name(),
+                            request.getTitle(),
+                            request.getMessage(),
+                            request.getReferenceId(),
+                            request.getReferenceType(),
+                            recipientDeduplicationKey);
+            Notification persistedNotification = notificationRepository
+                    .findByDeduplicationKey(recipientDeduplicationKey)
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Notification insert did not produce a persisted notification"));
+
+            NotificationResponse response =
+                    mapToResponse(persistedNotification);
+            if (inserted > 0) {
+                notificationSseService.sendNotification(
+                        user.getId(),
+                        response);
+            }
+            return response;
+        }
+
         Notification notification = new Notification(
                 user,
                 request.getType(),
@@ -90,7 +139,6 @@ public class NotificationServiceImpl implements NotificationService {
                 request.getReferenceType(),
                 false
         );
-
         Notification savedNotification =
                 notificationRepository.save(notification);
 
@@ -225,6 +273,34 @@ public class NotificationServiceImpl implements NotificationService {
         request.setReferenceType(referenceType);
 
         createNotification(request);
+    }
+
+    @Override
+    public void notifyUserOnce(
+            Long userId,
+            NotificationType type,
+            NotificationPriority priority,
+            String title,
+            String message,
+            Long referenceId,
+            String referenceType,
+            String deduplicationKey) {
+
+        if (deduplicationKey == null || deduplicationKey.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Notification deduplication key is required");
+        }
+
+        NotificationCreateRequest request = new NotificationCreateRequest();
+        request.setUserId(userId);
+        request.setType(type);
+        request.setPriority(priority);
+        request.setTitle(title);
+        request.setMessage(message);
+        request.setReferenceId(referenceId);
+        request.setReferenceType(referenceType);
+
+        createNotification(request, deduplicationKey);
     }
 
     // GET LOGGED-IN USER

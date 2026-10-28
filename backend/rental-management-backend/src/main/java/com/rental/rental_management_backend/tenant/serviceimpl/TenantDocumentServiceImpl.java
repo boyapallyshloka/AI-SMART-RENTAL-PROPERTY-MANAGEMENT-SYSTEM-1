@@ -323,25 +323,23 @@ public class TenantDocumentServiceImpl
 
         for (RentalApplication application : applications) {
 
-            if (application.getUnit() == null
-                    || application.getUnit()
-                            .getFloor() == null
-                    || application.getUnit()
-                            .getFloor()
-                            .getBuilding() == null
-                    || application.getUnit()
-                            .getFloor()
-                            .getBuilding()
-                            .getProperty() == null) {
+            var property = application.getProperty();
 
-                continue;
+            if (property == null
+                    && application.getUnit() != null
+                    && application.getUnit().getFloor() != null
+                    && application.getUnit()
+                            .getFloor()
+                            .getBuilding() != null) {
+                property = application.getUnit()
+                        .getFloor()
+                        .getBuilding()
+                        .getProperty();
             }
 
-            var property =
-                    application.getUnit()
-                            .getFloor()
-                            .getBuilding()
-                            .getProperty();
+            if (property == null) {
+                continue;
+            }
 
             /*
              * PROPERTY_OWNER:
@@ -353,6 +351,7 @@ public class TenantDocumentServiceImpl
                     == RoleType.PROPERTY_OWNER) {
 
                 if (property.getOwner() != null
+                        && property.getOwner().getId() != null
                         && property.getOwner()
                                 .getId()
                                 .equals(authenticatedUser.getId())) {
@@ -373,6 +372,9 @@ public class TenantDocumentServiceImpl
                 if (property.getPropertyManager() != null
                         && property.getPropertyManager()
                                 .getUser() != null
+                        && property.getPropertyManager()
+                                .getUser()
+                                .getId() != null
                         && property.getPropertyManager()
                                 .getUser()
                                 .getId()

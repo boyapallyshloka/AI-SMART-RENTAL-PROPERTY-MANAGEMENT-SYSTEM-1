@@ -20,6 +20,8 @@ public class ReceiptResponse {
     private Long unitId;
 
     private BigDecimal amountPaid;
+    private BigDecimal rentAmount;
+    private BigDecimal lateFee;
     private BigDecimal invoiceTotalAmount;
     private BigDecimal remainingAmount;
 
@@ -105,6 +107,22 @@ public class ReceiptResponse {
 
     public void setAmountPaid(BigDecimal amountPaid) {
         this.amountPaid = amountPaid;
+    }
+
+    public BigDecimal getRentAmount() {
+        return rentAmount;
+    }
+
+    public void setRentAmount(BigDecimal rentAmount) {
+        this.rentAmount = rentAmount;
+    }
+
+    public BigDecimal getLateFee() {
+        return lateFee;
+    }
+
+    public void setLateFee(BigDecimal lateFee) {
+        this.lateFee = lateFee;
     }
 
     public BigDecimal getInvoiceTotalAmount() {
