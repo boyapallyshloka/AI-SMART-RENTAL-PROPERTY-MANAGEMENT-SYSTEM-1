@@ -36,10 +36,11 @@ function startViewTransition(update = () => {}) {
       await committed
     })
 
-    viewTransition.finished.finally(() => {
+    const clearTransition = () => {
       window.clearTimeout(timeout)
       if (activeTransition === transition) activeTransition = null
-    })
+    }
+    viewTransition.finished.then(clearTransition, clearTransition)
   } catch {
     window.clearTimeout(timeout)
     activeTransition = null
