@@ -262,6 +262,7 @@ public class TenantServiceImpl implements TenantService {
         User user = tenant.getUser();
 
         user.setStatus(status);
+        user.setSelfDeactivated(false);
 
         userRepository.save(user);
 
@@ -503,4 +504,3 @@ public class TenantServiceImpl implements TenantService {
                 .collect(Collectors.toList());
     }
 }
-

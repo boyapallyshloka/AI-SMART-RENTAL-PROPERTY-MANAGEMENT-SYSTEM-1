@@ -60,7 +60,11 @@ public class MaintenanceRequest {
     // UNIT
     // =========================================================
 
+<<<<<<< HEAD
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
+=======
+    @ManyToOne(fetch = FetchType.EAGER)
+>>>>>>> origin/backend/sripriya
     @JoinColumn(name = "unit_id", nullable = true)
     private Unit unit;
 

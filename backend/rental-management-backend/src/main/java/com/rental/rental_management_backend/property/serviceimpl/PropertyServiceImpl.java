@@ -73,6 +73,7 @@ public class PropertyServiceImpl implements PropertyService {
 	    property.setPropertyName(request.getPropertyName());
 	    property.setPropertyType(request.getPropertyType());
             applyPropertyRentalDetails(property, request, false);
+            applyPropertyRoomDetails(property, request, false);
 	    property.setDescription(request.getDescription());
 	    property.setTotalArea(request.getTotalArea());
 	    property.setBedrooms(request.getBedrooms());
@@ -268,6 +269,7 @@ private String toPublicImageUrl(String imageUrl) {
         property.setPropertyType(request.getPropertyType());
 
         applyPropertyRentalDetails(property, request, true);
+        applyPropertyRoomDetails(property, request, true);
 
         property.setDescription(request.getDescription());
 
@@ -557,6 +559,28 @@ private String toPublicImageUrl(String imageUrl) {
                 }
         }
 
+    private void applyPropertyRoomDetails(
+            Property property,
+            PropertyRequest request,
+            boolean preserveMissingValues) {
+        PropertyType propertyType = request.getPropertyType();
+        boolean directRental = propertyType == PropertyType.HOUSE
+                || propertyType == PropertyType.VILLA;
+
+        if (!directRental) {
+            property.setBedrooms(null);
+            property.setBathrooms(null);
+            return;
+        }
+
+        if (!preserveMissingValues || request.getBedrooms() != null) {
+            property.setBedrooms(request.getBedrooms());
+        }
+        if (!preserveMissingValues || request.getBathrooms() != null) {
+            property.setBathrooms(request.getBathrooms());
+        }
+    }
+
     private PropertyResponse convertToResponse(
             Property property) {
 
@@ -578,6 +602,10 @@ private String toPublicImageUrl(String imageUrl) {
         response.setMonthlyRent(property.getMonthlyRent());
 
         response.setSecurityDeposit(property.getSecurityDeposit());
+
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
 
         response.setDescription(
                 property.getDescription()

@@ -180,6 +180,20 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
 
         List<RentInvoice> invoices = new ArrayList<>();
         Map<Long, Long> propertyIdByInvoiceId = new HashMap<>();
+<<<<<<< HEAD
+=======
+
+        for (RentInvoice invoice : rentInvoiceRepository.findAll()) {
+            Long propertyId = resolveInvoicePropertyId(invoice);
+
+            if (propertyId == null || !propertyIds.contains(propertyId)) {
+                continue;
+            }
+
+            invoices.add(invoice);
+            propertyIdByInvoiceId.put(invoice.getInvoiceId(), propertyId);
+        }
+>>>>>>> origin/backend/sripriya
 
         for (RentInvoice invoice : rentInvoiceRepository.findAll()) {
             Long propertyId = resolveInvoicePropertyId(
@@ -243,7 +257,11 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
             }
 
             Long propertyId =
+<<<<<<< HEAD
                     propertyIdByInvoiceId.get(invoiceId);
+=======
+                    propertyIdByInvoiceId.get(invoice.getInvoiceId());
+>>>>>>> origin/backend/sripriya
 
             if (propertyId == null) {
                 continue;
@@ -552,6 +570,33 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
         throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN,
                 "You are not allowed to access reports and analytics");
+    }
+
+    private Long resolveInvoicePropertyId(RentInvoice invoice) {
+        if (invoice == null || invoice.getRentalAgreement() == null) {
+            return null;
+        }
+
+        var agreement = invoice.getRentalAgreement();
+        if (agreement.getProperty() != null) {
+            return agreement.getProperty().getPropertyId();
+        }
+
+        if (agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null
+                && agreement.getUnit()
+                        .getFloor()
+                        .getBuilding()
+                        .getProperty() != null) {
+            return agreement.getUnit()
+                    .getFloor()
+                    .getBuilding()
+                    .getProperty()
+                    .getPropertyId();
+        }
+
+        return null;
     }
 
     private Map<Long, BigDecimal> zeroAmounts(Set<Long> propertyIds) {

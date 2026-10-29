@@ -84,6 +84,13 @@ public class User {
     )
     private boolean emailVerified = true;
 
+    @Column(
+        name = "self_deactivated",
+        nullable = false,
+        columnDefinition = "boolean default false"
+    )
+    private boolean selfDeactivated;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -184,6 +191,14 @@ public class User {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public boolean isSelfDeactivated() {
+        return selfDeactivated;
+    }
+
+    public void setSelfDeactivated(boolean selfDeactivated) {
+        this.selfDeactivated = selfDeactivated;
     }
 
     public LocalDateTime getCreatedAt() {

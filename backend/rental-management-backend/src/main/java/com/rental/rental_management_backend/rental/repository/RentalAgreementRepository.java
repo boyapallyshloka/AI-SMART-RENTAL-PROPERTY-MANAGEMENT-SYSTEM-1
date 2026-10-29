@@ -86,9 +86,40 @@ public interface RentalAgreementRepository
             Long unitId,
             AgreementStatus status);
 
+    boolean existsByTenant_TenantIdAndProperty_PropertyIdAndUnitIsNullAndStatus(
+            Long tenantId,
+            Long propertyId,
+            AgreementStatus status);
+
+    boolean existsByTenant_TenantIdAndUnit_UnitIdAndStatus(
+            Long tenantId,
+            Long unitId,
+            AgreementStatus status);
+
     boolean existsByProperty_PropertyIdAndStatus(
             Long propertyId,
             AgreementStatus status);
+
+    @EntityGraph(attributePaths = {"property", "unit"})
+    @Query("""
+            SELECT DISTINCT agreement
+            FROM RentalAgreement agreement
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE (agreement.property.propertyId = :propertyId
+                    OR unitProperty.propertyId = :propertyId)
+              AND agreement.startDate <= :endDate
+              AND COALESCE(agreement.moveOutDate, agreement.endDate) >= :startDate
+              AND agreement.status <> :draftStatus
+            """)
+    List<RentalAgreement> findProfitabilityAgreements(
+            @Param("propertyId") Long propertyId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("draftStatus") AgreementStatus draftStatus);
+
  // M3 Rental Demand Prediction
 
     @Query("""

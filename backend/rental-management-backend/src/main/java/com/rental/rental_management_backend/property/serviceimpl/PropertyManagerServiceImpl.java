@@ -216,6 +216,10 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
         response.setPropertyType(
                 property.getPropertyType());
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
         response.setDescription(
                 property.getDescription());
 
@@ -324,6 +328,7 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
         property.setPropertyName(request.getPropertyName());
         property.setPropertyType(request.getPropertyType());
         applyPropertyRentalDetails(property, request);
+        applyPropertyRoomDetails(property, request);
         property.setDescription(request.getDescription());
         property.setTotalArea(request.getTotalArea());
         property.setBedrooms(request.getBedrooms());
@@ -338,6 +343,28 @@ public class PropertyManagerServiceImpl implements PropertyManagerService {
                 propertyRepository.save(property);
 
         return convertPropertyToResponse(updatedProperty);
+    }
+
+    private void applyPropertyRoomDetails(
+            Property property,
+            PropertyRequest request) {
+        boolean directRental = request.getPropertyType()
+                        == com.rental.rental_management_backend.property.enums.PropertyType.HOUSE
+                || request.getPropertyType()
+                        == com.rental.rental_management_backend.property.enums.PropertyType.VILLA;
+
+        if (!directRental) {
+            property.setBedrooms(null);
+            property.setBathrooms(null);
+            return;
+        }
+
+        if (request.getBedrooms() != null) {
+            property.setBedrooms(request.getBedrooms());
+        }
+        if (request.getBathrooms() != null) {
+            property.setBathrooms(request.getBathrooms());
+        }
     }
 
         private void applyPropertyRentalDetails(

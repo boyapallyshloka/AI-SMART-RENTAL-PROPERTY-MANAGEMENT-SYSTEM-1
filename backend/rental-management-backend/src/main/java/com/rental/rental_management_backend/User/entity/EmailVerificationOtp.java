@@ -3,8 +3,12 @@ package com.rental.rental_management_backend.User.entity;
 
 import java.time.LocalDateTime;
 
+import com.rental.rental_management_backend.User.enums.Gender;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,6 +46,22 @@ public class EmailVerificationOtp {
 
     @Column(name = "failed_attempts", nullable = false)
     private int failedAttempts;
+
+    @Column(name = "pending_first_name", length = 50)
+    private String pendingFirstName;
+
+    @Column(name = "pending_last_name", length = 50)
+    private String pendingLastName;
+
+    @Column(name = "pending_password_hash", length = 255)
+    private String pendingPasswordHash;
+
+    @Column(name = "pending_phone", length = 15)
+    private String pendingPhone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pending_gender", length = 30)
+    private Gender pendingGender;
 
 	public Long getId() {
 		return id;

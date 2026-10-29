@@ -1,5 +1,5 @@
 # Python virtual environment
-ai-service/venv/
+ai-service/.venv/
 
 # Python cache
 __pycache__/
@@ -14,7 +14,7 @@ __pycache__/
 
 # Model artifacts
 *.pkl
-*.joblib
+
 
 # Logs
 *.log
@@ -22,11 +22,11 @@ __pycache__/
 # OS files
 .DS_Store
 Thumbs.db
-# Avenue360 shared datasets
-ai-service/data/processed/
+
+# Raw and ML datasets
 ai-service/data/raw/
-ai-service/data/ml 
-ai-service/m1_rent_prediction/data/ml
+ai-service/data/ml/
+ai-service/m1_rent_prediction/data/ml/
 
 # Archives
 *.zip

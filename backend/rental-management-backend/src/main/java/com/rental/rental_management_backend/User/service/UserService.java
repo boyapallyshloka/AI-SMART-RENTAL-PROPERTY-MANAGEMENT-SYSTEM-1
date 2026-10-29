@@ -32,6 +32,8 @@ public interface UserService {
 
     UserResponse registerUser(RegisterRequest request);
 
+    void deactivateMyAccount(String email);
+
     LoginResponse loginUser(LoginRequest request);
 
     void verifyEmailOtp(String email, String otp);

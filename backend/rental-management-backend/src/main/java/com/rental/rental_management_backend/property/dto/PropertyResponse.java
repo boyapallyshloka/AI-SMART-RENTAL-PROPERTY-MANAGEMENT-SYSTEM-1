@@ -19,6 +19,10 @@ public class PropertyResponse {
 
     private BigDecimal securityDeposit;
 
+    private Integer bedrooms;
+
+    private Integer bathrooms;
+
     private String description;
 
     private Double totalArea;
@@ -98,6 +102,22 @@ public class PropertyResponse {
 
     public void setSecurityDeposit(BigDecimal securityDeposit) {
         this.securityDeposit = securityDeposit;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
     }
 
     public String getDescription() {

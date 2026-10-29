@@ -52,6 +52,14 @@ public class Property {
     @Column(name = "security_deposit", precision = 12, scale = 2)
     private BigDecimal securityDeposit;
 
+    @PositiveOrZero(message = "Bedrooms cannot be negative")
+    @Column(name = "bedrooms")
+    private Integer bedrooms;
+
+    @PositiveOrZero(message = "Bathrooms cannot be negative")
+    @Column(name = "bathrooms")
+    private Integer bathrooms;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -166,6 +174,22 @@ public class Property {
 
     public void setSecurityDeposit(BigDecimal securityDeposit) {
         this.securityDeposit = securityDeposit;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
     }
 
     public String getDescription() {

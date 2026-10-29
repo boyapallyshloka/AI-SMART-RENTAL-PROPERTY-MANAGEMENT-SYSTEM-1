@@ -22,6 +22,10 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
 
     @Override
     @EntityGraph(attributePaths = {
+<<<<<<< HEAD
+=======
+            "rentalAgreement.tenant.user",
+>>>>>>> origin/backend/sripriya
             "rentalAgreement.property.owner",
             "rentalAgreement.property.propertyManager.user",
             "rentalAgreement.unit.floor.building.property.owner",
@@ -48,8 +52,16 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
     List<RentInvoice> findAll();
 
     @EntityGraph(attributePaths = {
+<<<<<<< HEAD
             "rentalAgreement.property",
             "rentalAgreement.unit.floor.building.property"
+=======
+            "rentalAgreement.tenant.user",
+            "rentalAgreement.property.owner",
+            "rentalAgreement.property.propertyManager.user",
+            "rentalAgreement.unit.floor.building.property.owner",
+            "rentalAgreement.unit.floor.building.property.propertyManager.user"
+>>>>>>> origin/backend/sripriya
     })
     @Query("""
             SELECT DISTINCT invoice
@@ -60,6 +72,7 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
             LEFT JOIN unit.floor floor
             LEFT JOIN floor.building building
             LEFT JOIN building.property unitProperty
+<<<<<<< HEAD
             WHERE directProperty.owner.id = :userId
                OR (
                     directProperty IS NULL
@@ -90,6 +103,14 @@ public interface RentInvoiceRepository extends JpaRepository<RentInvoice, Long> 
             """)
     List<RentInvoice> findAllForPropertyManager(
             @Param("userId") Long userId);
+=======
+            WHERE directProperty.propertyId IN :propertyIds
+               OR (directProperty IS NULL
+                   AND unitProperty.propertyId IN :propertyIds)
+            """)
+    List<RentInvoice> findByAuthorizedPropertyIds(
+            @Param("propertyIds") List<Long> propertyIds);
+>>>>>>> origin/backend/sripriya
 
     Optional<RentInvoice> findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
             Long agreementId,

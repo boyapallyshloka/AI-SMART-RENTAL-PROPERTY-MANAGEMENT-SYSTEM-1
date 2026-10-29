@@ -1,5 +1,6 @@
 package com.rental.rental_management_backend.maintenance.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
 
 @Repository
@@ -30,6 +32,14 @@ public interface MaintenanceRequestRepository extends JpaRepository<MaintenanceR
     List<MaintenanceRequest> findByProperty_PropertyId(Long propertyId);
 
     List<MaintenanceRequest> findByUnit_UnitId(Long unitId);
+
+    List<MaintenanceRequest>
+    findByProperty_PropertyIdAndStatusAndPayerAndCompletedDateGreaterThanEqualAndCompletedDateLessThan(
+            Long propertyId,
+            MaintenanceStatus status,
+            MaintenancePayer payer,
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime);
 
     // Explicit JPQL queries to ensure reliable lookups regardless of entity field naming
     @Query("SELECT m FROM MaintenanceRequest m WHERE m.property.propertyId = :propertyId")

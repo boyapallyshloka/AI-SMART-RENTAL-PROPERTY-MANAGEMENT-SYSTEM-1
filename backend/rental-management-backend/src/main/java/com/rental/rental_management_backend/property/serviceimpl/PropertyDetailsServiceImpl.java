@@ -515,6 +515,10 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
 
         response.setSecurityDeposit(property.getSecurityDeposit());
 
+        response.setBedrooms(property.getBedrooms());
+
+        response.setBathrooms(property.getBathrooms());
+
         response.setDescription(
                 property.getDescription());
 

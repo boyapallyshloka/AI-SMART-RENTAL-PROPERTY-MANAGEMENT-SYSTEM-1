@@ -15,11 +15,11 @@ from m6_profitability_prediction.api import router as m6_router
 from scout.api import router as scout_router
 
 
-logger = logging.getLogger("avenue360.ai_service")
+logger = logging.getLogger("SmartEstate.ai_service")
 
 
 app = FastAPI(
-    title="Avenue360 AI Service",
+    title="SmartEstate AI Service",
     description="Central AI/ML service integrating M1-M6 and Scout chatbot",
     version="1.0.0",
 )
@@ -34,7 +34,7 @@ async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError,
 ) -> JSONResponse:
-    """Standardized validation error response per Avenue360 ML Standard."""
+    """Standardized validation error response per SmartEstate ML Standard."""
 
     errors = []
 
@@ -138,7 +138,7 @@ app.include_router(scout_router)
 @app.get("/")
 def home():
     return {
-        "message": "Avenue360 AI Service is running",
+        "message": "SmartEstate AI Service is running",
         "status": "online",
         "version": "1.0.0",
     }
@@ -148,5 +148,5 @@ def home():
 def health():
     return {
         "status": "healthy",
-        "service": "avenue360-ai-service",
+        "service": "SmartEstate-ai-service",
     }

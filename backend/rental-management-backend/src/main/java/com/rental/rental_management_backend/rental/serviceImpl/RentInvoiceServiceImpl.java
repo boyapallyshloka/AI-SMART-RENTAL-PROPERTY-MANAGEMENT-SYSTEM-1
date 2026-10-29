@@ -7,9 +7,14 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+<<<<<<< HEAD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+=======
+>>>>>>> origin/backend/sripriya
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +26,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
+<<<<<<< HEAD
 import com.rental.rental_management_backend.User.exception.ResourceNotFoundException;
+=======
+>>>>>>> origin/backend/sripriya
 import com.rental.rental_management_backend.User.serviceImpl.UserAuthEmailDispatcher;
 import com.rental.rental_management_backend.email.EmailService;
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
@@ -30,8 +38,14 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 import com.rental.rental_management_backend.payment.enums.PaymentStatus;
 import com.rental.rental_management_backend.payment.repository.PaymentRepository;
 import com.rental.rental_management_backend.property.entity.Property;
+<<<<<<< HEAD
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceLateFeeRequest;
+=======
+import com.rental.rental_management_backend.property.entity.PropertyManager;
+import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
+import com.rental.rental_management_backend.property.repository.PropertyRepository;
+>>>>>>> origin/backend/sripriya
 import com.rental.rental_management_backend.rental.dto.RentInvoiceRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceResponse;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
@@ -58,6 +72,10 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
 
     private final UserRepository userRepository;
 
+    private final PropertyRepository propertyRepository;
+
+    private final PropertyManagerRepository propertyManagerRepository;
+
     private final RentInvoicePdfService rentInvoicePdfService;
 
     private final TenantRepository tenantRepository;
@@ -79,6 +97,10 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
             RentalAgreementRepository rentalAgreementRepository,
 
             UserRepository userRepository,
+
+            PropertyRepository propertyRepository,
+
+            PropertyManagerRepository propertyManagerRepository,
 
             RentInvoicePdfService rentInvoicePdfService,
 
@@ -102,6 +124,12 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
 
         this.userRepository =
                 userRepository;
+
+        this.propertyRepository =
+                propertyRepository;
+
+        this.propertyManagerRepository =
+                propertyManagerRepository;
 
         this.rentInvoicePdfService =
                 rentInvoicePdfService;
@@ -142,16 +170,26 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
 
         RentalAgreement agreement =
                 rentalAgreementRepository
+<<<<<<< HEAD
                         .findByIdForInvoiceCreation(request.getAgreementId())
+=======
+                        .findForAccessByAgreementId(request.getAgreementId())
+>>>>>>> origin/backend/sripriya
                         .orElseThrow(() ->
                                 new RuntimeException(
                                         "Rental agreement not found"
                                 )
                         );
 
+<<<<<<< HEAD
         if (!hasPropertyAccess(agreement, user)) {
             throw new RuntimeException("Rental agreement not found");
         }
+=======
+        authorizePropertyAccess(
+                resolveProperty(agreement),
+                getAuthenticatedUser());
+>>>>>>> origin/backend/sripriya
 
         // -----------------------------------------------------
         // 2. Agreement must be ACTIVE
@@ -364,7 +402,44 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                 billingYear
         );
 
+<<<<<<< HEAD
         invoice.setInvoiceDate(invoiceDate);
+=======
+        invoice.setInvoiceDate(
+                LocalDate.now()
+        );
+
+        // -----------------------------------------------------
+        // 6. Calculate due date
+        // -----------------------------------------------------
+
+        Integer agreementDueDay = agreement.getDueDay();
+        if (agreementDueDay == null
+                || agreementDueDay < 1
+                || agreementDueDay > 31) {
+            throw new IllegalArgumentException(
+                    "Rental agreement does not have a valid rent due day");
+        }
+
+        int dueDay = agreementDueDay;
+
+        LocalDate dueDate;
+
+        int lastDayOfMonth =
+                billingDate.lengthOfMonth();
+
+        if (dueDay > lastDayOfMonth) {
+
+            dueDay = lastDayOfMonth;
+        }
+
+        dueDate =
+                LocalDate.of(
+                        billingYear,
+                        billingMonth,
+                        dueDay
+                );
+>>>>>>> origin/backend/sripriya
 
         invoice.setDueDate(
                 billingPeriod.dueDate()
@@ -616,9 +691,13 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                                 )
                         );
 
+<<<<<<< HEAD
         if (!hasInvoiceAccess(invoice, user)) {
             throw new RuntimeException("Invoice not found");
         }
+=======
+        authorizeInvoiceAccess(invoice, getAuthenticatedUser());
+>>>>>>> origin/backend/sripriya
 
         return mapToResponse(
                 invoice
@@ -633,6 +712,7 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
     public List<RentInvoiceResponse> getAllInvoices() {
 
         User user = getAuthenticatedUser();
+<<<<<<< HEAD
         List<RentInvoice> invoices = switch (user.getRole()) {
             case SUPER_ADMIN -> rentInvoiceRepository.findAll();
             case PROPERTY_OWNER ->
@@ -644,6 +724,20 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         };
 
         return mapInvoicesToResponses(invoices);
+=======
+
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            return mapInvoicesToResponses(rentInvoiceRepository.findAll());
+        }
+
+        List<Long> propertyIds = getAuthorizedPropertyIds(user);
+        if (propertyIds.isEmpty()) {
+            return List.of();
+        }
+
+        return mapInvoicesToResponses(
+                rentInvoiceRepository.findByAuthorizedPropertyIds(propertyIds));
+>>>>>>> origin/backend/sripriya
     }
 
     // =========================================================
@@ -808,6 +902,111 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         }
 
         return billingDate;
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || authentication.getName() == null) {
+            throw new AccessDeniedException("User is not authenticated");
+        }
+
+        return userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new AccessDeniedException(
+                        "Logged-in user not found"));
+    }
+
+    private void authorizeInvoiceAccess(RentInvoice invoice, User user) {
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            return;
+        }
+
+        if (user.getRole() == RoleType.TENANT) {
+            RentalAgreement agreement = invoice.getRentalAgreement();
+            Tenant tenant = agreement == null ? null : agreement.getTenant();
+            User tenantUser = tenant == null ? null : tenant.getUser();
+
+            if (tenantUser != null
+                    && Objects.equals(tenantUser.getId(), user.getId())) {
+                return;
+            }
+
+            throw new AccessDeniedException(
+                    "You do not have access to this invoice");
+        }
+
+        RentalAgreement agreement = invoice.getRentalAgreement();
+        authorizePropertyAccess(
+                agreement == null ? null : resolveProperty(agreement),
+                user);
+    }
+
+    private void authorizePropertyAccess(Property property, User user) {
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            return;
+        }
+
+        if (property != null && user.getRole() == RoleType.PROPERTY_OWNER
+                && property.getOwner() != null
+                && Objects.equals(property.getOwner().getId(), user.getId())) {
+            return;
+        }
+
+        if (property != null && user.getRole() == RoleType.PROPERTY_MANAGER) {
+            PropertyManager manager = property.getPropertyManager();
+            User managerUser = manager == null ? null : manager.getUser();
+            if (managerUser != null
+                    && Objects.equals(managerUser.getId(), user.getId())) {
+                return;
+            }
+        }
+
+        throw new AccessDeniedException(
+                "You do not have access to this property");
+    }
+
+    private Property resolveProperty(RentalAgreement agreement) {
+        if (agreement.getProperty() != null) {
+            return agreement.getProperty();
+        }
+
+        if (agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null) {
+            return agreement.getUnit()
+                    .getFloor()
+                    .getBuilding()
+                    .getProperty();
+        }
+
+        return null;
+    }
+
+    private List<Long> getAuthorizedPropertyIds(User user) {
+        if (user.getRole() == RoleType.PROPERTY_OWNER) {
+            return propertyRepository.findByOwner(user).stream()
+                    .map(Property::getPropertyId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+
+        if (user.getRole() == RoleType.PROPERTY_MANAGER) {
+            PropertyManager manager = propertyManagerRepository
+                    .findByUser(user)
+                    .orElseThrow(() -> new AccessDeniedException(
+                            "Property manager record not found"));
+
+            return propertyRepository.findByPropertyManager(manager).stream()
+                    .map(Property::getPropertyId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+
+        throw new AccessDeniedException(
+                "You do not have permission to access these invoices");
     }
 
     private List<RentInvoiceResponse> mapInvoicesToResponses(

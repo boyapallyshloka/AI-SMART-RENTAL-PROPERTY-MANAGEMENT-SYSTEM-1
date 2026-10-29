@@ -89,6 +89,42 @@ public class UserServiceImpl implements UserService {
 
         String email = request.getEmail().toLowerCase().trim();
 
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            if (user.getStatus() != UserStatus.INACTIVE
+                    || !user.isSelfDeactivated()) {
+                throw new UserAlreadyExistsException("Email already registered");
+            }
+
+            if (request.getRole() != user.getRole()
+                    || user.getRole() == RoleType.SUPER_ADMIN) {
+                throw new IllegalArgumentException(
+                        "Registration role does not match the existing account");
+            }
+
+            if (userRepository.existsByPhoneAndIdNot(
+                    request.getPhone(), user.getId())) {
+                throw new UserAlreadyExistsException(
+                        "Phone number already registered");
+            }
+
+            Optional<EmailVerificationOtp> existingOtp =
+                    emailVerificationOtpRepository.findByUser_Id(user.getId());
+            if (existingOtp.isPresent()) {
+                LocalDateTime lastSentAt = existingOtp.get().getLastSentAt();
+                if (lastSentAt != null
+                        && lastSentAt.plusSeconds(OTP_RESEND_COOLDOWN_SECONDS)
+                                .isAfter(LocalDateTime.now())) {
+                    throw new IllegalArgumentException(
+                            "Please wait 60 seconds before requesting another OTP");
+                }
+            }
+
+            issueOtp(user, true, request);
+            return mapToResponse(user);
+        }
+
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("Email already registered");
         }
@@ -136,6 +172,30 @@ public class UserServiceImpl implements UserService {
         issueOtp(savedUser, false);
 
         return mapToResponse(savedUser);
+    }
+
+    @Override
+    public void deactivateMyAccount(String email) {
+
+        User user = userRepository.findByEmail(email.toLowerCase().trim())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Authenticated user not found"));
+
+        if (user.getRole() != RoleType.TENANT
+                && user.getRole() != RoleType.PROPERTY_OWNER
+                && user.getRole() != RoleType.PROPERTY_MANAGER) {
+            throw new IllegalArgumentException(
+                    "This account cannot be deactivated through self-service");
+        }
+
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new IllegalArgumentException(
+                    "Only active accounts can be deactivated");
+        }
+
+        user.setStatus(UserStatus.INACTIVE);
+        user.setSelfDeactivated(true);
+        userRepository.save(user);
     }
 
     // =========================================================
@@ -201,14 +261,29 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Invalid email or OTP"));
 
-        if (user.isEmailVerified()) {
-            return;
+        Optional<EmailVerificationOtp> existingOtp =
+                emailVerificationOtpRepository.findByUser_Id(user.getId());
+        if (existingOtp.isEmpty()) {
+            if (user.isEmailVerified()) {
+                return;
+            }
+            throw new IllegalArgumentException(
+                    "OTP not found. Please request a new OTP.");
         }
 
-        EmailVerificationOtp otpRecord =
-                emailVerificationOtpRepository.findByUser_Id(user.getId())
-                        .orElseThrow(() -> new IllegalArgumentException(
-                                "OTP not found. Please request a new OTP."));
+        EmailVerificationOtp otpRecord = existingOtp.get();
+
+        boolean reactivation = otpRecord.getPendingPasswordHash() != null;
+        if (reactivation
+                && (user.getStatus() != UserStatus.INACTIVE
+                        || !user.isSelfDeactivated())) {
+            throw new IllegalArgumentException(
+                    "Account is not eligible for reactivation");
+        }
+
+        if (user.isEmailVerified() && !reactivation) {
+            return;
+        }
 
         if (otpRecord.getExpiryDate().isBefore(LocalDateTime.now())) {
             emailVerificationOtpRepository.delete(otpRecord);
@@ -240,12 +315,30 @@ public class UserServiceImpl implements UserService {
                             + (MAX_OTP_ATTEMPTS - attempts));
         }
 
+        if (reactivation) {
+            if (userRepository.existsByPhoneAndIdNot(
+                    otpRecord.getPendingPhone(), user.getId())) {
+                throw new IllegalArgumentException(
+                        "Phone number already registered");
+            }
+
+            user.setFirstName(otpRecord.getPendingFirstName());
+            user.setLastName(otpRecord.getPendingLastName());
+            user.setPassword(otpRecord.getPendingPasswordHash());
+            user.setPhone(otpRecord.getPendingPhone());
+            user.setGender(otpRecord.getPendingGender());
+            user.setStatus(UserStatus.ACTIVE);
+            user.setSelfDeactivated(false);
+        }
+
         user.setEmailVerified(true);
         userRepository.save(user);
         emailVerificationOtpRepository.delete(otpRecord);
 
-        // Welcome email is sent only after successful verification.
-        sendWelcomeEmail(user);
+        if (!reactivation) {
+            // Welcome email is sent only after successful verification.
+            sendWelcomeEmail(user);
+        }
     }
 
     // =========================================================
@@ -260,13 +353,19 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Unable to resend OTP for this email address"));
 
-        if (user.isEmailVerified()) {
+        Optional<EmailVerificationOtp> existingOtp =
+                emailVerificationOtpRepository.findByUser_Id(user.getId());
+
+        boolean reactivation = user.getStatus() == UserStatus.INACTIVE
+                && user.isSelfDeactivated()
+                && existingOtp
+                        .map(this::hasPendingReactivationData)
+                        .orElse(false);
+
+        if (user.isEmailVerified() && !reactivation) {
             throw new IllegalArgumentException(
                     "Email address is already verified");
         }
-
-        Optional<EmailVerificationOtp> existingOtp =
-                emailVerificationOtpRepository.findByUser_Id(user.getId());
 
         if (existingOtp.isPresent()) {
             LocalDateTime lastSentAt = existingOtp.get().getLastSentAt();
@@ -279,7 +378,44 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        issueOtp(user);
+        if (reactivation) {
+            resendReactivationOtp(user, existingOtp.orElseThrow());
+        } else {
+            issueOtp(user);
+        }
+    }
+
+    private boolean hasPendingReactivationData(EmailVerificationOtp otpRecord) {
+        return otpRecord.getPendingFirstName() != null
+                && otpRecord.getPendingLastName() != null
+                && otpRecord.getPendingPasswordHash() != null
+                && otpRecord.getPendingPhone() != null
+                && otpRecord.getPendingGender() != null;
+    }
+
+    private void resendReactivationOtp(
+            User user,
+            EmailVerificationOtp otpRecord) {
+
+        String otp = String.format(
+                "%06d",
+                SECURE_RANDOM.nextInt(1_000_000));
+        LocalDateTime now = LocalDateTime.now();
+
+        otpRecord.setOtpHash(passwordEncoder.encode(otp));
+        otpRecord.setExpiryDate(now.plusMinutes(OTP_EXPIRY_MINUTES));
+        otpRecord.setLastSentAt(now);
+        otpRecord.setFailedAttempts(0);
+        emailVerificationOtpRepository.save(otpRecord);
+
+        String userEmail = user.getEmail();
+        String firstName = user.getFirstName();
+        dispatchEmail(
+                "Email verification OTP",
+                () -> emailService.sendEmailVerificationOtp(
+                        userEmail,
+                        firstName,
+                        otp));
     }
 
     // =========================================================
@@ -291,6 +427,14 @@ public class UserServiceImpl implements UserService {
     }
 
     private void issueOtp(User user, boolean replaceExistingOtp) {
+        issueOtp(user, replaceExistingOtp, null);
+    }
+
+    private void issueOtp(
+            User user,
+            boolean replaceExistingOtp,
+            RegisterRequest pendingReactivation) {
+
         if (replaceExistingOtp) {
             emailVerificationOtpRepository.deleteByUser_Id(user.getId());
             emailVerificationOtpRepository.flush();
@@ -308,6 +452,17 @@ public class UserServiceImpl implements UserService {
         otpRecord.setExpiryDate(now.plusMinutes(OTP_EXPIRY_MINUTES));
         otpRecord.setLastSentAt(now);
         otpRecord.setFailedAttempts(0);
+
+        if (pendingReactivation != null) {
+            otpRecord.setPendingFirstName(
+                    pendingReactivation.getFirstName().trim());
+            otpRecord.setPendingLastName(
+                    pendingReactivation.getLastName().trim());
+            otpRecord.setPendingPasswordHash(
+                    passwordEncoder.encode(pendingReactivation.getPassword()));
+            otpRecord.setPendingPhone(pendingReactivation.getPhone());
+            otpRecord.setPendingGender(pendingReactivation.getGender());
+        }
 
         emailVerificationOtpRepository.save(otpRecord);
 
@@ -542,6 +697,7 @@ public class UserServiceImpl implements UserService {
                         "User not found with id: " + id));
 
         user.setStatus(status);
+        user.setSelfDeactivated(false);
         User updatedUser = userRepository.save(user);
 
         // Preserve property manager profile creation on approval.
