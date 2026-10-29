@@ -3,7 +3,6 @@ package com.rental.rental_management_backend.property.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +40,6 @@ public class PropertyPublicController {
      * that are currently available for rental.
      */
     @GetMapping("/public")
-    @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<List<PropertyCardResponse>> getAvailableProperties() {
 
         return ResponseEntity.ok(
@@ -58,7 +56,6 @@ public class PropertyPublicController {
      * All parameters are optional.
      */
     @GetMapping("/public/search")
-    @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<List<PropertyResponse>> searchAvailableProperties(
 
             @RequestParam(required = false)
@@ -106,7 +103,6 @@ public class PropertyPublicController {
      * of one available property.
      */
     @GetMapping("/public/{propertyId}")
-    @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<PropertyDetailsResponse> getPublicPropertyDetails(
             @PathVariable Long propertyId) {
 

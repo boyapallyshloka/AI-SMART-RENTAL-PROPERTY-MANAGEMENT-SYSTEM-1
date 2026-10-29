@@ -5,6 +5,7 @@ public enum PropertyDocumentType {
     PROPERTY_REGISTRATION,
     PROPERTY_TAX_DOCUMENT,
     NOC,
+    BUILDING_PERMIT,
     INSURANCE,
     OTHER
 }

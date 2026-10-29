@@ -5,12 +5,19 @@ import java.time.Year;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.rental.rental_management_backend.User.Repository.UserRepository;
+import com.rental.rental_management_backend.User.entity.User;
+import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.ai.client.FastApiRentPredictionClient;
 import com.rental.rental_management_backend.ai.dto.RentPredictionPreviewRequestDTO;
 import com.rental.rental_management_backend.ai.dto.RentPredictionRequestDTO;
@@ -35,6 +42,8 @@ public class RentPredictionServiceImpl implements RentPredictionService {
 
     private final FloorRepository floorRepository;
 
+    private final UserRepository userRepository;
+
     private final PropertyAddressRepository propertyAddressRepository;
 
     private final PropertyAmenityRepository propertyAmenityRepository;
@@ -43,11 +52,13 @@ public class RentPredictionServiceImpl implements RentPredictionService {
 
     public RentPredictionServiceImpl(
             FloorRepository floorRepository,
+            UserRepository userRepository,
             PropertyAddressRepository propertyAddressRepository,
             PropertyAmenityRepository propertyAmenityRepository,
             FastApiRentPredictionClient fastApiRentPredictionClient) {
 
         this.floorRepository = floorRepository;
+        this.userRepository = userRepository;
         this.propertyAddressRepository = propertyAddressRepository;
         this.propertyAmenityRepository = propertyAmenityRepository;
         this.fastApiRentPredictionClient = fastApiRentPredictionClient;
@@ -100,8 +111,10 @@ public class RentPredictionServiceImpl implements RentPredictionService {
         // 2. Load Floor
         // ---------------------------------------------------------
 
+        User authenticatedOwner = getAuthenticatedOwner();
+
         Floor floor = floorRepository
-                .findById(previewRequest.getFloorId())
+                .findFloorWithAccessDetailsByFloorId(previewRequest.getFloorId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Floor not found with id: "
@@ -120,10 +133,6 @@ public class RentPredictionServiceImpl implements RentPredictionService {
 
         Building building = floor.getBuilding();
 
-        // ---------------------------------------------------------
-        // 4. Load Property
-        // ---------------------------------------------------------
-
         if (building.getProperty() == null) {
 
             throw new ResponseStatusException(
@@ -132,6 +141,16 @@ public class RentPredictionServiceImpl implements RentPredictionService {
         }
 
         Property property = building.getProperty();
+
+        if (property.getOwner() == null
+                || property.getOwner().getId() == null
+                || !Objects.equals(
+                        property.getOwner().getId(),
+                        authenticatedOwner.getId())) {
+
+            throw new AccessDeniedException(
+                    "You are not authorized to predict rent for this floor");
+        }
 
         // ---------------------------------------------------------
         // 5. Load Property Address
@@ -211,6 +230,34 @@ public class RentPredictionServiceImpl implements RentPredictionService {
         response.setPredictedRent(predictedRent);
 
         return response;
+    }
+
+    private User getAuthenticatedOwner() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        if (authentication == null
+                || !authentication.isAuthenticated()) {
+
+            throw new AccessDeniedException(
+                    "User is not authenticated");
+        }
+
+        User user = userRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new AccessDeniedException(
+                        "Authenticated user not found"));
+
+        if (user.getRole() != RoleType.PROPERTY_OWNER) {
+
+            throw new AccessDeniedException(
+                    "Only PROPERTY_OWNER can predict rent");
+        }
+
+        return user;
     }
 
     /**
