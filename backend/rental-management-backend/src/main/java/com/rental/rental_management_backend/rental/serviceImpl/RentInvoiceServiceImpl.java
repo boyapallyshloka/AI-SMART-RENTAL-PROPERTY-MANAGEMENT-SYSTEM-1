@@ -10,26 +10,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-<<<<<<< HEAD
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-=======
->>>>>>> origin/backend/sripriya
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
-<<<<<<< HEAD
-import com.rental.rental_management_backend.User.exception.ResourceNotFoundException;
-=======
->>>>>>> origin/backend/sripriya
 import com.rental.rental_management_backend.User.serviceImpl.UserAuthEmailDispatcher;
 import com.rental.rental_management_backend.email.EmailService;
 import com.rental.rental_management_backend.notification.enums.NotificationPriority;
@@ -38,14 +28,9 @@ import com.rental.rental_management_backend.notification.service.NotificationSer
 import com.rental.rental_management_backend.payment.enums.PaymentStatus;
 import com.rental.rental_management_backend.payment.repository.PaymentRepository;
 import com.rental.rental_management_backend.property.entity.Property;
-<<<<<<< HEAD
-import com.rental.rental_management_backend.property.entity.Unit;
-import com.rental.rental_management_backend.rental.dto.RentInvoiceLateFeeRequest;
-=======
 import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
->>>>>>> origin/backend/sripriya
 import com.rental.rental_management_backend.rental.dto.RentInvoiceRequest;
 import com.rental.rental_management_backend.rental.dto.RentInvoiceResponse;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
@@ -62,9 +47,6 @@ import com.rental.rental_management_backend.tenant.repository.TenantRepository;
 
 @Service
 public class RentInvoiceServiceImpl implements RentInvoiceService {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(RentInvoiceServiceImpl.class);
 
     private final RentInvoiceRepository rentInvoiceRepository;
 
@@ -158,11 +140,8 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
     // =========================================================
 
     @Override
-    @Transactional
     public RentInvoiceResponse createInvoice(
             RentInvoiceRequest request) {
-
-        User user = getAuthenticatedUser();
 
         // -----------------------------------------------------
         // 1. Find rental agreement
@@ -170,26 +149,16 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
 
         RentalAgreement agreement =
                 rentalAgreementRepository
-<<<<<<< HEAD
-                        .findByIdForInvoiceCreation(request.getAgreementId())
-=======
                         .findForAccessByAgreementId(request.getAgreementId())
->>>>>>> origin/backend/sripriya
                         .orElseThrow(() ->
                                 new RuntimeException(
                                         "Rental agreement not found"
                                 )
                         );
 
-<<<<<<< HEAD
-        if (!hasPropertyAccess(agreement, user)) {
-            throw new RuntimeException("Rental agreement not found");
-        }
-=======
         authorizePropertyAccess(
                 resolveProperty(agreement),
                 getAuthenticatedUser());
->>>>>>> origin/backend/sripriya
 
         // -----------------------------------------------------
         // 2. Agreement must be ACTIVE
@@ -203,178 +172,42 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
             );
         }
 
-        BillingPeriod billingPeriod = getNextBillingPeriod(agreement);
-        return createInvoiceForAgreement(
-                agreement,
-                billingPeriod,
-                LocalDate.now(),
-                false);
-    }
+        // -----------------------------------------------------
+        // 3. Determine next billing month
+        // -----------------------------------------------------
 
-    @Override
-    @Transactional
-    public RentInvoiceResponse updateLateFee(
-            Long invoiceId,
-            RentInvoiceLateFeeRequest request) {
+        LocalDate billingDate =
+                getNextBillingDate(agreement);
 
-        User user = getAuthenticatedUser();
-        if (user.getRole() != RoleType.PROPERTY_OWNER
-                && user.getRole() != RoleType.PROPERTY_MANAGER
-                && user.getRole() != RoleType.SUPER_ADMIN) {
-            throw new AccessDeniedException(
-                    "You are not authorized to update invoice late fees");
-        }
+        int billingMonth =
+                billingDate.getMonthValue();
 
-        RentInvoice invoice = rentInvoiceRepository
-                .findByIdForUpdate(invoiceId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Invoice not found"));
+        int billingYear =
+                billingDate.getYear();
 
-        if (!hasPropertyAccess(invoice.getRentalAgreement(), user)) {
-            throw new ResourceNotFoundException("Invoice not found");
-        }
-
-        if (invoice.getStatus() == InvoiceStatus.PAID) {
-            throw new IllegalArgumentException(
-                    "Late fee cannot be changed for a paid invoice");
-        }
-
-        invoice.setLateFee(request.getLateFee());
-        invoice.setTotalAmount(
-                invoice.getRentAmount().add(request.getLateFee()));
-        rentInvoiceRepository.saveAndFlush(invoice);
-
-        try {
-            String updatedInvoiceDocument =
-                    rentInvoicePdfService.generateInvoicePdf(invoice);
-            if (updatedInvoiceDocument == null
-                    || updatedInvoiceDocument.isBlank()) {
-                logger.error(
-                        "Invoice PDF regeneration returned an empty document reference "
-                                + "for invoice {}. Financial changes were saved; "
-                                + "the existing invoice document was retained.",
-                        invoiceId);
-            } else {
-                invoice.setInvoiceDocument(updatedInvoiceDocument);
-                rentInvoiceRepository.save(invoice);
-            }
-        } catch (RuntimeException exception) {
-            logger.error(
-                    "Failed to regenerate PDF for invoice {} after manual late-fee update. "
-                            + "Financial changes were saved; the existing invoice document was retained.",
-                    invoiceId,
-                    exception);
-        }
-
-        return mapToResponse(invoice);
-    }
-
-    @Override
-    @Transactional
-    public void generateScheduledInvoice(Long agreementId, LocalDate today) {
-        RentalAgreement agreement = rentalAgreementRepository
-                .findByIdForInvoiceCreation(agreementId)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Rental agreement not found: " + agreementId));
-        if (agreement.getStatus() != AgreementStatus.ACTIVE) {
-            logger.info("Skipping invoice generation for inactive agreement {}", agreementId);
-            return;
-        }
-
-        BillingPeriod billingPeriod = getNextBillingPeriod(agreement);
-        int billingMonth = billingPeriod.billingDate().getMonthValue();
-        int billingYear = billingPeriod.billingDate().getYear();
-
-        LocalDate billingPeriodStart = billingPeriod.billingDate();
-        LocalDate billingPeriodEnd = billingPeriodStart.withDayOfMonth(
-                billingPeriodStart.lengthOfMonth());
-        if (billingPeriodEnd.isBefore(agreement.getStartDate())
-                || billingPeriodStart.isAfter(agreement.getEndDate())
-                || today.isBefore(agreement.getStartDate())
-                || today.isAfter(agreement.getEndDate())) {
-            logger.info(
-                    "Skipping invoice generation for agreement {} billing {}/{}: outside agreement period",
-                    agreementId,
-                    billingMonth,
-                    billingYear);
-            return;
-        }
-
-        LocalDate generationDate = billingPeriod.dueDate().minusDays(7);
-        if (today.isBefore(generationDate)) {
-            logger.info(
-                    "Skipping invoice generation for agreement {} billing {}/{}: eligible on {}",
-                    agreementId,
-                    billingMonth,
-                    billingYear,
-                    generationDate);
-            return;
-        }
-
-        if (rentInvoiceRepository
-                .findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
-                        agreementId,
-                        billingMonth,
-                        billingYear)
-                .isPresent()) {
-            logger.info(
-                    "Skipping invoice generation for agreement {} billing {}/{}: invoice already exists",
-                    agreementId,
-                    billingMonth,
-                    billingYear);
-            return;
-        }
-
-        try {
-            RentInvoiceResponse createdInvoice = createInvoiceForAgreement(
-                    agreement,
-                    billingPeriod,
-                    today,
-                    true);
-            if (createdInvoice == null) {
-                logger.info(
-                        "Skipping invoice generation for agreement {} billing {}/{}: invoice already exists",
-                        agreementId,
-                        billingMonth,
-                        billingYear);
-                return;
-            }
-            logger.info(
-                    "Created rent invoice for agreement {} billing {}/{}",
-                    agreementId,
-                    billingMonth,
-                    billingYear);
-        } catch (RuntimeException exception) {
-            logger.error(
-                    "Failed to create rent invoice for agreement {} billing {}/{}",
-                    agreementId,
-                    billingMonth,
-                    billingYear,
-                    exception);
-            throw exception;
-        }
-    }
-
-    private RentInvoiceResponse createInvoiceForAgreement(
-            RentalAgreement agreement,
-            BillingPeriod billingPeriod,
-            LocalDate invoiceDate,
-            boolean preserveInvoiceOnPdfFailure) {
-        int billingMonth = billingPeriod.billingDate().getMonthValue();
-        int billingYear = billingPeriod.billingDate().getYear();
+        // -----------------------------------------------------
+        // 4. Prevent duplicate invoice
+        // -----------------------------------------------------
 
         if (rentInvoiceRepository
                 .findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
                         agreement.getAgreementId(),
                         billingMonth,
-                        billingYear)
+                        billingYear
+                )
                 .isPresent()) {
-            if (preserveInvoiceOnPdfFailure) {
-                return null;
-            }
+
             throw new RuntimeException(
-                    "Invoice already exists for " + billingMonth + "/" + billingYear);
+                    "Invoice already exists for "
+                            + billingMonth
+                            + "/"
+                            + billingYear
+            );
         }
+
+        // -----------------------------------------------------
+        // 5. Create invoice entity
+        // -----------------------------------------------------
 
         RentInvoice invoice =
                 new RentInvoice();
@@ -402,9 +235,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                 billingYear
         );
 
-<<<<<<< HEAD
-        invoice.setInvoiceDate(invoiceDate);
-=======
         invoice.setInvoiceDate(
                 LocalDate.now()
         );
@@ -439,10 +269,9 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                         billingMonth,
                         dueDay
                 );
->>>>>>> origin/backend/sripriya
 
         invoice.setDueDate(
-                billingPeriod.dueDate()
+                dueDate
         );
 
         // -----------------------------------------------------
@@ -517,32 +346,24 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         // 14. Generate PDF
         // -----------------------------------------------------
 
-        String invoiceDocument;
-        try {
-            invoiceDocument = rentInvoicePdfService.generateInvoicePdf(invoice);
-        } catch (RuntimeException exception) {
-            if (!preserveInvoiceOnPdfFailure) {
-                throw exception;
-            }
-            logger.error(
-                    "Failed to generate PDF for scheduled rent invoice {}. "
-                            + "Invoice financial data will be retained.",
-                    invoice.getInvoiceId(),
-                    exception);
-            invoiceDocument = null;
-        }
+        String invoiceDocument =
+                rentInvoicePdfService
+                        .generateInvoicePdf(
+                                invoice
+                        );
 
-        if (invoiceDocument != null && !invoiceDocument.isBlank()) {
-            invoice.setInvoiceDocument(invoiceDocument);
-        } else if (preserveInvoiceOnPdfFailure) {
-            logger.error(
-                    "Invoice PDF generation returned an empty document for scheduled rent invoice {}. "
-                            + "Invoice financial data will be retained.",
-                    invoice.getInvoiceId());
-        } else {
-            invoice.setInvoiceDocument(invoiceDocument);
-        }
-        invoice = rentInvoiceRepository.save(invoice);
+        invoice.setInvoiceDocument(
+                invoiceDocument
+        );
+
+        // -----------------------------------------------------
+        // 15. Save final invoice
+        // -----------------------------------------------------
+
+        invoice =
+                rentInvoiceRepository.save(
+                        invoice
+                );
 
         // -----------------------------------------------------
         // 16. Notify tenant
@@ -559,28 +380,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         return mapToResponse(
                 invoice
         );
-    }
-
-    private BillingPeriod getNextBillingPeriod(RentalAgreement agreement) {
-        LocalDate billingDate = getNextBillingDate(agreement);
-        Integer agreementDueDay = agreement.getDueDay();
-        if (agreementDueDay == null || agreementDueDay < 1 || agreementDueDay > 31) {
-            throw new IllegalArgumentException(
-                    "Rental agreement does not have a valid rent due day");
-        }
-        int dueDay = agreementDueDay;
-        int lastDayOfMonth = billingDate.lengthOfMonth();
-        if (dueDay > lastDayOfMonth) {
-            dueDay = lastDayOfMonth;
-        }
-        LocalDate dueDate = LocalDate.of(
-                billingDate.getYear(),
-                billingDate.getMonthValue(),
-                dueDay);
-        return new BillingPeriod(billingDate, dueDate);
-    }
-
-    private record BillingPeriod(LocalDate billingDate, LocalDate dueDate) {
     }
 
     // =========================================================
@@ -677,11 +476,9 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
     // =========================================================
 
     @Override
-    @Transactional(readOnly = true)
     public RentInvoiceResponse getInvoiceById(
             Long invoiceId) {
 
-        User user = getAuthenticatedUser();
         RentInvoice invoice =
                 rentInvoiceRepository
                         .findById(invoiceId)
@@ -691,13 +488,7 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                                 )
                         );
 
-<<<<<<< HEAD
-        if (!hasInvoiceAccess(invoice, user)) {
-            throw new RuntimeException("Invoice not found");
-        }
-=======
         authorizeInvoiceAccess(invoice, getAuthenticatedUser());
->>>>>>> origin/backend/sripriya
 
         return mapToResponse(
                 invoice
@@ -712,19 +503,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
     public List<RentInvoiceResponse> getAllInvoices() {
 
         User user = getAuthenticatedUser();
-<<<<<<< HEAD
-        List<RentInvoice> invoices = switch (user.getRole()) {
-            case SUPER_ADMIN -> rentInvoiceRepository.findAll();
-            case PROPERTY_OWNER ->
-                    rentInvoiceRepository.findAllForPropertyOwner(user.getId());
-            case PROPERTY_MANAGER ->
-                    rentInvoiceRepository.findAllForPropertyManager(user.getId());
-            default -> throw new AccessDeniedException(
-                    "You are not authorized to access invoices");
-        };
-
-        return mapInvoicesToResponses(invoices);
-=======
 
         if (user.getRole() == RoleType.SUPER_ADMIN) {
             return mapInvoicesToResponses(rentInvoiceRepository.findAll());
@@ -737,7 +515,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
 
         return mapInvoicesToResponses(
                 rentInvoiceRepository.findByAuthorizedPropertyIds(propertyIds));
->>>>>>> origin/backend/sripriya
     }
 
     // =========================================================
@@ -766,7 +543,7 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                         throw new RuntimeException(
                                 "Logged-in user not found");
                     }
-                    throw new ResourceNotFoundException(
+                    throw new RuntimeException(
                             "Tenant profile not found for logged-in user");
                 });
 
@@ -778,92 +555,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
                 rentInvoiceRepository.findByTenantId(tenantId);
 
         return mapInvoicesToResponses(invoices);
-    }
-
-    private User getAuthenticatedUser() {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null
-                || authentication.getName() == null
-                || authentication.getName().isBlank()) {
-            throw new AccessDeniedException(
-                    "Authenticated user is required");
-        }
-
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new AccessDeniedException(
-                        "Authenticated user is not authorized"));
-    }
-
-    private boolean hasInvoiceAccess(RentInvoice invoice, User user) {
-        if (user.getRole() == RoleType.SUPER_ADMIN) {
-            return true;
-        }
-        if (user.getRole() == RoleType.TENANT) {
-            return invoice.getTenantId() != null
-                    && tenantRepository.findByUser_Id(user.getId())
-                            .map(Tenant::getTenantId)
-                            .filter(invoice.getTenantId()::equals)
-                            .isPresent();
-        }
-
-        return hasPropertyAccess(
-                invoice.getRentalAgreement(),
-                user);
-    }
-
-    private boolean hasPropertyAccess(
-            RentalAgreement agreement,
-            User user) {
-        if (user.getRole() == RoleType.SUPER_ADMIN) {
-            return true;
-        }
-
-        Property property = resolveAgreementProperty(agreement);
-        if (property == null) {
-            return false;
-        }
-
-        if (user.getRole() == RoleType.PROPERTY_OWNER) {
-            return property.getOwner() != null
-                    && user.getId().equals(property.getOwner().getId());
-        }
-        if (user.getRole() == RoleType.PROPERTY_MANAGER) {
-            return property.getPropertyManager() != null
-                    && property.getPropertyManager().getUser() != null
-                    && user.getId().equals(
-                            property.getPropertyManager().getUser().getId());
-        }
-        return false;
-    }
-
-    private Property resolveAgreementProperty(RentalAgreement agreement) {
-        if (agreement == null) {
-            return null;
-        }
-        if (agreement.getProperty() != null) {
-            return agreement.getProperty();
-        }
-        if (agreement.getRentalApplication() != null) {
-            if (agreement.getRentalApplication().getProperty() != null) {
-                return agreement.getRentalApplication().getProperty();
-            }
-            Property applicationUnitProperty = resolveUnitProperty(
-                    agreement.getRentalApplication().getUnit());
-            if (applicationUnitProperty != null) {
-                return applicationUnitProperty;
-            }
-        }
-        return resolveUnitProperty(agreement.getUnit());
-    }
-
-    private Property resolveUnitProperty(Unit unit) {
-        if (unit == null
-                || unit.getFloor() == null
-                || unit.getFloor().getBuilding() == null) {
-            return null;
-        }
-        return unit.getFloor().getBuilding().getProperty();
     }
 
     // =========================================================
@@ -1174,13 +865,6 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
         response.setUnitId(
                 invoice.getUnitId()
         );
-
-        if (invoice.getRentalAgreement().getProperty() != null) {
-            response.setPropertyId(
-                    invoice.getRentalAgreement().getProperty().getPropertyId());
-            response.setPropertyName(
-                    invoice.getRentalAgreement().getProperty().getPropertyName());
-        }
 
         response.setBillingMonth(
                 invoice.getBillingMonth()
