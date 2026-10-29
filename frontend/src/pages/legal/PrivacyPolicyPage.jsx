@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
             01
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Introduction & Scope
             </h2>
             <p className="text-xs text-[#5B6875]">Platform overview and applicability</p>
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
 
         <div className="text-sm text-[#5B6875] leading-relaxed space-y-3">
           <p>
-            SmartEstate (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;the platform&rdquo;) provides digital property management software designed to streamline rental operations for <strong className="text-[#243447]">property owners</strong>, <strong className="text-[#243447]">property managers</strong>, <strong className="text-[#243447]">tenants</strong>, and <strong className="text-[#243447]">system administrators</strong>.
+            SmartEstate (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;the platform&rdquo;) provides digital property management software designed to streamline rental operations for <strong className="text-[#111820]">property owners</strong>, <strong className="text-[#111820]">property managers</strong>, <strong className="text-[#111820]">tenants</strong>, and <strong className="text-[#111820]">system administrators</strong>.
           </p>
           <p>
             This Privacy Policy explains how information is gathered, recorded, utilized, and safeguarded when using the SmartEstate application, including unit listings, rental applications, digital lease records, maintenance ticket coordination, and payment tracking.
@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
             02
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Information We Collect
             </h2>
             <p className="text-xs text-[#5B6875]">Categories of information handled by the platform</p>
@@ -94,7 +94,7 @@ export default function PrivacyPolicyPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
             <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
-              <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
+              <p className="font-semibold text-xs text-[#111820] flex items-center gap-1.5">
                 <UserCheck className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Account & Authentication Data
               </p>
@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
-              <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
+              <p className="font-semibold text-xs text-[#111820] flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Property & Unit Listings
               </p>
@@ -114,7 +114,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
-              <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
+              <p className="font-semibold text-xs text-[#111820] flex items-center gap-1.5">
                 <FileCheck className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Tenancy & Lease Records
               </p>
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
-              <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
+              <p className="font-semibold text-xs text-[#111820] flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Maintenance & Dispatch Logs
               </p>
@@ -135,7 +135,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div className="p-3 rounded-md bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1">
-            <p className="font-semibold text-[#243447]">Payment Processing Notice</p>
+            <p className="font-semibold text-[#111820]">Payment Processing Notice</p>
             <p className="text-[#5B6875] leading-relaxed">
               SmartEstate records payment status metadata (such as payment dates, amounts, receipt numbers, and payment status indicators). Full credit card numbers and bank routing credentials are processed through designated payment gateways and are not stored in plain text within SmartEstate application databases.
             </p>
@@ -153,7 +153,7 @@ export default function PrivacyPolicyPage() {
             03
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               How Information Is Used
             </h2>
             <p className="text-xs text-[#5B6875]">Purposes for operational data processing</p>
@@ -193,7 +193,7 @@ export default function PrivacyPolicyPage() {
             04
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Information Sharing & Access
             </h2>
             <p className="text-xs text-[#5B6875]">How data is shared across platform roles and service providers</p>
@@ -207,22 +207,22 @@ export default function PrivacyPolicyPage() {
 
           <div className="space-y-3 text-xs sm:text-sm">
             <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
-              <strong className="text-[#243447] block">Between Owners and Tenants</strong>
+              <strong className="text-[#111820] block">Between Owners and Tenants</strong>
               <span>Property owners and designated managers can view tenant application details, lease terms, and maintenance tickets for their properties. Tenants can view property details, unit assignments, and their own payment histories.</span>
             </div>
 
             <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
-              <strong className="text-[#243447] block">Authorized Infrastructure Service Providers</strong>
+              <strong className="text-[#111820] block">Authorized Infrastructure Service Providers</strong>
               <span>We engage trusted cloud hosting, database storage, and transactional notification providers strictly to host and deliver platform functionality. These providers operate under confidentiality agreements.</span>
             </div>
 
             <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
-              <strong className="text-[#243447] block">Legal and Compliance Obligations</strong>
+              <strong className="text-[#111820] block">Legal and Compliance Obligations</strong>
               <span>We may disclose records when required by law, valid court order, administrative subpoena, or to protect the vital interests and safety of users.</span>
             </div>
 
             <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
-              <strong className="text-[#243447] block">No Selling of Personal Data</strong>
+              <strong className="text-[#111820] block">No Selling of Personal Data</strong>
               <span>SmartEstate does not sell, rent, or trade personal contact information, rental history, or financial data to third-party advertisers or data brokers.</span>
             </div>
           </div>
@@ -239,7 +239,7 @@ export default function PrivacyPolicyPage() {
             05
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Data Retention & Archival
             </h2>
             <p className="text-xs text-[#5B6875]">Retention timelines for rental and accounting records</p>
@@ -266,7 +266,7 @@ export default function PrivacyPolicyPage() {
             06
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Platform Security Measures
             </h2>
             <p className="text-xs text-[#5B6875]">Safeguards implemented to protect platform access</p>
@@ -307,7 +307,7 @@ export default function PrivacyPolicyPage() {
             07
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               User Rights & Preferences
             </h2>
             <p className="text-xs text-[#5B6875]">Managing your account and information choices</p>
@@ -343,7 +343,7 @@ export default function PrivacyPolicyPage() {
             08
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Cookies & Local Storage
             </h2>
             <p className="text-xs text-[#5B6875]">Browser storage mechanisms utilized</p>
@@ -375,7 +375,7 @@ export default function PrivacyPolicyPage() {
             09
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Children&rsquo;s Privacy
             </h2>
             <p className="text-xs text-[#5B6875]">Age restrictions for platform use</p>
@@ -399,7 +399,7 @@ export default function PrivacyPolicyPage() {
             10
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Policy Changes & Updates
             </h2>
             <p className="text-xs text-[#5B6875]">Notification procedures for document amendments</p>
@@ -423,7 +423,7 @@ export default function PrivacyPolicyPage() {
             11
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Contact Information
             </h2>
             <p className="text-xs text-[#5B6875]">Support and inquiries regarding privacy</p>
@@ -434,7 +434,7 @@ export default function PrivacyPolicyPage() {
           <p>
             If you have questions, comments, or requests regarding this Privacy Policy or SmartEstate data practices, please reach out to our platform administration team:
           </p>
-          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#243447]">
+          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#111820]">
             <p><strong>SmartEstate Property Management Platform</strong></p>
             <p>Support and privacy contact addresses are not configured in this application.</p>
             <p>Contact channels will be shown here when configured.</p>

@@ -269,7 +269,7 @@ export default function PropertyCard({
 
         {/* Title and Location */}
         <div>
-          <h3 className="font-semibold text-sm sm:text-base text-[#243447] line-clamp-1 group-hover:text-[#3F7D58] transition-colors">
+          <h3 className="font-semibold text-sm sm:text-base text-[#111820] line-clamp-1 group-hover:text-[#3F7D58] transition-colors">
             {displayName}
           </h3>
           {displayLocation && (
@@ -286,7 +286,7 @@ export default function PropertyCard({
             {hasBeds && (
               <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Bed className="w-3.5 h-3.5 text-[#5B6875]" />
-                <span className="font-medium text-[#243447]">
+                <span className="font-medium text-[#111820]">
                   {bedrooms === 0 ? 'Studio' : `${bedrooms} Beds`}
                 </span>
               </div>
@@ -295,21 +295,21 @@ export default function PropertyCard({
             {hasBaths && (
               <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Bath className="w-3.5 h-3.5 text-[#5B6875]" />
-                <span className="font-medium text-[#243447]">{bathrooms} Baths</span>
+                <span className="font-medium text-[#111820]">{bathrooms} Baths</span>
               </div>
             )}
 
             {hasArea && (
               <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Maximize2 className="w-3.5 h-3.5 text-[#5B6875]" />
-                <span className="font-medium text-[#243447]">{displayArea} sqft</span>
+                <span className="font-medium text-[#111820]">{displayArea} sqft</span>
               </div>
             )}
 
             {hasYear && !hasBeds && (
               <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Calendar className="w-3.5 h-3.5 text-[#5B6875]" />
-                <span className="font-medium text-[#243447]">Built {yearBuilt}</span>
+                <span className="font-medium text-[#111820]">Built {yearBuilt}</span>
               </div>
             )}
           </div>

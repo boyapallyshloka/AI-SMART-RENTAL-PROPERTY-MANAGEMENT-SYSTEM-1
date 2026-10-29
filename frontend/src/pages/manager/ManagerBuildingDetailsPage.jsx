@@ -443,7 +443,7 @@ export default function ManagerBuildingDetailsPage() {
               <AlertCircle className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-lg font-bold text-[#243447]">
+              <h2 className="text-lg font-bold text-[#111820]">
                 Unable to Load Building
               </h2>
               <p className="text-xs text-[#5B6875]">{error || 'Building not found'}</p>
@@ -548,7 +548,7 @@ export default function ManagerBuildingDetailsPage() {
               <span className="font-mono text-[11px] font-bold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                 Building #{building.buildingId || building.id}
               </span>
-              <h1 className="text-2xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl font-bold tracking-tight text-[#111820]">
                 {building.buildingName || building.name || 'Unnamed Building'}
               </h1>
             </div>
@@ -558,7 +558,7 @@ export default function ManagerBuildingDetailsPage() {
                 <span className="text-[#5B6875] block text-[10px] uppercase font-bold tracking-wider">
                   Total Floors
                 </span>
-                <span className="font-bold text-sm text-[#243447]">
+                <span className="font-bold text-sm text-[#111820]">
                   {building.totalFloors != null ? building.totalFloors : floors.length}
                 </span>
               </div>
@@ -580,7 +580,7 @@ export default function ManagerBuildingDetailsPage() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#5B6875]">
               Description
             </h4>
-            <p className="text-xs sm:text-sm text-[#243447] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#111820] leading-relaxed">
               {building.description || 'No specific description provided for this building.'}
             </p>
           </div>
@@ -591,7 +591,7 @@ export default function ManagerBuildingDetailsPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Layers className="w-5 h-5 text-[#3F7D58]" />
-              <h2 className="text-lg font-bold text-[#243447]">
+              <h2 className="text-lg font-bold text-[#111820]">
                 Floors & Rental Units ({floors.length} Floors)
               </h2>
             </div>
@@ -636,7 +636,7 @@ export default function ManagerBuildingDetailsPage() {
                       >
                         <button
                           type="button"
-                          className="p-1 rounded text-[#5B6875] hover:text-[#243447] hover:bg-white transition-colors"
+                          className="p-1 rounded text-[#5B6875] hover:text-[#111820] hover:bg-white transition-colors"
                         >
                           {isExpanded ? (
                             <ChevronUp className="w-4 h-4" />
@@ -646,7 +646,7 @@ export default function ManagerBuildingDetailsPage() {
                         </button>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="text-base font-bold text-[#243447]">
+                            <h3 className="text-base font-bold text-[#111820]">
                               {floor.floorName || floor.name || `Floor ${floor.floorNumber}`}
                             </h3>
                             <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-white px-2 py-0.5 rounded border border-[#E3E8DF]">
@@ -672,7 +672,7 @@ export default function ManagerBuildingDetailsPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenEditFloor(floor)}
-                          className="p-1.5 rounded text-[#5B6875] hover:text-[#243447] hover:bg-white border border-[#E3E8DF] transition-colors"
+                          className="p-1.5 rounded text-[#5B6875] hover:text-[#111820] hover:bg-white border border-[#E3E8DF] transition-colors"
                           title="Edit floor"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -721,7 +721,7 @@ export default function ManagerBuildingDetailsPage() {
                                         <Home className="w-3.5 h-3.5" />
                                       </div>
                                       <div>
-                                        <h4 className="text-sm font-bold text-[#243447]">
+                                        <h4 className="text-sm font-bold text-[#111820]">
                                           Unit {unit.unitNumber || unit.number}
                                         </h4>
                                         <span className="text-[11px] text-[#5B6875]">
@@ -738,7 +738,7 @@ export default function ManagerBuildingDetailsPage() {
                                       <span className="text-[10px] text-[#5B6875] block uppercase">
                                         Rent
                                       </span>
-                                      <span className="font-bold text-[#243447]">
+                                      <span className="font-bold text-[#111820]">
                                         {unit.monthlyRent != null ? formatCurrency(unit.monthlyRent) : '—'}
                                       </span>
                                     </div>
@@ -746,7 +746,7 @@ export default function ManagerBuildingDetailsPage() {
                                       <span className="text-[10px] text-[#5B6875] block uppercase">
                                         Deposit
                                       </span>
-                                      <span className="font-semibold text-[#243447]">
+                                      <span className="font-semibold text-[#111820]">
                                         {unit.securityDeposit != null ? formatCurrency(unit.securityDeposit) : '—'}
                                       </span>
                                     </div>
@@ -754,7 +754,7 @@ export default function ManagerBuildingDetailsPage() {
                                       <span className="text-[10px] text-[#5B6875] block uppercase">
                                         Area
                                       </span>
-                                      <span className="font-semibold text-[#243447]">
+                                      <span className="font-semibold text-[#111820]">
                                         {unit.area != null ? `${unit.area} sqft` : '—'}
                                       </span>
                                     </div>
@@ -790,7 +790,7 @@ export default function ManagerBuildingDetailsPage() {
                                       <button
                                         type="button"
                                         onClick={() => handleOpenEditUnit(unit, floor)}
-                                        className="p-1 rounded text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]"
+                                        className="p-1 rounded text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1]"
                                         title="Edit unit"
                                       >
                                         <Pencil className="w-3.5 h-3.5" />
@@ -829,13 +829,13 @@ export default function ManagerBuildingDetailsPage() {
         >
           <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-              <h3 className="text-base font-bold text-[#243447]">
+              <h3 className="text-base font-bold text-[#111820]">
                 Edit Building Details
               </h3>
               <button
                 type="button"
                 onClick={() => setIsEditBuildingOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -843,7 +843,7 @@ export default function ManagerBuildingDetailsPage() {
 
             <form onSubmit={handleSaveBuilding} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Building Name *
                 </label>
                 <Input
@@ -856,7 +856,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Total Floors
                 </label>
                 <Input
@@ -870,7 +870,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Description
                 </label>
                 <Textarea
@@ -927,13 +927,13 @@ export default function ManagerBuildingDetailsPage() {
         >
           <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-              <h3 className="text-base font-bold text-[#243447]">
+              <h3 className="text-base font-bold text-[#111820]">
                 {editingFloor ? 'Edit Floor' : 'Add New Floor'}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsFloorModalOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -947,7 +947,7 @@ export default function ManagerBuildingDetailsPage() {
 
             <form onSubmit={handleSaveFloor} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Floor Name *
                 </label>
                 <Input
@@ -961,7 +961,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Floor Number *
                 </label>
                 <Input
@@ -1022,7 +1022,7 @@ export default function ManagerBuildingDetailsPage() {
           <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div>
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   {editingUnit ? `Edit Unit ${editingUnit.unitNumber}` : 'Add New Rental Unit'}
                 </h3>
                 <span className="text-xs text-[#5B6875]">
@@ -1032,7 +1032,7 @@ export default function ManagerBuildingDetailsPage() {
               <button
                 type="button"
                 onClick={() => setIsUnitModalOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1047,7 +1047,7 @@ export default function ManagerBuildingDetailsPage() {
             <form onSubmit={handleSaveUnit} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Unit Number *
                   </label>
                   <Input
@@ -1061,7 +1061,7 @@ export default function ManagerBuildingDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Unit Type *
                   </label>
                   <Select
@@ -1080,7 +1080,7 @@ export default function ManagerBuildingDetailsPage() {
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Area (sq. ft.)
                   </label>
                   <Input
@@ -1096,7 +1096,7 @@ export default function ManagerBuildingDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Bedrooms
                   </label>
                   <Input
@@ -1111,7 +1111,7 @@ export default function ManagerBuildingDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Bathrooms
                   </label>
                   <Input
@@ -1128,7 +1128,7 @@ export default function ManagerBuildingDetailsPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Monthly Rent (₹) *
                   </label>
                   <Input
@@ -1145,7 +1145,7 @@ export default function ManagerBuildingDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Security Deposit (₹) *
                   </label>
                   <Input
@@ -1163,7 +1163,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Status *
                 </label>
                 <Select
@@ -1182,7 +1182,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Unit Description
                 </label>
                 <Textarea
@@ -1233,14 +1233,14 @@ export default function ManagerBuildingDetailsPage() {
                 <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                   Unit #{viewingUnit.unitId || viewingUnit.id}
                 </span>
-                <h3 className="text-lg font-bold text-[#243447] mt-1">
+                <h3 className="text-lg font-bold text-[#111820] mt-1">
                   Unit {viewingUnit.unitNumber || viewingUnit.number}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setViewingUnit(null)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1257,7 +1257,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold">
                     Monthly Rent
                   </span>
-                  <p className="text-sm font-bold text-[#243447]">
+                  <p className="text-sm font-bold text-[#111820]">
                     {viewingUnit.monthlyRent != null ? formatCurrency(viewingUnit.monthlyRent) : '—'}
                   </p>
                 </div>
@@ -1265,7 +1265,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold">
                     Security Deposit
                   </span>
-                  <p className="text-sm font-bold text-[#243447]">
+                  <p className="text-sm font-bold text-[#111820]">
                     {viewingUnit.securityDeposit != null ? formatCurrency(viewingUnit.securityDeposit) : '—'}
                   </p>
                 </div>
@@ -1276,7 +1276,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Type
                   </span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {viewingUnit.unitType || '—'}
                   </span>
                 </div>
@@ -1284,7 +1284,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Bedrooms
                   </span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {viewingUnit.bedrooms != null ? viewingUnit.bedrooms : '—'}
                   </span>
                 </div>
@@ -1292,7 +1292,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Bathrooms
                   </span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {viewingUnit.bathrooms != null ? viewingUnit.bathrooms : '—'}
                   </span>
                 </div>
@@ -1301,7 +1301,7 @@ export default function ManagerBuildingDetailsPage() {
               {viewingUnit.area != null && (
                 <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex justify-between">
                   <span className="text-[#5B6875] font-semibold">Total Area:</span>
-                  <span className="font-bold text-[#243447]">{viewingUnit.area} sq. ft.</span>
+                  <span className="font-bold text-[#111820]">{viewingUnit.area} sq. ft.</span>
                 </div>
               )}
 
@@ -1310,7 +1310,7 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] font-semibold uppercase text-[10px]">
                     Description
                   </span>
-                  <p className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-[#243447] leading-relaxed">
+                  <p className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-[#111820] leading-relaxed">
                     {viewingUnit.description}
                   </p>
                 </div>

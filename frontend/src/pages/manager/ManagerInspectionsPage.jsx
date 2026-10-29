@@ -110,8 +110,8 @@ export default function ManagerInspectionsPage() {
       <div className="space-y-6">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#243447]">Property Inspections</h1>
-            <p className="mt-1 text-sm text-[#5B6875]">Review and record completed inspections for your assigned properties.</p>
+            <h1 className="text-2xl font-bold text-[#111820]">Property Inspections</h1>
+            <p className="mt-1 text-sm text-[#111820]">Review and record completed inspections for your assigned properties.</p>
           </div>
           <Button variant="outline" onClick={loadPage} disabled={loading} leftIcon={<RefreshCw className="h-4 w-4" />}>Refresh</Button>
         </header>
@@ -167,7 +167,7 @@ export default function ManagerInspectionsPage() {
                   return <article key={inspection.id} className="flex flex-wrap items-start justify-between gap-4 px-5 py-4">
                     <div className="flex min-w-0 items-start gap-3">
                       <span className={`rounded-lg p-2 ${passed ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{passed ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}</span>
-                      <div className="min-w-0"><h3 className="font-semibold text-[#243447]">{inspection.propertyName || `Property #${inspection.propertyId}`}</h3><p className="mt-1 text-sm text-[#5B6875]">{inspection.inspectionDate || 'Date unavailable'} · Inspector: {inspection.inspectorName || '—'}</p>{inspection.notes && <p className="mt-2 whitespace-pre-wrap text-sm text-[#46596B]">{inspection.notes}</p>}</div>
+                      <div className="min-w-0"><h3 className="font-semibold text-[#111820]">{inspection.propertyName || `Property #${inspection.propertyId}`}</h3><p className="mt-1 text-sm text-[#5B6875]">{inspection.inspectionDate || 'Date unavailable'} · Inspector: {inspection.inspectorName || '—'}</p>{inspection.notes && <p className="mt-2 whitespace-pre-wrap text-sm text-[#46596B]">{inspection.notes}</p>}</div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
                       <span className={`rounded-full px-2.5 py-1 ${passed ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>{passed ? 'Passed' : 'Failed'}</span>

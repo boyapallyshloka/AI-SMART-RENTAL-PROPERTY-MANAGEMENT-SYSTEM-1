@@ -50,7 +50,7 @@ export default function PropertySummaryCard({ properties = [] }) {
           </div>
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
             {totalProperties}
           </p>
           <p className="text-xs text-[#5B6875] mt-0.5">
@@ -76,7 +76,7 @@ export default function PropertySummaryCard({ properties = [] }) {
           </div>
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
             {totalUnits ?? '—'}
           </p>
           <p className="text-xs text-[#5B6875] mt-0.5 truncate">
@@ -108,7 +108,7 @@ export default function PropertySummaryCard({ properties = [] }) {
           </div>
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
             {occupancyRate == null ? '—' : `${occupancyRate}%`}
           </p>
           {occupancyRate != null && (
@@ -139,7 +139,7 @@ export default function PropertySummaryCard({ properties = [] }) {
           </div>
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+          <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
             {monthlyRevenue == null ? '—' : `₹${monthlyRevenue.toLocaleString('en-IN')}`}
           </p>
           <p className="text-xs text-[#5B6875] mt-0.5">

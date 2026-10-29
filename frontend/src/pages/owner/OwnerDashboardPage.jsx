@@ -195,7 +195,7 @@ export default function OwnerDashboardPage() {
             <section className="grid overflow-hidden rounded-2xl border border-[#E2D5C1] bg-[#F8F1E6]/95 shadow-sm md:min-h-[220px] md:grid-cols-[1fr_0.9fr]" aria-label="Portfolio highlights">
               <div className="flex flex-col items-start justify-center px-6 py-7 sm:px-9">
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#3F7D58]">Owner overview</p>
-                <h1 className="mt-2 font-serif text-2xl font-semibold tracking-tight text-[#243447] sm:text-3xl">
+                <h1 className="mt-2 font-serif text-2xl font-semibold tracking-tight text-[#111820] sm:text-3xl">
                   Welcome back, {ownerDisplayName}
                 </h1>
                 <p className="mt-2 max-w-lg text-sm leading-6 text-[#657168]">
@@ -205,7 +205,7 @@ export default function OwnerDashboardPage() {
                   View properties <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
-              <div className="relative min-h-[190px] overflow-hidden bg-[#243447] md:min-h-full">
+              <div className="relative min-h-[190px] overflow-hidden bg-[#111820] md:min-h-full">
                 <img src={featuredPropertyImage} alt={featuredPropertyName} className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#182B3C]/85 via-[#182B3C]/10 to-transparent md:bg-gradient-to-l md:from-transparent md:via-[#182B3C]/10 md:to-[#182B3C]/50" />
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
@@ -256,7 +256,7 @@ export default function OwnerDashboardPage() {
               <div className="rounded-xl border border-[#E2D5C1] bg-[#F8F1E6]/95 p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between border-b border-[#E9EDE5] pb-3">
                   <div>
-                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#243447]">
+                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#111820]">
                       My Properties
                     </h2>
                     <p className="text-xs text-[#657168]">Current real estate assets</p>
@@ -311,7 +311,7 @@ export default function OwnerDashboardPage() {
                           <div className="min-w-0 flex-1 pr-3">
                             <Link
                               to={`/owner/properties/${propId}`}
-                              className="font-semibold text-[#243447] hover:text-[#3F7D58] transition-colors truncate block text-xs sm:text-sm"
+                              className="font-semibold text-[#111820] hover:text-[#3F7D58] transition-colors truncate block text-xs sm:text-sm"
                             >
                               {propName}
                             </Link>
@@ -337,7 +337,7 @@ export default function OwnerDashboardPage() {
               <div className="rounded-xl border border-[#E2D5C1] bg-[#F8F1E6]/95 p-5 shadow-sm space-y-4 flex flex-col justify-between">
                 <div>
                   <div className="border-b border-[#E9EDE5] pb-3">
-                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#243447]">
+                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#111820]">
                       Quick Actions
                     </h2>
                     <p className="text-xs text-[#657168] mt-0.5">Common property tasks</p>
@@ -363,7 +363,7 @@ export default function OwnerDashboardPage() {
 
                 <div className="pt-3 border-t border-[#E9EDE5]">
                   <div className="p-3 rounded-lg bg-[#F0E5D5] border border-[#E2D5C1] text-xs">
-                    <p className="font-semibold text-[#243447] flex items-center gap-1.5">
+                    <p className="font-semibold text-[#111820] flex items-center gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Portfolio Status
                     </p>
@@ -380,7 +380,7 @@ export default function OwnerDashboardPage() {
               <div className="rounded-xl border border-[#E2D5C1] bg-[#F8F1E6]/95 p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between border-b border-[#E9EDE5] pb-3">
                   <div>
-                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#243447]">
+                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#111820]">
                       Recent Maintenance Requests
                     </h2>
                     <p className="text-xs text-[#657168]">Latest repair tickets from tenants</p>
@@ -416,7 +416,7 @@ export default function OwnerDashboardPage() {
                             <div className="min-w-0">
                               <Link
                                 to={`/owner/maintenance/${tId}`}
-                                className="font-semibold text-[#243447] text-xs sm:text-sm hover:text-[#3F7D58] truncate block transition-colors"
+                                className="font-semibold text-[#111820] text-xs sm:text-sm hover:text-[#3F7D58] truncate block transition-colors"
                               >
                                 #{tId} &bull; {ticket.category || 'Maintenance'}: {ticket.description || 'Details unavailable'}
                               </Link>
@@ -437,7 +437,7 @@ export default function OwnerDashboardPage() {
               <div className="rounded-xl border border-[#E2D5C1] bg-[#F8F1E6]/95 p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between border-b border-[#E9EDE5] pb-3">
                   <div>
-                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#243447]">
+                    <h2 className="font-serif text-base sm:text-lg font-bold text-[#111820]">
                       Rent Invoices
                     </h2>
                     <p className="text-xs text-[#657168]">Recent billing records</p>
@@ -470,7 +470,7 @@ export default function OwnerDashboardPage() {
                               <CreditCard className="w-3.5 h-3.5 text-[#2E7D5B]" />
                             </div>
                             <div className="min-w-0">
-                              <p className="font-semibold text-[#243447] text-xs sm:text-sm">
+                              <p className="font-semibold text-[#111820] text-xs sm:text-sm">
                                 Invoice #{invId}
                               </p>
                               <p className="text-[11px] text-[#657168]">
@@ -479,7 +479,7 @@ export default function OwnerDashboardPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <span className="font-semibold text-xs sm:text-sm text-[#243447] block mb-0.5">
+                            <span className="font-semibold text-xs sm:text-sm text-[#111820] block mb-0.5">
                               {inv.amount != null || inv.totalAmount != null ? formatCurrency(amount) : '—'}
                             </span>
                             {inv.status ? <StatusBadge status={inv.status} size="xs" /> : <span className="text-[10px] text-[#657168]">Status unavailable</span>}
@@ -506,7 +506,7 @@ function MetricCard({ title, value, subtitle, icon, iconBg = 'bg-[#EDF4ED] borde
         <div className={`w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 ${iconBg}`}>{icon}</div>
       </div>
       <div className="mt-2">
-        <p className="text-lg sm:text-xl font-bold tracking-tight text-[#243447] font-sans truncate">{value}</p>
+        <p className="text-lg sm:text-xl font-bold tracking-tight text-[#111820] font-sans truncate">{value}</p>
         <p className="text-[11px] text-[#657168] mt-0.5 font-medium truncate">{subtitle}</p>
       </div>
     </div>

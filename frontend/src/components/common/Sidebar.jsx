@@ -197,10 +197,10 @@ export default function Sidebar({
       <div className="mx-auto flex max-w-[1600px] flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex shrink-0 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#243447] text-white shadow-sm">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#111820] text-white shadow-sm">
               <Home className="h-5 w-5" />
             </span>
-            <span className="font-serif text-lg font-bold tracking-tight text-[#243447]">SmartEstate</span>
+            <span className="font-serif text-lg font-bold tracking-tight text-[#111820]">SmartEstate</span>
           </div>
         </div>
 

@@ -308,7 +308,7 @@ export default function ApplicationDetailsPage() {
               )}
             </div>
             <div className="max-w-md mx-auto space-y-2">
-              <h3 className="text-xl font-bold text-[#243447]">
+              <h3 className="text-xl font-bold text-[#111820]">
                 {errorStatus === 403 ? 'Access Forbidden' : 'Failed to Load Application'}
               </h3>
               <p className="text-sm text-[#8A2E2C] leading-relaxed">{error}</p>
@@ -367,7 +367,7 @@ export default function ApplicationDetailsPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                       {application.tenantName || 'Applicant'}
                     </h1>
                     <StatusBadge status={application.status} size="md" />
@@ -375,14 +375,14 @@ export default function ApplicationDetailsPage() {
                   <p className="text-xs text-[#5B6875] mt-1.5 flex items-center gap-2 flex-wrap">
                     <span>
                       Application ID:{' '}
-                      <strong className="font-mono text-[#243447]">
+                      <strong className="font-mono text-[#111820]">
                         #{application.applicationId}
                       </strong>
                     </span>
                     <span>&bull;</span>
                     <span>
                       Submitted on{' '}
-                      <strong className="text-[#243447]">
+                      <strong className="text-[#111820]">
                         {formatDate(application.applicationDate || application.createdAt)}
                       </strong>
                     </span>
@@ -391,7 +391,7 @@ export default function ApplicationDetailsPage() {
                         <span>&bull;</span>
                         <span>
                           Reviewed on{' '}
-                          <strong className="text-[#243447]">
+                          <strong className="text-[#111820]">
                             {formatDateTime(application.reviewedAt)}
                           </strong>
                         </span>
@@ -450,7 +450,7 @@ export default function ApplicationDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Applicant Details Card */}
               <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <User className="w-4 h-4 text-[#3F7D58]" />
                   Applicant Information
                 </h2>
@@ -458,7 +458,7 @@ export default function ApplicationDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Tenant Name</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {application.tenantName || '—'}
                     </span>
                   </div>
@@ -467,7 +467,7 @@ export default function ApplicationDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <Mail className="w-3.5 h-3.5 text-[#5B6875]" /> Email Address
                     </span>
-                    <span className="font-medium text-[#243447]">
+                    <span className="font-medium text-[#111820]">
                       {application.tenantEmail || '—'}
                     </span>
                   </div>
@@ -475,7 +475,7 @@ export default function ApplicationDetailsPage() {
                   {application.tenantId && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-[#5B6875]">Tenant ID</span>
-                      <span className="font-mono text-xs text-[#243447]">
+                      <span className="font-mono text-xs text-[#111820]">
                         #{application.tenantId}
                       </span>
                     </div>
@@ -484,7 +484,7 @@ export default function ApplicationDetailsPage() {
                   {application.monthlyIncome != null && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-[#5B6875]">Monthly Gross Income</span>
-                      <span className="font-semibold text-[#243447]">
+                      <span className="font-semibold text-[#111820]">
                         {formatInr(application.monthlyIncome)} / mo
                       </span>
                     </div>
@@ -493,7 +493,7 @@ export default function ApplicationDetailsPage() {
                   {application.employerOccupation && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-[#5B6875]">Employer / Occupation</span>
-                      <span className="font-medium text-[#243447] text-right">
+                      <span className="font-medium text-[#111820] text-right">
                         {application.employerOccupation}
                       </span>
                     </div>
@@ -503,7 +503,7 @@ export default function ApplicationDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-[#5B6875]" /> Preferred Move-In
                     </span>
-                    <span className="font-medium text-[#243447]">
+                    <span className="font-medium text-[#111820]">
                       {application.preferredMoveInDate
                         ? formatDate(application.preferredMoveInDate)
                         : 'Flexible / Not Specified'}
@@ -514,7 +514,7 @@ export default function ApplicationDetailsPage() {
 
               {/* Property & Unit Details Card */}
               <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <Building2 className="w-4 h-4 text-[#3F7D58]" />
                   Property & Unit Information
                 </h2>
@@ -522,7 +522,7 @@ export default function ApplicationDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Property Name</span>
-                    <span className="font-semibold text-[#243447] text-right">
+                    <span className="font-semibold text-[#111820] text-right">
                       {application.propertyName || 'Property'}
                     </span>
                   </div>
@@ -530,7 +530,7 @@ export default function ApplicationDetailsPage() {
                   {application.buildingName && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-[#5B6875]">Building</span>
-                      <span className="font-medium text-[#243447]">
+                      <span className="font-medium text-[#111820]">
                         {application.buildingName}
                       </span>
                     </div>
@@ -538,7 +538,7 @@ export default function ApplicationDetailsPage() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Unit Number</span>
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                       Unit {application.unitNumber || '—'}
                     </span>
                   </div>
@@ -547,7 +547,7 @@ export default function ApplicationDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <IndianRupee className="w-3.5 h-3.5 text-[#5B6875]" /> Monthly Rent
                     </span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {formatInr(application.monthlyRent)} / mo
                     </span>
                   </div>
@@ -557,7 +557,7 @@ export default function ApplicationDetailsPage() {
                       <span className="text-xs text-[#5B6875] flex items-center gap-1">
                         <IndianRupee className="w-3.5 h-3.5 text-[#5B6875]" /> Security Deposit
                       </span>
-                      <span className="font-medium text-[#243447]">
+                      <span className="font-medium text-[#111820]">
                         {formatInr(application.securityDeposit)}
                       </span>
                     </div>
@@ -573,12 +573,12 @@ export default function ApplicationDetailsPage() {
 
             {/* Applicant Message / Notes */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-3">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <FileText className="w-4 h-4 text-[#3F7D58]" />
                 Applicant Message & Notes
               </h2>
 
-              <p className="text-sm text-[#243447] leading-relaxed bg-[#F7F7F1] p-4 rounded-xl border border-[#E3E8DF]">
+              <p className="text-sm text-[#111820] leading-relaxed bg-[#F7F7F1] p-4 rounded-xl border border-[#E3E8DF]">
                 {application.message && application.message.trim()
                   ? application.message
                   : 'No additional message was included with this rental application.'}
@@ -587,7 +587,7 @@ export default function ApplicationDetailsPage() {
 
             {/* Review Audit Information */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-3 text-xs text-[#5B6875]">
-              <h3 className="font-semibold text-sm text-[#243447] border-b border-[#E3E8DF] pb-2">
+              <h3 className="font-semibold text-sm text-[#111820] border-b border-[#E3E8DF] pb-2">
                 Application Timestamps
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
@@ -595,7 +595,7 @@ export default function ApplicationDetailsPage() {
                   <span className="block text-[11px] uppercase tracking-wide text-[#5B6875]">
                     Submitted At
                   </span>
-                  <span className="font-medium text-[#243447] mt-0.5 block">
+                  <span className="font-medium text-[#111820] mt-0.5 block">
                     {formatDateTime(application.createdAt || application.applicationDate)}
                   </span>
                 </div>
@@ -603,7 +603,7 @@ export default function ApplicationDetailsPage() {
                   <span className="block text-[11px] uppercase tracking-wide text-[#5B6875]">
                     Last Updated
                   </span>
-                  <span className="font-medium text-[#243447] mt-0.5 block">
+                  <span className="font-medium text-[#111820] mt-0.5 block">
                     {formatDateTime(application.updatedAt || application.createdAt)}
                   </span>
                 </div>
@@ -611,7 +611,7 @@ export default function ApplicationDetailsPage() {
                   <span className="block text-[11px] uppercase tracking-wide text-[#5B6875]">
                     Review Status
                   </span>
-                  <span className="font-medium text-[#243447] mt-0.5 block">
+                  <span className="font-medium text-[#111820] mt-0.5 block">
                     {application.status} {application.reviewedAt && `(${formatDate(application.reviewedAt)})`}
                   </span>
                 </div>
@@ -629,12 +629,12 @@ export default function ApplicationDetailsPage() {
                   <CheckCircle2 className="w-6 h-6 text-[#3F7D58]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-[#243447]">Approve Application</h3>
+                  <h3 className="text-lg font-bold text-[#111820]">Approve Application</h3>
                   <p className="text-xs text-[#5B6875]">Confirm decision for applicant</p>
                 </div>
               </div>
 
-              <p className="text-sm text-[#243447] leading-relaxed">
+              <p className="text-sm text-[#111820] leading-relaxed">
                 Are you sure you want to approve the application for{' '}
                 <strong>{application.tenantName || 'this tenant'}</strong> for{' '}
                 <strong>{application.propertyName}</strong> (Unit {application.unitNumber})?
@@ -684,18 +684,18 @@ export default function ApplicationDetailsPage() {
                   <XCircle className="w-6 h-6 text-[#B94A48]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-[#243447]">Reject Application</h3>
+                  <h3 className="text-lg font-bold text-[#111820]">Reject Application</h3>
                   <p className="text-xs text-[#5B6875]">Specify the reason for rejection</p>
                 </div>
               </div>
 
-              <p className="text-sm text-[#243447]">
+              <p className="text-sm text-[#111820]">
                 Please enter a reason for rejecting the application for{' '}
                 <strong>{application.tenantName || 'this applicant'}</strong>. The reason will be recorded on the application record.
               </p>
 
               <div>
-                <label className="block text-xs font-semibold text-[#243447] mb-1.5">
+                <label className="block text-xs font-semibold text-[#111820] mb-1.5">
                   Rejection Reason <span className="text-[#B94A48]">*</span>
                 </label>
                 <Textarea

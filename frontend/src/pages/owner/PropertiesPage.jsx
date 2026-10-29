@@ -217,10 +217,10 @@ export default function PropertiesPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
               Properties
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Manage real estate listings, occupancy rates, and rental units
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function PropertiesPage() {
                   onClick={resetFilters}
                   title="Reset all filters"
                   aria-label="Reset all filters"
-                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -283,7 +283,7 @@ export default function PropertiesPage() {
           <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
-              <strong className="text-[#243447]">
+              <strong className="text-[#111820]">
                 {filteredProperties.length}
               </strong>{' '}
               of {properties.length} properties

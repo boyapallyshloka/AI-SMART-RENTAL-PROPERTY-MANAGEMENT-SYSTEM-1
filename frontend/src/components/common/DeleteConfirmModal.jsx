@@ -44,7 +44,7 @@ export default function DeleteConfirmModal({
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
-            <h3 id="delete-dialog-title" className="text-base font-bold text-[#243447]">
+            <h3 id="delete-dialog-title" className="text-base font-bold text-[#111820]">
               {title}
             </h3>
             <p className="text-xs text-[#5B6875] mt-1 leading-relaxed">
@@ -53,7 +53,7 @@ export default function DeleteConfirmModal({
               ) : (
                 <>
                   Are you sure you want to permanently delete{' '}
-                  <strong className="text-[#243447]">{itemName}</strong>?
+                  <strong className="text-[#111820]">{itemName}</strong>?
                 </>
               )}
             </p>

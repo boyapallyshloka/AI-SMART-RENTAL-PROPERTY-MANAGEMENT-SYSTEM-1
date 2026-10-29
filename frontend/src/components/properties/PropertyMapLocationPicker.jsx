@@ -278,7 +278,7 @@ export default function PropertyMapLocationPicker({
     <div className="space-y-2.5">
       {/* Map Header / Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-        <div className="flex items-center gap-1.5 text-[#243447] font-semibold">
+        <div className="flex items-center gap-1.5 text-[#111820] font-semibold">
           <MapPin className="w-4 h-4 text-[#3F7D58]" />
           <span>Interactive Property Location Map</span>
         </div>
@@ -288,7 +288,7 @@ export default function PropertyMapLocationPicker({
             type="button"
             onClick={handleUseCurrentLocation}
             disabled={isLocating}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-[#243447] text-xs font-medium transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-[#111820] text-xs font-medium transition-colors shadow-2xs disabled:opacity-50"
             title="Detect and center map on your current location"
           >
             {isLocating ? (
@@ -324,7 +324,7 @@ export default function PropertyMapLocationPicker({
 
         {/* Floating Instructions Banner */}
         <div className="absolute top-2.5 left-2.5 right-2.5 pointer-events-none z-[400] flex justify-between items-start gap-2">
-          <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#E3E8DF] shadow-sm text-[11px] text-[#243447] font-medium flex items-center gap-1.5">
+          <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#E3E8DF] shadow-sm text-[11px] text-[#111820] font-medium flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#3F7D58] animate-pulse shrink-0" />
             <span>Click map or drag pin to position property</span>
           </div>
@@ -379,13 +379,13 @@ export default function PropertyMapLocationPicker({
         <div className="flex items-center gap-3 text-[#5B6875]">
           <span>
             Lat:{' '}
-            <strong className="text-[#243447] font-mono">
+            <strong className="text-[#111820] font-mono">
               {currentCoords ? currentCoords.lat.toFixed(6) : '—'}
             </strong>
           </span>
           <span>
             Lng:{' '}
-            <strong className="text-[#243447] font-mono">
+            <strong className="text-[#111820] font-mono">
               {currentCoords ? currentCoords.lng.toFixed(6) : '—'}
             </strong>
           </span>

@@ -104,7 +104,7 @@ export default function ManagerProfilePage() {
 
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">
+                  <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#111820]">
                     {fullName}
                   </h1>
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
@@ -117,12 +117,12 @@ export default function ManagerProfilePage() {
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-[#5B6875]">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5 text-[#3F7D58]" />
-                    <strong className="font-medium text-[#243447]">{userEmail}</strong>
+                    <strong className="font-medium text-[#111820]">{userEmail}</strong>
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <Phone className="w-3.5 h-3.5 text-[#3F7D58]" />
-                    <strong className="font-medium text-[#243447]">{userPhone}</strong>
+                    <strong className="font-medium text-[#111820]">{userPhone}</strong>
                   </span>
                 </div>
               </div>
@@ -151,7 +151,7 @@ export default function ManagerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Email Address
                 </span>
-                <span className="font-semibold text-[#243447] truncate block">
+                <span className="font-semibold text-[#111820] truncate block">
                   {userEmail}
                 </span>
               </div>
@@ -163,7 +163,7 @@ export default function ManagerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Phone
                 </span>
-                <span className="font-semibold text-[#243447]">{userPhone}</span>
+                <span className="font-semibold text-[#111820]">{userPhone}</span>
               </div>
             </div>
 
@@ -183,7 +183,7 @@ export default function ManagerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Member Since
                 </span>
-                <span className="font-semibold text-[#243447]">
+                <span className="font-semibold text-[#111820]">
                   {profileData?.createdAt
                     ? new Date(profileData.createdAt).toLocaleDateString()
                     : 'Active'}
@@ -201,7 +201,7 @@ export default function ManagerProfilePage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'profile'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <MapPin className="w-4 h-4" />
@@ -214,7 +214,7 @@ export default function ManagerProfilePage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'security'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <KeyRound className="w-4 h-4" />
@@ -232,7 +232,7 @@ export default function ManagerProfilePage() {
             ) : loadError ? (
               <div className="p-6 rounded-2xl bg-white border border-[#E3E8DF] text-center space-y-3">
                 <AlertCircle className="w-8 h-8 text-[#B94A48] mx-auto" />
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   Unable to load manager profile
                 </p>
                 <p className="text-xs text-[#5B6875] max-w-md mx-auto">{loadError}</p>
@@ -250,7 +250,7 @@ export default function ManagerProfilePage() {
                 {/* Account Details Read-Only Summary Card */}
                 <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
                   <div className="border-b border-[#E3E8DF] pb-3">
-                    <h2 className="text-sm font-bold text-[#243447] flex items-center gap-2">
+                    <h2 className="text-sm font-bold text-[#111820] flex items-center gap-2">
                       <User className="w-4 h-4 text-[#3F7D58]" />
                       <span>Account Information</span>
                     </h2>
@@ -262,35 +262,35 @@ export default function ManagerProfilePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">First Name</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {profileData?.firstName || '—'}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Last Name</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {profileData?.lastName || '—'}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Email Address</span>
-                      <strong className="text-xs text-[#243447] font-semibold break-all">
+                      <strong className="text-xs text-[#111820] font-semibold break-all">
                         {userEmail}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Phone Number</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {userPhone}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Gender</span>
-                      <strong className="text-xs text-[#243447] font-semibold capitalize">
+                      <strong className="text-xs text-[#111820] font-semibold capitalize">
                         {userGender}
                       </strong>
                     </div>
@@ -336,7 +336,7 @@ export default function ManagerProfilePage() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-bold text-[#111820] flex items-center gap-2">
                   <KeyRound className="w-4 h-4 text-[#3F7D58]" />
                   <span>Account Password & Credentials</span>
                 </h2>

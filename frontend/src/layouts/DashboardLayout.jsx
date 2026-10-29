@@ -8,7 +8,7 @@ import dashboardCityBackground from '../assets/dashboard-city-golden-hour.png'
 
 /**
  * DashboardLayout Component for SmartEstate
- * Canvas background: #F7F7F1, Main Text: #243447
+ * Canvas background: #F7F7F1, Main Text: #111820
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children
@@ -53,13 +53,16 @@ export default function DashboardLayout({
   }, [displayTitle])
 
   return (
-    <div className="relative isolate min-h-screen text-[#243447] font-sans antialiased">
+    <div className="relative isolate min-h-screen text-[#111820] font-sans antialiased">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <img
           src={dashboardCityBackground}
           alt=""
           className="absolute inset-0 h-full w-full scale-[1.02] object-cover blur-[2px]"
         />
+        <div aria-hidden="true" className="absolute inset-0 bg-[#30251F]/35" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(39,30,25,.22)_0%,rgba(58,42,31,.14)_42%,rgba(86,57,35,.18)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(37,28,23,.18),rgba(49,36,27,.03)_48%,rgba(44,32,24,.08)_100%)]" />
       </div>
 
       <div className="relative z-10 flex min-h-screen flex-col">

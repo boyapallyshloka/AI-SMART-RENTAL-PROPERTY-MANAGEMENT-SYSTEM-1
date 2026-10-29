@@ -146,7 +146,7 @@ export default function PropertyDetailsSection({
     <div className="space-y-8">
       {/* 1. Key Property Specifications Grid */}
       <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs sm:p-6">
-        <h3 className="text-base font-bold text-[#243447] mb-4 flex items-center gap-2">
+        <h3 className="text-base font-bold text-[#111820] mb-4 flex items-center gap-2">
           <Building className="w-4 h-4 text-[#3F7D58]" />
           <span>Property Overview & Specifications</span>
         </h3>
@@ -157,7 +157,7 @@ export default function PropertyDetailsSection({
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <Building className="w-4 h-4 text-[#3F7D58]" /> Property Type
               </span>
-              <p className="text-sm font-bold text-[#243447] capitalize">
+              <p className="text-sm font-bold text-[#111820] capitalize">
                 {displayType}
               </p>
             </div>
@@ -168,7 +168,7 @@ export default function PropertyDetailsSection({
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <Maximize2 className="w-4 h-4 text-[#3F7D58]" /> Total Area
               </span>
-              <p className="text-sm font-bold text-[#243447]">
+              <p className="text-sm font-bold text-[#111820]">
                 {displayArea} sq ft
               </p>
             </div>
@@ -179,7 +179,7 @@ export default function PropertyDetailsSection({
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <Sofa className="w-4 h-4 text-[#3F7D58]" /> Furnishing
               </span>
-              <p className="text-sm font-bold text-[#243447] capitalize">
+              <p className="text-sm font-bold text-[#111820] capitalize">
                 {displayFurnishing.toLowerCase()}
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function PropertyDetailsSection({
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <Car className="w-4 h-4 text-[#3F7D58]" /> Parking
               </span>
-              <p className="text-sm font-bold text-[#243447]">
+              <p className="text-sm font-bold text-[#111820]">
                 {displayParking}
               </p>
             </div>
@@ -201,7 +201,7 @@ export default function PropertyDetailsSection({
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#3F7D58]" /> Year Built
               </span>
-              <p className="text-sm font-bold text-[#243447]">
+              <p className="text-sm font-bold text-[#111820]">
                 {yearBuilt}
               </p>
             </div>
@@ -222,7 +222,7 @@ export default function PropertyDetailsSection({
 
       {/* 2. Address & Location Details */}
       <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
-        <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
+        <h3 className="text-base font-bold text-[#111820] flex items-center gap-2">
           <MapPin className="w-4 h-4 text-[#3F7D58]" />
           <span>Location & Address</span>
         </h3>
@@ -230,7 +230,7 @@ export default function PropertyDetailsSection({
         {hasAddress ? (
           <div className="min-w-0 p-3 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-2 text-xs sm:p-4">
             {address.addressLine1 && (
-              <p className="break-words font-semibold text-sm text-[#243447]">
+              <p className="break-words font-semibold text-sm text-[#111820]">
                 {address.addressLine1}
               </p>
             )}
@@ -282,7 +282,7 @@ export default function PropertyDetailsSection({
 
       {/* 3. Description Section */}
       <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
-        <h3 className="text-base font-bold text-[#243447]">
+        <h3 className="text-base font-bold text-[#111820]">
           About This Property
         </h3>
         <p className="break-words text-sm text-[#5B6875] leading-relaxed">
@@ -293,7 +293,7 @@ export default function PropertyDetailsSection({
       {/* 4. Real Amenities & Features */}
       <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-4 sm:p-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
+          <h3 className="text-base font-bold text-[#111820] flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#3F7D58]" />
             <span>Amenities & Facilities</span>
           </h3>
@@ -313,7 +313,7 @@ export default function PropertyDetailsSection({
                     {getAmenityIcon(name)}
                   </div>
                   <div>
-                    <p className="text-xs text-[#243447] font-semibold">{name}</p>
+                    <p className="text-xs text-[#111820] font-semibold">{name}</p>
                     {desc && <p className="text-[11px] text-[#5B6875] mt-0.5">{desc}</p>}
                   </div>
                 </div>
@@ -332,7 +332,7 @@ export default function PropertyDetailsSection({
       {!isDirectRental && <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-6 sm:p-6">
         <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-4">
           <div>
-            <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
+            <h3 className="text-base font-bold text-[#111820] flex items-center gap-2">
               <Building2 className="w-5 h-5 text-[#3F7D58]" />
               <span>Buildings & Units</span>
             </h3>
@@ -358,7 +358,7 @@ export default function PropertyDetailsSection({
                   {/* Building Header */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E3E8DF]">
                     <div>
-                      <h4 className="font-bold text-sm text-[#243447] flex items-center gap-2">
+                      <h4 className="font-bold text-sm text-[#111820] flex items-center gap-2">
                         <Building className="w-4 h-4 text-[#3F7D58]" />
                         {bName}
                       </h4>
@@ -412,7 +412,7 @@ export default function PropertyDetailsSection({
                                     >
                                       <div className="space-y-1.5">
                                         <div className="flex items-center justify-between">
-                                          <span className="font-bold text-sm text-[#243447]">
+                                          <span className="font-bold text-sm text-[#111820]">
                                             Unit {u.unitNumber || `#${uIdx + 1}`}
                                           </span>
                                           {u.status && (

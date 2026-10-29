@@ -3,11 +3,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 ::view-transition-old(root) {
-  animation: route-slide-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: route-slide-out 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 
 ::view-transition-new(root) {
-  animation: route-slide-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: route-slide-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes route-slide-out {
@@ -45,7 +45,7 @@
 
   --color-canvas: #F7F7F1;
   --color-surface: #FFFFFF;
-  --color-text-main: #243447;
+  --color-text-main: #111820;
   --color-text-secondary: #5B6875;
 
   --color-success: #3F7D58;
@@ -56,7 +56,7 @@
 @layer base {
   body {
     background-color: #F7F7F1;
-    color: #243447;
+    color: #111820;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

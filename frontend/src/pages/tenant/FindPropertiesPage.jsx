@@ -251,7 +251,7 @@ export default function FindPropertiesPage() {
                 <Building2 className="w-4 h-4" />
               </div>
               <div>
-                <p className="font-semibold text-[#243447]">
+                <p className="font-semibold text-[#111820]">
                   Currently Renting:{' '}
                   <span className="text-[#3F7D58] font-bold">
                     {myRental.property.name || myRental.property.propertyName}
@@ -293,7 +293,7 @@ export default function FindPropertiesPage() {
                 className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
                   activeTab === 'units'
                     ? 'bg-white text-[#3F7D58] shadow-2xs border border-[#E3E8DF]/80'
-                    : 'text-[#5B6875] hover:text-[#243447]'
+                    : 'text-[#5B6875] hover:text-[#111820]'
                 }`}
               >
                 Available Units ({filteredUnits.length})
@@ -304,7 +304,7 @@ export default function FindPropertiesPage() {
                 className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
                   activeTab === 'communities'
                     ? 'bg-white text-[#3F7D58] shadow-2xs border border-[#E3E8DF]/80'
-                    : 'text-[#5B6875] hover:text-[#243447]'
+                    : 'text-[#5B6875] hover:text-[#111820]'
                 }`}
               >
                 Communities ({filteredProperties.length})
@@ -432,7 +432,7 @@ export default function FindPropertiesPage() {
                           <span className="text-[10px] uppercase font-bold tracking-wider text-[#3F7D58] px-2 py-0.5 rounded bg-[#EDF4ED] border border-[#E3E8DF]/80">
                             {unit.unitType}
                           </span>
-                          <h2 className="font-serif text-xl font-bold text-[#243447] mt-1.5">
+                          <h2 className="font-serif text-xl font-bold text-[#111820] mt-1.5">
                             Unit {unit.unitNumber}
                           </h2>
                         </div>
@@ -442,7 +442,7 @@ export default function FindPropertiesPage() {
 
                       {/* Location Hierarchy */}
                       <div className="space-y-1 text-xs text-[#5B6875] pt-1">
-                        <div className="flex items-center gap-1.5 font-semibold text-[#243447]">
+                        <div className="flex items-center gap-1.5 font-semibold text-[#111820]">
                           <Building className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                           <span className="truncate">{building?.buildingName}</span>
                         </div>
@@ -469,7 +469,7 @@ export default function FindPropertiesPage() {
                         <div className="flex items-baseline justify-between">
                           <div>
                             <span className="text-xs text-[#5B6875]">Monthly Rent</span>
-                            <div className="text-lg font-bold text-[#243447]">
+                            <div className="text-lg font-bold text-[#111820]">
                               ₹{Number(unit.monthlyRent).toLocaleString('en-IN')}
                               <span className="text-xs font-normal text-[#5B6875]">/mo</span>
                             </div>
@@ -486,15 +486,15 @@ export default function FindPropertiesPage() {
                         <div className="grid grid-cols-3 gap-2 text-center text-xs">
                           <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Area</p>
-                            <p className="font-bold text-[#243447] mt-0.5">{unit.area} sq ft</p>
+                            <p className="font-bold text-[#111820] mt-0.5">{unit.area} sq ft</p>
                           </div>
                           <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Beds</p>
-                            <p className="font-bold text-[#243447] mt-0.5">{unit.bedrooms}</p>
+                            <p className="font-bold text-[#111820] mt-0.5">{unit.bedrooms}</p>
                           </div>
                           <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Baths</p>
-                            <p className="font-bold text-[#243447] mt-0.5">{unit.bathrooms}</p>
+                            <p className="font-bold text-[#111820] mt-0.5">{unit.bathrooms}</p>
                           </div>
                         </div>
                       </div>
@@ -565,7 +565,7 @@ export default function FindPropertiesPage() {
                             </span>
                           )}
                         </div>
-                        <h2 className="font-serif text-xl font-bold text-[#243447]">
+                        <h2 className="font-serif text-xl font-bold text-[#111820]">
                           {p.property.name}
                         </h2>
                         <div className="flex items-center gap-1.5 text-xs text-[#5B6875]">
@@ -588,7 +588,7 @@ export default function FindPropertiesPage() {
                         </div>
                         <div className="px-3.5 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                           <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Rent From</p>
-                          <p className="text-lg font-bold text-[#243447]">₹{Number(p.minRent).toLocaleString('en-IN')}</p>
+                          <p className="text-lg font-bold text-[#111820]">₹{Number(p.minRent).toLocaleString('en-IN')}</p>
                         </div>
                         <Button
                           size="sm"
@@ -617,7 +617,7 @@ export default function FindPropertiesPage() {
                           >
                             <div>
                               <div className="flex items-center justify-between">
-                                <h4 className="font-semibold text-sm text-[#243447]">
+                                <h4 className="font-semibold text-sm text-[#111820]">
                                   {b.buildingName}
                                 </h4>
                                 <span className="text-[11px] font-semibold text-[#3F7D58]">

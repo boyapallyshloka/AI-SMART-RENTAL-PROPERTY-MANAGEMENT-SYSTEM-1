@@ -104,10 +104,10 @@ export default function TenantApplicationsPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
               My Rental Applications
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Track the status, submission dates, and manager reviews of your property applications
             </p>
           </div>
@@ -191,7 +191,7 @@ export default function TenantApplicationsPage() {
             <div className="p-4 sm:p-5 border-b border-[#E3E8DF] flex items-center justify-between">
               <span className="text-xs text-[#5B6875]">
                 Displaying{' '}
-                <strong className="text-[#243447]">
+                <strong className="text-[#111820]">
                   {applications.length}
                 </strong>{' '}
                 {applications.length === 1 ? 'application' : 'applications'}
@@ -243,10 +243,10 @@ export default function TenantApplicationsPage() {
                         </td>
 
                         {/* Property Name */}
-                        <td className="py-4 px-4 font-semibold text-[#243447] min-w-[180px]">
+                        <td className="py-4 px-4 font-semibold text-[#111820] min-w-[180px]">
                           <Link
                             to={`/tenant/applications/${app.applicationId}`}
-                            className="flex items-center gap-2 text-[#243447] hover:text-[#3F7D58] hover:underline"
+                            className="flex items-center gap-2 text-[#111820] hover:text-[#3F7D58] hover:underline"
                             title="View Application Details"
                           >
                             <Building2 className="w-4 h-4 text-[#3F7D58] shrink-0" />
@@ -270,7 +270,7 @@ export default function TenantApplicationsPage() {
                         </td>
 
                         {/* Move-In Date */}
-                        <td className="py-4 px-4 whitespace-nowrap text-xs text-[#243447]">
+                        <td className="py-4 px-4 whitespace-nowrap text-xs text-[#111820]">
                           <div className="flex items-center gap-1.5 font-medium">
                             <Clock className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                             <span>{app.preferredMoveInDate || 'Flexible'}</span>
@@ -281,7 +281,7 @@ export default function TenantApplicationsPage() {
                         <td className="py-4 px-4 whitespace-nowrap text-xs">
                           {rent ? (
                             <div>
-                              <span className="font-bold text-[#243447]">{rent}</span>
+                              <span className="font-bold text-[#111820]">{rent}</span>
                               <span className="text-[#5B6875]">/mo</span>
                               {deposit && (
                                 <span className="block text-[10px] text-[#5B6875]">Dep: {deposit}</span>

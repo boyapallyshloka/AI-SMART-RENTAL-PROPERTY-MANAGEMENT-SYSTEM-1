@@ -372,7 +372,7 @@ export default function BuildingDetailsPage() {
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#243447]">Failed to Load Building</h3>
+              <h3 className="text-base font-bold text-[#111820]">Failed to Load Building</h3>
               <p className="text-xs text-[#5B6875] mt-1">{errorMessage}</p>
             </div>
             <Button size="sm" variant="primary" onClick={loadData}>
@@ -491,7 +491,7 @@ export default function BuildingDetailsPage() {
             </>
           )}
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             {building.buildingName}
           </span>
         </div>
@@ -558,7 +558,7 @@ export default function BuildingDetailsPage() {
                     : 'Building Overview'}
                 </span>
               </div>
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {building.buildingName}
               </h1>
               {(building.propertyName || building.property?.name) && (
@@ -566,7 +566,7 @@ export default function BuildingDetailsPage() {
                   <Building2 className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                   <span>
                     Associated Property:{' '}
-                    <strong className="text-[#243447] font-semibold">
+                    <strong className="text-[#111820] font-semibold">
                       {building.propertyName || building.property?.name}
                     </strong>
                   </span>
@@ -605,7 +605,7 @@ export default function BuildingDetailsPage() {
             <div className="flex items-center gap-3">
               <div className="px-3.5 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                 <p className="text-xs uppercase font-semibold tracking-wider text-[#5B6875]">Floors</p>
-                <p className="text-xl font-bold text-[#243447]">{building.totalFloors ?? '—'}</p>
+                <p className="text-xl font-bold text-[#111820]">{building.totalFloors ?? '—'}</p>
               </div>
               <div className="px-3.5 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                 <p className="text-xs uppercase font-semibold tracking-wider text-[#5B6875]">Units</p>
@@ -617,7 +617,7 @@ export default function BuildingDetailsPage() {
           {/* Description */}
           {building.description && (
             <div className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">
-              <p className="font-medium text-[#243447] mb-1">Description</p>
+              <p className="font-medium text-[#111820] mb-1">Description</p>
               <p>{building.description}</p>
             </div>
           )}
@@ -627,7 +627,7 @@ export default function BuildingDetailsPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-[#243447]">
+              <h2 className="text-lg font-semibold text-[#111820]">
                 Floors in this Building
               </h2>
               <p className="text-xs text-[#5B6875]">
@@ -680,7 +680,7 @@ export default function BuildingDetailsPage() {
                           <span className="text-[10px] uppercase font-bold tracking-wider text-[#3F7D58] block">
                             Floor {floor.floorNumber}
                           </span>
-                          <h3 className="font-semibold text-base text-[#243447] mt-0.5">
+                          <h3 className="font-semibold text-base text-[#111820] mt-0.5">
                             {floor.floorName}
                           </h3>
                         </div>
@@ -792,7 +792,7 @@ export default function BuildingDetailsPage() {
                         <Layers className="w-4 h-4" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-[#243447]">
+                        <h3 className="text-base font-bold text-[#111820]">
                           {floorModalData.mode === 'add' ? 'Add Floor' : 'Edit Floor'}
                         </h3>
                         <p className="text-xs text-[#5B6875] truncate max-w-xs">
@@ -805,7 +805,7 @@ export default function BuildingDetailsPage() {
                       type="button"
                       onClick={() => !isSubmittingFloor && setFloorModalData(null)}
                       disabled={isSubmittingFloor}
-                      className="text-[#5B6875] hover:text-[#243447] p-1 rounded-md disabled:opacity-50"
+                      className="text-[#5B6875] hover:text-[#111820] p-1 rounded-md disabled:opacity-50"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -831,7 +831,7 @@ export default function BuildingDetailsPage() {
                         <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="text-[#5B6875]">Target Building:</span>
-                            <strong className="text-[#243447] font-semibold">{building.buildingName}</strong>
+                            <strong className="text-[#111820] font-semibold">{building.buildingName}</strong>
                           </div>
                           <p className="text-[#3F7D58] text-[11px] flex items-center gap-1 mt-1">
                             <Info className="w-3.5 h-3.5 shrink-0" />
@@ -842,7 +842,7 @@ export default function BuildingDetailsPage() {
                         <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="text-[#5B6875]">Target Building:</span>
-                            <strong className="text-[#243447] font-semibold">{building.buildingName}</strong>
+                            <strong className="text-[#111820] font-semibold">{building.buildingName}</strong>
                           </div>
                           <p className="text-[#856404] text-[11px] flex items-center gap-1 mt-1">
                             <Lock className="w-3.5 h-3.5 shrink-0" />

@@ -202,7 +202,7 @@ export const forgotPassword = async (emailOrData) => {
       ? (emailOrData.email || '').trim().toLowerCase()
       : String(emailOrData || '').trim().toLowerCase()
 
-  return axiosClient.post('/auth/forgot-password', { email })
+  return axiosClient.post('/auth/forgot-password', { email }, { skipAuthToken: true })
 }
 
 
@@ -229,10 +229,11 @@ export const resetPassword = async (tokenOrData, maybeNewPassword) => {
   token = String(token).trim()
   newPassword = String(newPassword)
 
-  return axiosClient.post('/auth/reset-password', {
-    token,
-    newPassword,
-  })
+  return axiosClient.post(
+    '/auth/reset-password',
+    { token, newPassword },
+    { skipAuthToken: true }
+  )
 }
 
 /**

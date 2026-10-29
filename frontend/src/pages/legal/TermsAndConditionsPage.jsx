@@ -53,7 +53,7 @@ export default function TermsAndConditionsPage() {
             01
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Acceptance of Terms
             </h2>
             <p className="text-xs text-[#5B6875]">Binding agreement between users and SmartEstate</p>
@@ -80,7 +80,7 @@ export default function TermsAndConditionsPage() {
             02
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Platform Scope & Role
             </h2>
             <p className="text-xs text-[#5B6875]">Nature of SmartEstate software services</p>
@@ -93,7 +93,7 @@ export default function TermsAndConditionsPage() {
           </p>
 
           <div className="p-4 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] space-y-2 text-xs">
-            <p className="font-semibold text-[#243447] flex items-center gap-1.5">
+            <p className="font-semibold text-[#111820] flex items-center gap-1.5">
               <Scale className="w-4 h-4 text-[#3F7D58]" />
               Clarification of Software Role
             </p>
@@ -114,7 +114,7 @@ export default function TermsAndConditionsPage() {
             03
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               User Accounts & Access
             </h2>
             <p className="text-xs text-[#5B6875]">Account creation, credential security, and role boundaries</p>
@@ -152,7 +152,7 @@ export default function TermsAndConditionsPage() {
             04
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Property Listings & Availability
             </h2>
             <p className="text-xs text-[#5B6875]">Owner responsibilities regarding unit listings and descriptions</p>
@@ -181,7 +181,7 @@ export default function TermsAndConditionsPage() {
             05
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Applications & Lease Agreements
             </h2>
             <p className="text-xs text-[#5B6875]">Contractual framework between owners and tenants</p>
@@ -213,7 +213,7 @@ export default function TermsAndConditionsPage() {
             06
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Rent Payments & Financial Records
             </h2>
             <p className="text-xs text-[#5B6875]">Recording payment transactions and billing logs</p>
@@ -242,7 +242,7 @@ export default function TermsAndConditionsPage() {
             07
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Maintenance & Emergency Notice
             </h2>
             <p className="text-xs text-[#5B6875]">Work order workflow and urgent hazard instructions</p>
@@ -276,7 +276,7 @@ export default function TermsAndConditionsPage() {
             08
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Prohibited Platform Conduct
             </h2>
             <p className="text-xs text-[#5B6875]">Unacceptable uses and behavioral boundaries</p>
@@ -305,7 +305,7 @@ export default function TermsAndConditionsPage() {
             09
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Intellectual Property Rights
             </h2>
             <p className="text-xs text-[#5B6875]">Platform software ownership and user content licenses</p>
@@ -332,7 +332,7 @@ export default function TermsAndConditionsPage() {
             10
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Disclaimer of Warranties
             </h2>
             <p className="text-xs text-[#5B6875]">Standard operational warranty disclaimers</p>
@@ -359,7 +359,7 @@ export default function TermsAndConditionsPage() {
             11
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Limitation of Liability
             </h2>
             <p className="text-xs text-[#5B6875]">Scope of software liability</p>
@@ -383,7 +383,7 @@ export default function TermsAndConditionsPage() {
             12
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Suspension & Termination
             </h2>
             <p className="text-xs text-[#5B6875]">Conditions for account termination or service restriction</p>
@@ -407,7 +407,7 @@ export default function TermsAndConditionsPage() {
             13
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               General Legal Provisions
             </h2>
             <p className="text-xs text-[#5B6875]">Severability, amendments, and legal counsel review</p>
@@ -434,7 +434,7 @@ export default function TermsAndConditionsPage() {
             14
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Contact Information
             </h2>
             <p className="text-xs text-[#5B6875]">Questions regarding these terms</p>
@@ -445,7 +445,7 @@ export default function TermsAndConditionsPage() {
           <p>
             If you have questions regarding these Terms &amp; Conditions, please direct inquiries to:
           </p>
-          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#243447]">
+          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#111820]">
             <p><strong>SmartEstate Legal &amp; Platform Support</strong></p>
             <p>Support and compliance contact addresses are not configured in this application.</p>
             <p>Platform: SmartEstate Property Management SaaS</p>

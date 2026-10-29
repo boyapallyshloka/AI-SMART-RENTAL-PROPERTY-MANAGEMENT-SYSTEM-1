@@ -238,7 +238,7 @@ export default function ApplicationsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 Rental Applications
               </h1>
               {/* Only show Total Count badge if NO error occurred and not loading */}
@@ -248,7 +248,7 @@ export default function ApplicationsPage() {
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Review and manage prospective tenant applications across your properties
             </p>
           </div>
@@ -313,7 +313,7 @@ export default function ApplicationsPage() {
                   onClick={resetFilters}
                   title="Reset all filters"
                   aria-label="Reset all filters"
-                  className="p-2.5 mb-0.5 rounded-xl border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                  className="p-2.5 mb-0.5 rounded-xl border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -326,7 +326,7 @@ export default function ApplicationsPage() {
               {!error && !loading ? (
                 <>
                   Showing{' '}
-                  <strong className="text-[#243447]">
+                  <strong className="text-[#111820]">
                     {filteredApplications.length}
                   </strong>{' '}
                   of {applications.length} applications
@@ -366,7 +366,7 @@ export default function ApplicationsPage() {
               )}
             </div>
             <div className="max-w-md mx-auto space-y-2">
-              <h3 className="text-xl font-bold text-[#243447]">
+              <h3 className="text-xl font-bold text-[#111820]">
                 {errorStatus === 403 ? 'Access Forbidden' : 'Failed to Load Applications'}
               </h3>
               <p className="text-sm text-[#8A2E2C] leading-relaxed">{error}</p>
@@ -434,7 +434,7 @@ export default function ApplicationsPage() {
                       <td className="py-4 pl-6 pr-4">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-[#243447]">
+                            <span className="font-semibold text-[#111820]">
                               {app.tenantName || 'Applicant'}
                             </span>
                             <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-[#F0F4F8] text-[#5B6875] border border-[#E3E8DF]">
@@ -453,13 +453,13 @@ export default function ApplicationsPage() {
                       {/* Property & Unit */}
                       <td className="py-4 px-4 min-w-[180px]">
                         <div>
-                          <div className="flex items-center gap-1.5 font-medium text-[#243447] truncate">
+                          <div className="flex items-center gap-1.5 font-medium text-[#111820] truncate">
                             <Building2 className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                             <span className="truncate">{app.propertyName || 'Property'}</span>
                           </div>
                           <div className="text-xs text-[#5B6875] mt-0.5 flex items-center gap-1.5">
                             {app.buildingName && <span>{app.buildingName} &bull;</span>}
-                            <span className="font-medium text-[#243447]">
+                            <span className="font-medium text-[#111820]">
                               Unit {app.unitNumber || '—'}
                             </span>
                           </div>
@@ -480,7 +480,7 @@ export default function ApplicationsPage() {
                       </td>
 
                       {/* Monthly Rent */}
-                      <td className="py-4 px-4 whitespace-nowrap font-medium text-[#243447]">
+                      <td className="py-4 px-4 whitespace-nowrap font-medium text-[#111820]">
                         {formatInr(app.monthlyRent)}
                         <span className="text-xs text-[#5B6875] font-normal"> / mo</span>
                       </td>

@@ -350,7 +350,7 @@ export default function FloorDetailsPage() {
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#243447]">Failed to Load Floor</h3>
+              <h3 className="text-base font-bold text-[#111820]">Failed to Load Floor</h3>
               <p className="text-xs text-[#5B6875] mt-1">{errorMessage}</p>
             </div>
             <Button size="sm" variant="primary" onClick={loadData}>
@@ -474,7 +474,7 @@ export default function FloorDetailsPage() {
             {buildingName}
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             {floor.floorName}
           </span>
         </div>
@@ -526,14 +526,14 @@ export default function FloorDetailsPage() {
                 <Layers className="w-3.5 h-3.5" />
                 <span>Floor Overview</span>
               </div>
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {floor.floorName}
               </h1>
               <div className="flex items-center gap-2 text-xs text-[#5B6875] mt-1.5 flex-wrap">
                 <Building className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                 <span>
                   Building:{' '}
-                  <strong className="text-[#243447] font-semibold">
+                  <strong className="text-[#111820] font-semibold">
                     {buildingName}
                   </strong>
                 </span>
@@ -543,7 +543,7 @@ export default function FloorDetailsPage() {
                   <>
                     <span>&bull;</span>
                     <span>
-                      Property: <strong className="text-[#243447]">{propertyName}</strong>
+                      Property: <strong className="text-[#111820]">{propertyName}</strong>
                     </span>
                   </>
                 )}
@@ -563,7 +563,7 @@ export default function FloorDetailsPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-[#243447]">
+              <h2 className="text-lg font-semibold text-[#111820]">
                 Units on this Floor
               </h2>
               <p className="text-xs text-[#5B6875]">
@@ -620,7 +620,7 @@ export default function FloorDetailsPage() {
                             </span>
                           )}
                         </div>
-                        <h3 className="font-semibold text-lg text-[#243447] mt-0.5">
+                        <h3 className="font-semibold text-lg text-[#111820] mt-0.5">
                           Unit {unit.unitNumber}
                         </h3>
                       </div>
@@ -632,7 +632,7 @@ export default function FloorDetailsPage() {
                     <div className="pt-2 border-t border-[#E3E8DF] space-y-2">
                       <div className="flex items-baseline justify-between">
                         <span className="text-xs text-[#5B6875]">Monthly Rent</span>
-                        <span className="text-base font-bold text-[#243447]">
+                        <span className="text-base font-bold text-[#111820]">
                           {formatCurrency(unit.monthlyRent)}
                           <span className="text-xs font-normal text-[#5B6875]">/mo</span>
                         </span>
@@ -641,17 +641,17 @@ export default function FloorDetailsPage() {
                       <div className="grid grid-cols-3 gap-2 pt-1 text-center">
                         <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Area</p>
-                          <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
+                          <p className="text-xs font-bold text-[#111820] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
                         </div>
 
                         <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Beds</p>
-                          <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.bedrooms ?? '—'}</p>
+                          <p className="text-xs font-bold text-[#111820] mt-0.5">{unit.bedrooms ?? '—'}</p>
                         </div>
 
                         <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Baths</p>
-                          <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.bathrooms ?? '—'}</p>
+                          <p className="text-xs font-bold text-[#111820] mt-0.5">{unit.bathrooms ?? '—'}</p>
                         </div>
                       </div>
                     </div>
@@ -751,7 +751,7 @@ export default function FloorDetailsPage() {
                         <Layers className="w-4 h-4" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-[#243447]">Edit Floor</h3>
+                        <h3 className="text-base font-bold text-[#111820]">Edit Floor</h3>
                         <p className="text-xs text-[#5B6875] truncate max-w-xs">{buildingName}</p>
                       </div>
                     </div>
@@ -760,7 +760,7 @@ export default function FloorDetailsPage() {
                       type="button"
                       onClick={() => !isSubmittingFloor && setIsEditFloorOpen(false)}
                       disabled={isSubmittingFloor}
-                      className="text-[#5B6875] hover:text-[#243447] p-1 rounded-md disabled:opacity-50"
+                      className="text-[#5B6875] hover:text-[#111820] p-1 rounded-md disabled:opacity-50"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -785,7 +785,7 @@ export default function FloorDetailsPage() {
                       <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="text-[#5B6875]">Target Building:</span>
-                          <strong className="text-[#243447] font-semibold">{buildingName}</strong>
+                          <strong className="text-[#111820] font-semibold">{buildingName}</strong>
                         </div>
                         <p className="text-[#856404] text-[11px] flex items-center gap-1 mt-1">
                           <Lock className="w-3.5 h-3.5 shrink-0" />

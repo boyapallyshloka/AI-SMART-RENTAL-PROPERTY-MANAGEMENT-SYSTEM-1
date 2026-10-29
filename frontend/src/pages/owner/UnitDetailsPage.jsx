@@ -203,7 +203,7 @@ export default function UnitDetailsPage() {
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#243447]">Failed to Load Unit</h3>
+              <h3 className="text-base font-bold text-[#111820]">Failed to Load Unit</h3>
               <p className="text-xs text-[#5B6875] mt-1">{errorMessage}</p>
             </div>
             <Button size="sm" variant="primary" onClick={loadUnit}>
@@ -337,7 +337,7 @@ export default function UnitDetailsPage() {
             </>
           )}
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             Unit {unit.unitNumber}
           </span>
         </div>
@@ -423,7 +423,7 @@ export default function UnitDetailsPage() {
                   ID: {unit.unitId}
                 </span>
               </div>
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 Unit {unit.unitNumber}
               </h1>
               {(targetBuildingName || targetFloorName) && (
@@ -445,18 +445,18 @@ export default function UnitDetailsPage() {
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
             <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <Home className="w-4 h-4 text-[#3F7D58]" />
-              <h2 className="font-semibold text-sm text-[#243447]">Unit Overview</h2>
+              <h2 className="font-semibold text-sm text-[#111820]">Unit Overview</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Unit Number</p>
-                <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.unitNumber}</p>
+                <p className="font-bold text-sm text-[#111820] mt-0.5">{unit.unitNumber}</p>
               </div>
 
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Unit Type</p>
-                <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.unitType || '—'}</p>
+                <p className="font-bold text-sm text-[#111820] mt-0.5">{unit.unitType || '—'}</p>
               </div>
 
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
@@ -468,7 +468,7 @@ export default function UnitDetailsPage() {
 
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Area</p>
-                <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
+                <p className="font-bold text-sm text-[#111820] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
               </div>
             </div>
           </div>
@@ -477,7 +477,7 @@ export default function UnitDetailsPage() {
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
             <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <MapPin className="w-4 h-4 text-[#3F7D58]" />
-              <h2 className="font-semibold text-sm text-[#243447]">Location Hierarchy</h2>
+              <h2 className="font-semibold text-sm text-[#111820]">Location Hierarchy</h2>
             </div>
 
             <div className="space-y-3 text-xs">
@@ -485,7 +485,7 @@ export default function UnitDetailsPage() {
                 <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Property</p>
-                    <p className="font-bold text-sm text-[#243447] mt-0.5">{targetPropertyName}</p>
+                    <p className="font-bold text-sm text-[#111820] mt-0.5">{targetPropertyName}</p>
                   </div>
                   {targetPropertyId && (
                     <Link
@@ -502,7 +502,7 @@ export default function UnitDetailsPage() {
                 <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Building</p>
-                    <p className="font-bold text-sm text-[#243447] mt-0.5">{targetBuildingName}</p>
+                    <p className="font-bold text-sm text-[#111820] mt-0.5">{targetBuildingName}</p>
                   </div>
                   {targetBuildingId && (
                     <Link
@@ -519,7 +519,7 @@ export default function UnitDetailsPage() {
                 <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Floor</p>
-                    <p className="font-bold text-sm text-[#243447] mt-0.5">
+                    <p className="font-bold text-sm text-[#111820] mt-0.5">
                       {targetFloorName} {unit.floorNumber != null ? `(Floor ${unit.floorNumber})` : ''}
                     </p>
                   </div>
@@ -540,13 +540,13 @@ export default function UnitDetailsPage() {
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
             <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
-              <h2 className="font-semibold text-sm text-[#243447]">Rental &amp; Financials</h2>
+              <h2 className="font-semibold text-sm text-[#111820]">Rental &amp; Financials</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Monthly Rent</p>
-                <p className="font-bold text-base text-[#243447] mt-0.5">
+                <p className="font-bold text-base text-[#111820] mt-0.5">
                   {formatCurrency(unit.monthlyRent)}
                   <span className="text-xs font-normal text-[#5B6875]">/mo</span>
                 </p>
@@ -554,7 +554,7 @@ export default function UnitDetailsPage() {
 
               <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Security Deposit</p>
-                <p className="font-bold text-base text-[#243447] mt-0.5">
+                <p className="font-bold text-base text-[#111820] mt-0.5">
                   {formatCurrency(unit.securityDeposit)}
                 </p>
               </div>
@@ -565,7 +565,7 @@ export default function UnitDetailsPage() {
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
             <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <Bed className="w-4 h-4 text-[#3F7D58]" />
-              <h2 className="font-semibold text-sm text-[#243447]">Room Details</h2>
+              <h2 className="font-semibold text-sm text-[#111820]">Room Details</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
@@ -575,7 +575,7 @@ export default function UnitDetailsPage() {
                 </div>
                 <div>
                   <p className="text-[#5B6875] font-medium">Bedrooms</p>
-                  <p className="font-bold text-base text-[#243447] mt-0.5">{unit.bedrooms ?? '—'}</p>
+                  <p className="font-bold text-base text-[#111820] mt-0.5">{unit.bedrooms ?? '—'}</p>
                 </div>
               </div>
 
@@ -585,7 +585,7 @@ export default function UnitDetailsPage() {
                 </div>
                 <div>
                   <p className="text-[#5B6875] font-medium">Bathrooms</p>
-                  <p className="font-bold text-base text-[#243447] mt-0.5">{unit.bathrooms ?? '—'}</p>
+                  <p className="font-bold text-base text-[#111820] mt-0.5">{unit.bathrooms ?? '—'}</p>
                 </div>
               </div>
             </div>
@@ -594,7 +594,7 @@ export default function UnitDetailsPage() {
 
         {/* Section 5: Description */}
         <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-3">
-          <h2 className="font-semibold text-sm text-[#243447] border-b border-[#E3E8DF] pb-3">
+          <h2 className="font-semibold text-sm text-[#111820] border-b border-[#E3E8DF] pb-3">
             Description
           </h2>
           <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">

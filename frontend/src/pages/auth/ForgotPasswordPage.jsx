@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import AuthLayout from '../../layouts/AuthLayout'
 import { Button, Input } from '../../components/ui'
-import { Mail, ArrowLeft, CheckCircle2, KeyRound, AlertCircle } from 'lucide-react'
+import { Mail, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
   const { forgotPassword } = useAuth()
@@ -58,26 +58,22 @@ export default function ForgotPasswordPage() {
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Check your inbox
             </h2>
             <p className="text-xs text-[#5B6875] mt-1 max-w-sm mx-auto">
               If an account with{' '}
-              <span className="font-semibold text-[#243447]">
+              <span className="font-semibold text-[#111820]">
                 {email}
               </span>{' '}
-              exists, password recovery instructions have been initiated.
+              exists, password recovery instructions have been initiated.{' '}
+              Check your inbox for the reset link and open it to choose a new password.
             </p>
           </div>
 
           <div className="pt-2 space-y-2">
-            <Link to="/reset-password">
-              <Button variant="primary" className="w-full" leftIcon={<KeyRound className="w-4 h-4" />}>
-                Proceed to Reset Password Page
-              </Button>
-            </Link>
             <Link to="/login">
-              <Button variant="secondary" className="w-full" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+              <Button variant="primary" className="w-full" leftIcon={<ArrowLeft className="w-4 h-4" />}>
                 Back to Sign In
               </Button>
             </Link>

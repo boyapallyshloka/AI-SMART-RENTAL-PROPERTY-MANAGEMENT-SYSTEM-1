@@ -176,7 +176,7 @@ function ExpenseForm({ propertyId, editingExpense, onSuccess, onCancel }) {
       className="space-y-4 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4"
       noValidate
     >
-      <p className="text-sm font-semibold text-[#243447]">
+      <p className="text-sm font-semibold text-[#111820]">
         {editingExpense ? 'Edit expense' : 'Add new expense'}
       </p>
 
@@ -294,10 +294,10 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
 
   return (
     <tr className="group border-t border-[#E3E8DF] hover:bg-[#F7F7F1]">
-      <td className="px-3 py-3 text-sm font-medium text-[#243447]">
+      <td className="px-3 py-3 text-sm font-medium text-[#111820]">
         {categoryLabel(expense.category)}
       </td>
-      <td className="px-3 py-3 text-sm text-[#243447]">{formatMoney(expense.amount)}</td>
+      <td className="px-3 py-3 text-sm text-[#111820]">{formatMoney(expense.amount)}</td>
       <td className="px-3 py-3 text-sm text-[#5B6875]">{expense.expenseDate ?? '—'}</td>
       <td className="px-3 py-3 text-sm text-[#5B6875]">
         <span className="line-clamp-1 max-w-[180px]">{expense.description || '—'}</span>

@@ -26,7 +26,7 @@ export default function EmptyState({
         {icon || <FolderOpen className="w-6 h-6" aria-hidden="true" />}
       </div>
 
-      <h3 className="text-base font-semibold text-[#243447] mb-1 tracking-tight">
+      <h3 className="text-base font-semibold text-[#111820] mb-1 tracking-tight">
         {title}
       </h3>
 

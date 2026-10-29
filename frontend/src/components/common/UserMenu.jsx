@@ -88,7 +88,7 @@ export default function UserMenu({ role, onLogout }) {
             {userInfo.avatarText}
           </div>
           <div className="hidden sm:block text-left">
-            <p className="text-xs font-semibold text-[#243447] leading-tight">
+            <p className="text-xs font-semibold text-[#111820] leading-tight">
               {userInfo.name}
             </p>
             <p className="text-[11px] text-[#5B6875] capitalize">
@@ -101,7 +101,7 @@ export default function UserMenu({ role, onLogout }) {
         {isOpen && (
           <div className="absolute right-0 mt-2 w-60 rounded-lg bg-white border border-[#E3E8DF] shadow-md z-50 overflow-hidden animate-in fade-in">
             <div className="px-4 py-3 border-b border-[#E3E8DF] bg-[#F7F7F1]">
-              <p className="text-xs font-semibold text-[#243447]">
+              <p className="text-xs font-semibold text-[#111820]">
                 {userInfo.name}
               </p>
               <p className="text-[11px] text-[#5B6875] truncate">
@@ -113,7 +113,7 @@ export default function UserMenu({ role, onLogout }) {
               </div>
             </div>
 
-            <div className="p-1.5 text-xs text-[#243447]">
+            <div className="p-1.5 text-xs text-[#111820]">
               <button
                 type="button"
                 onClick={() => {

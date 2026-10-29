@@ -4,7 +4,6 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 import { useAuth } from '../../context/AuthContext'
 import {
   getInvoices,
-  createInvoice,
   INVOICE_STATUSES,
 } from '../../api/invoiceApi'
 import { downloadInvoiceReceipt } from '../../api/paymentApi'
@@ -31,13 +30,11 @@ import {
   Calendar,
   Info,
   RefreshCw,
-  Plus,
   FileText,
   User,
   ExternalLink,
   Download,
   AlertCircle,
-  X,
 } from 'lucide-react'
 
 // Date formatter
@@ -75,7 +72,6 @@ export default function PaymentsPage() {
   const basePath = isManager ? '/manager' : '/owner'
 
   const [invoices, setInvoices] = useState([])
-  const [agreements, setAgreements] = useState([])
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState(null)
@@ -85,11 +81,6 @@ export default function PaymentsPage() {
     location.state?.successMessage || ''
   )
 
-  // Generate Invoice Modal State
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [selectedAgreementId, setSelectedAgreementId] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [generateError, setGenerateError] = useState(null)
   const [downloadingInvoiceId, setDownloadingInvoiceId] = useState(null)
 
   // Load real backend invoices and metadata
@@ -155,21 +146,6 @@ export default function PaymentsPage() {
         }
       })
 
-      // Store agreements for modal dropdown
-      setAgreements(
-        rawAgreements.map((agr) => {
-          const app = agr.applicationId ? appMap.get(Number(agr.applicationId)) : null
-          return {
-            ...agr,
-            tenantName: app?.tenantName || (agr.tenantId ? `Tenant #${agr.tenantId}` : null),
-            propertyName: app?.propertyName || agr.propertyName || null,
-            propertyType: app?.propertyType || agr.propertyType || null,
-            directRental: ['HOUSE', 'VILLA'].includes(String(app?.propertyType || agr.propertyType || '').toUpperCase()) || (agr.unitId == null && agr.propertyId != null),
-            unitNumber: app?.unitNumber || agr.unitId || '',
-          }
-        })
-      )
-
       // Enrich invoices with real display data
       const enriched = rawInvoices.map((inv) => {
         const agr = inv.agreementId ? agrMap.get(Number(inv.agreementId)) : null
@@ -226,55 +202,6 @@ export default function PaymentsPage() {
   useEffect(() => {
     loadData()
   }, [loadData])
-
-  // Active agreements eligible for monthly invoicing
-  const activeAgreements = useMemo(() => {
-    return agreements.filter(
-      (a) => String(a.status).toUpperCase() === 'ACTIVE'
-    )
-  }, [agreements])
-
-  // Open Generate Invoice Modal
-  const handleOpenCreateModal = () => {
-    if (activeAgreements.length > 0) {
-      setSelectedAgreementId(String(activeAgreements[0].agreementId))
-    } else {
-      setSelectedAgreementId('')
-    }
-    setGenerateError(null)
-    setIsCreateModalOpen(true)
-  }
-
-  // Handle invoice creation via POST /api/rent-invoices
-  const handleGenerateInvoice = async (e) => {
-    e.preventDefault()
-    if (!selectedAgreementId) {
-      setGenerateError('Please select an active rental agreement')
-      return
-    }
-
-    setIsGenerating(true)
-    setGenerateError(null)
-
-    try {
-      const res = await createInvoice({ agreementId: selectedAgreementId })
-      const newInv = res?.data || res
-      setSuccessMessage(
-        `Rent invoice ${newInv?.invoiceNumber || ''} generated successfully for Agreement #${selectedAgreementId}!`
-      )
-      setIsCreateModalOpen(false)
-      await loadData(true)
-    } catch (err) {
-      console.error('Failed to generate invoice:', err)
-      setGenerateError(
-        err?.response?.data?.message ||
-          err?.message ||
-          'Failed to generate invoice for this agreement.'
-      )
-    } finally {
-      setIsGenerating(false)
-    }
-  }
 
   // Handle authenticated invoice PDF download
   const handleDownloadInvoice = async (inv) => {
@@ -395,11 +322,11 @@ export default function PaymentsPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
               Rent Invoices &amp; Payments
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
-              Track collected rent, generate monthly billing, and review balances across leased units
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
+              Review automatically generated rent invoices, track collected rent, and check balances across leased units
             </p>
           </div>
 
@@ -414,14 +341,6 @@ export default function PaymentsPage() {
               Refresh
             </Button>
 
-            <Button
-              variant="primary"
-              size="md"
-              onClick={handleOpenCreateModal}
-              leftIcon={<Plus className="w-4 h-4" />}
-            >
-              Generate Invoice
-            </Button>
           </div>
         </div>
 
@@ -438,7 +357,7 @@ export default function PaymentsPage() {
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold text-[#243447] tracking-tight">
+              <p className="text-2xl sm:text-3xl font-bold text-[#111820] tracking-tight">
                 {formatCurrency(totalCollected)}
               </p>
               <p className="text-xs text-[#5B6875] mt-0.5">
@@ -515,7 +434,7 @@ export default function PaymentsPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -526,7 +445,7 @@ export default function PaymentsPage() {
           <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
-              <strong className="text-[#243447]">
+              <strong className="text-[#111820]">
                 {filteredInvoices.length}
               </strong>{' '}
               of {invoices.length} rent invoices
@@ -553,7 +472,7 @@ export default function PaymentsPage() {
               message={
                 hasActiveFilters
                   ? 'No rent invoices match your current search query or status filter.'
-                  : 'No rent invoices have been created yet. Generate monthly invoices for active rental agreements.'
+                  : 'No rent invoices are available yet. The system creates invoices automatically for eligible active agreements.'
               }
               action={
                 hasActiveFilters ? (
@@ -562,11 +481,12 @@ export default function PaymentsPage() {
                   </Button>
                 ) : (
                   <Button
-                    variant="primary"
-                    onClick={handleOpenCreateModal}
-                    leftIcon={<Plus className="w-4 h-4" />}
+                    variant="outline"
+                    onClick={() => loadData(true)}
+                    isLoading={isRefreshing}
+                    leftIcon={<RefreshCw className="w-4 h-4" />}
                   >
-                    Generate First Invoice
+                    Refresh invoices
                   </Button>
                 )
               }
@@ -581,6 +501,7 @@ export default function PaymentsPage() {
                   <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">Invoice #</th>
                     <th className="py-3.5 px-4">Billing Period</th>
+                    <th className="py-3.5 px-4">Invoice Date</th>
                     <th className="py-3.5 px-4">Tenant</th>
                     <th className="py-3.5 px-4">Property &amp; Unit</th>
                     <th className="py-3.5 px-4">Due Date</th>
@@ -607,13 +528,21 @@ export default function PaymentsPage() {
 
                       {/* Billing Period */}
                       <td className="py-4 px-4 whitespace-nowrap text-xs text-[#5B6875]">
-                        <span className="font-semibold text-[#243447]">
+                        <span className="font-semibold text-[#111820]">
                           {formatMonthYear(inv.billingMonth, inv.billingYear)}
                         </span>
                       </td>
 
+                      {/* Invoice Generation Date */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-[#5B6875]">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
+                          <span>{formatDate(inv.invoiceDate)}</span>
+                        </div>
+                      </td>
+
                       {/* Tenant Name */}
-                      <td className="py-4 px-4 whitespace-nowrap font-medium text-[#243447]">
+                      <td className="py-4 px-4 whitespace-nowrap font-medium text-[#111820]">
                         <div className="flex items-center gap-2">
                           <User className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                           <div>
@@ -629,7 +558,7 @@ export default function PaymentsPage() {
 
                       {/* Property & Unit */}
                       <td className="py-4 px-4 min-w-[180px]">
-                        <p className="font-semibold text-[#243447] text-xs truncate">
+                        <p className="font-semibold text-[#111820] text-xs truncate">
                           {inv.propertyName}
                         </p>
                         <span className="text-xs text-[#5B6875]">
@@ -646,7 +575,7 @@ export default function PaymentsPage() {
                       </td>
 
                       {/* Amount */}
-                      <td className="py-4 px-4 whitespace-nowrap font-bold text-[#243447]">
+                      <td className="py-4 px-4 whitespace-nowrap font-bold text-[#111820]">
                         {formatCurrency(inv.amount)}
                         {inv.remainingAmount > 0 && inv.remainingAmount < inv.amount && (
                           <span className="block text-[11px] text-amber-700 font-normal">
@@ -694,104 +623,6 @@ export default function PaymentsPage() {
           </div>
         )}
 
-        {/* Generate Invoice Modal */}
-        {isCreateModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-lg overflow-hidden">
-              <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#3F7D58] text-white flex items-center justify-center shadow-xs">
-                    <Receipt className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-[#243447] text-base">
-                      Generate Monthly Rent Invoice
-                    </h3>
-                    <p className="text-xs text-[#5B6875]">
-                      Create next billing statement for an active rental agreement
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsCreateModalOpen(false)}
-                  disabled={isGenerating}
-                  className="p-1 rounded-lg text-[#5B6875] hover:text-[#243447]"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <form onSubmit={handleGenerateInvoice} className="p-6 space-y-4">
-                <p className="text-xs text-[#5B6875] leading-relaxed">
-                  The backend automatically computes the next billing period, sets the due date matching the agreement schedule, and generates an official PDF invoice statement.
-                </p>
-
-                {generateError && (
-                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                    <span>{generateError}</span>
-                  </div>
-                )}
-
-                {activeAgreements.length === 0 ? (
-                  <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-2">
-                    <p className="font-semibold flex items-center gap-1.5">
-                      <AlertTriangle className="w-4 h-4 text-amber-700" />
-                      No Active Agreements Available
-                    </p>
-                    <p>
-                      Invoices can only be generated for ACTIVE rental agreements. Activate a drafted agreement first in Lease Agreements.
-                    </p>
-                    <Link
-                      to={`${basePath}/agreements`}
-                      className="inline-block text-xs font-semibold text-[#3F7D58] hover:underline"
-                    >
-                      Go to Agreements &rarr;
-                    </Link>
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-xs font-semibold text-[#243447] mb-1.5">
-                      Select Active Rental Agreement <span className="text-red-500">*</span>
-                    </label>
-                    <Select
-                      options={activeAgreements.map((a) => ({
-                        value: String(a.agreementId),
-                        label: `Agreement #${a.agreementId} — ${a.tenantName} (${a.propertyName} · ${a.directRental ? 'Whole property' : `Unit #${a.unitNumber || a.unitId}`})`,
-                      }))}
-                      value={selectedAgreementId}
-                      onChange={(e) => setSelectedAgreementId(e.target.value)}
-                    />
-                  </div>
-                )}
-
-                <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#E3E8DF]">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    type="button"
-                    onClick={() => setIsCreateModalOpen(false)}
-                    disabled={isGenerating}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    type="submit"
-                    isLoading={isGenerating}
-                    disabled={isGenerating || activeAgreements.length === 0}
-                    leftIcon={<CheckCircle2 className="w-4 h-4" />}
-                  >
-                    Generate Invoice
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     </DashboardLayout>
   )

@@ -248,12 +248,12 @@ export default function WelcomePage() {
                 <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-4 sm:px-4">
                   <div className="min-w-0">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#7A6959]">{String(featuredProperty?.propertyType || '').replace(/_/g, ' ') || (isLoading ? 'Available rentals' : 'Public listings')}</p>
-                    <h2 className="mt-1 truncate text-lg font-semibold text-[#243447]">
+                    <h2 className="mt-1 truncate text-lg font-semibold text-[#111820]">
                       {featuredProperty?.propertyName || featuredProperty?.name || (isLoading ? 'Finding homes for you…' : 'No available homes yet')}
                     </h2>
                   </div>
                   {Number.isFinite(featuredRent) && featuredRent > 0 && (
-                    <p className="shrink-0 text-right text-sm font-bold text-[#243447]">
+                    <p className="shrink-0 text-right text-sm font-bold text-[#111820]">
                       ₹{featuredRent.toLocaleString('en-IN')}<span className="ml-1 text-[10px] font-medium text-[#7A6959]">/mo</span>
                     </p>
                   )}
@@ -262,7 +262,7 @@ export default function WelcomePage() {
                   <button
                     type="button"
                     onClick={() => navigate(`/properties/${featuredProperty.propertyId ?? featuredProperty.id}`, { state: { publicFilters: filters } })}
-                    className="mx-3 mb-3 inline-flex items-center gap-1.5 rounded-md px-1 text-xs font-semibold text-[#315F46] transition-colors hover:text-[#243447] sm:mx-4"
+                    className="mx-3 mb-3 inline-flex items-center gap-1.5 rounded-md px-1 text-xs font-semibold text-[#315F46] transition-colors hover:text-[#111820] sm:mx-4"
                   >
                     View this home <ArrowRight className="h-3.5 w-3.5" />
                   </button>
@@ -276,7 +276,7 @@ export default function WelcomePage() {
 
         <section
           id="property-listings"
-          className="scroll-mt-20 border-y border-[#E3E8DF] bg-white"
+          className="scroll-mt-20 border-y border-[#E3E8DF] bg-[#F8F1E6]"
           aria-labelledby="property-listings-title"
         >
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8 lg:px-12 lg:py-16">
@@ -285,7 +285,7 @@ export default function WelcomePage() {
                 <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#3F7D58]">
                   <Building2 className="h-4 w-4" /> SmartEstate Listings
                 </p>
-                <h2 id="property-listings-title" className="font-serif text-3xl font-semibold text-[#243447] sm:text-4xl">
+                <h2 id="property-listings-title" className="font-serif text-3xl font-semibold text-[#111820] sm:text-4xl">
                   Find a home
                 </h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5B6875]">
@@ -356,6 +356,25 @@ export default function WelcomePage() {
             <p className="mt-1 text-sm leading-6 text-[#5B6875]">Sign in when you are ready to apply or manage your rental.</p>
           </div>
         </section>
+
+        <footer className="border-t border-[#E3E8DF] bg-[#F8F1E6]">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-6 text-xs text-[#5B6875] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+            <span>&copy; {new Date().getFullYear()} SmartEstate SaaS Platform</span>
+            <nav className="flex flex-wrap items-center gap-x-3 gap-y-2" aria-label="Footer links">
+              <Link to="/privacy-policy" className="transition-colors hover:text-[#111820] hover:underline">
+                Privacy Policy
+              </Link>
+              <span aria-hidden="true">&bull;</span>
+              <Link to="/terms-and-conditions" className="transition-colors hover:text-[#111820] hover:underline">
+                Terms &amp; Conditions
+              </Link>
+              <span aria-hidden="true">&bull;</span>
+              <Link to="/contact" className="transition-colors hover:text-[#111820] hover:underline">
+                Contact Support
+              </Link>
+            </nav>
+          </div>
+        </footer>
       </main>
     </PublicLayout>
   )

@@ -495,7 +495,7 @@ export default function ManagerPropertyDetailsPage() {
               <AlertCircle className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-lg font-bold text-[#243447]">
+              <h2 className="text-lg font-bold text-[#111820]">
                 Unable to Load Assigned Property
               </h2>
               <p className="text-xs text-[#5B6875]">{error || 'Property not found'}</p>
@@ -596,7 +596,7 @@ export default function ManagerPropertyDetailsPage() {
                 </span>
                 <StatusBadge status={property.status} size="sm" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {property.propertyName || 'Unnamed Property'}
               </h1>
             </div>
@@ -606,7 +606,7 @@ export default function ManagerPropertyDetailsPage() {
                 <span className="text-[11px] uppercase font-bold text-[#5B6875] block tracking-wider">
                   Property Owner
                 </span>
-                <p className="font-bold text-[#243447] flex items-center gap-1.5">
+                <p className="font-bold text-[#111820] flex items-center gap-1.5">
                   <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                   <span>{property.ownerName}</span>
                   {property.ownerId && (
@@ -624,7 +624,7 @@ export default function ManagerPropertyDetailsPage() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#5B6875]">
               Description
             </h4>
-            <p className="text-xs sm:text-sm text-[#243447] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#111820] leading-relaxed">
               {property.description || 'No description provided for this assigned property.'}
             </p>
           </div>
@@ -640,7 +640,7 @@ export default function ManagerPropertyDetailsPage() {
                   <Maximize2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Total Area
                 </span>
-                <p className="font-bold text-[#243447] text-sm">
+                <p className="font-bold text-[#111820] text-sm">
                   {property.totalArea != null
                     ? `${Number(property.totalArea).toLocaleString('en-IN')} sq. ft.`
                     : '—'}
@@ -652,7 +652,7 @@ export default function ManagerPropertyDetailsPage() {
                   <Sofa className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Furnishing
                 </span>
-                <p className="font-bold text-[#243447] text-sm">
+                <p className="font-bold text-[#111820] text-sm">
                   {formatFurnishing(property.furnishingStatus)}
                 </p>
               </div>
@@ -662,7 +662,7 @@ export default function ManagerPropertyDetailsPage() {
                   <Car className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Parking
                 </span>
-                <p className="font-bold text-[#243447] text-sm">
+                <p className="font-bold text-[#111820] text-sm">
                   {property.parkingAvailable == null ? 'Not specified' : property.parkingAvailable ? 'Available' : 'None'}
                 </p>
               </div>
@@ -672,7 +672,7 @@ export default function ManagerPropertyDetailsPage() {
                   <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Year Built
                 </span>
-                <p className="font-bold text-[#243447] text-sm">
+                <p className="font-bold text-[#111820] text-sm">
                   {property.yearBuilt != null ? String(property.yearBuilt) : '—'}
                 </p>
               </div>
@@ -685,7 +685,7 @@ export default function ManagerPropertyDetailsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2">
               <ImageIcon className="w-4 h-4 text-[#3F7D58]" />
-              <h3 className="text-base font-bold text-[#243447]">
+              <h3 className="text-base font-bold text-[#111820]">
                 Property Photos & Media
               </h3>
               {images.length > 0 && (
@@ -697,7 +697,7 @@ export default function ManagerPropertyDetailsPage() {
 
             <div className="flex items-center gap-2">
               <label
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#111820] cursor-pointer transition-colors shadow-2xs ${
                   isUploadingImage ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
@@ -772,7 +772,7 @@ export default function ManagerPropertyDetailsPage() {
                         <Button
                           variant="outline"
                           size="xs"
-                          className="bg-white/90 hover:bg-white text-[#243447] border-white/40 backdrop-blur-md shadow-sm"
+                          className="bg-white/90 hover:bg-white text-[#111820] border-white/40 backdrop-blur-md shadow-sm"
                           disabled={isUpdatingImageId === currentImg?.imageId}
                           onClick={() => handleSetPrimary(currentImg)}
                           leftIcon={
@@ -840,7 +840,7 @@ export default function ManagerPropertyDetailsPage() {
                 <ImageIcon className="w-6 h-6" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   No Property Photos Uploaded
                 </p>
                 <p className="text-xs text-[#5B6875] max-w-md mx-auto">
@@ -859,7 +859,7 @@ export default function ManagerPropertyDetailsPage() {
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   Property Address
                 </h3>
                 <span className="text-xs text-[#5B6875]">
@@ -893,7 +893,7 @@ export default function ManagerPropertyDetailsPage() {
           <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[#F0F4F8] border border-[#E3E8DF] text-xs">
             <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <p className="font-semibold text-[#243447]">
+              <p className="font-semibold text-[#111820]">
                 Address Management Restricted
               </p>
               <p className="text-[#5B6875]">
@@ -908,7 +908,7 @@ export default function ManagerPropertyDetailsPage() {
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Address Line
                 </span>
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   {[address.addressLine1, address.addressLine2].filter(Boolean).join(', ')}
                 </p>
               </div>
@@ -918,7 +918,7 @@ export default function ManagerPropertyDetailsPage() {
                   <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                     Locality / Area
                   </span>
-                  <p className="text-sm font-semibold text-[#243447]">{address.area}</p>
+                  <p className="text-sm font-semibold text-[#111820]">{address.area}</p>
                 </div>
               )}
 
@@ -926,7 +926,7 @@ export default function ManagerPropertyDetailsPage() {
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   City & State
                 </span>
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   {[address.city, address.state].filter(Boolean).join(', ')}
                 </p>
               </div>
@@ -935,7 +935,7 @@ export default function ManagerPropertyDetailsPage() {
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Postal Code
                 </span>
-                <p className="text-sm font-semibold text-[#243447] font-mono">
+                <p className="text-sm font-semibold text-[#111820] font-mono">
                   {address.pincode || '—'}
                 </p>
               </div>
@@ -944,7 +944,7 @@ export default function ManagerPropertyDetailsPage() {
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Country
                 </span>
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   {address.country || 'India'}
                 </p>
               </div>
@@ -954,7 +954,7 @@ export default function ManagerPropertyDetailsPage() {
               <div className="w-10 h-10 rounded-full bg-[#EDF4ED] flex items-center justify-center mx-auto text-[#3F7D58]">
                 <MapPin className="w-5 h-5" />
               </div>
-              <p className="text-sm font-semibold text-[#243447]">
+              <p className="text-sm font-semibold text-[#111820]">
                 No Postal Address Registered
               </p>
               <p className="text-xs text-[#5B6875] max-w-sm mx-auto">
@@ -972,7 +972,7 @@ export default function ManagerPropertyDetailsPage() {
                 <Building className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   Property Buildings
                 </h3>
                 <span className="text-xs text-[#5B6875]">
@@ -1017,7 +1017,7 @@ export default function ManagerPropertyDetailsPage() {
                           <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-white px-2 py-0.5 rounded border border-[#E3E8DF]">
                             Building #{bId}
                           </span>
-                          <h4 className="text-base font-bold text-[#243447] tracking-tight mt-1">
+                          <h4 className="text-base font-bold text-[#111820] tracking-tight mt-1">
                             {b.buildingName || b.name || 'Unnamed Building'}
                           </h4>
                         </div>
@@ -1025,7 +1025,7 @@ export default function ManagerPropertyDetailsPage() {
                           <button
                             type="button"
                             onClick={() => handleOpenEditBuilding(b)}
-                            className="p-1.5 rounded text-[#5B6875] hover:text-[#243447] hover:bg-white transition-colors"
+                            className="p-1.5 rounded text-[#5B6875] hover:text-[#111820] hover:bg-white transition-colors"
                             title="Edit building"
                           >
                             <Pencil className="w-3.5 h-3.5" />
@@ -1047,7 +1047,7 @@ export default function ManagerPropertyDetailsPage() {
 
                       <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-xs">
                         <span className="text-[#5B6875]">Total Floors:</span>
-                        <span className="font-bold text-[#243447]">
+                        <span className="font-bold text-[#111820]">
                           {b.totalFloors != null ? b.totalFloors : '—'}
                         </span>
                       </div>
@@ -1085,14 +1085,14 @@ export default function ManagerPropertyDetailsPage() {
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-[#3F7D58]" />
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   Edit Property Specifications
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsEditPropertyOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1109,7 +1109,7 @@ export default function ManagerPropertyDetailsPage() {
 
             <form onSubmit={handleSaveProperty} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Property Name *
                 </label>
                 <Input
@@ -1124,7 +1124,7 @@ export default function ManagerPropertyDetailsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Property Type *
                   </label>
                   <Select
@@ -1145,7 +1145,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Total Area (sq. ft.)
                   </label>
                   <Input
@@ -1163,7 +1163,7 @@ export default function ManagerPropertyDetailsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Furnishing
                   </label>
                   <Select
@@ -1184,7 +1184,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Parking
                   </label>
                   <Select
@@ -1204,7 +1204,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Year Built
                   </label>
                   <Input
@@ -1221,7 +1221,7 @@ export default function ManagerPropertyDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Description
                 </label>
                 <Textarea
@@ -1270,14 +1270,14 @@ export default function ManagerPropertyDetailsPage() {
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-[#3F7D58]" />
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   Property Address Details (Read-Only)
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsEditAddressOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1295,7 +1295,7 @@ export default function ManagerPropertyDetailsPage() {
 
             <form onSubmit={handleSaveAddress} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Address Line 1
                 </label>
                 <Input
@@ -1307,7 +1307,7 @@ export default function ManagerPropertyDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Address Line 2
                 </label>
                 <Input
@@ -1320,7 +1320,7 @@ export default function ManagerPropertyDetailsPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Locality / Area
                   </label>
                   <Input
@@ -1332,7 +1332,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     City
                   </label>
                   <Input
@@ -1346,7 +1346,7 @@ export default function ManagerPropertyDetailsPage() {
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     State
                   </label>
                   <Input
@@ -1358,7 +1358,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Pincode
                   </label>
                   <Input
@@ -1370,7 +1370,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#243447] mb-1">
+                  <label className="block font-semibold text-[#111820] mb-1">
                     Country
                   </label>
                   <Input
@@ -1420,14 +1420,14 @@ export default function ManagerPropertyDetailsPage() {
             <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
                 <Building className="w-5 h-5 text-[#3F7D58]" />
-                <h3 className="text-base font-bold text-[#243447]">
+                <h3 className="text-base font-bold text-[#111820]">
                   {editingBuilding ? 'Edit Building' : 'Add New Building'}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsBuildingModalOpen(false)}
-                className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1441,7 +1441,7 @@ export default function ManagerPropertyDetailsPage() {
 
             <form onSubmit={handleSaveBuilding} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Building Name *
                 </label>
                 <Input
@@ -1455,7 +1455,7 @@ export default function ManagerPropertyDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Total Floors
                 </label>
                 <Input
@@ -1470,7 +1470,7 @@ export default function ManagerPropertyDetailsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#243447] mb-1">
+                <label className="block font-semibold text-[#111820] mb-1">
                   Description
                 </label>
                 <Textarea

@@ -85,10 +85,10 @@ export default function OwnerVerificationPage() {
         {/* Page Header */}
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#243447]">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#111820]">
               Owner Verification
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-[#5B6875]">
+            <p className="mt-1 text-xs sm:text-sm text-[#111820]">
               Review owner accounts, property submissions, and their verification documents.
             </p>
           </div>
@@ -132,7 +132,7 @@ export default function OwnerVerificationPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-[#243447]">
+              <h2 className="text-base font-bold text-[#111820]">
                 Pending Owner Account Registrations
               </h2>
               <p className="text-xs text-[#5B6875]">
@@ -185,7 +185,7 @@ export default function OwnerVerificationPage() {
 
                       return (
                         <tr key={id ?? owner.email} className="hover:bg-[#F7F7F1]/60 transition-colors">
-                          <td className="p-3.5 font-medium text-[#243447]">
+                          <td className="p-3.5 font-medium text-[#111820]">
                             <span className="inline-flex items-center gap-2">
                               <Building2 className="h-4 w-4 text-[#3F7D58] shrink-0" />
                               {name}

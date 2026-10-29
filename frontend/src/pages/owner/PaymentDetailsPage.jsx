@@ -439,13 +439,13 @@ export default function PaymentDetailsPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-mono">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-mono">
                       {invoice.invoiceNumber}
                     </h1>
                     <StatusBadge status={invoice.status} size="md" />
                   </div>
                   <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
-                    Billing Period: <strong className="text-[#243447]">{formatMonthYear(invoice.billingMonth, invoice.billingYear)}</strong> &bull; Agreement {invoice.agreementNumber}
+                    Billing Period: <strong className="text-[#111820]">{formatMonthYear(invoice.billingMonth, invoice.billingYear)}</strong> &bull; Agreement {invoice.agreementNumber}
                   </p>
                 </div>
 
@@ -474,7 +474,7 @@ export default function PaymentDetailsPage() {
 
             {/* Payment Timeline */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <Clock className="w-4 h-4 text-[#3F7D58]" />
                 Invoice Timeline &amp; Status
               </h2>
@@ -486,7 +486,7 @@ export default function PaymentDetailsPage() {
                     <div className="w-6 h-6 rounded-full bg-[#3F7D58] text-white flex items-center justify-center text-xs font-bold shrink-0">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-sm font-semibold text-[#243447]">
+                    <span className="text-sm font-semibold text-[#111820]">
                       Invoice Date
                     </span>
                   </div>
@@ -501,7 +501,7 @@ export default function PaymentDetailsPage() {
                     <div className="w-6 h-6 rounded-full bg-[#3F7D58] text-white flex items-center justify-center text-xs font-bold shrink-0">
                       <Calendar className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-sm font-semibold text-[#243447]">
+                    <span className="text-sm font-semibold text-[#111820]">
                       Payment Due Date
                     </span>
                   </div>
@@ -579,7 +579,7 @@ export default function PaymentDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Tenant & Lease Premise Information */}
               <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <User className="w-4 h-4 text-[#3F7D58]" />
                   Tenant &amp; Lease Premise
                 </h2>
@@ -587,7 +587,7 @@ export default function PaymentDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Tenant Name</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {invoice.tenantName}
                     </span>
                   </div>
@@ -595,7 +595,7 @@ export default function PaymentDetailsPage() {
                   {invoice.tenantEmail && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-[#5B6875]">Email</span>
-                      <span className="text-xs text-[#243447]">
+                      <span className="text-xs text-[#111820]">
                         {invoice.tenantEmail}
                       </span>
                     </div>
@@ -605,14 +605,14 @@ export default function PaymentDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <Building2 className="w-3.5 h-3.5 text-[#5B6875]" /> Property
                     </span>
-                    <span className="font-medium text-[#243447] text-right">
+                    <span className="font-medium text-[#111820] text-right">
                       {invoice.propertyName}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Unit</span>
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                       {invoice.unitNumber}
                     </span>
                   </div>
@@ -633,7 +633,7 @@ export default function PaymentDetailsPage() {
 
               {/* Financial & Fee Breakdown */}
               <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                   Financial Breakdown
                 </h2>
@@ -641,7 +641,7 @@ export default function PaymentDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Monthly Rent</span>
-                    <span className="font-medium text-[#243447]">
+                    <span className="font-medium text-[#111820]">
                       {formatCurrency(invoice.rentAmount)}
                     </span>
                   </div>
@@ -658,7 +658,7 @@ export default function PaymentDetailsPage() {
                           aria-label="Late fee amount"
                           value={lateFeeDraft}
                           onChange={(event) => setLateFeeDraft(event.target.value)}
-                          className="w-32 rounded-lg border border-[#C8D3DD] px-3 py-1.5 text-right text-sm text-[#243447] outline-none focus:border-[#3F7D58] focus:ring-2 focus:ring-[#3F7D58]/15"
+                          className="w-32 rounded-lg border border-[#C8D3DD] px-3 py-1.5 text-right text-sm text-[#111820] outline-none focus:border-[#3F7D58] focus:ring-2 focus:ring-[#3F7D58]/15"
                           disabled={isSavingLateFee}
                         />
                       ) : (
@@ -666,7 +666,7 @@ export default function PaymentDetailsPage() {
                           className={`font-medium ${
                             Number(invoice.lateFee || 0) > 0
                               ? 'text-[#B94A48] font-semibold'
-                              : 'text-[#243447]'
+                              : 'text-[#111820]'
                           }`}
                         >
                           {formatCurrency(invoice.lateFee)}
@@ -706,10 +706,10 @@ export default function PaymentDetailsPage() {
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-[#E3E8DF]">
-                    <span className="text-xs font-semibold text-[#243447]">
+                    <span className="text-xs font-semibold text-[#111820]">
                       Total Invoiced Amount
                     </span>
-                    <span className="text-lg font-bold text-[#243447]">
+                    <span className="text-lg font-bold text-[#111820]">
                       {formatCurrency(invoice.totalAmount)}
                     </span>
                   </div>
@@ -736,7 +736,7 @@ export default function PaymentDetailsPage() {
             {/* Payment Transactions History Card */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                   <History className="w-4 h-4 text-[#3F7D58]" />
                   Recorded Payment Transactions
                 </h2>
@@ -748,7 +748,7 @@ export default function PaymentDetailsPage() {
               {transactions.length === 0 ? (
                 <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                   <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
-                  <p className="text-xs font-semibold text-[#243447]">
+                  <p className="text-xs font-semibold text-[#111820]">
                     No Payment Transactions Recorded
                   </p>
                   <p className="text-[11px] text-[#5B6875] mt-1">
@@ -776,10 +776,10 @@ export default function PaymentDetailsPage() {
                           <td className="py-3 px-4 text-[#5B6875]">
                             {formatDateTime(txn.paymentDate || txn.createdAt)}
                           </td>
-                          <td className="py-3 px-4 font-medium text-[#243447]">
+                          <td className="py-3 px-4 font-medium text-[#111820]">
                             {txn.paymentMethod || '—'}
                           </td>
-                          <td className="py-3 px-4 font-bold text-[#243447]">
+                          <td className="py-3 px-4 font-bold text-[#111820]">
                             {formatCurrency(txn.amount)}
                           </td>
                           <td className="py-3 px-4 text-right">
@@ -800,7 +800,7 @@ export default function PaymentDetailsPage() {
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <Receipt className="w-4 h-4 text-[#3F7D58]" />
-                  <h2 className="text-base font-semibold text-[#243447]">
+                  <h2 className="text-base font-semibold text-[#111820]">
                     Official Payment Receipts
                   </h2>
                   <span className="text-xs font-semibold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
@@ -843,7 +843,7 @@ export default function PaymentDetailsPage() {
                 /* Empty State */
                 <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                   <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
-                  <p className="text-xs font-semibold text-[#243447]">
+                  <p className="text-xs font-semibold text-[#111820]">
                     No Payment Receipts Found
                   </p>
                   <p className="text-[11px] text-[#5B6875] mt-1 max-w-sm mx-auto">
@@ -876,7 +876,7 @@ export default function PaymentDetailsPage() {
                           </td>
 
                           {/* Invoice Number */}
-                          <td className="py-3 px-3 font-mono text-[#243447] whitespace-nowrap">
+                          <td className="py-3 px-3 font-mono text-[#111820] whitespace-nowrap">
                             {rcp.invoiceNumber || invoice.invoiceNumber || `#${rcp.invoiceId}`}
                           </td>
 
@@ -896,7 +896,7 @@ export default function PaymentDetailsPage() {
                           </td>
 
                           {/* Method */}
-                          <td className="py-3 px-3 font-medium text-[#243447] whitespace-nowrap">
+                          <td className="py-3 px-3 font-medium text-[#111820] whitespace-nowrap">
                             {rcp.paymentMethod || '—'}
                           </td>
 
@@ -944,7 +944,7 @@ export default function PaymentDetailsPage() {
                     <Receipt className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-[#243447]">
+                    <h2 className="text-base font-bold text-[#111820]">
                       Official Payment Receipt
                     </h2>
                     <p className="text-xs text-[#5B6875]">
@@ -955,7 +955,7 @@ export default function PaymentDetailsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedReceipt(null)}
-                  className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-lg hover:bg-white transition-colors"
+                  className="text-[#5B6875] hover:text-[#111820] p-1.5 rounded-lg hover:bg-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>

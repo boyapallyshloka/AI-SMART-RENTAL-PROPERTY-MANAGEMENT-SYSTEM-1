@@ -72,7 +72,7 @@ export default function NotificationBell() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Open notifications"
-        className="relative p-2 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
+        className="relative p-2 rounded-md text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
       >
         <Bell className="w-5 h-5" />
 
@@ -91,7 +91,7 @@ export default function NotificationBell() {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-[#E3E8DF]">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-[#243447]">
+              <h3 className="text-sm font-semibold text-[#111820]">
                 Notifications
               </h3>
 
@@ -159,7 +159,7 @@ export default function NotificationBell() {
                   <div className="flex-1 min-w-0">
 
                     {/* Title */}
-                    <p className="text-xs font-semibold text-[#243447] truncate">
+                    <p className="text-xs font-semibold text-[#111820] truncate">
                       {item.title}
                     </p>
 

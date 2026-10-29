@@ -37,7 +37,7 @@ export default function SelfServiceAccountSection() {
           <AlertTriangle className="w-4 h-4" />
         </div>
         <div>
-          <h2 className="text-base font-bold text-[#243447]">Deactivate account</h2>
+          <h2 className="text-base font-bold text-[#111820]">Deactivate account</h2>
           <p className="mt-1 text-xs leading-relaxed text-[#5B6875]">
             Deactivation signs you out and prevents future sign-ins. Your account
             and related records are retained; this does not permanently erase data.

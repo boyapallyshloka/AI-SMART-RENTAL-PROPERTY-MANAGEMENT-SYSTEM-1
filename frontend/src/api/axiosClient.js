@@ -100,7 +100,11 @@ axiosClient.interceptors.response.use(
       case 401:
         // Unauthorized: token expired or invalid credentials
         if (error.config?.skipAuthToken) {
-          message = 'The public endpoint requires backend unauthenticated GET access.'
+          if (!message && error.config?.url?.includes('/properties/public')) {
+            message = 'The public endpoint requires backend unauthenticated GET access.'
+          } else if (!message) {
+            message = 'The request was not authorized. Please check the link and try again.'
+          }
         } else {
           message = 'Your session has expired. Please sign in again.'
           try {

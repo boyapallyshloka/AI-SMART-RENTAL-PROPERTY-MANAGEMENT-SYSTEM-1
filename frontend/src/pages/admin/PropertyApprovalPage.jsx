@@ -108,7 +108,7 @@ export default function PropertyApprovalPage() {
       <div id="property-review" className="scroll-mt-6 space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">Property Review</h2>
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#111820]">Property Review</h2>
             <p className="mt-1 text-sm text-[#5B6875]">
               Review submitted property details and approve them after the required documents are verified.
             </p>
@@ -159,7 +159,7 @@ export default function PropertyApprovalPage() {
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <h2 className="text-lg font-semibold text-[#243447]">
+                      <h2 className="text-lg font-semibold text-[#111820]">
                         {property.propertyName}
                       </h2>
                       <p className="mt-1 text-sm text-[#5B6875]">
@@ -183,30 +183,30 @@ export default function PropertyApprovalPage() {
                   <dl className="mt-4 grid gap-3 border-t border-[#E3E8DF] pt-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
                     <div>
                       <dt className="text-xs text-[#5B6875]">Property type</dt>
-                      <dd className="font-medium text-[#243447]">{property.propertyType || '—'}</dd>
+                      <dd className="font-medium text-[#111820]">{property.propertyType || '—'}</dd>
                     </div>
                     <div>
                       <dt className="text-xs text-[#5B6875]">Area</dt>
-                      <dd className="font-medium text-[#243447]">
+                      <dd className="font-medium text-[#111820]">
                         {property.totalArea != null ? `${property.totalArea} sq. ft.` : '—'}
                       </dd>
                     </div>
                     <div>
                       <dt className="text-xs text-[#5B6875]">Monthly rent</dt>
-                      <dd className="font-medium text-[#243447]">
+                      <dd className="font-medium text-[#111820]">
                         {property.monthlyRent != null ? `₹${property.monthlyRent}` : '—'}
                       </dd>
                     </div>
                     <div>
                       <dt className="text-xs text-[#5B6875]">Security deposit</dt>
-                      <dd className="font-medium text-[#243447]">
+                      <dd className="font-medium text-[#111820]">
                         {property.securityDeposit != null ? `₹${property.securityDeposit}` : '—'}
                       </dd>
                     </div>
                   </dl>
 
                   <div className="mt-4 border-t border-[#E3E8DF] pt-4">
-                    <h3 className="text-sm font-semibold text-[#243447]">Uploaded documents</h3>
+                    <h3 className="text-sm font-semibold text-[#111820]">Uploaded documents</h3>
                     {documents.length === 0 ? (
                       <p className="mt-2 text-sm text-[#8A2E2C]">No documents are available for review.</p>
                     ) : (

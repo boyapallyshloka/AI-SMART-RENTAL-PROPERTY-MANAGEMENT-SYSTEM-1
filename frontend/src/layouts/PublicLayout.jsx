@@ -19,7 +19,7 @@ export default function PublicLayout({ children }) {
   }, [location.pathname])
 
   return (
-    <div className="relative min-h-screen bg-[#F7F7F1] text-[#243447]">
+    <div className="relative min-h-screen bg-[#F7F7F1] text-[#111820]">
       <header className={isWelcomePage
         ? 'absolute inset-x-0 top-0 z-40 border-b border-white/15 bg-gradient-to-b from-[#30251F]/65 to-transparent'
         : 'sticky top-0 z-40 border-b border-[#E3E8DF]/80 bg-white/95 shadow-[0_4px_24px_rgba(36,52,71,0.06)] backdrop-blur-xl'}>
@@ -30,7 +30,7 @@ export default function PublicLayout({ children }) {
               <Building2 className="relative h-5 w-5" strokeWidth={2.1} />
             </span>
             <span className="min-w-0">
-              <span className={`block font-serif text-xl font-bold leading-tight tracking-tight sm:text-[1.35rem] ${isWelcomePage ? 'text-white' : 'text-[#243447]'}`}>SmartEstate</span>
+              <span className={`block font-serif text-xl font-bold leading-tight tracking-tight sm:text-[1.35rem] ${isWelcomePage ? 'text-white' : 'text-[#111820]'}`}>SmartEstate</span>
               <span className={`mt-0.5 hidden text-[9px] font-bold uppercase tracking-[0.19em] sm:block ${isWelcomePage ? 'text-white/75' : 'text-[#718092]'}`}>Find a place to belong</span>
             </span>
           </Link>

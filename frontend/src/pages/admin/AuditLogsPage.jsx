@@ -52,10 +52,10 @@ export default function AuditLogsPage() {
     >
       <div className="space-y-6">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#243447]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#111820]">
             Platform Audit Logs
           </h1>
-          <p className="mt-1 text-xs sm:text-sm text-[#5B6875]">
+          <p className="mt-1 text-xs sm:text-sm text-[#111820]">
             Immutable record of administrative operations, security events, and entity lifecycle changes.
           </p>
         </div>

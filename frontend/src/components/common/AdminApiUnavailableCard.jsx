@@ -35,7 +35,7 @@ export default function AdminApiUnavailableCard({
           </div>
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base font-bold text-[#243447]">{title}</h2>
+              <h2 className="text-base font-bold text-[#111820]">{title}</h2>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-white text-[#8A5B16] border border-[#F4E2B6]">
                 Backend API Required
               </span>
@@ -57,7 +57,7 @@ export default function AdminApiUnavailableCard({
           <div className="border-b border-[#E3E8DF] bg-[#F7F7F1] px-5 py-3.5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Server className="h-4 w-4 text-[#3F7D58]" />
-              <h3 className="text-xs sm:text-sm font-semibold text-[#243447]">
+              <h3 className="text-xs sm:text-sm font-semibold text-[#111820]">
                 Required Backend REST Endpoints
               </h3>
             </div>
@@ -81,7 +81,7 @@ export default function AdminApiUnavailableCard({
                       >
                         {ep.method}
                       </span>
-                      <code className="text-xs sm:text-sm font-mono font-semibold text-[#243447]">
+                      <code className="text-xs sm:text-sm font-mono font-semibold text-[#111820]">
                         {ep.path}
                       </code>
                     </div>
@@ -102,7 +102,7 @@ export default function AdminApiUnavailableCard({
                     <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#5B6875]">
                       {ep.params?.length > 0 && (
                         <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-[#243447]">Parameters:</span>
+                          <span className="font-semibold text-[#111820]">Parameters:</span>
                           <span className="font-mono text-[11px] bg-[#F7F7F1] px-1.5 py-0.5 rounded border border-[#E3E8DF]">
                             {ep.params.join(', ')}
                           </span>
@@ -111,7 +111,7 @@ export default function AdminApiUnavailableCard({
 
                       {ep.body && (
                         <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-[#243447]">Payload:</span>
+                          <span className="font-semibold text-[#111820]">Payload:</span>
                           <span className="font-mono text-[11px] bg-[#F7F7F1] px-1.5 py-0.5 rounded border border-[#E3E8DF]">
                             {ep.body}
                           </span>
@@ -129,7 +129,7 @@ export default function AdminApiUnavailableCard({
       {/* Backend Implementation Requirements */}
       {backendRequirements.length > 0 && (
         <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
-          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#243447]">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#111820]">
             <Database className="h-4 w-4 text-[#3F7D58]" />
             <span>Backend Implementation Checklist</span>
           </div>

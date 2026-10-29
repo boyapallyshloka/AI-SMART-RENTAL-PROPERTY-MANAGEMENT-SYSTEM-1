@@ -462,7 +462,7 @@ export default function CreateAgreementPage() {
             <span>Back to Agreements</span>
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             New Lease Agreement
           </span>
         </div>
@@ -475,7 +475,7 @@ export default function CreateAgreementPage() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                   Create Lease Agreement
                 </h1>
                 <StatusBadge status="Draft" size="sm" />
@@ -573,7 +573,7 @@ export default function CreateAgreementPage() {
             {/* Section 1: Approved Rental Application Selection */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                   <FileCheck className="w-4 h-4 text-[#3F7D58]" />
                   1. Select Approved Application
                 </h2>
@@ -610,7 +610,7 @@ export default function CreateAgreementPage() {
                         <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Tenant
                       </span>
-                      <p className="font-bold text-[#243447]">
+                      <p className="font-bold text-[#111820]">
                         {selectedApp.tenantName || 'Applicant'}
                       </p>
                       {selectedApp.tenantEmail && (
@@ -625,7 +625,7 @@ export default function CreateAgreementPage() {
                         <Home className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Property
                       </span>
-                      <p className="font-bold text-[#243447]">
+                      <p className="font-bold text-[#111820]">
                         {selectedApp.propertyName || 'Property'}
                       </p>
                       {selectedApp.buildingName && (
@@ -640,7 +640,7 @@ export default function CreateAgreementPage() {
                         <DoorOpen className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Unit
                       </span>
-                      <p className="font-bold text-[#243447]">
+                      <p className="font-bold text-[#111820]">
                         {selectedApp.unitNumber
                           ? `Unit #${selectedApp.unitNumber}`
                           : selectedApp.unitId
@@ -654,7 +654,7 @@ export default function CreateAgreementPage() {
                         <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Preferred Move-in
                       </span>
-                      <p className="font-bold text-[#243447]">
+                      <p className="font-bold text-[#111820]">
                         {selectedApp.preferredMoveInDate || 'Not specified'}
                       </p>
                     </div>
@@ -665,7 +665,7 @@ export default function CreateAgreementPage() {
 
             {/* Section 2: Financial Terms & Rent Schedule */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                 2. Financial Terms
               </h2>
@@ -725,7 +725,7 @@ export default function CreateAgreementPage() {
 
             {/* Section 3: Lease Duration Dates & Special Terms */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <Calendar className="w-4 h-4 text-[#3F7D58]" />
                 3. Lease Term Dates & Special Provisions
               </h2>
@@ -781,7 +781,7 @@ export default function CreateAgreementPage() {
             {/* Section 4: Official Agreement Document Upload */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                   <Upload className="w-4 h-4 text-[#3F7D58]" />
                   4. Agreement Document (Optional)
                 </h2>
@@ -827,7 +827,7 @@ export default function CreateAgreementPage() {
                       <Upload className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-[#243447]">
+                      <p className="text-sm font-semibold text-[#111820]">
                         Click to select document or drag &amp; drop
                       </p>
                       <p className="text-xs text-[#5B6875] mt-0.5">
@@ -848,7 +848,7 @@ export default function CreateAgreementPage() {
                       <FileText className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm text-[#243447] truncate max-w-[260px] sm:max-w-md">
+                      <p className="font-semibold text-sm text-[#111820] truncate max-w-[260px] sm:max-w-md">
                         {selectedFile.name}
                       </p>
                       <p className="text-xs text-[#5B6875] mt-0.5">
@@ -862,7 +862,7 @@ export default function CreateAgreementPage() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isSubmitting || isUploadingDocument}
-                      className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E3E8DF] text-[#243447] bg-white hover:bg-[#F7F7F1] transition-colors cursor-pointer"
+                      className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E3E8DF] text-[#111820] bg-white hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                     >
                       Change File
                     </button>

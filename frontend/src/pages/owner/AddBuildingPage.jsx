@@ -387,7 +387,7 @@ export default function AddBuildingPage() {
               </>
             )}
             <span>/</span>
-            <span className="text-[#243447] font-semibold">
+            <span className="text-[#111820] font-semibold">
               {isEditMode ? 'Edit Building' : 'Add New Building'}
             </span>
           </div>
@@ -400,10 +400,10 @@ export default function AddBuildingPage() {
               <Building className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {isEditMode ? 'Edit Building' : 'Add New Building'}
               </h1>
-              <p className="text-xs sm:text-sm text-[#5B6875] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#111820] mt-0.5">
                 {isEditMode
                   ? 'Update building specifications, floor count, and property association.'
                   : `Register a residential tower or block for ${targetPropertyName || 'your property'}.`}
@@ -437,7 +437,7 @@ export default function AddBuildingPage() {
             {/* Property Context (Requirement 3: Read-only context, not dropdown when known) */}
             {formData.propertyId ? (
               <div>
-                <label className="text-xs font-semibold text-[#243447] block mb-1.5">
+                <label className="text-xs font-semibold text-[#111820] block mb-1.5">
                   Property
                 </label>
                 <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs">
@@ -445,7 +445,7 @@ export default function AddBuildingPage() {
                     <Building2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="font-semibold text-[#243447] text-xs sm:text-sm">
+                    <p className="font-semibold text-[#111820] text-xs sm:text-sm">
                       {targetPropertyName || `Property #${formData.propertyId}`}
                     </p>
                     {targetPropertySubtitle && (

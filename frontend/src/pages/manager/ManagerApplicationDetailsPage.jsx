@@ -305,7 +305,7 @@ export default function ManagerApplicationDetailsPage() {
               <span>Back to Applications</span>
             </Link>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
                 Application Details
               </h1>
               {application?.applicationId && (
@@ -428,7 +428,7 @@ export default function ManagerApplicationDetailsPage() {
                   <AlertCircle className="w-8 h-8" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-base font-semibold text-[#243447]">
+                  <h3 className="text-base font-semibold text-[#111820]">
                     Unable to Load Application Details
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5B6875] max-w-md mx-auto">
@@ -472,20 +472,20 @@ export default function ManagerApplicationDetailsPage() {
               <div className="flex flex-wrap items-center gap-6 text-xs text-[#5B6875] border-t sm:border-t-0 pt-3 sm:pt-0">
                 <div>
                   <span className="block text-[#5B6875]">Application Date</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {formatDate(application.applicationDate || application.createdAt)}
                   </span>
                 </div>
                 <div>
                   <span className="block text-[#5B6875]">Preferred Move-In</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {formatDate(application.preferredMoveInDate) || 'Flexible'}
                   </span>
                 </div>
                 {application.reviewedAt && (
                   <div>
                     <span className="block text-[#5B6875]">Reviewed At</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {formatDateTime(application.reviewedAt)}
                     </span>
                   </div>
@@ -535,7 +535,7 @@ export default function ManagerApplicationDetailsPage() {
                     <h4 className="text-xs font-bold uppercase tracking-wider text-[#8A2E2C]">
                       Reason for Rejection
                     </h4>
-                    <p className="text-sm font-medium text-[#243447]">
+                    <p className="text-sm font-medium text-[#111820]">
                       {application.rejectionReason}
                     </p>
                   </div>
@@ -548,7 +548,7 @@ export default function ManagerApplicationDetailsPage() {
               {/* Property & Unit Information */}
               <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-[#111820] uppercase tracking-wider flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-[#3F7D58]" />
                     Property & Unit Details
                   </h2>
@@ -557,7 +557,7 @@ export default function ManagerApplicationDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div>
                     <span className="text-xs text-[#5B6875] block">Property</span>
-                    <span className="font-semibold text-[#243447] text-base">
+                    <span className="font-semibold text-[#111820] text-base">
                       {application.propertyName || `Property #${application.propertyId || '—'}`}
                     </span>
                   </div>
@@ -565,7 +565,7 @@ export default function ManagerApplicationDetailsPage() {
                   <div className="grid grid-cols-2 gap-4 pt-1">
                     <div>
                       <span className="text-xs text-[#5B6875] block">Building</span>
-                      <span className="font-medium text-[#243447]">
+                      <span className="font-medium text-[#111820]">
                         {application.buildingName || (application.buildingId ? `Building #${application.buildingId}` : '—')}
                       </span>
                     </div>
@@ -580,7 +580,7 @@ export default function ManagerApplicationDetailsPage() {
                   {application.floorId != null && (
                     <div className="pt-1">
                       <span className="text-xs text-[#5B6875] block">Floor</span>
-                      <span className="font-medium text-[#243447]">
+                      <span className="font-medium text-[#111820]">
                         Floor #{application.floorId}
                       </span>
                     </div>
@@ -591,7 +591,7 @@ export default function ManagerApplicationDetailsPage() {
               {/* Financial Terms */}
               <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
                 <div className="border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-[#111820] uppercase tracking-wider flex items-center gap-2">
                     <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                     Rental & Financial Terms
                   </h2>
@@ -601,7 +601,7 @@ export default function ManagerApplicationDetailsPage() {
                   <div>
                     <span className="text-xs text-[#5B6875] block">Monthly Rent</span>
                     <div className="flex items-baseline gap-1 mt-0.5">
-                      <span className="text-xl font-bold text-[#243447]">
+                      <span className="text-xl font-bold text-[#111820]">
                         {rentFormatted || '—'}
                       </span>
                       {rentFormatted && <span className="text-xs text-[#5B6875]">/ month</span>}
@@ -610,7 +610,7 @@ export default function ManagerApplicationDetailsPage() {
 
                   <div className="pt-1">
                     <span className="text-xs text-[#5B6875] block">Security Deposit</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {depositFormatted || '—'}
                     </span>
                   </div>
@@ -624,7 +624,7 @@ export default function ManagerApplicationDetailsPage() {
               {/* Applicant Profile */}
               <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
                 <div className="border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-[#111820] uppercase tracking-wider flex items-center gap-2">
                     <User className="w-4 h-4 text-[#3F7D58]" />
                     Applicant Information
                   </h2>
@@ -633,14 +633,14 @@ export default function ManagerApplicationDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div>
                     <span className="text-xs text-[#5B6875] block">Full Name</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {application.tenantName || '—'}
                     </span>
                   </div>
 
                   <div>
                     <span className="text-xs text-[#5B6875] block">Email Address</span>
-                    <div className="flex items-center gap-1.5 text-[#243447]">
+                    <div className="flex items-center gap-1.5 text-[#111820]">
                       <Mail className="w-3.5 h-3.5 text-[#5B6875]" />
                       <span>{application.tenantEmail || '—'}</span>
                     </div>
@@ -658,7 +658,7 @@ export default function ManagerApplicationDetailsPage() {
                   {application.monthlyIncome != null && (
                     <div>
                       <span className="text-xs text-[#5B6875] block">Monthly Gross Income</span>
-                      <span className="font-semibold text-[#243447]">
+                      <span className="font-semibold text-[#111820]">
                         {formatInr(application.monthlyIncome)} / mo
                       </span>
                     </div>
@@ -667,7 +667,7 @@ export default function ManagerApplicationDetailsPage() {
                   {application.employerOccupation && (
                     <div>
                       <span className="text-xs text-[#5B6875] block">Employer / Occupation</span>
-                      <span className="font-medium text-[#243447]">
+                      <span className="font-medium text-[#111820]">
                         {application.employerOccupation}
                       </span>
                     </div>
@@ -678,7 +678,7 @@ export default function ManagerApplicationDetailsPage() {
               {/* Submission Notes & Message */}
               <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
                 <div className="border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-[#111820] uppercase tracking-wider flex items-center gap-2">
                     <FileText className="w-4 h-4 text-[#3F7D58]" />
                     Applicant Message
                   </h2>
@@ -686,7 +686,7 @@ export default function ManagerApplicationDetailsPage() {
 
                 <div className="text-sm">
                   {application.message ? (
-                    <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-[#243447] whitespace-pre-wrap leading-relaxed text-xs sm:text-sm">
+                    <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-[#111820] whitespace-pre-wrap leading-relaxed text-xs sm:text-sm">
                       {application.message}
                     </div>
                   ) : (
@@ -707,14 +707,14 @@ export default function ManagerApplicationDetailsPage() {
             <div className="bg-white rounded-lg border border-[#E3E8DF] px-6 py-4 shadow-2xs text-xs text-[#5B6875] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span>Record Created: </span>
-                <span className="font-medium text-[#243447]">
+                <span className="font-medium text-[#111820]">
                   {formatDateTime(application.createdAt)}
                 </span>
               </div>
               {application.updatedAt && (
                 <div>
                   <span>Last Updated: </span>
-                  <span className="font-medium text-[#243447]">
+                  <span className="font-medium text-[#111820]">
                     {formatDateTime(application.updatedAt)}
                   </span>
                 </div>
@@ -737,14 +737,14 @@ export default function ManagerApplicationDetailsPage() {
                   <CheckCircle2 className="w-5 h-5 text-[#3F7D58]" />
                 </div>
                 <div className="space-y-1">
-                  <h3 id="approve-modal-title" className="text-base font-bold text-[#243447]">
+                  <h3 id="approve-modal-title" className="text-base font-bold text-[#111820]">
                     Approve Rental Application
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">
                     Are you sure you want to approve the application for{' '}
-                    <strong className="text-[#243447]">{application.tenantName || 'Applicant'}</strong>{' '}
+                    <strong className="text-[#111820]">{application.tenantName || 'Applicant'}</strong>{' '}
                     for{' '}
-                    <strong className="text-[#243447]">
+                    <strong className="text-[#111820]">
                       {application.propertyName || 'Property'}
                       {application.unitNumber ? ` · Unit ${application.unitNumber}` : ''}
                     </strong>
@@ -806,12 +806,12 @@ export default function ManagerApplicationDetailsPage() {
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
-                  <h3 id="reject-modal-title" className="text-base font-bold text-[#243447]">
+                  <h3 id="reject-modal-title" className="text-base font-bold text-[#111820]">
                     Reject Rental Application
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">
                     You are rejecting the rental application for{' '}
-                    <strong className="text-[#243447]">{application.tenantName || 'Applicant'}</strong>.
+                    <strong className="text-[#111820]">{application.tenantName || 'Applicant'}</strong>.
                     Please provide an explicit reason below for the applicant and records.
                   </p>
                 </div>

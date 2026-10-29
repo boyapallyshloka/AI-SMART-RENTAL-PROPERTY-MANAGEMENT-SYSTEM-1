@@ -91,7 +91,7 @@ export default function ResetPasswordPage() {
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-[#243447]">
+            <h2 className="text-lg font-semibold text-[#111820]">
               Password updated!
             </h2>
             <p className="text-xs text-[#5B6875] mt-1">

@@ -808,13 +808,13 @@ export default function MaintenancePage() {
 
           <div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
 
               Maintenance Requests
 
             </h1>
 
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
 
               Review and manage tenant repair tickets, issues, worker dispatches, and maintenance history
 
@@ -860,7 +860,7 @@ export default function MaintenancePage() {
 
               ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
+              : 'text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -894,7 +894,7 @@ export default function MaintenancePage() {
 
               ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
+              : 'text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -928,7 +928,7 @@ export default function MaintenancePage() {
 
               ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
+              : 'text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -1026,7 +1026,7 @@ export default function MaintenancePage() {
 
                 aria-label="Reset filters"
 
-                className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
 
               >
 
@@ -1046,7 +1046,7 @@ export default function MaintenancePage() {
 
             Showing{' '}
 
-            <strong className="text-[#243447]">
+            <strong className="text-[#111820]">
 
               {filteredRequests.length}
 
@@ -1226,7 +1226,7 @@ export default function MaintenancePage() {
 
                         <td className="py-4 px-4 whitespace-nowrap">
 
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
 
                             <Wrench className="w-3 h-3 text-[#5B6875]" />
 
@@ -1240,7 +1240,7 @@ export default function MaintenancePage() {
 
                         <td className="py-4 px-4 min-w-[200px] max-w-xs">
 
-                          <p className="font-medium text-[#243447] text-xs truncate">
+                          <p className="font-medium text-[#111820] text-xs truncate">
 
                             {req.description || 'No description provided'}
 
@@ -1304,7 +1304,7 @@ export default function MaintenancePage() {
 
                             </td>
 
-                            <td className="py-4 px-4 whitespace-nowrap text-xs font-medium text-[#243447]">
+                            <td className="py-4 px-4 whitespace-nowrap text-xs font-medium text-[#111820]">
 
                               {req.cost != null ? `₹${req.cost}` : '—'}
 

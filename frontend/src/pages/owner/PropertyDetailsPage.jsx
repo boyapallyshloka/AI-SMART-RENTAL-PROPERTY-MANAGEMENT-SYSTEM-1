@@ -1570,7 +1570,7 @@ export default function PropertyDetailsPage() {
               <span>Back to Properties</span>
             </Link>
             <span>/</span>
-            <span className="text-[#243447] font-semibold truncate max-w-[200px] sm:max-w-none">
+            <span className="text-[#111820] font-semibold truncate max-w-[200px] sm:max-w-none">
               {property.name}
             </span>
           </div>
@@ -1650,7 +1650,7 @@ export default function PropertyDetailsPage() {
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
                     disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED'}
-                    className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
+                    className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#111820] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
                     {property.status && !CANONICAL_PROPERTY_STATUSES.includes(property.status) && (
@@ -1729,10 +1729,10 @@ export default function PropertyDetailsPage() {
                   )}
                 </button>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {property.name}
               </h1>
-              <p className="flex items-center gap-1.5 text-xs sm:text-sm text-[#5B6875]">
+              <p className="flex items-center gap-1.5 text-xs sm:text-sm text-[#111820]">
                 <MapPin className="w-4 h-4 text-[#5B6875] shrink-0" />
                 <span>
                   {addressData
@@ -1779,7 +1779,7 @@ export default function PropertyDetailsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2">
               <ImageIcon className="w-4 h-4 text-[#3F7D58]" />
-              <h2 className="text-base font-semibold text-[#243447]">
+              <h2 className="text-base font-semibold text-[#111820]">
                 Property Photos & Media
               </h2>
               {propertyImages.length > 0 && (
@@ -1791,7 +1791,7 @@ export default function PropertyDetailsPage() {
 
             <div className="flex items-center gap-2">
               <label
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#111820] cursor-pointer transition-colors shadow-2xs ${
                   isUploadingImage ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
@@ -1863,7 +1863,7 @@ export default function PropertyDetailsPage() {
                     <Button
                       variant="outline"
                       size="xs"
-                      className="bg-white/90 hover:bg-white text-[#243447] border-white/40 backdrop-blur-md shadow-sm"
+                      className="bg-white/90 hover:bg-white text-[#111820] border-white/40 backdrop-blur-md shadow-sm"
                       disabled={isUpdatingImageId === currentImage?.imageId}
                       onClick={() => handleSetPrimary(currentImage)}
                       leftIcon={
@@ -1932,7 +1932,7 @@ export default function PropertyDetailsPage() {
               <div className="p-3.5 rounded-full bg-[#EDF4ED] text-[#3F7D58] mb-3">
                 <ImageIcon className="w-8 h-8" />
               </div>
-              <h3 className="text-sm font-semibold text-[#243447]">
+              <h3 className="text-sm font-semibold text-[#111820]">
                 No Photos Uploaded Yet
               </h3>
               <p className="text-xs text-[#5B6875] max-w-sm mt-1 mb-4">
@@ -1961,7 +1961,7 @@ export default function PropertyDetailsPage() {
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div>
-                  <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                  <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#3F7D58]" />
                     Property Address
                   </h2>
@@ -2250,11 +2250,11 @@ export default function PropertyDetailsPage() {
                                       className={`px-3 py-2 text-xs cursor-pointer flex items-center justify-between transition-colors ${
                                         isHighlighted
                                           ? 'bg-[#F0F5FA] text-[#3F7D58]'
-                                          : 'hover:bg-slate-50 text-[#243447]'
+                                          : 'hover:bg-slate-50 text-[#111820]'
                                       }`}
                                     >
                                       <div className="flex flex-col">
-                                        <span className="font-semibold text-sm tracking-wide text-[#243447]">
+                                        <span className="font-semibold text-sm tracking-wide text-[#111820]">
                                           {sugg.pincode}
                                         </span>
                                         <span className="text-[11px] text-[#5B6875]">
@@ -2308,7 +2308,7 @@ export default function PropertyDetailsPage() {
                               className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors border ${
                                 addressForm.area.toLowerCase() === sugg.toLowerCase()
                                   ? 'bg-[#3F7D58] text-white border-[#3F7D58] shadow-2xs'
-                                  : 'bg-white text-[#243447] border-[#E3E8DF] hover:bg-slate-50'
+                                  : 'bg-white text-[#111820] border-[#E3E8DF] hover:bg-slate-50'
                               }`}
                             >
                               {sugg}
@@ -2394,7 +2394,7 @@ export default function PropertyDetailsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Address Line 1</p>
-                      <p className="font-semibold text-[#243447]">
+                      <p className="font-semibold text-[#111820]">
                         {addressData.addressLine1}
                       </p>
                     </div>
@@ -2402,7 +2402,7 @@ export default function PropertyDetailsPage() {
                     {addressData.addressLine2 ? (
                       <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                         <p className="text-[#5B6875] font-medium mb-0.5">Address Line 2</p>
-                        <p className="font-semibold text-[#243447]">
+                        <p className="font-semibold text-[#111820]">
                           {addressData.addressLine2}
                         </p>
                       </div>
@@ -2410,13 +2410,13 @@ export default function PropertyDetailsPage() {
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Area</p>
-                      <p className="font-semibold text-[#243447]">{addressData.area}</p>
+                      <p className="font-semibold text-[#111820]">{addressData.area}</p>
                     </div>
 
                     {addressData.areaType ? (
                       <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                         <p className="text-[#5B6875] font-medium mb-0.5">Area Type</p>
-                        <p className="font-semibold text-[#243447]">
+                        <p className="font-semibold text-[#111820]">
                           {formatAreaType(addressData.areaType)}
                         </p>
                       </div>
@@ -2424,14 +2424,14 @@ export default function PropertyDetailsPage() {
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">City & State</p>
-                      <p className="font-semibold text-[#243447]">
+                      <p className="font-semibold text-[#111820]">
                         {addressData.city}, {addressData.state}
                       </p>
                     </div>
 
                     <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Country & Pincode</p>
-                      <p className="font-semibold text-[#243447]">
+                      <p className="font-semibold text-[#111820]">
                         {addressData.country} — {addressData.pincode}
                       </p>
                     </div>
@@ -2440,7 +2440,7 @@ export default function PropertyDetailsPage() {
                   {(addressData.latitude != null || addressData.longitude != null) && (
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#5B6875] px-1 pt-1 border-t border-[#E3E8DF]/50">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-[#243447]">GPS Coordinates:</span>
+                        <span className="font-medium text-[#111820]">GPS Coordinates:</span>
                         <span className="font-mono text-[11px] bg-[#F7F7F1] px-2 py-0.5 rounded border border-[#E3E8DF]">
                           {addressData.latitude ?? '—'}, {addressData.longitude ?? '—'}
                         </span>
@@ -2465,7 +2465,7 @@ export default function PropertyDetailsPage() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-[#243447]">No address added</h3>
+                    <h3 className="text-sm font-semibold text-[#111820]">No address added</h3>
                     <p className="text-xs text-[#5B6875] mt-0.5 max-w-sm mx-auto">
                       This property does not have a registered address yet.
                     </p>
@@ -2485,7 +2485,7 @@ export default function PropertyDetailsPage() {
             {isDirectRentalProperty && (
               <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-5">
                 <div className="border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                  <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                     <Home className="w-4 h-4 text-[#3F7D58]" />
                     Rental Details &amp; M1 Rent Prediction
                   </h2>
@@ -2520,7 +2520,7 @@ export default function PropertyDetailsPage() {
                             setDirectRentalForm((previous) => ({ ...previous, [field]: event.target.value }))
                             setDirectRentalError(null)
                           }}
-                          className="mt-1 w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
+                          className="mt-1 w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#111820] outline-none focus:border-[#3F7D58]"
                         />
                       </label>
                     ))}
@@ -2536,7 +2536,7 @@ export default function PropertyDetailsPage() {
                 <div className="rounded-xl border border-[#C8D8E5] bg-[#F3F8FB] p-4 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                      <h3 className="text-sm font-semibold text-[#243447] flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-[#111820] flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-[#3F7D58]" /> M1 Rent Prediction
                       </h3>
                       <p className="mt-1 text-xs text-[#5B6875]">
@@ -2558,7 +2558,7 @@ export default function PropertyDetailsPage() {
                   {rentPrediction != null && (
                     <div className="rounded-lg border border-[#C6DEC8] bg-[#EDF7EE] px-4 py-3">
                       <p className="text-xs font-medium text-[#2A583B]">Estimated monthly rent</p>
-                      <p className="mt-0.5 text-xl font-bold text-[#243447]">{formatCurrency(rentPrediction)} <span className="text-xs font-medium">/ month</span></p>
+                      <p className="mt-0.5 text-xl font-bold text-[#111820]">{formatCurrency(rentPrediction)} <span className="text-xs font-medium">/ month</span></p>
                     </div>
                   )}
                   {!addressData && (
@@ -2570,7 +2570,7 @@ export default function PropertyDetailsPage() {
 
             {/* Property Specs */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm">
-              <h2 className="text-base font-semibold text-[#243447] mb-4">
+              <h2 className="text-base font-semibold text-[#111820] mb-4">
                 Property Dimensions & Specs
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -2579,7 +2579,7 @@ export default function PropertyDetailsPage() {
                     <Maximize2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Total Area</span>
                   </div>
-                  <p className="text-lg font-bold text-[#243447]">
+                  <p className="text-lg font-bold text-[#111820]">
                     {property.totalArea != null ? `${Number(property.totalArea).toLocaleString()} sq ft` : '—'}
                   </p>
                 </div>
@@ -2589,7 +2589,7 @@ export default function PropertyDetailsPage() {
                     <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Year Built</span>
                   </div>
-                  <p className="text-lg font-bold text-[#243447]">
+                  <p className="text-lg font-bold text-[#111820]">
                     {property.yearBuilt || '—'}
                   </p>
                 </div>
@@ -2599,7 +2599,7 @@ export default function PropertyDetailsPage() {
                     <Home className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Furnishing</span>
                   </div>
-                  <p className="text-sm font-bold text-[#243447] truncate">
+                  <p className="text-sm font-bold text-[#111820] truncate">
                     {property.furnishing || '—'}
                   </p>
                 </div>
@@ -2609,7 +2609,7 @@ export default function PropertyDetailsPage() {
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Parking</span>
                   </div>
-                  <p className="text-sm font-bold text-[#243447] truncate">
+                  <p className="text-sm font-bold text-[#111820] truncate">
                     {property.parking || (property.parkingAvailable == null ? '—' : property.parkingAvailable ? 'Available' : 'None')}
                   </p>
                 </div>
@@ -2617,7 +2617,7 @@ export default function PropertyDetailsPage() {
 
               <div className="mt-4 pt-4 border-t border-[#E3E8DF] flex items-center justify-between text-xs text-[#5B6875]">
                 <span>Property Classification:</span>
-                <span className="font-semibold text-[#243447]">
+                <span className="font-semibold text-[#111820]">
                   {property.propertyType || property.type || '—'}
                 </span>
               </div>
@@ -2628,7 +2628,7 @@ export default function PropertyDetailsPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#B7791F]" />
-                  <h2 className="text-base font-semibold text-[#243447]">
+                  <h2 className="text-base font-semibold text-[#111820]">
                     Included Amenities & Facilities
                   </h2>
                   <span className="text-xs text-[#5B6875] font-semibold">
@@ -2666,7 +2666,7 @@ export default function PropertyDetailsPage() {
               {isAddAmenityOpen && (
                 <div className="p-4 rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-bold text-[#243447]">
+                    <h3 className="text-xs font-bold text-[#111820]">
                       {isCreatingNewAmenity
                         ? 'Define New Amenity'
                         : 'Add Amenity to Property'}
@@ -2709,7 +2709,7 @@ export default function PropertyDetailsPage() {
                               setSelectedAmenityIdToAdd(e.target.value)
                             }
                             disabled={isSubmittingAmenity}
-                            className="w-full text-xs rounded-lg border border-[#E3E8DF] p-2 bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58]"
+                            className="w-full text-xs rounded-lg border border-[#E3E8DF] p-2 bg-white text-[#111820] focus:outline-none focus:border-[#3F7D58]"
                           >
                             <option value="">-- Choose an amenity --</option>
                             {unassignedAmenities.map((a) => (
@@ -2832,12 +2832,12 @@ export default function PropertyDetailsPage() {
                   {propertyAmenities.map((amenity) => (
                     <div
                       key={amenity.amenityId}
-                      className="group relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs text-[#243447] font-medium hover:border-[#B7791F]/50 transition-colors"
+                      className="group relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs text-[#111820] font-medium hover:border-[#B7791F]/50 transition-colors"
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <div className="min-w-0">
-                          <span className="truncate block font-semibold text-[#243447]">
+                          <span className="truncate block font-semibold text-[#111820]">
                             {amenity.amenityName}
                           </span>
                           {amenity.description && (
@@ -2866,7 +2866,7 @@ export default function PropertyDetailsPage() {
               ) : (
                 <div className="py-8 text-center rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1]/50">
                   <Sparkles className="w-7 h-7 text-[#B7791F]/60 mx-auto mb-2" />
-                  <p className="text-xs font-semibold text-[#243447]">
+                  <p className="text-xs font-semibold text-[#111820]">
                     No amenities specified yet.
                   </p>
                   <p className="text-xs text-[#5B6875] max-w-xs mx-auto mt-1 mb-3">
@@ -2889,7 +2889,7 @@ export default function PropertyDetailsPage() {
 
             {/* Description */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
-              <h2 className="text-base font-semibold text-[#243447]">
+              <h2 className="text-base font-semibold text-[#111820]">
                 About this Property
               </h2>
               <p className="text-sm text-[#5B6875] leading-relaxed">
@@ -2903,7 +2903,7 @@ export default function PropertyDetailsPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-[#3F7D58]" />
-                  <h2 className="text-base font-semibold text-[#243447]">
+                  <h2 className="text-base font-semibold text-[#111820]">
                     Buildings
                   </h2>
                   <span className="text-xs text-[#5B6875] font-semibold">
@@ -2960,7 +2960,7 @@ export default function PropertyDetailsPage() {
                             <Building className="w-4 h-4" />
                           </div>
                           <div>
-                            <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#3F7D58] transition-colors">
+                            <h3 className="text-sm font-bold text-[#111820] group-hover:text-[#3F7D58] transition-colors">
                               {b.buildingName}
                             </h3>
                             {(b.propertyName || property.name) && (
@@ -3003,7 +3003,7 @@ export default function PropertyDetailsPage() {
                                 key={fl.floorId || fl.floorNumber}
                                 className="p-2 rounded-lg bg-white border border-[#E3E8DF] text-xs space-y-1"
                               >
-                                <div className="flex items-center justify-between font-semibold text-[#243447]">
+                                <div className="flex items-center justify-between font-semibold text-[#111820]">
                                   <span className="flex items-center gap-1">
                                     <Layers className="w-3 h-3 text-[#3F7D58]" />
                                     {fl.floorName || `Floor ${fl.floorNumber}`}
@@ -3070,7 +3070,7 @@ export default function PropertyDetailsPage() {
               ) : (
                 <div className="py-8 text-center rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1]/50">
                   <Building2 className="w-8 h-8 text-[#3F7D58]/40 mx-auto mb-2" />
-                  <p className="text-xs font-semibold text-[#243447]">
+                  <p className="text-xs font-semibold text-[#111820]">
                     No buildings added yet.
                   </p>
                   <p className="text-xs text-[#5B6875] max-w-xs mx-auto mt-1 mb-3">
@@ -3105,7 +3105,7 @@ export default function PropertyDetailsPage() {
             {/* Occupancy Card */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                   <Users className="w-4 h-4 text-[#3F7D58]" />
                   Occupancy Metrics
                 </h2>
@@ -3133,7 +3133,7 @@ export default function PropertyDetailsPage() {
                 <div className="grid grid-cols-3 gap-2 text-center pt-2">
                   <div className="p-2 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                     <p className="text-xs text-[#5B6875]">Total</p>
-                    <p className="text-sm font-bold text-[#243447]">
+                    <p className="text-sm font-bold text-[#111820]">
                       {total ?? '—'}
                     </p>
                   </div>
@@ -3158,7 +3158,7 @@ export default function PropertyDetailsPage() {
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-[#3F7D58]" />
-                  <h2 className="text-base font-semibold text-[#243447]">
+                  <h2 className="text-base font-semibold text-[#111820]">
                     Property Manager
                   </h2>
                 </div>
@@ -3201,7 +3201,7 @@ export default function PropertyDetailsPage() {
                         : 'PM'}
                     </div>
                     <div className="min-w-0 flex-1 space-y-1">
-                      <p className="text-sm font-bold text-[#243447] truncate">
+                      <p className="text-sm font-bold text-[#111820] truncate">
                         {property.managerName || 'Assigned Manager'}
                       </p>
                       <div className="space-y-1 text-xs text-[#5B6875]">
@@ -3269,7 +3269,7 @@ export default function PropertyDetailsPage() {
                     <UserX className="w-5 h-5 text-[#8C9BA8]" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold text-[#243447]">
+                    <p className="text-xs font-semibold text-[#111820]">
                       No Manager Assigned
                     </p>
                     <p className="text-[11px] text-[#5B6875] max-w-xs mx-auto leading-relaxed">
@@ -3294,46 +3294,46 @@ export default function PropertyDetailsPage() {
 
             {/* Property Overview Card */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+              <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                 <Building className="w-4 h-4 text-[#3F7D58]" />
                 Property Specifications
               </h2>
               <div className="space-y-2 text-xs divide-y divide-[#E3E8DF]">
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Property Type:</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {property.propertyType || property.type || '—'}
                   </span>
                 </div>
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Total Area:</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {property.totalArea != null ? `${Number(property.totalArea).toLocaleString()} sq ft` : '—'}
                   </span>
                 </div>
                 {isDirectRentalProperty && (
                   <div className="flex justify-between pt-2">
                     <span className="text-[#5B6875]">Bedrooms / BHK:</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {property.bedrooms != null ? (property.bedrooms === 0 ? 'Studio' : `${property.bedrooms} BHK`) : '—'}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Year Built:</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {property.yearBuilt || '—'}
                   </span>
                 </div>
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Furnishing:</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {property.furnishing || '—'}
                   </span>
                 </div>
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Parking:</span>
-                  <span className="font-semibold text-[#243447]">
+                  <span className="font-semibold text-[#111820]">
                     {property.parking || (property.parkingAvailable == null ? '—' : property.parkingAvailable ? 'Available' : 'None')}
                   </span>
                 </div>
@@ -3342,7 +3342,7 @@ export default function PropertyDetailsPage() {
 
             {/* Actions Card */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
-              <h2 className="text-base font-semibold text-[#243447]">
+              <h2 className="text-base font-semibold text-[#111820]">
                 Quick Actions
               </h2>
               <div className="space-y-2">
@@ -3434,10 +3434,10 @@ export default function PropertyDetailsPage() {
         message={
           <>
             Are you sure you want to unassign{' '}
-            <strong className="text-[#243447]">
+            <strong className="text-[#111820]">
               {property.managerName || 'the manager'}
             </strong>{' '}
-            from <strong className="text-[#243447]">{property.name}</strong>?
+            from <strong className="text-[#111820]">{property.name}</strong>?
           </>
         }
         consequenceMessage="This manager will immediately lose operational access to this property, including its buildings, units, and maintenance requests."

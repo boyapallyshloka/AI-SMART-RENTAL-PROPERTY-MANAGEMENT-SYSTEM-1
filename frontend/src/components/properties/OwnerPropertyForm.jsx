@@ -289,7 +289,7 @@ export default function OwnerPropertyForm({
       {/* 1. General Property Information */}
       <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
         <div className="border-b border-[#E3E8DF] pb-4">
-          <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+          <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
             <Building2 className="w-5 h-5 text-[#3F7D58]" />
             General Property Information
           </h2>
@@ -326,7 +326,7 @@ export default function OwnerPropertyForm({
       {/* 2. Specifications & Features */}
       <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
         <div className="border-b border-[#E3E8DF] pb-4">
-          <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+          <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
             <Layers className="w-5 h-5 text-[#3F7D58]" />
             Property Specifications
           </h2>
@@ -408,7 +408,7 @@ export default function OwnerPropertyForm({
       {!initialData && (
         <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
           <div className="border-b border-[#E3E8DF] pb-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+            <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-[#3F7D58]" />
               Amenities &amp; Facilities
             </h2>
@@ -425,7 +425,7 @@ export default function OwnerPropertyForm({
               return (
                 <label
                   key={amenity}
-                  className="flex items-center gap-3 rounded-xl border border-[#E3E8DF] p-3 text-sm text-[#243447] cursor-pointer hover:border-[#3F7D58]"
+                  className="flex items-center gap-3 rounded-xl border border-[#E3E8DF] p-3 text-sm text-[#111820] cursor-pointer hover:border-[#3F7D58]"
                 >
                   <input
                     type="checkbox"
@@ -455,7 +455,7 @@ export default function OwnerPropertyForm({
       {/* 3. Description */}
       <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
         <div className="border-b border-[#E3E8DF] pb-4">
-          <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+          <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#3F7D58]" />
             Property Description
           </h2>

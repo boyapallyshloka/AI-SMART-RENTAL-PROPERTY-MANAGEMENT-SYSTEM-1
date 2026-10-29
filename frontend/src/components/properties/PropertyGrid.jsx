@@ -72,7 +72,7 @@ export default function PropertyGrid({
           <SearchX className="h-6 w-6" />
         </div>
 
-        <h3 className="text-base sm:text-lg font-semibold text-[#243447]">
+        <h3 className="text-base sm:text-lg font-semibold text-[#111820]">
           No matching properties found
         </h3>
         <p className="mt-1.5 max-w-md text-sm text-[#5B6875]">
@@ -99,7 +99,7 @@ export default function PropertyGrid({
       {/* Top Results Bar & Sorting Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#E3E8DF]">
         <div>
-          <h2 className="text-base sm:text-lg font-serif font-bold text-[#243447] flex items-center gap-2">
+          <h2 className="text-base sm:text-lg font-serif font-bold text-[#111820] flex items-center gap-2">
             <LayoutGrid className="w-4 h-4 text-[#3F7D58]" />
             <span>Available Rentals</span>
             <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
@@ -124,7 +124,7 @@ export default function PropertyGrid({
               aria-label="Sort properties"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
-              className="text-xs font-medium py-1.5 px-2.5 rounded-md border border-[#E3E8DF] bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58] cursor-pointer"
+              className="text-xs font-medium py-1.5 px-2.5 rounded-md border border-[#E3E8DF] bg-white text-[#111820] focus:outline-none focus:border-[#3F7D58] cursor-pointer"
             >
               {showPersonalizedSort ? (
                 <option value="ai_match">Recommended Match</option>

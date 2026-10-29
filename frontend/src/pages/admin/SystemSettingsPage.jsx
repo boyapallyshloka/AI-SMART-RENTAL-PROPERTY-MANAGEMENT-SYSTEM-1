@@ -43,10 +43,10 @@ export default function SystemSettingsPage() {
     >
       <div className="space-y-6">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#243447]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#111820]">
             Platform System Settings
           </h1>
-          <p className="mt-1 text-xs sm:text-sm text-[#5B6875]">
+          <p className="mt-1 text-xs sm:text-sm text-[#111820]">
             Global platform configuration, notification triggers, security controls, and integration credentials.
           </p>
         </div>

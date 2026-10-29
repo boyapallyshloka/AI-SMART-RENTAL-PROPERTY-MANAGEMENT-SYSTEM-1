@@ -69,7 +69,7 @@ const getRiskStyle = (rawStatus) => {
   }
 
   return {
-    textColor: 'text-[#243447]',
+    textColor: 'text-[#111820]',
     bgColor: 'bg-[#F7F7F1]',
     borderColor: 'border-[#E3E8DF]',
     badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
@@ -183,7 +183,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
       <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-[#3F7D58]" />
-          <h2 className="text-base font-semibold text-[#243447]">
+          <h2 className="text-base font-semibold text-[#111820]">
             Payment-Risk Analysis
           </h2>
           <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
@@ -198,7 +198,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
             onClick={fetchRisk}
             title="Refresh payment-risk analysis"
             leftIcon={<RefreshCw className="w-3.5 h-3.5 text-[#5B6875]" />}
-            className="text-xs text-[#5B6875] hover:text-[#243447] px-2 py-1"
+            className="text-xs text-[#5B6875] hover:text-[#111820] px-2 py-1"
           >
             Refresh
           </Button>
@@ -307,7 +307,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
                 <span className="text-[11px] uppercase tracking-wider font-semibold text-[#5B6875] block">
                   Risk Probability
                 </span>
-                <div className="text-lg font-bold text-[#243447]">
+                <div className="text-lg font-bold text-[#111820]">
                   {probabilityFormatted != null ? probabilityFormatted : '—'}
                 </div>
               </div>
@@ -328,11 +328,11 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
             <span className="flex items-center gap-1.5 flex-wrap">
               <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" />
               <span>
-                Model: <strong className="font-semibold text-[#243447]">{modelName}</strong>
+                Model: <strong className="font-semibold text-[#111820]">{modelName}</strong>
               </span>
               <span>&bull;</span>
               <span>
-                Version: <strong className="font-semibold text-[#243447]">{modelVersion}</strong>
+                Version: <strong className="font-semibold text-[#111820]">{modelVersion}</strong>
               </span>
             </span>
 
@@ -347,7 +347,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
       <div className="p-3.5 bg-[#F7F7F1] border border-[#E3E8DF] rounded-xl text-xs text-[#5B6875] flex items-start gap-2.5">
         <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <p className="font-semibold text-[#243447]">
+          <p className="font-semibold text-[#111820]">
             Advisory Notice (Decision Support Only)
           </p>
           <p className="leading-relaxed">

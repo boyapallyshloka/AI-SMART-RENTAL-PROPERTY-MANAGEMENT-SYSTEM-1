@@ -82,7 +82,7 @@ export default function LegalPageLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F7F1] text-[#243447] font-sans antialiased flex flex-col">
+    <div className="min-h-screen bg-[#F7F7F1] text-[#111820] font-sans antialiased flex flex-col">
       {/* Top Application Header */}
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-[#E3E8DF] shadow-2xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -93,7 +93,7 @@ export default function LegalPageLayout({
                 <Home className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-serif text-lg font-bold tracking-tight text-[#243447] block leading-none">
+                <span className="font-serif text-lg font-bold tracking-tight text-[#111820] block leading-none">
                   SmartEstate
                 </span>
                 <span className="text-[10px] uppercase font-semibold tracking-wider text-[#5B6875] mt-1 block">
@@ -117,7 +117,7 @@ export default function LegalPageLayout({
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                 activeDoc === 'privacy'
                   ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
-                  : 'text-[#5B6875] hover:text-[#243447]'
+                  : 'text-[#5B6875] hover:text-[#111820]'
               }`}
             >
               Privacy Policy
@@ -127,14 +127,14 @@ export default function LegalPageLayout({
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                 activeDoc === 'terms'
                   ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
-                  : 'text-[#5B6875] hover:text-[#243447]'
+                  : 'text-[#5B6875] hover:text-[#111820]'
               }`}
             >
               Terms &amp; Conditions
             </Link>
             <Link
               to="/contact"
-              className="px-3 py-1.5 text-xs font-medium rounded-md text-[#5B6875] hover:text-[#243447] transition-colors"
+              className="px-3 py-1.5 text-xs font-medium rounded-md text-[#5B6875] hover:text-[#111820] transition-colors"
             >
               Contact Support
             </Link>
@@ -198,11 +198,11 @@ export default function LegalPageLayout({
               <span>Legal Documentation</span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[#243447]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[#111820]">
               {title}
             </h1>
 
-            <p className="text-sm sm:text-base text-[#5B6875] leading-relaxed">
+            <p className="text-sm sm:text-base text-[#111820] leading-relaxed">
               {subtitle}
             </p>
 
@@ -211,13 +211,13 @@ export default function LegalPageLayout({
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-[#3F7D58]" />
                 <span>
-                  Last Updated: <strong className="text-[#243447] font-medium">{lastUpdated}</strong>
+                  Last Updated: <strong className="text-[#111820] font-medium">{lastUpdated}</strong>
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#3F7D58]" />
                 <span>
-                  Effective Date: <strong className="text-[#243447] font-medium">{effectiveDate}</strong>
+                  Effective Date: <strong className="text-[#111820] font-medium">{effectiveDate}</strong>
                 </span>
               </div>
               <button
@@ -264,7 +264,7 @@ export default function LegalPageLayout({
 
             {/* Quick Contact & Assistance Box */}
             <div className="bg-[#EDF4ED] rounded-lg border border-[#E3E8DF] p-5 text-xs space-y-2.5">
-              <div className="flex items-center gap-2 font-semibold text-[#243447]">
+              <div className="flex items-center gap-2 font-semibold text-[#111820]">
                 <Mail className="w-4 h-4 text-[#3F7D58]" />
                 <span>Legal & Support Inquiries</span>
               </div>
@@ -288,7 +288,7 @@ export default function LegalPageLayout({
             <div className="rounded-lg bg-white border border-[#E3E8DF] p-4 sm:p-5 shadow-2xs flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-[#3F7D58] shrink-0 mt-0.5" />
               <div className="text-xs text-[#5B6875] space-y-1">
-                <p className="font-semibold text-[#243447]">
+                <p className="font-semibold text-[#111820]">
                   Standard Platform Documentation Notice
                 </p>
                 <p className="leading-relaxed">

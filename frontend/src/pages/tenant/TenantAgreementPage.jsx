@@ -282,10 +282,10 @@ export default function TenantAgreementPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
               My Lease Agreement
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Review your official residential lease terms, payment schedules, and tenure conditions
             </p>
           </div>
@@ -317,7 +317,7 @@ export default function TenantAgreementPage() {
         {/* Agreement Selector (shown if tenant has multiple agreements) */}
         {agreements.length > 1 && (
           <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="text-xs font-semibold text-[#243447]">
+            <div className="text-xs font-semibold text-[#111820]">
               Select Lease Agreement ({agreements.length} total on record):
             </div>
             <div className="w-full sm:w-80">
@@ -366,7 +366,7 @@ export default function TenantAgreementPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2.5">
-                      <h2 className="text-xl font-bold text-[#243447]">
+                      <h2 className="text-xl font-bold text-[#111820]">
                         {selectedAgreement.agreementNumber}
                       </h2>
                       <StatusBadge status={selectedAgreement.status} size="sm" />
@@ -409,7 +409,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5B6875] block mb-1">
                     Security Deposit
                   </span>
-                  <span className="text-xl font-bold text-[#243447]">
+                  <span className="text-xl font-bold text-[#111820]">
                     {formatCurrency(selectedAgreement.securityDeposit)}
                   </span>
                   <span className="text-[11px] text-[#3F7D58] font-medium block mt-0.5">
@@ -421,7 +421,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5B6875] block mb-1">
                     Lease Term
                   </span>
-                  <span className="text-sm font-bold text-[#243447] block mt-1">
+                  <span className="text-sm font-bold text-[#111820] block mt-1">
                     {formatDate(selectedAgreement.startDate)}
                   </span>
                   <span className="text-[11px] text-[#5B6875] block">
@@ -433,7 +433,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5B6875] block mb-1">
                     Notice Period
                   </span>
-                  <span className="text-xl font-bold text-[#243447]">
+                  <span className="text-xl font-bold text-[#111820]">
                     {selectedAgreement.noticePeriodDays != null
                       ? `${selectedAgreement.noticePeriodDays} days`
                       : '30 days'}
@@ -447,7 +447,7 @@ export default function TenantAgreementPage() {
 
             {/* Property & Leased Unit Specifications */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-              <h3 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h3 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <Building2 className="w-4 h-4 text-[#3F7D58]" />
                 Leased Property & Unit Details
               </h3>
@@ -458,7 +458,7 @@ export default function TenantAgreementPage() {
                     <Home className="w-3.5 h-3.5 text-[#3F7D58]" />
                     Property Name
                   </span>
-                  <p className="font-semibold text-[#243447] text-base">
+                  <p className="font-semibold text-[#111820] text-base">
                     {selectedAgreement.propertyName}
                   </p>
                   {selectedAgreement.buildingName && (
@@ -473,7 +473,7 @@ export default function TenantAgreementPage() {
                     <DoorOpen className="w-3.5 h-3.5 text-[#3F7D58]" />
                     Designated Unit
                   </span>
-                  <p className="font-semibold text-[#243447] text-base">
+                  <p className="font-semibold text-[#111820] text-base">
                     {selectedAgreement.unit}
                   </p>
                 </div>
@@ -482,7 +482,7 @@ export default function TenantAgreementPage() {
 
             {/* Occupancy Dates & Financial Schedule */}
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-              <h3 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <h3 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <Calendar className="w-4 h-4 text-[#3F7D58]" />
                 Occupancy Dates & Contract Information
               </h3>
@@ -492,7 +492,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[#5B6875] font-medium block">
                     Move-In Date
                   </span>
-                  <p className="font-bold text-[#243447] text-sm">
+                  <p className="font-bold text-[#111820] text-sm">
                     {formatDate(selectedAgreement.moveInDate)}
                   </p>
                 </div>
@@ -501,7 +501,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[#5B6875] font-medium block">
                     Move-Out Date
                   </span>
-                  <p className="font-bold text-[#243447] text-sm">
+                  <p className="font-bold text-[#111820] text-sm">
                     {formatDate(selectedAgreement.moveOutDate)}
                   </p>
                 </div>
@@ -510,7 +510,7 @@ export default function TenantAgreementPage() {
                   <span className="text-[#5B6875] font-medium block">
                     Rent Due Day
                   </span>
-                  <p className="font-bold text-[#243447] text-sm">
+                  <p className="font-bold text-[#111820] text-sm">
                     {selectedAgreement.dueDay
                       ? `${selectedAgreement.dueDay}th of the month`
                       : '1st of the month'}
@@ -529,7 +529,7 @@ export default function TenantAgreementPage() {
 
               {selectedAgreement.termsAndConditions && (
                 <div className="mt-4 p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
-                  <span className="text-xs font-semibold text-[#243447] block mb-1">
+                  <span className="text-xs font-semibold text-[#111820] block mb-1">
                     Terms, Provisions & Special Clauses
                   </span>
                   <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed whitespace-pre-line">

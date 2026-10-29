@@ -16,10 +16,10 @@ export default function AuthLayout({
   children,
   title = 'Welcome back',
   subtitle = 'Sign in to manage your rental properties and leases',
-  cityBackdrop = false,
+  cityBackdrop = true,
 }) {
   return (
-    <div className="relative flex min-h-screen overflow-hidden bg-[#F7F7F1] font-sans text-[#243447]">
+    <div className="relative flex min-h-screen overflow-hidden bg-[#F7F7F1] font-sans text-[#111820]">
       {cityBackdrop && (
         <>
           <img
@@ -116,7 +116,7 @@ export default function AuthLayout({
               <Home className="w-5 h-5" />
             </div>
             <div>
-              <span className={`font-serif text-lg font-bold ${cityBackdrop ? 'text-white' : 'text-[#243447]'}`}>SmartEstate</span>
+              <span className={`font-serif text-lg font-bold ${cityBackdrop ? 'text-white' : 'text-[#111820]'}`}>SmartEstate</span>
               <span className={`block text-[10px] uppercase font-semibold ${cityBackdrop ? 'text-white/80' : 'text-[#5B6875]'}`}>
                 Property Management
               </span>
@@ -126,7 +126,7 @@ export default function AuthLayout({
           <div className={cityBackdrop ? 'rounded-3xl border border-white/70 bg-[#FBFAF4]/80 p-6 shadow-[0_24px_70px_rgba(25,55,38,0.18)] backdrop-blur-xl sm:p-8' : ''}>
             {/* Form Header */}
             <div className="mb-6">
-              <h1 className="font-serif text-2xl font-bold tracking-tight text-[#243447] sm:text-3xl">
+              <h1 className="font-serif text-2xl font-bold tracking-tight text-[#111820] sm:text-3xl">
                 {title}
               </h1>
               {subtitle && (
@@ -144,15 +144,15 @@ export default function AuthLayout({
 
           {/* Mobile Footer Links */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-[#5B6875] lg:hidden">
-            <Link to="/privacy-policy" className="hover:text-[#243447] hover:underline">
+            <Link to="/privacy-policy" className="hover:text-[#111820] hover:underline">
               Privacy Policy
             </Link>
             <span>&bull;</span>
-            <Link to="/terms-and-conditions" className="hover:text-[#243447] hover:underline">
+            <Link to="/terms-and-conditions" className="hover:text-[#111820] hover:underline">
               Terms &amp; Conditions
             </Link>
             <span>&bull;</span>
-            <Link to="/contact" className="hover:text-[#243447] hover:underline">
+            <Link to="/contact" className="hover:text-[#111820] hover:underline">
               Contact Support
             </Link>
           </div>

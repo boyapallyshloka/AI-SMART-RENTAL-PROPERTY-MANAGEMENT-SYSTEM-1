@@ -34,7 +34,7 @@ export default function Button({
     primary:
       'bg-[#3F7D58] hover:bg-[#315F46] text-white shadow-xs focus-visible:ring-[#3F7D58]',
     secondary:
-      'bg-[#EDF4ED] hover:bg-[#D9E6F0] text-[#243447] border border-[#E3E8DF] shadow-xs focus-visible:ring-[#3F7D58]',
+      'bg-[#EDF4ED] hover:bg-[#D9E6F0] text-[#111820] border border-[#E3E8DF] shadow-xs focus-visible:ring-[#3F7D58]',
     danger:
       'border border-[#B94A48] text-[#B94A48] bg-white hover:bg-[#FDF2F2] hover:border-[#9B3B39] hover:text-[#9B3B39] shadow-xs focus-visible:ring-[#B94A48]',
     outline:

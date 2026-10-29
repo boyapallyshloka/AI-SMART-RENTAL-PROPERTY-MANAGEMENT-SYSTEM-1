@@ -137,7 +137,7 @@ export default function AddPropertyPage() {
             <span>Back to Properties</span>
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             Add New Property
           </span>
         </div>
@@ -166,10 +166,10 @@ export default function AddPropertyPage() {
               <Building2 className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 Add New Property
               </h1>
-              <p className="text-xs sm:text-sm text-[#5B6875] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#111820] mt-0.5">
                 Register a new rental building, condo, or single-family residence
               </p>
             </div>

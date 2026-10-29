@@ -406,10 +406,10 @@ export default function UserManagementPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
               User Directory & Accounts
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Browse, inspect, edit, and manage accounts for owners, tenants, property managers, and administrators
             </p>
           </div>
@@ -493,7 +493,7 @@ export default function UserManagementPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors shrink-0"
+                  className="p-2 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -514,7 +514,7 @@ export default function UserManagementPage() {
           <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
-              <strong className="text-[#243447]">
+              <strong className="text-[#111820]">
                 {filteredUsers.length}
               </strong>{' '}
               of {users.length} loaded users
@@ -564,7 +564,7 @@ export default function UserManagementPage() {
                       className="hover:bg-[#F7F7F1] transition-colors"
                     >
                       {/* Name */}
-                      <td className="py-3.5 pl-6 pr-4 font-semibold text-[#243447] min-w-[180px]">
+                      <td className="py-3.5 pl-6 pr-4 font-semibold text-[#111820] min-w-[180px]">
                         <div className="flex items-center gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center font-bold text-xs text-[#3F7D58] shrink-0">
                             {u.name?.charAt(0) || 'U'}
@@ -635,7 +635,7 @@ export default function UserManagementPage() {
                             onClick={() => handleOpenEdit(u)}
                             title="Edit User Profile"
                             aria-label={`Edit profile for ${u.name}`}
-                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
+                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
@@ -696,7 +696,7 @@ export default function UserManagementPage() {
                     {selectedUser?.name?.charAt(0) || <User className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h3 id="user-details-title" className="text-base font-bold text-[#243447]">
+                    <h3 id="user-details-title" className="text-base font-bold text-[#111820]">
                       {selectedUser?.name || 'User Profile'}
                     </h3>
                     <p className="text-xs text-[#5B6875]">User ID: #{selectedUser?.id}</p>
@@ -705,7 +705,7 @@ export default function UserManagementPage() {
                 <button
                   type="button"
                   onClick={() => setIsDetailsOpen(false)}
-                  className="text-[#5B6875] hover:text-[#243447] p-1 rounded-md"
+                  className="text-[#5B6875] hover:text-[#111820] p-1 rounded-md"
                   aria-label="Close user details modal"
                 >
                   <X className="w-4 h-4" />
@@ -725,23 +725,23 @@ export default function UserManagementPage() {
                   <div className="grid grid-cols-2 gap-3 p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]">
                     <div>
                       <span className="text-[#5B6875] block">First Name</span>
-                      <strong className="text-[#243447] font-semibold">{selectedUser.firstName || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold">{selectedUser.firstName || '—'}</strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Last Name</span>
-                      <strong className="text-[#243447] font-semibold">{selectedUser.lastName || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold">{selectedUser.lastName || '—'}</strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Email Address</span>
-                      <strong className="text-[#243447] font-semibold break-all">{selectedUser.email || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold break-all">{selectedUser.email || '—'}</strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Phone Number</span>
-                      <strong className="text-[#243447] font-semibold">{selectedUser.phone || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold">{selectedUser.phone || '—'}</strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Gender</span>
-                      <strong className="text-[#243447] font-semibold">{selectedUser.gender || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold">{selectedUser.gender || '—'}</strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Account Role</span>
@@ -758,7 +758,7 @@ export default function UserManagementPage() {
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Registration Date</span>
-                      <strong className="text-[#243447] font-semibold">{selectedUser.joinDate || '—'}</strong>
+                      <strong className="text-[#111820] font-semibold">{selectedUser.joinDate || '—'}</strong>
                     </div>
                   </div>
 
@@ -800,14 +800,14 @@ export default function UserManagementPage() {
           >
             <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-2 border-b border-[#E3E8DF]">
-                <h3 id="edit-user-title" className="text-base font-bold text-[#243447]">
+                <h3 id="edit-user-title" className="text-base font-bold text-[#111820]">
                   Edit User Profile
                 </h3>
                 <button
                   type="button"
                   onClick={() => !isSubmittingEdit && setEditUserModalData(null)}
                   disabled={isSubmittingEdit}
-                  className="text-[#5B6875] hover:text-[#243447] p-1 rounded-md"
+                  className="text-[#5B6875] hover:text-[#111820] p-1 rounded-md"
                   aria-label="Close edit user modal"
                 >
                   <X className="w-4 h-4" />
@@ -910,14 +910,14 @@ export default function UserManagementPage() {
           >
             <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-[#E3E8DF]">
-                <h3 id="change-status-title" className="text-base font-bold text-[#243447]">
+                <h3 id="change-status-title" className="text-base font-bold text-[#111820]">
                   Update User Account Status
                 </h3>
                 <button
                   type="button"
                   onClick={() => !isUpdatingStatus && setStatusModalData(null)}
                   disabled={isUpdatingStatus}
-                  className="text-[#5B6875] hover:text-[#243447] p-1 rounded-md"
+                  className="text-[#5B6875] hover:text-[#111820] p-1 rounded-md"
                   aria-label="Close status modal"
                 >
                   <X className="w-4 h-4" />
@@ -926,7 +926,7 @@ export default function UserManagementPage() {
 
               <p className="text-xs text-[#5B6875]">
                 Update account status for{' '}
-                <strong className="text-[#243447]">{statusModalData.name}</strong> ({statusModalData.email}):
+                <strong className="text-[#111820]">{statusModalData.name}</strong> ({statusModalData.email}):
               </p>
 
               {statusError && (

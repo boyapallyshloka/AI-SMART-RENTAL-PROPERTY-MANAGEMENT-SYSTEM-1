@@ -103,7 +103,7 @@ export default function OwnerProfilePage() {
 
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-xl font-bold text-[#243447]">{fullName}</h1>
+                  <h1 className="text-xl font-bold text-[#111820]">{fullName}</h1>
                   <StatusBadge status={userStatus} size="sm" />
                 </div>
                 <p className="text-xs text-[#5B6875] mt-1 flex items-center gap-1.5">
@@ -137,7 +137,7 @@ export default function OwnerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Email Address
                 </span>
-                <span className="font-semibold text-[#243447] truncate block">
+                <span className="font-semibold text-[#111820] truncate block">
                   {userEmail}
                 </span>
               </div>
@@ -149,7 +149,7 @@ export default function OwnerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Phone
                 </span>
-                <span className="font-semibold text-[#243447]">{userPhone}</span>
+                <span className="font-semibold text-[#111820]">{userPhone}</span>
               </div>
             </div>
 
@@ -169,7 +169,7 @@ export default function OwnerProfilePage() {
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Member Since
                 </span>
-                <span className="font-semibold text-[#243447]">
+                <span className="font-semibold text-[#111820]">
                   {profileData?.createdAt
                     ? new Date(profileData.createdAt).toLocaleDateString()
                     : 'Active'}
@@ -187,7 +187,7 @@ export default function OwnerProfilePage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'profile'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <MapPin className="w-4 h-4" />
@@ -200,7 +200,7 @@ export default function OwnerProfilePage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'security'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <KeyRound className="w-4 h-4" />
@@ -218,7 +218,7 @@ export default function OwnerProfilePage() {
             ) : loadError ? (
               <div className="p-6 rounded-2xl bg-white border border-[#E3E8DF] text-center space-y-3">
                 <AlertCircle className="w-8 h-8 text-[#B94A48] mx-auto" />
-                <p className="text-sm font-semibold text-[#243447]">
+                <p className="text-sm font-semibold text-[#111820]">
                   Unable to load owner profile
                 </p>
                 <p className="text-xs text-[#5B6875] max-w-md mx-auto">{loadError}</p>
@@ -246,7 +246,7 @@ export default function OwnerProfilePage() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-bold text-[#111820] flex items-center gap-2">
                   <KeyRound className="w-4 h-4 text-[#3F7D58]" />
                   <span>Account Password & Credentials</span>
                 </h2>

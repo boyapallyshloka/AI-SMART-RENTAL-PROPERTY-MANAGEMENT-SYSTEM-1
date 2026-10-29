@@ -24,7 +24,7 @@ export default function ScoutAssistant({
         <div className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#E3E8DF] bg-[#EDF4ED] text-[#3F7D58]"><Bot className="h-4 w-4" /></span>
           <div>
-            <h2 className="text-sm font-bold text-[#243447]">SCOUT</h2>
+            <h2 className="text-sm font-bold text-[#111820]">SCOUT</h2>
             <p className="text-[11px] text-[#5B6875]">SmartEstate assistant</p>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function ScoutAssistant({
       </header>
       <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <CircleOff className="h-8 w-8 text-[#8A5B16]" />
-        <h3 className="text-base font-semibold text-[#243447]">Assistant unavailable</h3>
+        <h3 className="text-base font-semibold text-[#111820]">Assistant unavailable</h3>
         <p className="max-w-sm text-sm leading-relaxed text-[#5B6875]">
           The current backend does not expose a SCOUT chat endpoint, so this assistant cannot answer questions yet. Live property, payment, and maintenance information remains available in their respective pages.
         </p>

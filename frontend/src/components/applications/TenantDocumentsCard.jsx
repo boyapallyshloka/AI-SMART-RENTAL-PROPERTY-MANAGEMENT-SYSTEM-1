@@ -36,7 +36,7 @@ export default function TenantDocumentsCard({ tenantId }) {
 
   return (
     <section className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-      <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+      <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
         <FileText className="w-4 h-4 text-[#3F7D58]" /> Supporting Documents
       </h2>
       {loading ? (
@@ -50,7 +50,7 @@ export default function TenantDocumentsCard({ tenantId }) {
           {documents.map((document) => (
             <li key={document.documentId} className="py-3 first:pt-0 last:pb-0 flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-sm font-medium text-[#243447] truncate">{document.fileName || labelForType(document.documentType)}</p>
+                <p className="text-sm font-medium text-[#111820] truncate">{document.fileName || labelForType(document.documentType)}</p>
                 <p className="text-xs text-[#5B6875]">{labelForType(document.documentType)} · {document.verificationStatus || 'Pending'}</p>
               </div>
               {document.documentUrl ? (

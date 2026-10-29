@@ -208,7 +208,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
         className="flex flex-col gap-3 rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs sm:flex-row sm:items-end sm:justify-between"
       >
         <div>
-          <p className="text-sm font-semibold text-[#243447]">Reporting period</p>
+          <p className="text-sm font-semibold text-[#111820]">Reporting period</p>
           <p className="mt-1 text-xs text-[#5B6875]">
             Live {scopeLabel.toLowerCase()} figures from the authenticated reports API.
           </p>
@@ -220,7 +220,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
               type="date"
               value={startDate}
               onChange={(event) => setStartDate(event.target.value)}
-              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]"
+              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#111820]"
             />
           </label>
           <label className="text-xs font-medium text-[#5B6875]">
@@ -229,7 +229,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
               type="date"
               value={endDate}
               onChange={(event) => setEndDate(event.target.value)}
-              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]"
+              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#111820]"
             />
           </label>
           <Button type="submit" isLoading={loading} leftIcon={<CalendarDays className="h-4 w-4" />}>

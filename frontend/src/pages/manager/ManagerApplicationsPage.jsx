@@ -230,7 +230,7 @@ export default function ManagerApplicationsPage() {
           <div className="space-y-1">
 
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
                 Applications
               </h1>
 
@@ -267,14 +267,14 @@ export default function ManagerApplicationsPage() {
                   placeholder="Search by applicant name, email, property, unit, or ID..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] placeholder:text-[#98A2B3] pl-9 pr-8 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#111820] placeholder:text-[#98A2B3] pl-9 pr-8 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
                     aria-label="Clear search"
-                    className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-[#5B6875] hover:text-[#243447]"
+                    className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-[#5B6875] hover:text-[#111820]"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -286,7 +286,7 @@ export default function ManagerApplicationsPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] px-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#111820] px-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                 >
                   {statusOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -301,7 +301,7 @@ export default function ManagerApplicationsPage() {
                 <select
                   value={propertyFilter}
                   onChange={(e) => setPropertyFilter(e.target.value)}
-                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] px-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] truncate"
+                  className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#111820] px-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] truncate"
                 >
                   {propertyOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -317,7 +317,7 @@ export default function ManagerApplicationsPage() {
               <div className="flex items-center gap-2">
                 <span>
                   Showing{' '}
-                  <strong className="text-[#243447]">
+                  <strong className="text-[#111820]">
                     {filteredApplications.length}
                   </strong>{' '}
                   of {applications.length} applications
@@ -334,7 +334,7 @@ export default function ManagerApplicationsPage() {
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#3F7D58] hover:text-[#243447] transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#3F7D58] hover:text-[#111820] transition-colors"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Reset filters</span>
@@ -357,7 +357,7 @@ export default function ManagerApplicationsPage() {
                 <AlertCircle className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-base font-bold text-[#243447]">
+                <h2 className="text-base font-bold text-[#111820]">
                   {errorType === '403'
                     ? 'Access Restricted'
                     : errorType === '401'
@@ -432,13 +432,13 @@ export default function ManagerApplicationsPage() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
-                      <th className="py-3.5 pl-6 pr-4 text-[#243447]">Applicant</th>
-                      <th className="py-3.5 px-4 text-[#243447]">Property / Unit</th>
-                      <th className="py-3.5 px-4 text-[#243447]">Application Date</th>
-                      <th className="py-3.5 px-4 text-[#243447]">Preferred Move-In</th>
-                      <th className="py-3.5 px-4 text-[#243447]">Monthly Rent</th>
-                      <th className="py-3.5 px-4 text-[#243447]">Status</th>
-                      <th className="py-3.5 pl-4 pr-6 text-right text-[#243447]">Action</th>
+                      <th className="py-3.5 pl-6 pr-4 text-[#111820]">Applicant</th>
+                      <th className="py-3.5 px-4 text-[#111820]">Property / Unit</th>
+                      <th className="py-3.5 px-4 text-[#111820]">Application Date</th>
+                      <th className="py-3.5 px-4 text-[#111820]">Preferred Move-In</th>
+                      <th className="py-3.5 px-4 text-[#111820]">Monthly Rent</th>
+                      <th className="py-3.5 px-4 text-[#111820]">Status</th>
+                      <th className="py-3.5 pl-4 pr-6 text-right text-[#111820]">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E3E8DF] text-sm">
@@ -451,7 +451,7 @@ export default function ManagerApplicationsPage() {
                         <td className="py-4 pl-6 pr-4 whitespace-nowrap">
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-2">
-                              <p className="font-semibold text-[#243447]">
+                              <p className="font-semibold text-[#111820]">
                                 {app.tenantName || 'Applicant'}
                               </p>
                               <span className="font-mono text-[10px] text-[#5B6875] bg-[#F0F4F7] px-1.5 py-0.2 rounded border border-[#E3E8DF]">
@@ -470,7 +470,7 @@ export default function ManagerApplicationsPage() {
                         {/* 2. Property / Unit */}
                         <td className="py-4 px-4 min-w-[200px]">
                           <div className="space-y-0.5">
-                            <p className="font-medium text-[#243447] flex items-center gap-1.5 truncate">
+                            <p className="font-medium text-[#111820] flex items-center gap-1.5 truncate">
                               <Building2 className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                               <span className="truncate">
                                 {app.propertyName || `Property #${app.propertyId}`}
@@ -487,7 +487,7 @@ export default function ManagerApplicationsPage() {
                         <td className="py-4 px-4 whitespace-nowrap text-xs text-[#5B6875]">
                           <div className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5 text-[#98A2B3] shrink-0" />
-                            <span className="font-medium text-[#243447]">
+                            <span className="font-medium text-[#111820]">
                               {formatDate(app.applicationDate || app.createdAt)}
                             </span>
                           </div>
@@ -506,7 +506,7 @@ export default function ManagerApplicationsPage() {
                         {/* 5. Monthly Rent */}
                         <td className="py-4 px-4 whitespace-nowrap">
                           {app.monthlyRent != null ? (
-                            <span className="font-semibold text-[#243447] text-xs sm:text-sm">
+                            <span className="font-semibold text-[#111820] text-xs sm:text-sm">
                               {formatCurrency(app.monthlyRent)}
                               <span className="text-xs text-[#5B6875] font-normal"> / mo</span>
                             </span>
@@ -550,7 +550,7 @@ export default function ManagerApplicationsPage() {
                   <div className="flex items-start justify-between gap-2 border-b border-[#E3E8DF] pb-2.5">
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-1.5">
-                        <p className="font-semibold text-[#243447] text-sm">
+                        <p className="font-semibold text-[#111820] text-sm">
                           {app.tenantName || 'Applicant'}
                         </p>
                         <span className="font-mono text-[10px] text-[#5B6875] bg-[#F0F4F7] px-1.5 py-0.2 rounded border border-[#E3E8DF]">
@@ -570,7 +570,7 @@ export default function ManagerApplicationsPage() {
                   {/* Card Body: Property, Unit, Dates & Rent */}
                   <div className="space-y-2 text-xs">
                     {/* Property & Unit */}
-                    <div className="flex items-start gap-1.5 text-[#243447]">
+                    <div className="flex items-start gap-1.5 text-[#111820]">
                       <Building2 className="w-3.5 h-3.5 text-[#3F7D58] shrink-0 mt-0.5" />
                       <div className="min-w-0 flex-1">
                         <p className="font-medium truncate">
@@ -587,13 +587,13 @@ export default function ManagerApplicationsPage() {
                     <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#E3E8DF]/60">
                       <div>
                         <span className="text-[#5B6875] block text-[11px]">Applied</span>
-                        <span className="font-medium text-[#243447]">
+                        <span className="font-medium text-[#111820]">
                           {formatDate(app.applicationDate || app.createdAt)}
                         </span>
                       </div>
                       <div>
                         <span className="text-[#5B6875] block text-[11px]">Move-In</span>
-                        <span className="font-medium text-[#243447]">
+                        <span className="font-medium text-[#111820]">
                           {app.preferredMoveInDate ? formatDate(app.preferredMoveInDate) : 'Flexible'}
                         </span>
                       </div>
@@ -602,7 +602,7 @@ export default function ManagerApplicationsPage() {
                     {/* Monthly Rent */}
                     <div className="pt-1 flex items-center justify-between border-t border-[#E3E8DF]/60">
                       <span className="text-[#5B6875] text-[11px]">Monthly Rent</span>
-                      <span className="font-semibold text-[#243447]">
+                      <span className="font-semibold text-[#111820]">
                         {app.monthlyRent != null ? formatCurrency(app.monthlyRent) + ' / mo' : '—'}
                       </span>
                     </div>

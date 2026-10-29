@@ -136,7 +136,7 @@ export function PrintableReceiptVoucher({
       className={
         isPrintView
           ? 'p-8 bg-white border border-[#CBD5E1] rounded-xl text-[#0F172A] space-y-6'
-          : 'p-6 sm:p-8 rounded-xl bg-white border border-[#E3E8DF] shadow-xs space-y-6 text-[#243447]'
+          : 'p-6 sm:p-8 rounded-xl bg-white border border-[#E3E8DF] shadow-xs space-y-6 text-[#111820]'
       }
       style={{
         boxSizing: 'border-box',
@@ -149,7 +149,7 @@ export function PrintableReceiptVoucher({
         <div>
           <div className="flex items-center gap-2">
             <Building2 className="w-6 h-6 text-[#3F7D58]" />
-            <span className="text-xl font-bold tracking-tight text-[#243447]">
+            <span className="text-xl font-bold tracking-tight text-[#111820]">
               SmartEstate
             </span>
           </div>
@@ -179,7 +179,7 @@ export function PrintableReceiptVoucher({
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B6875] block">
             Tenant &amp; Premises Details
           </span>
-          <p className="font-bold text-[#243447] text-sm">
+          <p className="font-bold text-[#111820] text-sm">
             {resolvedTenantName}
             {showIds && (
               <span className="font-mono text-[11px] text-[#5B6875] font-normal ml-1.5">
@@ -190,7 +190,7 @@ export function PrintableReceiptVoucher({
           {resolvedTenantEmail && (
             <p className="text-[#5B6875] truncate">{resolvedTenantEmail}</p>
           )}
-          <p className="text-[#243447] font-medium pt-1">
+          <p className="text-[#111820] font-medium pt-1">
             {resolvedPropertyName} &bull; {resolvedUnitNumber}
             {showIds && (
               <span className="font-mono text-[11px] text-[#5B6875] font-normal ml-1.5">
@@ -204,19 +204,19 @@ export function PrintableReceiptVoucher({
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B6875] block">
             Billing &amp; Payment Reference
           </span>
-          <p className="text-[#243447]">
+          <p className="text-[#111820]">
             <strong className="text-[#5B6875]">Invoice No:</strong>{' '}
             <span className="font-mono font-semibold">
               {resolvedInvoiceNumber}
             </span>
           </p>
-          <p className="text-[#243447]">
+          <p className="text-[#111820]">
             <strong className="text-[#5B6875]">Payment Method:</strong>{' '}
             <span className="font-semibold">
               {receipt.paymentMethod || 'Razorpay / Online'}
             </span>
           </p>
-          <p className="text-[#243447] truncate">
+          <p className="text-[#111820] truncate">
             <strong className="text-[#5B6875]">Gateway Txn ID:</strong>{' '}
             <span className="font-mono text-[11px]">
               {receipt.razorpayPaymentId ||
@@ -240,14 +240,14 @@ export function PrintableReceiptVoucher({
           <tbody>
             <tr>
               <td className="py-3.5 px-4">
-                <p className="font-bold text-[#243447]">
+                <p className="font-bold text-[#111820]">
                   Rent Payment Settlement
                 </p>
                 <span className="text-[#5B6875] text-[11px]">
                   Billing Period: {formatMonthYear(resolvedBillingMonth, resolvedBillingYear)}
                 </span>
               </td>
-              <td className="py-3.5 px-4 text-right font-medium text-[#243447]">
+              <td className="py-3.5 px-4 text-right font-medium text-[#111820]">
                 {formatCurrency(resolvedInvoicedAmount)}
               </td>
               <td className="py-3.5 px-4 text-right font-bold text-[#2A583B]">
@@ -269,7 +269,7 @@ export function PrintableReceiptVoucher({
       <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2 text-xs">
         <div className="flex justify-between items-center text-[#5B6875]">
           <span>Total Invoiced</span>
-          <span className="font-semibold text-[#243447]">
+          <span className="font-semibold text-[#111820]">
             {formatCurrency(resolvedInvoicedAmount)}
           </span>
         </div>

@@ -340,10 +340,10 @@ export default function TenantMaintenancePage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
               Maintenance Requests
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Track repairs, schedule service dispatches, and review technician resolution status
             </p>
           </div>
@@ -390,7 +390,7 @@ export default function TenantMaintenancePage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -401,7 +401,7 @@ export default function TenantMaintenancePage() {
           <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
-              <strong className="text-[#243447]">
+              <strong className="text-[#111820]">
                 {filteredRequests.length}
               </strong>{' '}
               of {requests.length} maintenance tickets
@@ -477,14 +477,14 @@ export default function TenantMaintenancePage() {
 
                         {/* Category */}
                         <td className="py-4 px-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                             {formatCategoryLabel(req.category)}
                           </span>
                         </td>
 
                         {/* Description */}
                         <td className="py-4 px-4 min-w-[200px] max-w-xs">
-                          <p className="font-medium text-[#243447] text-xs truncate">
+                          <p className="font-medium text-[#111820] text-xs truncate">
                             {req.description || 'No description provided'}
                           </p>
                         </td>
@@ -540,7 +540,7 @@ export default function TenantMaintenancePage() {
               {/* Modal Header */}
               <div className="p-6 border-b border-[#E3E8DF] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <h3 className="text-lg font-bold text-[#243447] font-mono">
+                  <h3 className="text-lg font-bold text-[#111820] font-mono">
                     Ticket #{selectedTicket.requestId || selectedTicket.id}
                   </h3>
                   <StatusBadge status={formatStatusLabel(selectedTicket.status)} size="sm" />
@@ -555,7 +555,7 @@ export default function TenantMaintenancePage() {
                 <button
                   type="button"
                   onClick={() => setSelectedTicket(null)}
-                  className="p-1 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]"
+                  className="p-1 rounded-md text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1]"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -566,13 +566,13 @@ export default function TenantMaintenancePage() {
                 <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
                     <span className="text-[#5B6875] block">Category:</span>
-                    <strong className="text-[#243447]">
+                    <strong className="text-[#111820]">
                       {formatCategoryLabel(selectedTicket.category)}
                     </strong>
                   </div>
                   <div>
                     <span className="text-[#5B6875] block">Submitted Date:</span>
-                    <strong className="text-[#243447]">
+                    <strong className="text-[#111820]">
                       {selectedTicket.requestedDate
                         ? new Date(selectedTicket.requestedDate).toLocaleString()
                         : selectedTicket.submittedDate || 'Date unavailable'}
@@ -584,13 +584,13 @@ export default function TenantMaintenancePage() {
                   <div className="grid grid-cols-2 gap-4 text-xs pt-2 border-t border-[#E3E8DF]">
                     <div>
                       <span className="text-[#5B6875] block">Property:</span>
-                      <strong className="text-[#243447]">
+                      <strong className="text-[#111820]">
                         {getPropertyDisplayName(selectedTicket)}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Unit ID:</span>
-                      <strong className="text-[#243447]">
+                      <strong className="text-[#111820]">
                         {selectedTicket.unitId != null ? `#${selectedTicket.unitId}` : '—'}
                       </strong>
                     </div>
@@ -598,17 +598,17 @@ export default function TenantMaintenancePage() {
                 )}
 
                 <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
-                  <span className="text-xs font-semibold text-[#243447] block">
+                  <span className="text-xs font-semibold text-[#111820] block">
                     Issue Description:
                   </span>
-                  <p className="text-xs text-[#243447] leading-relaxed bg-[#F7F7F1] p-3 rounded-xl border border-[#E3E8DF]">
+                  <p className="text-xs text-[#111820] leading-relaxed bg-[#F7F7F1] p-3 rounded-xl border border-[#E3E8DF]">
                     {selectedTicket.description || 'No description provided.'}
                   </p>
                 </div>
 
                 {selectedTicket.imageUrl && (
                   <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
-                    <span className="text-xs font-semibold text-[#243447] block">
+                    <span className="text-xs font-semibold text-[#111820] block">
                       Attached Photo:
                     </span>
                     <div className="rounded-xl border border-[#E3E8DF] overflow-hidden max-h-48 bg-[#F7F7F1] flex items-center justify-center">
@@ -625,7 +625,7 @@ export default function TenantMaintenancePage() {
                 )}
 
                 {selectedTicket.costResponsibility && selectedTicket.cost != null && (
-                  <div className="p-3 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1 text-[#243447]">
+                  <div className="p-3 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1 text-[#111820]">
                     <div className="font-bold">Maintenance cost allocation</div>
                     <p>{selectedTicket.costResponsibility === 'TENANT_PAID' ? 'Tenant responsible' : 'Owner responsible'}</p>
                     <p>Repair amount: ₹{Number(selectedTicket.cost).toLocaleString('en-IN')}</p>

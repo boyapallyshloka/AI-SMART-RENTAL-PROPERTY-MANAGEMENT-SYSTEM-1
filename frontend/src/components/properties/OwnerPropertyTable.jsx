@@ -112,7 +112,7 @@ export default function OwnerPropertyTable({
                       <div className="min-w-0">
                         <Link
                           to={`/owner/properties/${prop.id}`}
-                          className="font-semibold text-[#243447] hover:text-[#3F7D58] transition-colors line-clamp-1"
+                          className="font-semibold text-[#111820] hover:text-[#3F7D58] transition-colors line-clamp-1"
                         >
                           {prop.name}
                         </Link>
@@ -128,7 +128,7 @@ export default function OwnerPropertyTable({
 
                   {/* Type & Specs (Bedrooms, Bathrooms, Area) */}
                   <td className="py-4 px-4 min-w-[160px]">
-                    <span className="inline-block font-medium text-[#243447] text-xs px-2 py-0.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] mb-1">
+                    <span className="inline-block font-medium text-[#111820] text-xs px-2 py-0.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] mb-1">
                       {formatPropertyType(prop.type || prop.propertyType)}
                     </span>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#5B6875]">
@@ -169,7 +169,7 @@ export default function OwnerPropertyTable({
                     ) : (
                       <div>
                         <div className="flex items-baseline justify-between text-xs mb-1">
-                          <span className="font-semibold text-[#243447]">
+                          <span className="font-semibold text-[#111820]">
                             {prop.occupiedUnits} / {prop.totalUnits} Units
                           </span>
                           <span className="text-[11px] text-[#5B6875] font-medium">
@@ -201,7 +201,7 @@ export default function OwnerPropertyTable({
                   <td className="py-4 px-4 whitespace-nowrap min-w-[130px]">
                     {prop.rentDisplay ? (
                       <>
-                        <span className="font-bold text-[#243447]">
+                        <span className="font-bold text-[#111820]">
                           {prop.rentDisplay}
                         </span>
                         <span className="text-xs text-[#5B6875] font-normal"> / mo</span>
@@ -228,7 +228,7 @@ export default function OwnerPropertyTable({
                           value={prop.status}
                           disabled={updatingStatusId === prop.id || updatingStatusId === prop.propertyId}
                           onChange={(e) => onStatusChange(prop.id, e.target.value)}
-                          className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
+                          className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#111820] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                         >
                           {CANONICAL_PROPERTY_STATUSES.map((st) => (
                             <option key={st} value={st}>

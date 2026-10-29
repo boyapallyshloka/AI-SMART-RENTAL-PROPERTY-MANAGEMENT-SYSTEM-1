@@ -227,7 +227,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#243447]">
+              <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#111820]">
                 Property Document Review
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#3F7D58] text-white">
@@ -302,7 +302,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
 
           <div className="flex items-center gap-2 text-xs text-[#5B6875]">
             <FileCheck2 className="w-4 h-4 text-[#3F7D58]" />
-            <span className="font-semibold text-[#243447]">
+            <span className="font-semibold text-[#111820]">
               {loading
                 ? 'Loading reviews…'
                 : `${documents.length} document${documents.length === 1 ? '' : 's'} across ${propertyGroups.length} propert${propertyGroups.length === 1 ? 'y' : 'ies'}`}
@@ -360,7 +360,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h2 className="font-bold text-base text-[#243447]">
+                        <h2 className="font-bold text-base text-[#111820]">
                           {group.propertyName || `Property #${group.propertyId}`}
                         </h2>
                         <span className="text-xs font-mono text-[#5B6875] px-2 py-0.5 rounded bg-white border border-[#E3E8DF]">
@@ -404,7 +404,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                           </div>
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-semibold text-sm text-[#243447]">
+                              <span className="font-semibold text-sm text-[#111820]">
                                 {typeLabel}
                               </span>
                               {isTitleDeed && (
@@ -434,7 +434,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                               href={doc.documentUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#111820] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
                               title="Inspect document securely in a new tab"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -446,7 +446,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                             type="button"
                             onClick={() => handleDownload(doc)}
                             disabled={downloadingId === doc.documentId}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#111820] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
                             title="Download document file"
                           >
                             <Download className="w-3.5 h-3.5" />
@@ -491,7 +491,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-base text-[#243447]">
+                  <h3 className="font-semibold text-base text-[#111820]">
                     Approve Property Document
                   </h3>
                   <p className="text-xs text-[#5B6875]">Confirm verification approval</p>
@@ -585,7 +585,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#243447] mb-1">
+                  <label className="block text-xs font-semibold text-[#111820] mb-1">
                     Rejection Reason <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -596,7 +596,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                       if (rejectionError) setRejectionError('')
                     }}
                     placeholder="Explain clearly why this document was rejected (e.g. illegible photocopy, missing municipal seal, owner name mismatch, expired certificate)..."
-                    className="w-full text-xs rounded-xl border border-[#E3E8DF] p-3 focus:outline-none focus:ring-2 focus:ring-[#8A2E2C] text-[#243447]"
+                    className="w-full text-xs rounded-xl border border-[#E3E8DF] p-3 focus:outline-none focus:ring-2 focus:ring-[#8A2E2C] text-[#111820]"
                     disabled={isSubmittingRejection}
                   />
                   <p className="text-[11px] text-[#5B6875] mt-1">

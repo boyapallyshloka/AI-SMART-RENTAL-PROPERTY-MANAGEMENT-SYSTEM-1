@@ -296,7 +296,7 @@ export default function AdminDashboardPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+                  <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                     Super Admin Control Center
                   </h1>
                   <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
@@ -333,7 +333,7 @@ export default function AdminDashboardPage() {
                       <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block group-hover:text-[#3F7D58] transition-colors">
                         {card.label}
                       </span>
-                      <div className="text-2xl font-bold tracking-tight text-[#243447] mt-1">
+                      <div className="text-2xl font-bold tracking-tight text-[#111820] mt-1">
                         {card.value}
                       </div>
                       <span className="text-xs text-[#5B6875] block mt-1">
@@ -361,7 +361,7 @@ export default function AdminDashboardPage() {
               <div className="p-4 border-b border-[#E3E8DF] bg-[#F7F7F1] flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-[#3F7D58]" />
-                  <h2 className="text-xs sm:text-sm font-semibold text-[#243447]">
+                  <h2 className="text-xs sm:text-sm font-semibold text-[#111820]">
                     Recent Registered Platform Users
                   </h2>
                 </div>
@@ -406,7 +406,7 @@ export default function AdminDashboardPage() {
                             <td className="py-2.5 pl-4 pr-3 font-mono font-medium text-[#3F7D58]">
                               #{uid}
                             </td>
-                            <td className="py-2.5 px-3 font-medium text-[#243447]">
+                            <td className="py-2.5 px-3 font-medium text-[#111820]">
                               {displayName}
                             </td>
                             <td className="py-2.5 px-3 text-[#5B6875]">
@@ -433,7 +433,7 @@ export default function AdminDashboardPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-base font-bold text-[#243447]">
+                  <h2 className="text-base font-bold text-[#111820]">
                     Administrative Subsystems & API Integration Status
                   </h2>
                   <p className="text-xs text-[#5B6875]">
@@ -452,7 +452,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#3F7D58] transition-colors">
+                          <h3 className="text-sm font-bold text-[#111820] group-hover:text-[#3F7D58] transition-colors">
                             {mod.name}
                           </h3>
                         </div>

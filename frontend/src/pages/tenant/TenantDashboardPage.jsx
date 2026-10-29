@@ -162,7 +162,7 @@ export default function TenantDashboardPage() {
               <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/75 to-white/92 backdrop-blur-[0.5px]" />
 
               <div className="relative z-10 px-6 sm:px-10 py-8 max-w-3xl">
-                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#243447]">
+                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111820]">
                   Welcome back, {tenantDisplayName}!
                 </h1>
               </div>
@@ -214,7 +214,7 @@ export default function TenantDashboardPage() {
               <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs space-y-5">
                 <div className="flex items-center justify-between border-b border-[#E9EDE5] pb-4">
                   <div>
-                    <h2 className="font-serif text-lg sm:text-xl font-bold text-[#243447]">
+                    <h2 className="font-serif text-lg sm:text-xl font-bold text-[#111820]">
                       Rent Invoices
                     </h2>
                     <p className="text-xs text-[#657168] mt-0.5">Recent statements and payment records</p>
@@ -252,7 +252,7 @@ export default function TenantDashboardPage() {
                               <CreditCard className="w-4 h-4 text-[#2E7D5B]" />
                             </div>
                             <div className="min-w-0">
-                              <p className="font-semibold text-[#243447] text-xs">
+                              <p className="font-semibold text-[#111820] text-xs">
                                 Invoice #{invId}
                               </p>
                               <p className="text-[11px] text-[#657168]">
@@ -261,7 +261,7 @@ export default function TenantDashboardPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <span className="font-semibold text-xs text-[#243447] block">
+                            <span className="font-semibold text-xs text-[#111820] block">
                               {formatCurrency(amount)}
                             </span>
                             <StatusBadge status={inv.status} size="xs" />
@@ -276,7 +276,7 @@ export default function TenantDashboardPage() {
               {/* Tenant Actions Panel */}
               <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs space-y-5 flex flex-col justify-between">
                 <div>
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-[#243447]">
+                  <h2 className="font-serif text-lg sm:text-xl font-bold text-[#111820]">
                     Tenant Actions
                   </h2>
                   <p className="text-xs text-[#657168] mt-0.5">Quick access to tenancy services</p>
@@ -313,7 +313,7 @@ export default function TenantDashboardPage() {
 
                 <div className="pt-4 border-t border-[#E9EDE5]">
                   <div className="p-3.5 rounded-xl bg-[#F0F5FA] border border-[#E3E8DF] text-xs">
-                    <p className="font-semibold text-[#243447] flex items-center gap-1.5">
+                    <p className="font-semibold text-[#111820] flex items-center gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Maintenance Status
                     </p>
@@ -345,7 +345,7 @@ function MetricCard({ title, value, subtitle, change, icon, iconBg = 'bg-[#EDF4E
         </div>
       </div>
       <div>
-        <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">{value}</p>
+        <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-sans">{value}</p>
         <p className="text-xs text-[#657168] mt-1 font-medium">{subtitle}</p>
       </div>
       {change && (

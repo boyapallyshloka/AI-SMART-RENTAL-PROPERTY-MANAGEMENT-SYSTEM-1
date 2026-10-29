@@ -189,11 +189,11 @@ export default function RegisterPage() {
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-serif font-bold text-[#243447]">
+              <h3 className="text-base font-serif font-bold text-[#111820]">
                 Awaiting Administrator Approval
               </h3>
               <p className="text-xs text-[#5B6875] mt-1 max-w-sm mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-[#243447]">{registeredData
+                Thank you, <span className="font-semibold text-[#111820]">{registeredData
                   ? `${registeredData.firstName} ${registeredData.lastName}`
                   : `${firstName} ${lastName}`}
                 </span>.
@@ -206,11 +206,11 @@ export default function RegisterPage() {
           <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-2">
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Account Email:</span>
-              <span className="font-mono font-medium text-[#243447]">{registeredData?.email || email}</span>
+              <span className="font-mono font-medium text-[#111820]">{registeredData?.email || email}</span>
             </div>
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Phone Number:</span>
-              <span className="font-mono font-medium text-[#243447]">{registeredData?.phone || phone}</span>
+              <span className="font-mono font-medium text-[#111820]">{registeredData?.phone || phone}</span>
             </div>
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Role Requested:</span>
@@ -230,7 +230,7 @@ export default function RegisterPage() {
 
           {/* Compliance & Next Steps Notice */}
           <div className="p-3 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-xs text-[#315F46] space-y-1.5 leading-relaxed">
-            <div className="flex items-center gap-1.5 font-semibold text-[#243447]">
+            <div className="flex items-center gap-1.5 font-semibold text-[#111820]">
               <CheckCircle2 className="w-4 h-4 text-[#3F7D58]" />
               <span>What happens next?</span>
             </div>
@@ -275,7 +275,7 @@ export default function RegisterPage() {
 
         {/* Role Selector Tabs */}
         <div>
-          <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#243447]">
+          <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#111820]">
             I am joining as a
           </label>
           <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
@@ -284,7 +284,7 @@ export default function RegisterPage() {
               onClick={() => setRole(ROLES.TENANT)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isTenant(role)
                 ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#243447]'
+                : 'text-[#5B6875] hover:text-[#111820]'
                 }`}
             >
               <User className="w-3.5 h-3.5" />
@@ -295,7 +295,7 @@ export default function RegisterPage() {
               onClick={() => setRole(ROLES.PROPERTY_OWNER)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyOwner(role)
                 ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#243447]'
+                : 'text-[#5B6875] hover:text-[#111820]'
                 }`}
             >
               <Building2 className="w-3.5 h-3.5" />
@@ -306,7 +306,7 @@ export default function RegisterPage() {
               onClick={() => setRole(ROLES.PROPERTY_MANAGER)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyManager(role)
                 ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#243447]'
+                : 'text-[#5B6875] hover:text-[#111820]'
                 }`}
             >
               <Briefcase className="w-3.5 h-3.5" />

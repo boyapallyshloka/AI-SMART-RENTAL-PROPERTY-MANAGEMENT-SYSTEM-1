@@ -302,7 +302,7 @@ export default function CreateMaintenanceRequestPage() {
             <span>Back to Maintenance</span>
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-medium">
+          <span className="text-[#111820] font-medium">
             New Maintenance Request
           </span>
         </div>
@@ -315,7 +315,7 @@ export default function CreateMaintenanceRequestPage() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
                   Request Maintenance
                 </h1>
                 <StatusBadge status="Open" size="sm" />
@@ -349,7 +349,7 @@ export default function CreateMaintenanceRequestPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Tenant & Property Identification */}
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+            <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <Building2 className="w-4 h-4 text-[#3F7D58]" />
               1. Location & Tenant Details
             </h2>
@@ -359,7 +359,7 @@ export default function CreateMaintenanceRequestPage() {
                 <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                   Tenant Name
                 </label>
-                <div className="p-2.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-sm font-medium text-[#243447] flex items-center gap-2">
+                <div className="p-2.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-sm font-medium text-[#111820] flex items-center gap-2">
                   <User className="w-4 h-4 text-[#5B6875] shrink-0" />
                   <span className="truncate">{tenantName}</span>
                 </div>
@@ -385,7 +385,7 @@ export default function CreateMaintenanceRequestPage() {
                         setErrors((prev) => ({ ...prev, propertyId: undefined }))
                       }
                     }}
-                    className="w-full p-2.5 rounded-md bg-white border border-[#E3E8DF] text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#3F7D58]"
+                    className="w-full p-2.5 rounded-md bg-white border border-[#E3E8DF] text-sm font-medium text-[#111820] focus:outline-hidden focus:border-[#3F7D58]"
                   >
                     {properties.map((prop) => {
                       const propId = prop.propertyId ?? prop.id
@@ -437,7 +437,7 @@ export default function CreateMaintenanceRequestPage() {
                         }
                       }}
                       className={`w-full p-2.5 rounded-md bg-white border ${errors.unitId ? 'border-[#E05252]' : 'border-[#E3E8DF]'
-                        } text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#3F7D58]`}
+                        } text-sm font-medium text-[#111820] focus:outline-hidden focus:border-[#3F7D58]`}
                     >
                       {units.map((unit) => {
                         const cleanNum = String(unit.unitNumber || unit.unitId).replace(/^Unit\s*/i, '')
@@ -479,7 +479,7 @@ export default function CreateMaintenanceRequestPage() {
 
           {/* Section 2: Repair Information */}
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+            <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <Wrench className="w-4 h-4 text-[#3F7D58]" />
               2. Repair Information
             </h2>
@@ -534,7 +534,7 @@ export default function CreateMaintenanceRequestPage() {
 
           {/* Section 3: Scheduling & Real Image Upload */}
           <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+            <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
               <Calendar className="w-4 h-4 text-[#3F7D58]" />
               3. Scheduling & Issue Photo
             </h2>
@@ -572,7 +572,7 @@ export default function CreateMaintenanceRequestPage() {
                   >
                     <Upload className="w-5 h-5 text-[#5B6875]" />
                     <div>
-                      <p className="text-xs font-medium text-[#243447]">
+                      <p className="text-xs font-medium text-[#111820]">
                         Click to upload photo
                       </p>
                       <p className="text-[11px] text-[#5B6875]">
@@ -593,7 +593,7 @@ export default function CreateMaintenanceRequestPage() {
                         <ImageIcon className="w-8 h-8 text-[#3F7D58] shrink-0" />
                       )}
                       <div className="overflow-hidden text-left">
-                        <p className="text-xs font-medium text-[#243447] truncate">
+                        <p className="text-xs font-medium text-[#111820] truncate">
                           {imageFile.name}
                         </p>
                         <span className="text-[10px] text-[#5B6875]">

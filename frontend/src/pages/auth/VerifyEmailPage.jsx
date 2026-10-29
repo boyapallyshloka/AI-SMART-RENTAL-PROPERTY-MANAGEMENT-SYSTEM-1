@@ -100,7 +100,7 @@ export default function VerifyEmailPage() {
             <CheckCircle2 className="h-7 w-7" aria-hidden="true" />
           </div>
           <div className="space-y-2">
-            <p className="text-sm font-semibold text-[#243447]">{normalizedEmail}</p>
+            <p className="text-sm font-semibold text-[#111820]">{normalizedEmail}</p>
             {accountPendingApproval ? (
               <p className="text-sm leading-relaxed text-[#5B6875]">
                 Your email is verified. Your account is still awaiting administrator approval; you can sign in after it is approved.

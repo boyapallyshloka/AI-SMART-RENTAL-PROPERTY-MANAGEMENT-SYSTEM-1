@@ -363,7 +363,7 @@ export default function BuildingsPage() {
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       <span>Your Current Rental Property</span>
                     </div>
-                    <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+                    <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                       {myRental.property.name}
                     </h1>
                     <div className="flex items-center gap-2 text-xs text-[#5B6875] mt-1.5 flex-wrap">
@@ -376,7 +376,7 @@ export default function BuildingsPage() {
                       )}
                       {myRental.leaseSummary?.unitNumber && (
                         <>
-                          <span className="font-semibold text-[#243447]">
+                          <span className="font-semibold text-[#111820]">
                             Unit {myRental.leaseSummary.unitNumber}
                           </span>
                           <span>&bull;</span>
@@ -406,12 +406,12 @@ export default function BuildingsPage() {
 
                 {/* Hierarchy Breadcrumb Indicator */}
                 <div className="flex items-center gap-2 text-xs text-[#5B6875] flex-wrap">
-                  <span className="font-semibold text-[#243447]">Hierarchy:</span>
+                  <span className="font-semibold text-[#111820]">Hierarchy:</span>
                   <span className="px-2 py-0.5 rounded bg-[#F7F7F1] border border-[#E3E8DF] font-medium text-[#3F7D58]">
                     My Rental Property
                   </span>
                   <span>&rarr;</span>
-                  <span className="px-2 py-0.5 rounded bg-[#F7F7F1] border border-[#E3E8DF] font-medium text-[#243447]">
+                  <span className="px-2 py-0.5 rounded bg-[#F7F7F1] border border-[#E3E8DF] font-medium text-[#111820]">
                     Community Buildings ({buildings.length})
                   </span>
                   <span>&rarr;</span>
@@ -467,7 +467,7 @@ export default function BuildingsPage() {
                       <div className="space-y-3">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <h2 className="font-semibold text-base text-[#243447] truncate">
+                            <h2 className="font-semibold text-base text-[#111820] truncate">
                               {building.buildingName}
                             </h2>
                             {building.propertyName && (
@@ -533,7 +533,7 @@ export default function BuildingsPage() {
                   <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58]">
                     <Building className="w-4 h-4" />
                   </div>
-                  <h1 className="font-serif text-2xl font-bold tracking-tight text-[#243447]">
+                  <h1 className="font-serif text-2xl font-bold tracking-tight text-[#111820]">
                     Buildings
                   </h1>
                 </div>
@@ -617,7 +617,7 @@ export default function BuildingsPage() {
                       {/* Top Meta: Building Title & Floors/Units Tag */}
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <h2 className="font-semibold text-base text-[#243447] truncate">
+                          <h2 className="font-semibold text-base text-[#111820] truncate">
                             {building.buildingName}
                           </h2>
                           {(building.propertyName || building.property?.name) && (

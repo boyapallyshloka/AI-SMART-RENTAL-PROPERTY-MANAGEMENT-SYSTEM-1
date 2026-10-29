@@ -624,7 +624,7 @@ export default function MaintenanceDetailsPage() {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-mono">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-mono">
                       Ticket #{request.requestId || id}
                     </h1>
                     {getStatusBadge(request.status)}
@@ -635,7 +635,7 @@ export default function MaintenanceDetailsPage() {
                     >
                       {formatPriorityLabel(request.priority)} Priority
                     </span>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                       {formatCategoryLabel(request.category)}
                     </span>
                   </div>
@@ -708,7 +708,7 @@ export default function MaintenanceDetailsPage() {
             {/* Lifecycle Status Timeline */}
             <div className="bg-white rounded-xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                   <Clock className="w-4 h-4 text-[#3F7D58]" />
                   Ticket Status Lifecycle
                 </h2>
@@ -718,7 +718,7 @@ export default function MaintenanceDetailsPage() {
                     value={currentStatusNorm}
                     onChange={(e) => handleStatusChange(e.target.value)}
                     disabled={statusUpdating}
-                    className="text-xs font-semibold py-1 px-2.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] text-[#243447] focus:outline-hidden focus:border-[#3F7D58]"
+                    className="text-xs font-semibold py-1 px-2.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] text-[#111820] focus:outline-hidden focus:border-[#3F7D58]"
                   >
                     {MAINTENANCE_STATUSES.map((st) => (
                       <option key={st} value={st}>
@@ -793,7 +793,7 @@ export default function MaintenanceDetailsPage() {
                     <Sparkles className="w-5 h-5 text-[#3F7D58]" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                    <h2 className="text-base font-bold text-[#111820] flex items-center gap-2">
                       AI Predictive Maintenance Analytics
 
                     </h2>
@@ -834,7 +834,7 @@ export default function MaintenanceDetailsPage() {
                       <span className="text-xs text-[#5B6875] font-medium flex items-center gap-1.5">
                         <ShieldAlert className="w-4 h-4 text-[#3F7D58]" /> Risk Classification
                       </span>
-                      <div className="text-lg font-bold text-[#243447] flex items-center gap-2">
+                      <div className="text-lg font-bold text-[#111820] flex items-center gap-2">
                         <span>
                           {prediction.maintenance_risk?.risk_level || 'Evaluated'}
                         </span>
@@ -870,7 +870,7 @@ export default function MaintenanceDetailsPage() {
                       <span className="text-xs text-[#5B6875] font-medium flex items-center gap-1.5">
                         <Wrench className="w-4 h-4 text-[#3F7D58]" /> Forecasted Incidents
                       </span>
-                      <div className="text-xl font-extrabold text-[#243447]">
+                      <div className="text-xl font-extrabold text-[#111820]">
                         {prediction.next_month_maintenance_count != null
                           ? `${Number(prediction.next_month_maintenance_count).toFixed(1)}`
                           : '0.0'}
@@ -898,7 +898,7 @@ export default function MaintenanceDetailsPage() {
                   {/* Clearly Separated Actionable Preventive Recommendations */}
                   <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#243447] flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-[#111820] flex items-center gap-1.5">
                         <TrendingUp className="w-4 h-4 text-[#3F7D58]" />
                         Actionable Preventive Guidance
                       </span>
@@ -906,7 +906,7 @@ export default function MaintenanceDetailsPage() {
                         Frontend-Derived Guidance
                       </span>
                     </div>
-                    <p className="text-xs text-[#243447] leading-relaxed">
+                    <p className="text-xs text-[#111820] leading-relaxed">
                       {!prediction.maintenance_risk?.risk_level
                         ? 'Risk assessment was not returned by the prediction service.'
                         : String(prediction.maintenance_risk.risk_level).toUpperCase() === 'HIGH'
@@ -935,7 +935,7 @@ export default function MaintenanceDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Issue Details */}
               <div className="bg-white rounded-xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <Wrench className="w-4 h-4 text-[#3F7D58]" />
                   Issue Details
                 </h2>
@@ -943,7 +943,7 @@ export default function MaintenanceDetailsPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Category</span>
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                       {formatCategoryLabel(request.category)}
                     </span>
                   </div>
@@ -963,14 +963,14 @@ export default function MaintenanceDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <Building2 className="w-3.5 h-3.5 text-[#5B6875]" /> Leased Property
                     </span>
-                    <span className="font-medium text-[#243447] text-right">
+                    <span className="font-medium text-[#111820] text-right">
                       {displayPropertyName}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Unit Number</span>
-                    <span className="inline-block px-2 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
+                    <span className="inline-block px-2 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#111820] border border-[#E3E8DF]">
                       {displayUnitNumber}
                     </span>
                   </div>
@@ -979,7 +979,7 @@ export default function MaintenanceDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <User className="w-3.5 h-3.5 text-[#5B6875]" /> Tenant
                     </span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {displayTenantName}
                     </span>
                   </div>
@@ -988,7 +988,7 @@ export default function MaintenanceDetailsPage() {
                     <span className="text-xs text-[#5B6875] flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-[#5B6875]" /> Requested Date
                     </span>
-                    <span className="font-medium text-[#243447]">
+                    <span className="font-medium text-[#111820]">
                       {request.requestedDate
                         ? new Date(request.requestedDate).toLocaleString()
                         : 'Recent'}
@@ -996,17 +996,17 @@ export default function MaintenanceDetailsPage() {
                   </div>
 
                   <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
-                    <span className="text-xs font-semibold text-[#243447] block">
+                    <span className="text-xs font-semibold text-[#111820] block">
                       Issue Description:
                     </span>
-                    <p className="text-xs text-[#243447] leading-relaxed bg-[#F7F7F1] p-3 rounded-xl border border-[#E3E8DF]">
+                    <p className="text-xs text-[#111820] leading-relaxed bg-[#F7F7F1] p-3 rounded-xl border border-[#E3E8DF]">
                       {request.description || 'No description provided.'}
                     </p>
                   </div>
 
                   {request.imageUrl && (
                     <div className="pt-2 border-t border-[#E3E8DF] space-y-1.5">
-                      <span className="text-xs font-semibold text-[#243447] block">
+                      <span className="text-xs font-semibold text-[#111820] block">
                         Attached Issue Photo:
                       </span>
                       <div className="rounded-xl border border-[#E3E8DF] overflow-hidden bg-[#F7F7F1] p-2 flex justify-center max-h-56">
@@ -1024,21 +1024,21 @@ export default function MaintenanceDetailsPage() {
 
                   <form onSubmit={handleSaveCost} className="pt-3 border-t border-[#E3E8DF] space-y-3">
                     <div>
-                      <span className="text-sm font-semibold text-[#243447] block">Repair Cost & Responsibility</span>
+                      <span className="text-sm font-semibold text-[#111820] block">Repair Cost & Responsibility</span>
                       <span className="text-xs text-[#5B6875]">Saved owner-paid costs are included in Reports when the ticket is completed and its completion date is in the selected report period.</span>
                     </div>
                     {costError && <p role="alert" className="text-xs text-[#8A2E2C]">{costError}</p>}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <label className="space-y-1">
                         <span className="text-xs font-medium text-[#5B6875]">Who pays?</span>
-                        <select value={costResponsibility} onChange={(event) => setCostResponsibility(event.target.value)} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]">
+                        <select value={costResponsibility} onChange={(event) => setCostResponsibility(event.target.value)} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#111820]">
                           <option value="OWNER_PAID">Owner pays</option>
                           <option value="TENANT_PAID">Tenant pays</option>
                         </select>
                       </label>
                       <label className="space-y-1">
                         <span className="text-xs font-medium text-[#5B6875]">Repair amount (₹)</span>
-                        <input type="number" min="0" step="0.01" value={repairCost} onChange={(event) => setRepairCost(event.target.value)} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]" placeholder="Enter amount" />
+                        <input type="number" min="0" step="0.01" value={repairCost} onChange={(event) => setRepairCost(event.target.value)} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#111820]" placeholder="Enter amount" />
                       </label>
                     </div>
                     <Button type="submit" size="sm" disabled={costSaving}>
@@ -1077,7 +1077,7 @@ export default function MaintenanceDetailsPage() {
               {/* Right Column: Worker Assignment Section */}
               <div className="bg-white rounded-xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
                 <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
-                  <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
+                  <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
                     <HardHat className="w-4 h-4 text-[#3F7D58]" />
                     Assigned Service Technician
                   </h2>
@@ -1106,7 +1106,7 @@ export default function MaintenanceDetailsPage() {
                         <HardHat className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#243447] text-sm">
+                        <p className="font-semibold text-[#111820] text-sm">
                           {assignment.worker?.name || 'Assigned Technician'}
                         </p>
                         <p className="text-xs text-[#5B6875]">
@@ -1118,7 +1118,7 @@ export default function MaintenanceDetailsPage() {
                     <div className="space-y-2 text-xs pt-2 border-t border-[#E3E8DF]">
                       <div className="flex justify-between">
                         <span className="text-[#5B6875]">Worker ID:</span>
-                        <span className="font-medium text-[#243447]">
+                        <span className="font-medium text-[#111820]">
                           #{assignment.worker?.workerId || assignment.worker?.id || '—'}
                         </span>
                       </div>
@@ -1135,7 +1135,7 @@ export default function MaintenanceDetailsPage() {
                       {assignment.worker?.email && (
                         <div className="flex justify-between">
                           <span className="text-[#5B6875]">Email:</span>
-                          <span className="font-medium text-[#243447]">
+                          <span className="font-medium text-[#111820]">
                             {assignment.worker.email}
                           </span>
                         </div>
@@ -1150,7 +1150,7 @@ export default function MaintenanceDetailsPage() {
                       {assignment.assignedAt && (
                         <div className="flex justify-between">
                           <span className="text-[#5B6875]">Assigned Date:</span>
-                          <span className="font-medium text-[#243447]">
+                          <span className="font-medium text-[#111820]">
                             {new Date(assignment.assignedAt).toLocaleDateString()}
                           </span>
                         </div>
@@ -1158,7 +1158,7 @@ export default function MaintenanceDetailsPage() {
                       {assignment.notes && (
                         <div className="pt-2 border-t border-[#E3E8DF]">
                           <span className="text-[#5B6875] block">Dispatch Notes:</span>
-                          <p className="text-[#243447] italic mt-0.5">{assignment.notes}</p>
+                          <p className="text-[#111820] italic mt-0.5">{assignment.notes}</p>
                         </div>
                       )}
                     </div>
@@ -1170,7 +1170,7 @@ export default function MaintenanceDetailsPage() {
                   onSubmit={handleAssignWorker}
                   className="p-4 rounded-xl border border-[#E3E8DF] bg-white space-y-3 text-xs"
                 >
-                  <p className="font-semibold text-[#243447] text-xs flex items-center gap-1.5">
+                  <p className="font-semibold text-[#111820] text-xs flex items-center gap-1.5">
                     <UserPlus className="w-4 h-4 text-[#3F7D58]" />
                     {assignment ? 'Reassign / Dispatch Different Worker' : 'Dispatch Service Worker'}
                   </p>
@@ -1183,7 +1183,7 @@ export default function MaintenanceDetailsPage() {
                       <select
                         value={selectedWorkerId}
                         onChange={(e) => setSelectedWorkerId(e.target.value)}
-                        className="w-full p-2.5 rounded-lg border border-[#E3E8DF] text-xs bg-[#F7F7F1] text-[#243447] focus:outline-hidden focus:border-[#3F7D58]"
+                        className="w-full p-2.5 rounded-lg border border-[#E3E8DF] text-xs bg-[#F7F7F1] text-[#111820] focus:outline-hidden focus:border-[#3F7D58]"
                       >
                         {availableWorkers.map((w) => (
                           <option key={w.workerId || w.id} value={w.workerId || w.id}>

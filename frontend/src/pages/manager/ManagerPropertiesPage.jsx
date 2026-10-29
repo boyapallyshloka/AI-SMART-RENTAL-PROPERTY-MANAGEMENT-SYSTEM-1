@@ -242,7 +242,7 @@ export default function ManagerPropertiesPage() {
           <div className="space-y-1">
 
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
                 Assigned Properties
               </h1>
               {!loading && !error && (
@@ -281,14 +281,14 @@ export default function ManagerPropertiesPage() {
                 placeholder="Search by property name, ID, or owner..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] placeholder:text-[#98A2B3] pl-9 pr-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#111820] placeholder:text-[#98A2B3] pl-9 pr-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
                   aria-label="Clear search"
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#5B6875] hover:text-[#243447]"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#5B6875] hover:text-[#111820]"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -303,7 +303,7 @@ export default function ManagerPropertiesPage() {
                 <select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}
-                  className="rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] px-2.5 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                  className="rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#111820] px-2.5 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                 >
                   <option value="ALL">All Types</option>
                   {availableTypes.map((t) => (
@@ -341,7 +341,7 @@ export default function ManagerPropertiesPage() {
             <div className="flex items-start gap-3 text-[#B94A48]">
               <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h2 className="text-base font-bold text-[#243447]">
+                <h2 className="text-base font-bold text-[#111820]">
                   {errorType === '403'
                     ? 'Access Restricted'
                     : errorType === '401'
@@ -415,7 +415,7 @@ export default function ManagerPropertiesPage() {
 
                   {/* Property Name & Type */}
                   <div>
-                    <h2 className="text-base font-bold text-[#243447] tracking-tight line-clamp-1">
+                    <h2 className="text-base font-bold text-[#111820] tracking-tight line-clamp-1">
                       {prop.propertyName || 'Unnamed Property'}
                     </h2>
                     <span className="text-xs text-[#5B6875] font-medium">
@@ -474,7 +474,7 @@ export default function ManagerPropertiesPage() {
                 <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-between gap-2 text-xs">
                   <div className="text-[11px] text-[#5B6875] truncate">
                     <span>Registered Date: </span>
-                    <span className="font-medium text-[#243447]">{formatDate(prop.createdAt)}</span>
+                    <span className="font-medium text-[#111820]">{formatDate(prop.createdAt)}</span>
                   </div>
 
                   <Button
@@ -533,7 +533,7 @@ function PropertyDetailsSummaryModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111820]/60 backdrop-blur-xs transition-opacity"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-property-title"
@@ -552,7 +552,7 @@ function PropertyDetailsSummaryModal({
             <div>
               <h2
                 id="modal-property-title"
-                className="text-base font-bold text-[#243447] tracking-tight"
+                className="text-base font-bold text-[#111820] tracking-tight"
               >
                 Property Details Summary
               </h2>
@@ -566,7 +566,7 @@ function PropertyDetailsSummaryModal({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
+            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -583,7 +583,7 @@ function PropertyDetailsSummaryModal({
               <div className="flex items-start gap-2.5">
                 <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-[#243447]">
+                  <h3 className="text-sm font-bold text-[#111820]">
                     Unable to load property details
                   </h3>
                   <p className="text-xs text-[#5B6875]">{error}</p>
@@ -606,11 +606,11 @@ function PropertyDetailsSummaryModal({
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                     Property Name
                   </span>
-                  <h3 className="text-lg font-bold text-[#243447]">
+                  <h3 className="text-lg font-bold text-[#111820]">
                     {data.propertyName || 'Unnamed Property'}
                   </h3>
                   <span className="text-xs text-[#5B6875]">
-                    Type: <strong className="text-[#243447] font-semibold">{formatPropertyType(data.propertyType)}</strong>
+                    Type: <strong className="text-[#111820] font-semibold">{formatPropertyType(data.propertyType)}</strong>
                   </span>
                 </div>
                 <div>
@@ -624,7 +624,7 @@ function PropertyDetailsSummaryModal({
                   <FileText className="w-3.5 h-3.5 text-[#3F7D58]" />
                   <span>Description</span>
                 </h4>
-                <div className="p-3.5 rounded-lg bg-white border border-[#E3E8DF] text-xs sm:text-sm text-[#243447] leading-relaxed">
+                <div className="p-3.5 rounded-lg bg-white border border-[#E3E8DF] text-xs sm:text-sm text-[#111820] leading-relaxed">
                   {data.description || 'No description provided for this property.'}
                 </div>
               </div>
@@ -640,7 +640,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Total Area
                     </span>
-                    <p className="text-sm font-bold text-[#243447]">
+                    <p className="text-sm font-bold text-[#111820]">
                       {data.totalArea != null
                         ? `${Number(data.totalArea).toLocaleString('en-IN')} sq. ft.`
                         : '—'}
@@ -652,7 +652,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Furnishing Status
                     </span>
-                    <p className="text-sm font-bold text-[#243447]">
+                    <p className="text-sm font-bold text-[#111820]">
                       {formatFurnishing(data.furnishingStatus)}
                     </p>
                   </div>
@@ -662,7 +662,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Parking
                     </span>
-                    <p className="text-sm font-bold text-[#243447]">
+                    <p className="text-sm font-bold text-[#111820]">
                       {data.parkingAvailable ? 'Available (Yes)' : 'Not Available (No)'}
                     </p>
                   </div>
@@ -672,7 +672,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Year Built
                     </span>
-                    <p className="text-sm font-bold text-[#243447]">
+                    <p className="text-sm font-bold text-[#111820]">
                       {data.yearBuilt != null ? String(data.yearBuilt) : '—'}
                     </p>
                   </div>
@@ -689,7 +689,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Property Owner
                     </span>
-                    <p className="text-sm font-semibold text-[#243447]">
+                    <p className="text-sm font-semibold text-[#111820]">
                       {data.ownerName || '—'}
                     </p>
                     {data.ownerId != null && (
@@ -703,7 +703,7 @@ function PropertyDetailsSummaryModal({
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Property Created
                     </span>
-                    <p className="text-sm font-semibold text-[#243447]">
+                    <p className="text-sm font-semibold text-[#111820]">
                       {formatDate(data.createdAt)}
                     </p>
                     {data.updatedAt && (

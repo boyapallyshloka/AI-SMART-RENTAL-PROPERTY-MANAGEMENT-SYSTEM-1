@@ -294,7 +294,7 @@ export default function PropertyDocumentsSection({
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-semibold text-base text-[#243447]">
+                <h3 className="font-semibold text-base text-[#111820]">
                   {isEligible
                     ? 'Property Document Verification: Approved'
                     : 'Property Document Verification: Action Required'}
@@ -340,7 +340,7 @@ export default function PropertyDocumentsSection({
       <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E3E8DF]">
           <div>
-            <h3 className="font-serif text-lg font-bold text-[#243447] flex items-center gap-2">
+            <h3 className="font-serif text-lg font-bold text-[#111820] flex items-center gap-2">
               <FileCheck2 className="w-5 h-5 text-[#3F7D58]" />
               Property Documents
             </h3>
@@ -445,7 +445,7 @@ export default function PropertyDocumentsSection({
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-sm text-[#243447]">
+                          <span className="font-semibold text-sm text-[#111820]">
                             {typeLabel}
                           </span>
                           {/* Status Badge */}
@@ -488,7 +488,7 @@ export default function PropertyDocumentsSection({
                           href={doc.documentUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#111820] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
                           title="Open document securely in a new tab"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -499,7 +499,7 @@ export default function PropertyDocumentsSection({
                         type="button"
                         onClick={() => handleDownload(doc)}
                         disabled={downloadingId === doc.documentId}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#111820] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
                         title="Download file"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -561,7 +561,7 @@ export default function PropertyDocumentsSection({
             <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
               <div className="flex items-center gap-2">
                 <FileCheck2 className="w-5 h-5 text-[#3F7D58]" />
-                <h3 className="font-semibold text-base text-[#243447]">
+                <h3 className="font-semibold text-base text-[#111820]">
                   {resubmittingDoc ? 'Replace & Resubmit Property Document' : 'Upload Property Document'}
                 </h3>
               </div>
@@ -588,13 +588,13 @@ export default function PropertyDocumentsSection({
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-[#243447] mb-1">
+                <label className="block text-xs font-semibold text-[#111820] mb-1">
                   Document Type <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={documentType}
                   onChange={(e) => setDocumentType(e.target.value)}
-                  className="w-full text-sm rounded-lg border border-[#E3E8DF] bg-white text-[#243447] py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#3F7D58]"
+                  className="w-full text-sm rounded-lg border border-[#E3E8DF] bg-white text-[#111820] py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#3F7D58]"
                   disabled={isUploading || !!resubmittingDoc}
                 >
                   {Object.entries(PROPERTY_DOCUMENT_TYPES).map(([key, val]) => (
@@ -611,7 +611,7 @@ export default function PropertyDocumentsSection({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#243447] mb-1">
+                <label className="block text-xs font-semibold text-[#111820] mb-1">
                   Document File <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -628,7 +628,7 @@ export default function PropertyDocumentsSection({
 
               {selectedFile && (
                 <div className="p-3 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] text-xs space-y-1">
-                  <div className="font-semibold text-[#243447] flex items-center justify-between">
+                  <div className="font-semibold text-[#111820] flex items-center justify-between">
                     <span>{selectedFile.name}</span>
                     <span className="text-[#5B6875] font-normal">{formatFileSize(selectedFile.size)}</span>
                   </div>

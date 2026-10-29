@@ -24,7 +24,7 @@ export default function NavItem({
       className={`group inline-flex min-h-10 shrink-0 items-center justify-between gap-2 rounded-full px-3.5 py-2 text-sm transition-all duration-200 select-none ${
         isActive
           ? 'bg-[#3F7D58] text-white font-semibold shadow-sm shadow-[#3F7D58]/20'
-          : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] font-medium'
+          : 'text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] font-medium'
       }`}
     >
       <div className="flex items-center gap-2.5 min-w-0">

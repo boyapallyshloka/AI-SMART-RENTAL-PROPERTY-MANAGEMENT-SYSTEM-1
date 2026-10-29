@@ -48,7 +48,7 @@ export default function ScoutInput({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full text-xs sm:text-sm bg-[#F7F7F1] border border-[#E3E8DF] rounded-xl px-3.5 py-2.5 text-[#243447] placeholder-[#5B6875] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full text-xs sm:text-sm bg-[#F7F7F1] border border-[#E3E8DF] rounded-xl px-3.5 py-2.5 text-[#111820] placeholder-[#5B6875] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           aria-label="Message to SCOUT"
         />
       </div>

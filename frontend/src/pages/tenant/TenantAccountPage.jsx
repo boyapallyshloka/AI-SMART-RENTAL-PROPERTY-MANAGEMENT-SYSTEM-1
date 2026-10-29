@@ -74,7 +74,7 @@ export default function TenantAccountPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-xl font-bold text-[#243447]">
+                  <h1 className="text-xl font-bold text-[#111820]">
                     {profile?.name || 'My Account'}
                   </h1>
                   {profile?.status && <StatusBadge status={profile.status} size="sm" />}
@@ -95,7 +95,7 @@ export default function TenantAccountPage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors ${
               activeTab === 'profile'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <User className="w-4 h-4" />
@@ -107,7 +107,7 @@ export default function TenantAccountPage() {
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors ${
               activeTab === 'security'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <KeyRound className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function TenantAccountPage() {
                         <Icon className="w-3.5 h-3.5 text-[#3F7D58]" />
                         {label}
                       </span>
-                      <strong className="mt-1 block text-sm font-semibold text-[#243447] capitalize break-words">
+                      <strong className="mt-1 block text-sm font-semibold text-[#111820] capitalize break-words">
                         {value || '—'}
                       </strong>
                     </div>
@@ -151,7 +151,7 @@ export default function TenantAccountPage() {
           <div className="space-y-6">
             <section className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
               <div className="border-b border-[#E3E8DF] pb-3">
-                <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                <h2 className="text-base font-bold text-[#111820] flex items-center gap-2">
                   <KeyRound className="w-4 h-4 text-[#3F7D58]" />
                   <span>Account Password & Credentials</span>
                 </h2>

@@ -43,7 +43,7 @@ export default function RentalDemandPrediction() {
             id="demand-year"
             value={year}
             onChange={(event) => setYear(Number(event.target.value))}
-            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
+            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#111820] outline-none focus:border-[#3F7D58]"
           >
             {[now.getFullYear() - 1, now.getFullYear(), now.getFullYear() + 1].map((option) => (
               <option key={option} value={option}>{option}</option>
@@ -54,7 +54,7 @@ export default function RentalDemandPrediction() {
             id="demand-month"
             value={month}
             onChange={(event) => setMonth(Number(event.target.value))}
-            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
+            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#111820] outline-none focus:border-[#3F7D58]"
           >
             {months.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -70,7 +70,7 @@ export default function RentalDemandPrediction() {
               <Icon className="h-5 w-5" />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-[#243447]">{title}</p>
+              <p className="truncate text-sm font-semibold text-[#111820]">{title}</p>
               <p className="mt-0.5 text-xs text-[#60758A]">Forecast not available</p>
             </div>
             <span className="ml-auto text-lg font-semibold text-[#3F7D58]">—</span>

@@ -225,10 +225,10 @@ export default function ManagerProfileAddressForm({
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-5 text-xs">
       {/* Informational Guidance Notice */}
-      <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F0F4F8] border border-[#E3E8DF] text-[#243447]">
+      <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F0F4F8] border border-[#E3E8DF] text-[#111820]">
         <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <p className="font-semibold text-xs text-[#243447]">
+          <p className="font-semibold text-xs text-[#111820]">
             Property Manager Operational Address
           </p>
           <p className="text-[11px] text-[#5B6875] leading-relaxed">
@@ -351,7 +351,7 @@ export default function ManagerProfileAddressForm({
                   className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors border ${
                     formData.area.toLowerCase() === sugg.toLowerCase()
                       ? 'bg-[#3F7D58] text-white border-[#3F7D58] shadow-2xs'
-                      : 'bg-white text-[#243447] border-[#E3E8DF] hover:bg-slate-50'
+                      : 'bg-white text-[#111820] border-[#E3E8DF] hover:bg-slate-50'
                   }`}
                 >
                   {sugg}
@@ -449,7 +449,7 @@ export default function ManagerProfileAddressForm({
             <MapPin className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-[#243447]">
+            <h3 className="text-base font-bold text-[#111820]">
               Operational Profile & Address
             </h3>
             <span className="text-xs text-[#5B6875]">

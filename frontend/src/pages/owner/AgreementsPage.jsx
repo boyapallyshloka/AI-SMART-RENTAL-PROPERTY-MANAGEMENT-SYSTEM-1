@@ -11,7 +11,7 @@ import {
   updateAgreementMoveOut,
   AGREEMENT_STATUSES,
 } from '../../api/agreementApi'
-import { createInvoice } from '../../api/invoiceApi'
+import { getInvoices } from '../../api/invoiceApi'
 import { getOwnerApplications, getAllApplications } from '../../api/applicationApi'
 import { formatCurrency } from '../../utils/currency'
 import {
@@ -41,7 +41,6 @@ import {
   LogOut,
   X,
   FileCheck,
-  Receipt,
 } from 'lucide-react'
 
 // Date formatter
@@ -60,6 +59,97 @@ const formatDate = (dateStr) => {
   }
 }
 
+const getIndiaDateParts = () => {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date())
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]))
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    year: Number(values.year),
+    month: Number(values.month),
+    hour: Number(values.hour),
+  }
+}
+
+const addDays = (date, days) => {
+  const result = new Date(`${date}T00:00:00Z`)
+  result.setUTCDate(result.getUTCDate() + days)
+  return result.toISOString().slice(0, 10)
+}
+
+const formatDateOnly = (date) => {
+  if (!date) return '—'
+  const [year, month, day] = date.split('-').map(Number)
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString('en-IN', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
+const getNextInvoiceGenerationDate = (agreement, invoices, indiaNow) => {
+  if (String(agreement.status || '').toUpperCase() !== 'ACTIVE') return null
+
+  const startDate = agreement.startDate
+  const endDate = agreement.endDate
+  const dueDay = Number(agreement.dueDay)
+  if (!startDate || !endDate || !Number.isInteger(dueDay) || dueDay < 1 || dueDay > 31) {
+    return 'unavailable'
+  }
+  if (endDate < startDate) return null
+
+  const [startYear, startMonth] = startDate.split('-').map(Number)
+  const [endYear, endMonth] = endDate.split('-').map(Number)
+  const currentPeriod = indiaNow.year * 12 + indiaNow.month - 1
+  const startPeriod = startYear * 12 + startMonth - 1
+  const endPeriod = endYear * 12 + endMonth - 1
+  const scheduledDates = []
+
+  for (let period = Math.max(currentPeriod, startPeriod); period <= endPeriod; period += 1) {
+    if (period < startPeriod || period > endPeriod) continue
+
+    const year = Math.floor(period / 12)
+    const monthIndex = period % 12
+    const month = monthIndex + 1
+    const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate()
+    let dueDate = `${year}-${String(month).padStart(2, '0')}-${String(Math.min(dueDay, daysInMonth)).padStart(2, '0')}`
+    const billingPeriod = `${year}-${String(month).padStart(2, '0')}`
+
+    if (billingPeriod === startDate.slice(0, 7) && dueDate < startDate) {
+      dueDate = startDate
+    }
+
+    let generationDate = addDays(dueDate, -5)
+    if (billingPeriod === startDate.slice(0, 7) && generationDate < startDate) {
+      generationDate = startDate
+    }
+
+    const invoiceExists = invoices.some((invoice) =>
+      Number(invoice.agreementId) === Number(agreement.agreementId)
+      && Number(invoice.billingMonth) === month
+      && Number(invoice.billingYear) === year
+    )
+    if (invoiceExists) continue
+
+    // The backend checks eligible periods every day at 1:00 a.m. India time.
+    const nextRunDate = generationDate > indiaNow.date
+      ? generationDate
+      : indiaNow.hour < 1
+        ? indiaNow.date
+        : addDays(indiaNow.date, 1)
+    scheduledDates.push(nextRunDate)
+  }
+
+  return scheduledDates.sort()[0] || null
+}
+
 export default function AgreementsPage() {
   const location = useLocation()
   const { user } = useAuth()
@@ -72,6 +162,8 @@ export default function AgreementsPage() {
   const basePath = isManager ? '/manager' : '/owner'
 
   const [agreements, setAgreements] = useState([])
+  const [invoices, setInvoices] = useState([])
+  const [invoiceDataAvailable, setInvoiceDataAvailable] = useState(true)
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState(null)
@@ -84,7 +176,6 @@ export default function AgreementsPage() {
     location.state?.errorMessage || ''
   )
   const [actionLoadingId, setActionLoadingId] = useState(null)
-  const [generatingInvoiceId, setGeneratingInvoiceId] = useState(null)
 
   // Details Modal State
   const [selectedDetails, setSelectedDetails] = useState(null)
@@ -109,11 +200,12 @@ export default function AgreementsPage() {
 
     try {
       // 1. Fetch real agreements and applications concurrently
-      const [agreementsRes, appsRes] = await Promise.allSettled([
+      const [agreementsRes, appsRes, invoicesRes] = await Promise.allSettled([
         getAgreements(),
         user?.role === 'SUPER_ADMIN'
           ? getAllApplications()
           : getOwnerApplications(),
+        getInvoices(),
       ])
 
       if (agreementsRes.status === 'rejected') {
@@ -130,6 +222,14 @@ export default function AgreementsPage() {
             ? appsRes.value
             : appsRes.value?.data || []
           : []
+
+      const rawInvoices = invoicesRes.status === 'fulfilled'
+        ? Array.isArray(invoicesRes.value)
+          ? invoicesRes.value
+          : invoicesRes.value?.data || []
+        : []
+      setInvoices(rawInvoices)
+      setInvoiceDataAvailable(invoicesRes.status === 'fulfilled')
 
       // 2. Build lookup map for application details (tenant name, property, unit)
       const appMap = new Map()
@@ -176,6 +276,8 @@ export default function AgreementsPage() {
       setIsRefreshing(false)
     }
   }, [user?.role])
+
+  const indiaNow = useMemo(() => getIndiaDateParts(), [agreements, invoices])
 
   useEffect(() => {
     loadData()
@@ -254,29 +356,6 @@ export default function AgreementsPage() {
       )
     } finally {
       setActionLoadingId(null)
-    }
-  }
-
-  // Generate monthly rent invoice for an ACTIVE agreement
-  const handleGenerateInvoiceForAgreement = async (agr) => {
-    if (!agr || !agr.agreementId) return
-    setGeneratingInvoiceId(agr.agreementId)
-
-    try {
-      const res = await createInvoice({ agreementId: agr.agreementId })
-      const newInv = res?.data || res
-      setSuccessMessage(
-        `Rent invoice ${newInv?.invoiceNumber || ''} generated successfully for Agreement #${agr.agreementId}! You can view and manage it under Payments.`
-      )
-    } catch (err) {
-      console.error('Failed to generate rent invoice:', err)
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'Failed to generate rent invoice for this agreement.'
-      alert(msg)
-    } finally {
-      setGeneratingInvoiceId(null)
     }
   }
 
@@ -413,10 +492,10 @@ export default function AgreementsPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
               Lease Agreements
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Manage residential contracts, lease terms, rent schedules, and official documents
             </p>
           </div>
@@ -467,7 +546,7 @@ export default function AgreementsPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -478,7 +557,7 @@ export default function AgreementsPage() {
           <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
-              <strong className="text-[#243447]">
+              <strong className="text-[#111820]">
                 {filteredAgreements.length}
               </strong>{' '}
               of {agreements.length} lease agreements
@@ -533,6 +612,7 @@ export default function AgreementsPage() {
                     <th className="py-3.5 px-4">Tenant</th>
                     <th className="py-3.5 px-4">Property &amp; Unit</th>
                     <th className="py-3.5 px-4">Term Dates</th>
+                    <th className="py-3.5 px-4">Next Invoice Generation</th>
                     <th className="py-3.5 px-4">Monthly Rent</th>
                     <th className="py-3.5 px-4">Deposit</th>
                     <th className="py-3.5 px-4 text-center">Status</th>
@@ -545,6 +625,9 @@ export default function AgreementsPage() {
                     const isDraft = statusUpper === 'DRAFT'
                     const isActive = statusUpper === 'ACTIVE'
                     const isUpdating = actionLoadingId === agr.agreementId
+                    const nextGenerationDate = invoiceDataAvailable
+                      ? getNextInvoiceGenerationDate(agr, invoices, indiaNow)
+                      : undefined
 
                     return (
                       <tr
@@ -564,7 +647,7 @@ export default function AgreementsPage() {
                         </td>
 
                         {/* Tenant */}
-                        <td className="py-4 px-4 whitespace-nowrap font-medium text-[#243447]">
+                        <td className="py-4 px-4 whitespace-nowrap font-medium text-[#111820]">
                           <div className="flex items-center gap-2">
                             <User className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                             <div>
@@ -580,7 +663,7 @@ export default function AgreementsPage() {
 
                         {/* Property & Unit */}
                         <td className="py-4 px-4 min-w-[180px]">
-                          <p className="font-semibold text-[#243447] text-xs truncate">
+                          <p className="font-semibold text-[#111820] text-xs truncate">
                             {agr.propertyName}
                           </p>
                           <span className="text-xs text-[#5B6875]">
@@ -599,8 +682,31 @@ export default function AgreementsPage() {
                           </div>
                         </td>
 
+                        {/* Next Automatic Invoice Generation */}
+                        <td className="py-4 px-4 whitespace-nowrap text-xs text-[#5B6875]">
+                          {nextGenerationDate === undefined ? (
+                            <span title="Invoice records could not be loaded">Unavailable</span>
+                          ) : nextGenerationDate === 'unavailable' ? (
+                            <span title="The agreement is missing a valid due day or lease dates">Schedule unavailable</span>
+                          ) : nextGenerationDate ? (
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
+                              <div>
+                                <span className="font-medium text-[#111820]">
+                                  {formatDateOnly(nextGenerationDate)}
+                                </span>
+                                <span className="block text-[10px] text-[#5B6875]">
+                                  1:00 AM IST
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <span>{isActive ? 'No future invoice' : '—'}</span>
+                          )}
+                        </td>
+
                         {/* Monthly Rent */}
-                        <td className="py-4 px-4 whitespace-nowrap font-bold text-[#243447]">
+                        <td className="py-4 px-4 whitespace-nowrap font-bold text-[#111820]">
                           {formatCurrency(agr.monthlyRent)}/mo
                         </td>
 
@@ -659,38 +765,16 @@ export default function AgreementsPage() {
 
                             {/* Record Move-Out (ACTIVE -> TERMINATED) */}
                             {isActive && (
-                              <>
-                                <button
-                                  type="button"
-                                  disabled={
-                                    isUpdating ||
-                                    generatingInvoiceId === agr.agreementId
-                                  }
-                                  onClick={() =>
-                                    handleGenerateInvoiceForAgreement(agr)
-                                  }
-                                  className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#C2D8E8] hover:bg-[#d6e7f4] transition-colors cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
-                                  title="Generate monthly rent invoice for this active agreement"
-                                >
-                                  {generatingInvoiceId === agr.agreementId ? (
-                                    <RefreshCw className="w-3 h-3 animate-spin text-[#3F7D58]" />
-                                  ) : (
-                                    <Receipt className="w-3 h-3 text-[#3F7D58]" />
-                                  )}
-                                  <span>Generate Invoice</span>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  disabled={isUpdating}
-                                  onClick={() => handleOpenMoveOutModal(agr)}
-                                  className="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer inline-flex items-center gap-1"
-                                  title="Record move-out and terminate lease"
-                                >
-                                  <LogOut className="w-3 h-3" />
-                                  <span>Move Out</span>
-                                </button>
-                              </>
+                              <button
+                                type="button"
+                                disabled={isUpdating}
+                                onClick={() => handleOpenMoveOutModal(agr)}
+                                className="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer inline-flex items-center gap-1"
+                                title="Record move-out and terminate lease"
+                              >
+                                <LogOut className="w-3 h-3" />
+                                <span>Move Out</span>
+                              </button>
                             )}
                           </div>
                         </td>
@@ -705,7 +789,7 @@ export default function AgreementsPage() {
 
         {/* Agreement Details Modal */}
         {selectedDetails && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111820]/60 backdrop-blur-xs animate-in fade-in">
             <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               {/* Modal Header */}
               <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
@@ -715,7 +799,7 @@ export default function AgreementsPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h2 className="text-lg font-bold text-[#243447]">
+                      <h2 className="text-lg font-bold text-[#111820]">
                         Agreement {selectedDetails.agreementNumber}
                       </h2>
                       <StatusBadge status={selectedDetails.status} size="sm" />
@@ -730,7 +814,7 @@ export default function AgreementsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedDetails(null)}
-                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
+                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -751,7 +835,7 @@ export default function AgreementsPage() {
                       <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Tenant Information
                     </span>
-                    <p className="font-semibold text-base text-[#243447]">
+                    <p className="font-semibold text-base text-[#111820]">
                       {selectedDetails.tenantName || `Tenant #${selectedDetails.tenantId}`}
                     </p>
                     {selectedDetails.tenantEmail && (
@@ -767,7 +851,7 @@ export default function AgreementsPage() {
                       <Building2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Rented Unit &amp; Property
                     </span>
-                    <p className="font-semibold text-base text-[#243447]">
+                    <p className="font-semibold text-base text-[#111820]">
                       {selectedDetails.propertyName}
                     </p>
                     <p className="text-xs text-[#5B6875]">
@@ -789,25 +873,25 @@ export default function AgreementsPage() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                     <div>
                       <span className="text-[#5B6875] block">Start Date</span>
-                      <strong className="text-[#243447] text-sm font-semibold">
+                      <strong className="text-[#111820] text-sm font-semibold">
                         {formatDate(selectedDetails.startDate)}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">End Date</span>
-                      <strong className="text-[#243447] text-sm font-semibold">
+                      <strong className="text-[#111820] text-sm font-semibold">
                         {formatDate(selectedDetails.endDate)}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Move-In Date</span>
-                      <strong className="text-[#243447] text-sm font-semibold">
+                      <strong className="text-[#111820] text-sm font-semibold">
                         {formatDate(selectedDetails.moveInDate || selectedDetails.startDate)}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[#5B6875] block">Move-Out Date</span>
-                      <strong className="text-[#243447] text-sm font-semibold">
+                      <strong className="text-[#111820] text-sm font-semibold">
                         {selectedDetails.moveOutDate
                           ? formatDate(selectedDetails.moveOutDate)
                           : 'Not recorded'}
@@ -820,7 +904,7 @@ export default function AgreementsPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Monthly Rent</span>
-                    <p className="text-base font-bold text-[#243447] mt-0.5">
+                    <p className="text-base font-bold text-[#111820] mt-0.5">
                       {formatCurrency(selectedDetails.monthlyRent)}
                     </p>
                     <span className="text-[10px] text-[#5B6875]">Due on day {selectedDetails.dueDay ?? '—'}</span>
@@ -828,7 +912,7 @@ export default function AgreementsPage() {
 
                   <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Security Deposit</span>
-                    <p className="text-base font-bold text-[#243447] mt-0.5">
+                    <p className="text-base font-bold text-[#111820] mt-0.5">
                       {formatCurrency(selectedDetails.securityDeposit)}
                     </p>
                     <span className="text-[10px] text-[#5B6875]">Refundable</span>
@@ -836,7 +920,7 @@ export default function AgreementsPage() {
 
                   <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Rent Due Day</span>
-                    <p className="text-base font-bold text-[#243447] mt-0.5">
+                    <p className="text-base font-bold text-[#111820] mt-0.5">
                       {selectedDetails.dueDay == null ? '—' : `Day ${selectedDetails.dueDay}`}
                     </p>
                     <span className="text-[10px] text-[#5B6875]">Of each month</span>
@@ -844,7 +928,7 @@ export default function AgreementsPage() {
 
                   <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Notice Period</span>
-                    <p className="text-base font-bold text-[#243447] mt-0.5">
+                    <p className="text-base font-bold text-[#111820] mt-0.5">
                       {selectedDetails.noticePeriodDays != null ? `${selectedDetails.noticePeriodDays} Days` : '30 Days'}
                     </p>
                     <span className="text-[10px] text-[#5B6875]">Before vacancy</span>
@@ -856,7 +940,7 @@ export default function AgreementsPage() {
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     Terms &amp; Conditions / Special Provisions
                   </span>
-                  <p className="text-xs text-[#243447] whitespace-pre-wrap leading-relaxed">
+                  <p className="text-xs text-[#111820] whitespace-pre-wrap leading-relaxed">
                     {selectedDetails.termsAndConditions ||
                       'Standard residential lease terms apply. Tenant agrees to comply with community guidelines and local rental ordinances.'}
                   </p>
@@ -869,7 +953,7 @@ export default function AgreementsPage() {
                       <FileCheck className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm text-[#243447]">
+                      <p className="font-semibold text-sm text-[#111820]">
                         Official Lease Agreement PDF
                       </p>
                       <p className="text-xs text-[#5B6875]">
@@ -910,42 +994,18 @@ export default function AgreementsPage() {
                   )}
 
                   {String(selectedDetails.status).toUpperCase() === 'ACTIVE' && (
-                    <>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        disabled={
-                          generatingInvoiceId === selectedDetails.agreementId
-                        }
-                        onClick={() =>
-                          handleGenerateInvoiceForAgreement(selectedDetails)
-                        }
-                        leftIcon={
-                          generatingInvoiceId === selectedDetails.agreementId ? (
-                            <RefreshCw className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Receipt className="w-4 h-4" />
-                          )
-                        }
-                      >
-                        {generatingInvoiceId === selectedDetails.agreementId
-                          ? 'Generating Invoice...'
-                          : 'Generate Rent Invoice'}
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          const target = { ...selectedDetails }
-                          setSelectedDetails(null)
-                          handleOpenMoveOutModal(target)
-                        }}
-                        leftIcon={<LogOut className="w-4 h-4" />}
-                      >
-                        Record Move-Out
-                      </Button>
-                    </>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const target = { ...selectedDetails }
+                        setSelectedDetails(null)
+                        handleOpenMoveOutModal(target)
+                      }}
+                      leftIcon={<LogOut className="w-4 h-4" />}
+                    >
+                      Record Move-Out
+                    </Button>
                   )}
                 </div>
 
@@ -963,7 +1023,7 @@ export default function AgreementsPage() {
 
         {/* Record Move-Out Modal */}
         {moveOutTarget && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111820]/60 backdrop-blur-xs animate-in fade-in">
             <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-md overflow-hidden">
               <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
                 <div className="flex items-center gap-2.5">
@@ -971,7 +1031,7 @@ export default function AgreementsPage() {
                     <LogOut className="w-4 h-4 text-amber-800" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#243447] text-base">
+                    <h3 className="font-bold text-[#111820] text-base">
                       Record Tenant Move-Out
                     </h3>
                     <p className="text-xs text-[#5B6875]">
@@ -984,7 +1044,7 @@ export default function AgreementsPage() {
                   type="button"
                   onClick={() => setMoveOutTarget(null)}
                   disabled={moveOutLoading}
-                  className="p-1 rounded-lg text-[#5B6875] hover:text-[#243447]"
+                  className="p-1 rounded-lg text-[#5B6875] hover:text-[#111820]"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -993,7 +1053,7 @@ export default function AgreementsPage() {
               <form onSubmit={handleConfirmMoveOut} className="p-5 space-y-4">
                 <p className="text-xs text-[#5B6875] leading-relaxed">
                   Recording the move-out will terminate this active lease agreement and automatically release{' '}
-                  <strong className="text-[#243447]">{moveOutTarget.unit}</strong> back to vacant status.
+                  <strong className="text-[#111820]">{moveOutTarget.unit}</strong> back to vacant status.
                 </p>
 
                 {moveOutError && (

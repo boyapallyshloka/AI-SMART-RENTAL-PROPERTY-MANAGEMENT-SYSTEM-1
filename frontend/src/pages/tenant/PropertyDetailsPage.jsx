@@ -313,7 +313,7 @@ export default function PropertyDetailsPage({
             </div>
           )}
 
-          <h2 className="text-xl font-bold text-[#243447]">
+          <h2 className="text-xl font-bold text-[#111820]">
             {is403
               ? 'Access Restricted (403 Forbidden)'
               : is404
@@ -337,7 +337,7 @@ export default function PropertyDetailsPage({
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center gap-1.5 rounded-md border border-[#E3E8DF] bg-white px-4 py-2 text-xs font-semibold text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-md border border-[#E3E8DF] bg-white px-4 py-2 text-xs font-semibold text-[#111820] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#5B6875]" />
               <span>Back to Properties</span>
@@ -368,7 +368,7 @@ export default function PropertyDetailsPage({
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] mb-3">
             <Building2 className="h-7 w-7" />
           </div>
-          <h2 className="text-xl font-bold text-[#243447]">No Property Selected</h2>
+          <h2 className="text-xl font-bold text-[#111820]">No Property Selected</h2>
           <p className="text-sm text-[#5B6875] mt-1">
             Please browse the available properties to view full floor plans, unit pricing, and verified amenities.
           </p>
@@ -399,7 +399,7 @@ export default function PropertyDetailsPage({
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex min-w-0 items-center gap-2 self-start text-sm font-semibold text-[#243447] hover:text-[#3F7D58] transition-colors cursor-pointer"
+            className="inline-flex min-w-0 items-center gap-2 self-start text-sm font-semibold text-[#111820] hover:text-[#3F7D58] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-[#3F7D58]" />
             <span>Back to All Properties</span>
@@ -409,7 +409,7 @@ export default function PropertyDetailsPage({
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white text-xs font-medium text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white text-xs font-medium text-[#111820] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
             >
               <Share2 className="w-3.5 h-3.5 text-[#5B6875]" />
               <span>{copiedLink ? 'Link Copied!' : 'Share'}</span>
@@ -429,11 +429,11 @@ export default function PropertyDetailsPage({
             </div>
           </div>
 
-          <h1 className="break-words text-2xl font-extrabold leading-tight tracking-tight text-[#243447] sm:text-3xl">
+          <h1 className="break-words text-2xl font-extrabold leading-tight tracking-tight text-[#111820] sm:text-3xl">
             {property.propertyName}
           </h1>
 
-          <p className="flex min-w-0 items-start gap-1.5 text-sm leading-5 text-[#5B6875]">
+          <p className="flex min-w-0 items-start gap-1.5 text-sm leading-5 text-[#111820]">
             <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0" />
             <span className="min-w-0 break-words">{formattedAddress || 'Address details in specs below'}</span>
           </p>
@@ -453,7 +453,7 @@ export default function PropertyDetailsPage({
                     e.currentTarget.style.display = 'none'
                   }}
                 />
-                <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-md bg-[#243447]/80 text-white text-xs font-medium backdrop-blur-xs">
+                <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-md bg-[#111820]/80 text-white text-xs font-medium backdrop-blur-xs">
                   Photo {activeImageIndex + 1} of {imageList.length}
                 </div>
               </div>
@@ -492,7 +492,7 @@ export default function PropertyDetailsPage({
               <div className="p-4 rounded-full bg-[#EDF4ED] text-[#3F7D58]">
                 <Building className="w-8 h-8" />
               </div>
-              <p className="text-sm font-semibold text-[#243447]">No Photos Uploaded Yet</p>
+              <p className="text-sm font-semibold text-[#111820]">No Photos Uploaded Yet</p>
               <p className="text-xs text-[#5B6875] max-w-sm">
                 Floor plans, unit specifications, and building details for {property.propertyName} are listed in full below.
               </p>
@@ -528,7 +528,7 @@ export default function PropertyDetailsPage({
                   </span>
                   {getPropertyStatusBadge(property.status)}
                 </div>
-                <h3 className="text-lg font-bold text-[#243447] pt-1">
+                <h3 className="text-lg font-bold text-[#111820] pt-1">
                   {property.propertyName}
                 </h3>
                 <p className="text-xs text-[#5B6875]">
@@ -543,7 +543,7 @@ export default function PropertyDetailsPage({
                 {property.propertyType && (
                   <div className="flex items-center justify-between py-1">
                     <span>Property Type</span>
-                    <span className="font-semibold text-[#243447] capitalize">
+                    <span className="font-semibold text-[#111820] capitalize">
                       {String(property.propertyType).replace(/_/g, ' ').toLowerCase()}
                     </span>
                   </div>
@@ -552,7 +552,7 @@ export default function PropertyDetailsPage({
                 {property.totalArea != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Total Area</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {property.totalArea.toLocaleString('en-IN')} sq ft
                     </span>
                   </div>
@@ -567,32 +567,32 @@ export default function PropertyDetailsPage({
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.securityDeposit != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Security Deposit</span>
-                    <span className="font-semibold text-[#243447]">₹{Number(property.securityDeposit).toLocaleString('en-IN')}</span>
+                    <span className="font-semibold text-[#111820]">₹{Number(property.securityDeposit).toLocaleString('en-IN')}</span>
                   </div>
                 )}
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bedrooms != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Bedrooms / BHK</span>
-                    <span className="font-semibold text-[#243447]">{property.bedrooms} BHK</span>
+                    <span className="font-semibold text-[#111820]">{property.bedrooms} BHK</span>
                   </div>
                 )}
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.bathrooms != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Bathrooms</span>
-                    <span className="font-semibold text-[#243447]">{property.bathrooms}</span>
+                    <span className="font-semibold text-[#111820]">{property.bathrooms}</span>
                   </div>
                 )}
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.totalFloors != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Total Floors</span>
-                    <span className="font-semibold text-[#243447]">{property.totalFloors}</span>
+                    <span className="font-semibold text-[#111820]">{property.totalFloors}</span>
                   </div>
                 )}
 
                 {property.furnishingStatus && (
                   <div className="flex items-center justify-between py-1">
                     <span>Furnishing</span>
-                    <span className="font-semibold text-[#243447] capitalize">
+                    <span className="font-semibold text-[#111820] capitalize">
                       {String(property.furnishingStatus).replace(/_/g, ' ').toLowerCase()}
                     </span>
                   </div>
@@ -601,7 +601,7 @@ export default function PropertyDetailsPage({
                 {property.parkingAvailable != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Parking</span>
-                    <span className="font-semibold text-[#243447]">
+                    <span className="font-semibold text-[#111820]">
                       {property.parkingAvailable ? 'Available on premise' : 'No dedicated parking'}
                     </span>
                   </div>
@@ -610,14 +610,14 @@ export default function PropertyDetailsPage({
                 {property.yearBuilt != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Year Built</span>
-                    <span className="font-semibold text-[#243447]">{property.yearBuilt}</span>
+                    <span className="font-semibold text-[#111820]">{property.yearBuilt}</span>
                   </div>
                 )}
 
                 {isUserTenant && property.ownerName && (
                   <div className="flex items-center justify-between py-1">
                     <span>Property Manager</span>
-                    <span className="font-semibold text-[#243447]">{property.ownerName}</span>
+                    <span className="font-semibold text-[#111820]">{property.ownerName}</span>
                   </div>
                 )}
               </div>
@@ -644,7 +644,7 @@ export default function PropertyDetailsPage({
               <div className="rounded-md bg-[#F7F7F1] border border-[#E3E8DF] p-3 flex items-start gap-2.5 text-[11px] text-[#5B6875]">
                 <ShieldCheck className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                 <span>
-                  <strong className="text-[#243447]">SmartEstate Tenant Protection:</strong> Direct digital lease signing, verified owner listings, and transparent security deposit terms.
+                  <strong className="text-[#111820]">SmartEstate Tenant Protection:</strong> Direct digital lease signing, verified owner listings, and transparent security deposit terms.
                 </span>
               </div>
             </div>

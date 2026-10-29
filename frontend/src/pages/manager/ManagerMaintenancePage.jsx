@@ -664,11 +664,11 @@ export default function ManagerMaintenancePage() {
           <div className="space-y-1">
 
             <div>
-              <h1 className="text-2xl font-bold text-[#243447]">
+              <h1 className="text-2xl font-bold text-[#111820]">
                 Maintenance
               </h1>
 
-              <p className="text-sm text-[#5B6875] mt-1">
+              <p className="text-sm text-[#111820] mt-1">
                 Manage maintenance requests
               </p>
             </div>
@@ -796,7 +796,7 @@ export default function ManagerMaintenancePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by ticket number, category, description..."
-                className="w-full h-12 pl-11 pr-4 rounded-lg border border-[#E3E8DF] bg-white text-sm text-[#243447] placeholder:text-[#8A9AAF] outline-none focus:ring-2 focus:ring-[#3157AD]/20 focus:border-[#3157AD]"
+                className="w-full h-12 pl-11 pr-4 rounded-lg border border-[#E3E8DF] bg-white text-sm text-[#111820] placeholder:text-[#8A9AAF] outline-none focus:ring-2 focus:ring-[#3157AD]/20 focus:border-[#3157AD]"
               />
             </div>
 
@@ -838,7 +838,7 @@ export default function ManagerMaintenancePage() {
                 onClick={resetFilters}
                 title="Reset filters"
                 aria-label="Reset filters"
-                className="h-12 w-12 rounded-lg border border-[#E3E8DF] text-[#657168] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0 flex items-center justify-center"
+                className="h-12 w-12 rounded-lg border border-[#E3E8DF] text-[#657168] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors shrink-0 flex items-center justify-center"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -866,13 +866,13 @@ export default function ManagerMaintenancePage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
-                    <th className="py-3.5 pl-6 pr-4 text-[#243447]">Ticket #</th>
-                    <th className="py-3.5 px-4 text-[#243447]">Category</th>
-                    <th className="py-3.5 px-4 text-[#243447]">Property & Unit</th>
-                    <th className="py-3.5 px-4 text-[#243447]">Priority</th>
-                    <th className="py-3.5 px-4 text-[#243447]">Assigned Worker</th>
-                    <th className="py-3.5 px-4 text-[#243447]">Status</th>
-                    <th className="py-3.5 pl-4 pr-6 text-right text-[#243447]">Actions</th>
+                    <th className="py-3.5 pl-6 pr-4 text-[#111820]">Ticket #</th>
+                    <th className="py-3.5 px-4 text-[#111820]">Category</th>
+                    <th className="py-3.5 px-4 text-[#111820]">Property & Unit</th>
+                    <th className="py-3.5 px-4 text-[#111820]">Priority</th>
+                    <th className="py-3.5 px-4 text-[#111820]">Assigned Worker</th>
+                    <th className="py-3.5 px-4 text-[#111820]">Status</th>
+                    <th className="py-3.5 pl-4 pr-6 text-right text-[#111820]">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E3E8DF] text-sm">
@@ -889,7 +889,7 @@ export default function ManagerMaintenancePage() {
                           {formatCategoryLabel(req.category)}
                         </td>
                         <td className="py-4 px-4 text-xs">
-                          <span className="font-medium text-[#243447] block">
+                          <span className="font-medium text-[#111820] block">
                             {formatPropertyName(propertyMap[req.propertyId]) || (req.propertyId ? `Property #${req.propertyId}` : '—')}
                           </span>
                           <span className="text-[#5B6875] text-[11px]">
@@ -907,7 +907,7 @@ export default function ManagerMaintenancePage() {
                         </td>
                         <td className="py-4 px-4 text-xs whitespace-nowrap">
                           {assignmentObj?.worker ? (
-                            <span className="inline-flex items-center gap-1 font-medium text-[#243447]">
+                            <span className="inline-flex items-center gap-1 font-medium text-[#111820]">
                               <HardHat className="w-3.5 h-3.5 text-[#3F7D58]" />
                               {assignmentObj.worker.name}
                             </span>
@@ -945,7 +945,7 @@ export default function ManagerMaintenancePage() {
             <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
               <div className="p-6 border-b border-[#E3E8DF] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <h3 className="text-lg font-bold text-[#243447] font-mono">
+                  <h3 className="text-lg font-bold text-[#111820] font-mono">
                     Ticket #{selectedTicket.requestId || selectedTicket.id}
                   </h3>
                   <StatusBadge status={formatStatusLabel(selectedTicket.status)} size="sm" />
@@ -960,13 +960,13 @@ export default function ManagerMaintenancePage() {
                 <button
                   type="button"
                   onClick={() => setSelectedTicket(null)}
-                  className="p-1 rounded-md text-[#5B6875] hover:text-[#243447]"
+                  className="p-1 rounded-md text-[#5B6875] hover:text-[#111820]"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="p-6 overflow-y-auto space-y-5 text-xs text-[#243447]">
+              <div className="p-6 overflow-y-auto space-y-5 text-xs text-[#111820]">
                 {/* Issue Details */}
                 <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2">
                   <span className="font-bold text-xs text-[#5B6875] uppercase tracking-wider block">
@@ -974,16 +974,16 @@ export default function ManagerMaintenancePage() {
                   </span>
                   <p className="text-xs leading-relaxed">{selectedTicket.description || 'No description.'}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-[#E3E8DF] text-xs">
-                    <div className="flex items-center gap-1.5 text-[#243447]">
+                    <div className="flex items-center gap-1.5 text-[#111820]">
                       <Building2 className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                       <span className="text-[#5B6875]">Property:</span>
                       <strong className="font-semibold truncate">{displayModalPropertyName}</strong>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[#243447]">
+                    <div className="flex items-center gap-1.5 text-[#111820]">
                       <span className="text-[#5B6875]">Unit:</span>
                       <strong className="font-semibold">{displayModalUnitNumber}</strong>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[#243447]">
+                    <div className="flex items-center gap-1.5 text-[#111820]">
                       <Users className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                       <span className="text-[#5B6875]">Tenant:</span>
                       <strong className="font-semibold truncate">{displayModalTenantName}</strong>
@@ -1014,7 +1014,7 @@ export default function ManagerMaintenancePage() {
                     <span className="font-bold text-[#3F7D58] flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" /> AI Risk Forecast:
                     </span>
-                    <p className="text-[#243447]">
+                    <p className="text-[#111820]">
                       Risk Level: <strong>{modalPrediction.maintenance_risk?.risk_level || '—'}</strong> &bull; Failure Probability: <strong>{modalPrediction.maintenance_risk?.probability == null ? '—' : `${(Number(modalPrediction.maintenance_risk.probability) * 100).toFixed(1)}%`}</strong> &bull; Forecasted Cost: <strong>{modalPrediction.next_month_maintenance_cost == null ? '—' : `₹${Number(modalPrediction.next_month_maintenance_cost).toFixed(2)}`}</strong>
                     </p>
                   </div>
@@ -1033,7 +1033,7 @@ export default function ManagerMaintenancePage() {
                         onClick={() => handleModalStatusChange(st)}
                         className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${String(selectedTicket.status).toUpperCase() === st
                           ? 'bg-[#3F7D58] text-white border-[#3F7D58]'
-                          : 'bg-[#F7F7F1] text-[#243447] border-[#E3E8DF] hover:bg-[#EDF4ED]'
+                          : 'bg-[#F7F7F1] text-[#111820] border-[#E3E8DF] hover:bg-[#EDF4ED]'
                           }`}
                       >
                         {formatStatusLabel(st)}

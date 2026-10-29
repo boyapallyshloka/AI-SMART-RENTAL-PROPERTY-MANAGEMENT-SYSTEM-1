@@ -139,7 +139,7 @@ export default function EditPropertyPage() {
             {property.name}
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-semibold">Edit</span>
+          <span className="text-[#111820] font-semibold">Edit</span>
         </div>
 
         {/* Error Alert Banner */}
@@ -166,10 +166,10 @@ export default function EditPropertyPage() {
               <Edit className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 Edit Property Details
               </h1>
-              <p className="text-xs sm:text-sm text-[#5B6875] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#111820] mt-0.5">
                 Update specifications, rent pricing, amenities, and media assets
               </p>
             </div>

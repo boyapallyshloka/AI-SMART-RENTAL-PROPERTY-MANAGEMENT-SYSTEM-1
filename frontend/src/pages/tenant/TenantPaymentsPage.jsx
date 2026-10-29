@@ -605,10 +605,10 @@ export default function TenantPaymentsPage() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#243447]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111820]">
               Rent Invoices &amp; Payments
             </h1>
-            <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+            <p className="text-xs sm:text-sm text-[#111820] mt-1">
               Review your monthly rent billing statements, pay dues, and track payment transactions
             </p>
           </div>
@@ -647,7 +647,7 @@ export default function TenantPaymentsPage() {
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block">
                     Upcoming Due
                   </span>
-                  <div className="text-2xl font-bold text-[#243447] mt-1">
+                  <div className="text-2xl font-bold text-[#111820] mt-1">
                     {upcomingInvoice
                       ? `₹${Number(upcomingInvoice.remainingAmount || upcomingInvoice.amount).toLocaleString('en-IN')}`
                       : '₹0'}
@@ -705,7 +705,7 @@ export default function TenantPaymentsPage() {
               <div className="p-4 sm:p-5 border-b border-[#E3E8DF] flex items-center justify-between flex-wrap gap-2">
                 <span className="text-xs text-[#5B6875]">
                   Displaying{' '}
-                  <strong className="text-[#243447]">
+                  <strong className="text-[#111820]">
                     {invoices.length}
                   </strong>{' '}
                   rent billing records for {tenantDisplayName}
@@ -721,6 +721,7 @@ export default function TenantPaymentsPage() {
                     <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                       <th className="py-3.5 pl-6 pr-4">Invoice #</th>
                       <th className="py-3.5 px-4">Period</th>
+                      <th className="py-3.5 px-4">Invoice Date</th>
                       <th className="py-3.5 px-4">Property &amp; Unit</th>
                       <th className="py-3.5 px-4">Due Date</th>
                       <th className="py-3.5 px-4">Total Amount</th>
@@ -747,13 +748,21 @@ export default function TenantPaymentsPage() {
                           </td>
 
                           {/* Billing Period */}
-                          <td className="py-4 px-4 whitespace-nowrap text-xs text-[#243447]">
+                          <td className="py-4 px-4 whitespace-nowrap text-xs text-[#111820]">
                             {formatMonthYear(inv.billingMonth, inv.billingYear)}
+                          </td>
+
+                          {/* Invoice Generation Date */}
+                          <td className="py-4 px-4 whitespace-nowrap text-xs text-[#5B6875]">
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
+                              <span>{formatDate(inv.invoiceDate)}</span>
+                            </div>
                           </td>
 
                           {/* Property & Unit */}
                           <td className="py-4 px-4 min-w-[170px]">
-                            <p className="font-semibold text-[#243447] text-xs truncate">
+                            <p className="font-semibold text-[#111820] text-xs truncate">
                               {inv.propertyName}
                             </p>
                             <span className="text-xs text-[#5B6875]">
@@ -770,7 +779,7 @@ export default function TenantPaymentsPage() {
                           </td>
 
                           {/* Total Amount */}
-                          <td className="py-4 px-4 whitespace-nowrap font-bold text-[#243447]">
+                          <td className="py-4 px-4 whitespace-nowrap font-bold text-[#111820]">
                             {formatCurrency(inv.amount)}
                           </td>
 
@@ -875,7 +884,7 @@ export default function TenantPaymentsPage() {
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-[#243447]">
+                    <h2 className="text-base font-bold text-[#111820]">
                       Settle Rent Payment
                     </h2>
                     <p className="text-xs text-[#5B6875]">
@@ -888,7 +897,7 @@ export default function TenantPaymentsPage() {
                   type="button"
                   onClick={handleClosePaymentModal}
                   disabled={isProcessingPayment}
-                  className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-lg hover:bg-white transition-colors disabled:opacity-50"
+                  className="text-[#5B6875] hover:text-[#111820] p-1.5 rounded-lg hover:bg-white transition-colors disabled:opacity-50"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -902,7 +911,7 @@ export default function TenantPaymentsPage() {
                     <span className="text-[11px] font-semibold uppercase text-[#5B6875] block">
                       Total Invoiced
                     </span>
-                    <span className="text-sm font-bold text-[#243447] mt-0.5 block">
+                    <span className="text-sm font-bold text-[#111820] mt-0.5 block">
                       {formatCurrency(activePaymentInvoice.amount)}
                     </span>
                   </div>
@@ -934,7 +943,7 @@ export default function TenantPaymentsPage() {
 
                 {/* Amount Input */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#243447] flex items-center justify-between">
+                  <label className="text-xs font-semibold text-[#111820] flex items-center justify-between">
                     <span>Payment Amount (₹)</span>
                     <button
                       type="button"
@@ -959,7 +968,7 @@ export default function TenantPaymentsPage() {
                       onChange={(e) => setPaymentAmount(e.target.value)}
                       disabled={isProcessingPayment}
                       placeholder="0.00"
-                      className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-[#E3E8DF] text-sm font-bold text-[#243447] focus:outline-hidden focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] disabled:bg-gray-100"
+                      className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-[#E3E8DF] text-sm font-bold text-[#111820] focus:outline-hidden focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] disabled:bg-gray-100"
                       required
                     />
                   </div>
@@ -971,7 +980,7 @@ export default function TenantPaymentsPage() {
                 {/* Razorpay Gateway Information */}
                 <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#243447] flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-[#111820] flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4 text-[#3F7D58]" />
                       Payment Method
                     </span>
@@ -1041,7 +1050,7 @@ export default function TenantPaymentsPage() {
                     <History className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-[#243447]">
+                    <h2 className="text-base font-bold text-[#111820]">
                       Payment History
                     </h2>
                     <p className="text-xs text-[#5B6875]">
@@ -1053,7 +1062,7 @@ export default function TenantPaymentsPage() {
                 <button
                   type="button"
                   onClick={handleCloseHistoryModal}
-                  className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-lg hover:bg-white transition-colors"
+                  className="text-[#5B6875] hover:text-[#111820] p-1.5 rounded-lg hover:bg-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1065,7 +1074,7 @@ export default function TenantPaymentsPage() {
                 <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between text-xs">
                   <span>
                     Total Due:{' '}
-                    <strong className="text-[#243447]">
+                    <strong className="text-[#111820]">
                       {formatCurrency(historyInvoice.amount)}
                     </strong>
                   </span>
@@ -1095,7 +1104,7 @@ export default function TenantPaymentsPage() {
                 ) : historyPayments.length === 0 ? (
                   <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                     <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
-                    <p className="text-xs font-semibold text-[#243447]">
+                    <p className="text-xs font-semibold text-[#111820]">
                       No Payments Recorded Yet
                     </p>
                     <p className="text-[11px] text-[#5B6875] mt-1">
@@ -1123,10 +1132,10 @@ export default function TenantPaymentsPage() {
                             <td className="py-3 px-3 text-[#5B6875]">
                               {formatDateTime(p.paymentDate || p.createdAt)}
                             </td>
-                            <td className="py-3 px-3 font-medium text-[#243447]">
+                            <td className="py-3 px-3 font-medium text-[#111820]">
                               {p.paymentMethod || '—'}
                             </td>
-                            <td className="py-3 px-3 font-bold text-[#243447]">
+                            <td className="py-3 px-3 font-bold text-[#111820]">
                               {formatCurrency(p.amount)}
                             </td>
                             <td className="py-3 px-3 text-right">
@@ -1178,7 +1187,7 @@ export default function TenantPaymentsPage() {
                     <Receipt className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-[#243447]">
+                    <h2 className="text-base font-bold text-[#111820]">
                       {selectedReceipt ? 'Official Payment Receipt' : 'Invoice Payment Receipts'}
                     </h2>
                     <p className="text-xs text-[#5B6875]">
@@ -1190,7 +1199,7 @@ export default function TenantPaymentsPage() {
                 <button
                   type="button"
                   onClick={handleCloseReceiptsModal}
-                  className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-lg hover:bg-white transition-colors"
+                  className="text-[#5B6875] hover:text-[#111820] p-1.5 rounded-lg hover:bg-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1256,7 +1265,7 @@ export default function TenantPaymentsPage() {
                     <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between text-xs">
                       <span>
                         Total Invoiced:{' '}
-                        <strong className="text-[#243447]">
+                        <strong className="text-[#111820]">
                           {formatCurrency(receiptModalInvoice.amount)}
                         </strong>
                       </span>
@@ -1299,7 +1308,7 @@ export default function TenantPaymentsPage() {
                       /* Empty State */
                       <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                         <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
-                        <p className="text-xs font-semibold text-[#243447]">
+                        <p className="text-xs font-semibold text-[#111820]">
                           No Receipts Found
                         </p>
                         <p className="text-[11px] text-[#5B6875] mt-1 max-w-sm mx-auto">
@@ -1328,13 +1337,13 @@ export default function TenantPaymentsPage() {
                                   <td className="py-3 px-3 font-mono font-semibold text-[#3F7D58] whitespace-nowrap">
                                     {rcp.receiptNumber || `REC-${rcp.receiptId}`}
                                   </td>
-                                  <td className="py-3 px-3 font-mono text-[#243447] whitespace-nowrap">
+                                  <td className="py-3 px-3 font-mono text-[#111820] whitespace-nowrap">
                                     {rcp.invoiceNumber || receiptModalInvoice.invoiceNumber || `#${rcp.invoiceId}`}
                                   </td>
                                   <td className="py-3 px-3 text-[#5B6875] whitespace-nowrap">
                                     {formatDate(rcp.paymentDate || rcp.createdAt)}
                                   </td>
-                                  <td className="py-3 px-3 font-medium text-[#243447] whitespace-nowrap">
+                                  <td className="py-3 px-3 font-medium text-[#111820] whitespace-nowrap">
                                     {rcp.paymentMethod || '—'}
                                   </td>
                                   <td className="py-3 px-3 font-bold text-[#2A583B] whitespace-nowrap">

@@ -137,12 +137,12 @@ export default function AssignPropertyManagerModal({
             <div>
               <h2
                 id="assign-manager-dialog-title"
-                className="text-base font-bold text-[#243447]"
+                className="text-base font-bold text-[#111820]"
               >
                 {isReplacing ? 'Replace Property Manager' : 'Assign Property Manager'}
               </h2>
               <p className="text-xs text-[#5B6875]">
-                Property: <strong className="text-[#243447]">{property?.name || property?.propertyName || 'Listing'}</strong>
+                Property: <strong className="text-[#111820]">{property?.name || property?.propertyName || 'Listing'}</strong>
               </p>
             </div>
           </div>
@@ -150,7 +150,7 @@ export default function AssignPropertyManagerModal({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="p-1 rounded-lg text-[#8C9BA8] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors disabled:opacity-50"
+            className="p-1 rounded-lg text-[#8C9BA8] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors disabled:opacity-50"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -180,7 +180,7 @@ export default function AssignPropertyManagerModal({
                   : 'PM'}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-bold text-[#243447] truncate">
+                <p className="text-xs font-bold text-[#111820] truncate">
                   {property?.managerName || 'Assigned Manager'}
                 </p>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-[#5B6875] mt-0.5">
@@ -261,7 +261,7 @@ export default function AssignPropertyManagerModal({
               </div>
             ) : managers.length === 0 ? (
               <div className="p-4 rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1] text-center space-y-1">
-                <p className="text-xs font-semibold text-[#243447]">
+                <p className="text-xs font-semibold text-[#111820]">
                   No Property Managers Found
                 </p>
                 <p className="text-[11px] text-[#5B6875]">
@@ -278,7 +278,7 @@ export default function AssignPropertyManagerModal({
                     setSubmitError(null)
                   }}
                   disabled={isSubmitting}
-                  className="w-full text-xs rounded-xl border border-[#E3E8DF] p-2.5 bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] cursor-pointer disabled:opacity-60"
+                  className="w-full text-xs rounded-xl border border-[#E3E8DF] p-2.5 bg-white text-[#111820] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] cursor-pointer disabled:opacity-60"
                   required
                 >
                   <option value="">-- Select Property Manager --</option>
@@ -321,7 +321,7 @@ export default function AssignPropertyManagerModal({
                           .join('')
                           .toUpperCase()}
                       </div>
-                      <div className="min-w-0 flex-1 space-y-0.5 text-xs text-[#243447]">
+                      <div className="min-w-0 flex-1 space-y-0.5 text-xs text-[#111820]">
                         <p className="font-bold text-sm">
                           {getManagerFullName(selectedManager)}
                         </p>

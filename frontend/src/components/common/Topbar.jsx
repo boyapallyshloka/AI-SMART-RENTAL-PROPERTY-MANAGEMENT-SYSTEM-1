@@ -5,7 +5,7 @@ import { ROLES } from '../../utils/roles'
 
 /**
  * Enterprise Topbar Component for SmartEstate Dashboard
- * High contrast with #243447 headings and #5B6875 secondary text
+ * High contrast with #111820 headings and #5B6875 secondary text
  *
  * @param {Object} props
  * @param {string} [props.role]
@@ -21,7 +21,7 @@ export default function Topbar({
     <header className="flex min-h-[4.5rem] items-center justify-between border-b border-[#E3E8DF]/50 bg-transparent px-4 py-3 transition-colors sm:px-6 lg:px-10">
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex items-center gap-2">
-          <h2 className="truncate font-serif text-xl font-semibold tracking-tight text-[#243447] sm:text-2xl">
+          <h2 className="truncate font-serif text-xl font-semibold tracking-tight text-[#111820] sm:text-2xl">
             {title}
           </h2>
         </div>

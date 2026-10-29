@@ -773,7 +773,7 @@ export default function AddUnitPage() {
             </span>
           </Link>
           <span>/</span>
-          <span className="text-[#243447] font-semibold">
+          <span className="text-[#111820] font-semibold">
             {isEditMode ? 'Edit Unit' : 'Add Unit'}
           </span>
         </div>
@@ -785,10 +785,10 @@ export default function AddUnitPage() {
               <Home className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820]">
                 {isEditMode ? `Edit Unit ${formData.unitNumber}` : 'Register New Unit'}
               </h1>
-              <p className="text-xs sm:text-sm text-[#5B6875] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#111820] mt-0.5">
                 {building?.buildingName} &bull; {floor?.floorName} (Floor {floor?.floorNumber})
               </p>
             </div>
@@ -819,7 +819,7 @@ export default function AddUnitPage() {
         >
           {/* Location & Saved Property Context Card (Read-only) */}
           <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-3 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[#243447]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[#111820]">
               <div className="flex items-center gap-2">
                 <Building className="w-4 h-4 text-[#3F7D58] shrink-0" />
                 <span>
@@ -864,7 +864,7 @@ export default function AddUnitPage() {
                     return (
                       <span
                         key={amenity?.amenityId || idx}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[#243447] text-[11px] font-medium border border-[#E3E8DF] shadow-2xs"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[#111820] text-[11px] font-medium border border-[#E3E8DF] shadow-2xs"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#3F7D58]" />
                         {name}

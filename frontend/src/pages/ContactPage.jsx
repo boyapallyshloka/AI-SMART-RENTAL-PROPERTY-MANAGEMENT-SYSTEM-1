@@ -16,7 +16,7 @@ export default function ContactPage() {
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F7F1] font-sans text-[#243447]">
+    <div className="flex min-h-screen flex-col bg-[#F7F7F1] font-sans text-[#111820]">
       <header className="border-b border-[#E3E8DF] bg-white">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2 font-serif text-lg font-bold">
@@ -35,7 +35,7 @@ export default function ContactPage() {
             <Mail className="h-6 w-6" />
           </div>
           <h1 className="font-serif text-3xl font-bold tracking-tight">Contact Support</h1>
-          <p className="mt-2 text-sm leading-relaxed text-[#5B6875]">
+          <p className="mt-2 text-sm leading-relaxed text-[#111820]">
             Support contact details and message submission are not configured in the current application.
           </p>
           <div role="status" className="mt-6 flex items-start gap-3 rounded-lg border border-[#F4E2B6] bg-[#FEF7EC] p-4 text-sm text-[#8A5B16]">

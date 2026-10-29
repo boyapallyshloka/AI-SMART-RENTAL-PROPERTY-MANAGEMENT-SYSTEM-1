@@ -53,7 +53,7 @@ export default function Input({
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
-          className={`block w-full rounded-md text-sm transition-colors border bg-white text-[#243447] placeholder:text-[#98A2B3] focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F7F1] disabled:text-[#5B6875] disabled:cursor-not-allowed ${
+          className={`block w-full rounded-md text-sm transition-colors border bg-white text-[#111820] placeholder:text-[#98A2B3] focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F7F1] disabled:text-[#5B6875] disabled:cursor-not-allowed ${
             leftIcon ? 'pl-9' : 'pl-3'
           } ${rightIcon ? 'pr-9' : 'pr-3'} py-2 ${
             error

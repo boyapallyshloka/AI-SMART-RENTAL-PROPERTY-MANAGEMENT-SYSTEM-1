@@ -132,7 +132,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                 displayUser?.name?.charAt(0) || <User className="w-5 h-5" />}
             </div>
             <div>
-              <h3 id="profile-modal-title" className="text-base font-bold text-[#243447]">
+              <h3 id="profile-modal-title" className="text-base font-bold text-[#111820]">
                 {activeTab === 'security' ? 'Change Password' : displayUser?.name || 'My Profile'}
               </h3>
               <p className="text-xs text-[#5B6875]">
@@ -143,7 +143,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
           <button
             type="button"
             onClick={onClose}
-            className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-md hover:bg-[#EDF4ED] transition-colors"
+            className="text-[#5B6875] hover:text-[#111820] p-1.5 rounded-md hover:bg-[#EDF4ED] transition-colors"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
@@ -158,7 +158,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
             className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
               activeTab === 'profile'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <User className="w-3.5 h-3.5" />
@@ -171,7 +171,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
               className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
                 activeTab === 'address'
                   ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
-                  : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                  : 'border-transparent text-[#5B6875] hover:text-[#111820]'
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
@@ -185,7 +185,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
               className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
                 activeTab === 'address'
                   ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
-                  : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                  : 'border-transparent text-[#5B6875] hover:text-[#111820]'
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
@@ -198,7 +198,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
             className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
               activeTab === 'security'
                 ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
-                : 'border-transparent text-[#5B6875] hover:text-[#243447]'
+                : 'border-transparent text-[#5B6875] hover:text-[#111820]'
             }`}
           >
             <KeyRound className="w-3.5 h-3.5" />
@@ -238,31 +238,31 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs">
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">First Name</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {displayUser.firstName || '—'}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Last Name</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {displayUser.lastName || '—'}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Email Address</span>
-                      <strong className="text-xs text-[#243447] font-semibold break-all">
+                      <strong className="text-xs text-[#111820] font-semibold break-all">
                         {displayUser.email || '—'}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Phone Number</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {displayUser.phone || '—'}
                       </strong>
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Gender</span>
-                      <strong className="text-xs text-[#243447] font-semibold capitalize">
+                      <strong className="text-xs text-[#111820] font-semibold capitalize">
                         {displayUser.gender ? String(displayUser.gender).toLowerCase() : '—'}
                       </strong>
                     </div>
@@ -281,7 +281,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Member Since</span>
-                      <strong className="text-xs text-[#243447] font-semibold">
+                      <strong className="text-xs text-[#111820] font-semibold">
                         {displayUser.joinDate || '—'}
                       </strong>
                     </div>
@@ -298,7 +298,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                     <div className="flex items-start gap-2.5">
                       <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-[#243447] block">
+                        <span className="font-semibold text-[#111820] block">
                           Official Owner Postal Address
                         </span>
                         <span className="text-[11px] text-[#5B6875]">
@@ -333,7 +333,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                     <div className="flex items-start gap-2.5">
                       <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-semibold text-[#243447] block">
+                        <span className="font-semibold text-[#111820] block">
                           Official Manager Operational Address
                         </span>
                         <span className="text-[11px] text-[#5B6875]">

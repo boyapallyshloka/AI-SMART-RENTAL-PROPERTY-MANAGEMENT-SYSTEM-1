@@ -48,7 +48,7 @@ export default function Select({
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
-          className={`appearance-none block w-full rounded-md text-sm transition-colors border bg-white text-[#243447] pl-3 pr-8 py-2 focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F7F1] disabled:text-[#5B6875] disabled:cursor-not-allowed cursor-pointer ${error
+          className={`appearance-none block w-full rounded-md text-sm transition-colors border bg-white text-[#111820] pl-3 pr-8 py-2 focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F7F1] disabled:text-[#5B6875] disabled:cursor-not-allowed cursor-pointer ${error
               ? 'border-[#B94A48] focus:border-[#B94A48] focus:ring-[#B94A48]'
               : 'border-[#E3E8DF] hover:border-[#5B6875] focus:border-[#3F7D58] focus:ring-[#3F7D58]'
             } ${className}`}

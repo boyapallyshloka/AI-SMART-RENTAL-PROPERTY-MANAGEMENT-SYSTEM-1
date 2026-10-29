@@ -107,8 +107,8 @@ export default function ManagerTechniciansPage() {
 
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#243447]">Maintenance Technicians</h1>
-            <p className="mt-1 text-sm text-[#5B6875]">Manage the technicians available for maintenance tickets.</p>
+            <h1 className="text-2xl font-bold text-[#111820]">Maintenance Technicians</h1>
+            <p className="mt-1 text-sm text-[#111820]">Manage the technicians available for maintenance tickets.</p>
           </div>
           <Button variant="outline" onClick={loadWorkers} disabled={loading} leftIcon={<RefreshCw className="h-4 w-4" />}>
             Refresh

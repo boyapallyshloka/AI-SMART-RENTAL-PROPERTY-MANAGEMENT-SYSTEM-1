@@ -97,8 +97,8 @@ export default function TenantDocumentReviewPage() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#243447]">Tenant Document Review</h1>
-            <p className="mt-1 text-sm text-[#5B6875]">Review uploaded identity and income documents across tenant profiles.</p>
+            <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#111820]">Tenant Document Review</h1>
+            <p className="mt-1 text-sm text-[#111820]">Review uploaded identity and income documents across tenant profiles.</p>
           </div>
           <Button variant="outline" onClick={loadPendingDocuments} isLoading={loading} leftIcon={<RefreshCw className="h-4 w-4" />}>
             Refresh
@@ -115,7 +115,7 @@ export default function TenantDocumentReviewPage() {
 
         <div className="flex items-center gap-2 rounded-lg border border-[#E3E8DF] bg-white p-4">
           <FileCheck2 className="h-5 w-5 text-[#3F7D58]" />
-            <span className="text-[13px] font-semibold text-[#243447]">
+            <span className="text-[13px] font-semibold text-[#111820]">
             {loading ? 'Checking tenant profiles…' : `${pendingDocuments.length} pending document${pendingDocuments.length === 1 ? '' : 's'} across ${tenantGroups.length} tenant${tenantGroups.length === 1 ? '' : 's'}`}
           </span>
         </div>
@@ -143,7 +143,7 @@ export default function TenantDocumentReviewPage() {
                     </span>
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#3F7D58]">Tenant</p>
-                      <h2 className="text-base font-bold text-[#243447]">{tenantName(group.tenant)}</h2>
+                      <h2 className="text-base font-bold text-[#111820]">{tenantName(group.tenant)}</h2>
                       <p className="text-xs text-[#5B6875]">{group.tenant.email || '—'} <span className="mx-1">·</span> Tenant #{group.tenantId}</p>
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export default function TenantDocumentReviewPage() {
                             <FileText className="h-4 w-4" />
                           </span>
                           <div className="min-w-0">
-                            <p className="break-words text-[13px] font-semibold text-[#243447]">{item.fileName || 'Uploaded document'}</p>
+                            <p className="break-words text-[13px] font-semibold text-[#111820]">{item.fileName || 'Uploaded document'}</p>
                             <p className="mt-1 text-xs font-medium text-[#3F7D58]">{formatType(item.documentType)}</p>
                             {item.uploadedAt && <p className="mt-1 text-xs text-[#748291]">Uploaded {new Date(item.uploadedAt).toLocaleString()}</p>}
                           </div>

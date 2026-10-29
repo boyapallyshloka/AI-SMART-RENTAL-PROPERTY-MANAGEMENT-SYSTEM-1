@@ -1037,11 +1037,11 @@ export default function PropertySearchPage() {
                   )}
                 </div>
 
-                <h1 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-[#243447]">
+                <h1 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-[#111820]">
                   Find Your Next Home
                 </h1>
 
-                <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#111820] leading-relaxed">
                   Tell us what you're looking for and we'll personalize your recommendations.
                 </p>
               </div>
@@ -1050,7 +1050,7 @@ export default function PropertySearchPage() {
                 <button
                   type="button"
                   onClick={() => setIsPreferencesCollapsed((prev) => !prev)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                   title={isPreferencesCollapsed ? 'Expand Preferences Form' : 'Collapse Preferences Form'}
                 >
                   <span>{isPreferencesCollapsed ? 'Edit Preferences' : 'Hide Controls'}</span>
@@ -1210,7 +1210,7 @@ export default function PropertySearchPage() {
                             disabled={isPrefSaving}
                             className="w-4 h-4 rounded text-[#3F7D58] focus:ring-[#3F7D58] border-[#E3E8DF]"
                           />
-                          <span className="text-xs font-medium text-[#243447] flex items-center gap-1.5">
+                          <span className="text-xs font-medium text-[#111820] flex items-center gap-1.5">
                             <Car className="w-3.5 h-3.5 text-[#5B6875]" />
                             Dedicated Parking Required
                           </span>
@@ -1283,11 +1283,11 @@ export default function PropertySearchPage() {
                             <MapPin className="w-3 h-3 text-[#3F7D58] shrink-0" />
                             <span>
                               Lat:{' '}
-                              <strong className="font-mono text-[#243447]">{preferenceData.preferredLatitude}</strong>
+                              <strong className="font-mono text-[#111820]">{preferenceData.preferredLatitude}</strong>
                             </span>
                             <span>
                               Lng:{' '}
-                              <strong className="font-mono text-[#243447]">{preferenceData.preferredLongitude}</strong>
+                              <strong className="font-mono text-[#111820]">{preferenceData.preferredLongitude}</strong>
                             </span>
                           </div>
                         )}
@@ -1316,7 +1316,7 @@ export default function PropertySearchPage() {
                                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer border ${
                                   isSelected
                                     ? 'bg-[#EDF4ED] text-[#3F7D58] border-[#3F7D58]/40 font-semibold'
-                                    : 'bg-white text-[#5B6875] border-[#E3E8DF] hover:bg-[#F7F7F1] hover:text-[#243447]'
+                                    : 'bg-white text-[#5B6875] border-[#E3E8DF] hover:bg-[#F7F7F1] hover:text-[#111820]'
                                 }`}
                               >
                                 {isSelected && <Check className="w-3.5 h-3.5 text-[#3F7D58]" />}
@@ -1349,7 +1349,7 @@ export default function PropertySearchPage() {
                         type="button"
                         onClick={handleResetPreferences}
                         disabled={isPrefSaving}
-                        className="px-3.5 py-2 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
+                        className="px-3.5 py-2 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
                       >
                         Reset Form
                       </button>
@@ -1392,7 +1392,7 @@ export default function PropertySearchPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#243447]">
+                    <h2 className="font-serif text-lg sm:text-xl font-semibold text-[#111820]">
                       Recommended For You
                     </h2>
                     {aiModelVersion && (
@@ -1422,7 +1422,7 @@ export default function PropertySearchPage() {
                   type="button"
                   onClick={handleRefreshRecommendations}
                   disabled={isAiLoading || !isUserTenant}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
                   title="Refresh AI Recommendations"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin text-[#3F7D58]' : ''}`} />
@@ -1431,7 +1431,7 @@ export default function PropertySearchPage() {
                 <button
                   type="button"
                   onClick={() => setIsAiSectionCollapsed((prev) => !prev)}
-                  className="p-1.5 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#111820] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                   title={isAiSectionCollapsed ? 'Expand Recommendations' : 'Collapse Recommendations'}
                 >
                   {isAiSectionCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
@@ -1445,7 +1445,7 @@ export default function PropertySearchPage() {
                 {isAiLoading ? (
                   <div className="p-8 flex flex-col items-center justify-center text-center space-y-2.5 bg-[#F7F7F1] rounded-lg border border-[#E3E8DF]">
                     <RefreshCw className="w-6 h-6 text-[#3F7D58] animate-spin" />
-                    <p className="text-sm font-medium text-[#243447]">Calculating personalized property matches...</p>
+                    <p className="text-sm font-medium text-[#111820]">Calculating personalized property matches...</p>
                   </div>
                 ) : aiError ? (
                   <div className="rounded-lg bg-[#FDF2F2] border border-[#F8B4B4] p-4 text-[#9B1C1C] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm shadow-2xs">
@@ -1467,7 +1467,7 @@ export default function PropertySearchPage() {
                     <div className="w-10 h-10 rounded-full bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58]">
                       <Sparkles className="w-5 h-5" />
                     </div>
-                    <p className="text-sm font-semibold text-[#243447]">
+                    <p className="text-sm font-semibold text-[#111820]">
                       {hasExistingPreferences
                         ? 'No property recommendations found matching your saved preferences.'
                         : 'Set your preferences above to get personalized property recommendations.'}
@@ -1521,7 +1521,7 @@ export default function PropertySearchPage() {
           {/* Section 3 Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E3E8DF] pb-3">
             <div>
-              <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#243447]">
+              <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#111820]">
                 All Properties
               </h2>
               <p className="text-xs sm:text-sm text-[#5B6875] mt-0.5">

@@ -38,7 +38,7 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
       <div
         className={`rounded-2xl px-4 py-3 shadow-xs space-y-1 ${
           isScout
-            ? 'bg-white border border-[#E3E8DF] text-[#243447] rounded-tl-sm text-left'
+            ? 'bg-white border border-[#E3E8DF] text-[#111820] rounded-tl-sm text-left'
             : 'bg-[#3F7D58] text-white rounded-tr-sm text-left'
         }`}
       >
@@ -54,7 +54,7 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
         {/* Message Body Text */}
         <p
           className={`text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
-            isScout ? 'text-[#243447]' : 'text-white'
+            isScout ? 'text-[#111820]' : 'text-white'
           }`}
         >
           {message.text}

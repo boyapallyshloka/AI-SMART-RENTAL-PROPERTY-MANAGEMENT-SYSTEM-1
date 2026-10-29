@@ -92,7 +92,7 @@ export default function ManagerDashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/75 to-white/92 backdrop-blur-[0.5px]" />
 
           <div className="relative z-10 px-6 sm:px-10 py-8 max-w-3xl">
-            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#243447]">
+            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111820]">
               Welcome back, {displayName}!
             </h1>
           </div>
@@ -101,7 +101,7 @@ export default function ManagerDashboardPage() {
         {/* Operational Scope Overview */}
         <div className="flex items-center justify-between pt-2">
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#111820]">
               Manager Overview
             </h2>
             <p className="text-xs text-[#657168] mt-0.5">
@@ -123,7 +123,7 @@ export default function ManagerDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-sans">
                 {properties.length} {properties.length === 1 ? 'Property' : 'Properties'}
               </p>
               <p className="text-xs text-[#657168] mt-1 font-medium">
@@ -150,7 +150,7 @@ export default function ManagerDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-sans">
                 {applications.length} {applications.length === 1 ? 'Application' : 'Applications'}
               </p>
               <p className="text-xs text-[#657168] mt-1 font-medium">
@@ -177,7 +177,7 @@ export default function ManagerDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111820] font-sans">
                 {maintenanceRequests.length} {maintenanceRequests.length === 1 ? 'Request' : 'Requests'}
               </p>
               <p className="text-xs text-[#657168] mt-1 font-medium">

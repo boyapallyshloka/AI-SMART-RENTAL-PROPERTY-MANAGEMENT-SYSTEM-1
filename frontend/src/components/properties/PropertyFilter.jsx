@@ -109,13 +109,13 @@ export default function PropertyFilter({
               value={filters.searchQuery || ''}
               onChange={handleTextChange}
               placeholder="Search by neighborhood, city, or property name..."
-              className="w-full pl-9 pr-9 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#243447] text-sm placeholder:text-[#5B6875]/70 focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] transition-colors"
+              className="w-full pl-9 pr-9 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#111820] text-sm placeholder:text-[#5B6875]/70 focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] transition-colors"
             />
             {filters.searchQuery && (
               <button
                 type="button"
                 onClick={clearSearch}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-[#5B6875] hover:text-[#243447]"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-[#5B6875] hover:text-[#111820]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -129,7 +129,7 @@ export default function PropertyFilter({
               aria-label="Filter by location"
               value={filters.city || 'All Locations'}
               onChange={(e) => handleFieldChange('city', e.target.value)}
-              className="w-full pl-8 pr-8 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#243447] text-sm focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] appearance-none cursor-pointer"
+              className="w-full pl-8 pr-8 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#111820] text-sm focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] appearance-none cursor-pointer"
             >
               <option value="All Locations">All Locations</option>
               {cityOptions.map((city) => (
@@ -148,7 +148,7 @@ export default function PropertyFilter({
               aria-label="Filter by property type"
               value={filters.propertyType || 'All Types'}
               onChange={(e) => handleFieldChange('propertyType', e.target.value)}
-              className="w-full pl-8 pr-8 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#243447] text-sm focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] appearance-none cursor-pointer"
+              className="w-full pl-8 pr-8 py-2 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-[#111820] text-sm focus:outline-none focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] appearance-none cursor-pointer"
             >
               {filterOptions.propertyTypes.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -221,7 +221,7 @@ export default function PropertyFilter({
                     placeholder="Min"
                     value={filters.minRent || ''}
                     onChange={(e) => handleFieldChange('minRent', e.target.value)}
-                    className="w-full pl-6 pr-2 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#243447] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                    className="w-full pl-6 pr-2 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#111820] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                   />
                 </div>
                 <span className="text-[#5B6875] text-xs">-</span>
@@ -237,7 +237,7 @@ export default function PropertyFilter({
                     placeholder="Max"
                     value={filters.maxRent || ''}
                     onChange={(e) => handleFieldChange('maxRent', e.target.value)}
-                    className="w-full pl-6 pr-2 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#243447] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                    className="w-full pl-6 pr-2 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#111820] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                   />
                 </div>
               </div>
@@ -280,7 +280,7 @@ export default function PropertyFilter({
                 aria-label="Filter by furnishing"
                 value={filters.furnishing || 'All Furnishing'}
                 onChange={(e) => handleFieldChange('furnishing', e.target.value)}
-                className="w-full px-2.5 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#243447] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                className="w-full px-2.5 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#111820] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
               >
                 {filterOptions.furnishing.map((f) => (
                   <option key={f} value={f}>
@@ -300,7 +300,7 @@ export default function PropertyFilter({
                 aria-label="Filter by parking availability"
                 value={filters.parking || 'All Parking'}
                 onChange={(e) => handleFieldChange('parking', e.target.value)}
-                className="w-full px-2.5 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#243447] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
+                className="w-full px-2.5 py-1.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] text-xs text-[#111820] focus:bg-white focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
               >
                 {filterOptions.parking.map((p) => (
                   <option key={p} value={p}>
@@ -333,7 +333,7 @@ export default function PropertyFilter({
                       className={`px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors ${
                         isCurrent
                           ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
-                          : 'text-[#5B6875] hover:text-[#243447]'
+                          : 'text-[#5B6875] hover:text-[#111820]'
                       }`}
                     >
                       {tier.label}

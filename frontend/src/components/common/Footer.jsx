@@ -27,7 +27,7 @@ export default function Footer({ className = '', variant = 'default' }) {
         <div className="flex items-center gap-2">
           <Building2 className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
           <span>
-            &copy; {currentYear} <strong className="text-[#243447] font-medium">SmartEstate Property Management</strong>. All rights reserved.
+            &copy; {currentYear} <strong className="text-[#111820] font-medium">SmartEstate Property Management</strong>. All rights reserved.
           </span>
         </div>
 

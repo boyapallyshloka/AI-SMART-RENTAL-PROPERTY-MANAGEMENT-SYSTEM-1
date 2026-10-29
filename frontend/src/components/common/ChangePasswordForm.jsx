@@ -138,7 +138,7 @@ export default function ChangePasswordForm({ onSuccess }) {
             <button
               type="button"
               onClick={() => toggleShow('current')}
-              className="focus:outline-none hover:text-[#243447] text-[#5B6875]"
+              className="focus:outline-none hover:text-[#111820] text-[#5B6875]"
               tabIndex={-1}
               aria-label={showPasswords.current ? 'Hide password' : 'Show password'}
             >
@@ -168,7 +168,7 @@ export default function ChangePasswordForm({ onSuccess }) {
             <button
               type="button"
               onClick={() => toggleShow('new')}
-              className="focus:outline-none hover:text-[#243447] text-[#5B6875]"
+              className="focus:outline-none hover:text-[#111820] text-[#5B6875]"
               tabIndex={-1}
               aria-label={showPasswords.new ? 'Hide password' : 'Show password'}
             >
@@ -199,7 +199,7 @@ export default function ChangePasswordForm({ onSuccess }) {
             <button
               type="button"
               onClick={() => toggleShow('confirm')}
-              className="focus:outline-none hover:text-[#243447] text-[#5B6875]"
+              className="focus:outline-none hover:text-[#111820] text-[#5B6875]"
               tabIndex={-1}
               aria-label={showPasswords.confirm ? 'Hide password' : 'Show password'}
             >
