@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Home,
   LayoutDashboard,
-  Building,
   Building2,
   FileCheck,
   FileText,
@@ -12,17 +11,14 @@ import {
   Wrench,
   BarChart3,
   Search,
-  X,
   Users,
   ShieldCheck,
   History,
   Activity,
   Settings,
-  Bot,
   User,
 } from 'lucide-react'
 import NavItem from './NavItem'
-import { useScout } from '../../context/ScoutContext'
 import { getMyProperties } from '../../api/propertyApi'
 import {
   ROLES,
@@ -43,7 +39,7 @@ export const MANAGER_MENU = [
   { id: 'payments', label: 'Payments', icon: <CreditCard className="w-4 h-4" /> },
   { id: 'inspections', label: 'Inspections', icon: <ShieldCheck className="w-4 h-4" /> },
   { id: 'reports', label: 'Reports', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
+  { id: 'profile', label: 'My Account', icon: <User className="w-4 h-4" /> },
 ]
 
 const OWNER_MENU = [
@@ -54,7 +50,7 @@ const OWNER_MENU = [
   { id: 'payments', label: 'Payments', icon: <CreditCard className="w-4 h-4" /> },
   { id: 'maintenance', label: 'Maintenance', icon: <Wrench className="w-4 h-4" /> },
   { id: 'reports', label: 'Reports', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
+  { id: 'profile', label: 'My Account', icon: <User className="w-4 h-4" /> },
 ]
 
 const TENANT_MENU = [
@@ -75,29 +71,24 @@ const ADMIN_MENU = [
   { id: 'tenant-document-review', label: 'Tenant Document Review', icon: <FileCheck className="w-4 h-4" /> },
   { id: 'reports', label: 'Reports', icon: <BarChart3 className="w-4 h-4" /> },
   { id: 'audit-logs', label: 'Audit Logs', icon: <History className="w-4 h-4" /> },
-  { id: 'ai-monitoring', label: 'AI Monitoring', icon: <Activity className="w-4 h-4 text-[#315A7D]" /> },
+  { id: 'ai-monitoring', label: 'AI Monitoring', icon: <Activity className="w-4 h-4 text-[#3F7D58]" /> },
   { id: 'settings', label: 'System Settings', icon: <Settings className="w-4 h-4" /> },
 ]
 
 /**
- * Enterprise Sidebar Component for SmartEstate
+ * Responsive horizontal role navigation for SmartEstate.
  * @param {Object} props
  * @param {string} props.role
  * @param {string} props.activeItem
  * @param {(item: string) => void} props.onSelect
- * @param {boolean} props.isOpen
- * @param {() => void} props.onClose
  */
 export default function Sidebar({
   role = ROLES.PROPERTY_OWNER,
   activeItem = 'dashboard',
   onSelect,
-  isOpen = false,
-  onClose,
 }) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { openScout } = useScout()
   const [propertyCount, setPropertyCount] = useState(null)
 
   useEffect(() => {
@@ -124,11 +115,6 @@ export default function Sidebar({
     }
   }, [role])
 
-  const handleOpenScout = () => {
-    if (onClose) onClose()
-    openScout()
-  }
-
   const dynamicOwnerMenu = OWNER_MENU.map((item) => {
     if (item.id === 'properties' && propertyCount !== null && propertyCount > 0) {
       return { ...item, badge: String(propertyCount) }
@@ -146,7 +132,6 @@ export default function Sidebar({
 
   const handleItemClick = (id) => {
     if (onSelect) onSelect(id)
-    if (onClose) onClose()
 
     if (isSuperAdmin(role)) {
       if (id === 'dashboard') navigate('/admin/dashboard')
@@ -175,7 +160,7 @@ export default function Sidebar({
       } else if (id === 'inspections') {
         navigate('/manager/inspections')
       } else if (id === 'profile') {
-        navigate('/manager/profile')
+        navigate('/manager/account')
       } else if (id === 'reports') {
         navigate('/manager/reports')
       } else {
@@ -193,7 +178,7 @@ export default function Sidebar({
       else if (id === 'agreements') navigate('/owner/agreements')
       else if (id === 'payments') navigate('/owner/payments')
       else if (id === 'maintenance') navigate('/owner/maintenance')
-      else if (id === 'profile') navigate('/owner/profile')
+      else if (id === 'profile') navigate('/owner/account')
       else if (id === 'reports') navigate('/owner/reports')
     } else if (isTenant(role)) {
       if (id === 'dashboard') navigate('/tenant/dashboard')
@@ -208,66 +193,18 @@ export default function Sidebar({
   }
 
   return (
-    <>
-      {/* Mobile Backdrop */}
-      {isOpen && (
-        <div
-          onClick={onClose}
-          className="fixed inset-0 z-40 bg-[#243447]/50 lg:hidden transition-opacity"
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Sidebar Container */}
-      <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col w-64 bg-white border-r border-[#D9E0E6] transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
-          isOpen ? 'translate-x-0 shadow-lg' : '-translate-x-full'
-        }`}
-      >
-        {/* Branding Header */}
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[#D9E0E6] shrink-0 bg-white">
+    <header className="sticky top-0 z-40 border-b border-[#D8C6A8]/70 bg-[#F5E8D6]/75 px-3 py-3 backdrop-blur-md sm:px-5 lg:px-8">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
+        <div className="flex shrink-0 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-[#315A7D] text-white">
-              <Home className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-serif text-lg font-bold tracking-tight text-[#243447]">
-                SmartEstate
-              </span>
-              <span className="block text-[10px] uppercase font-semibold tracking-wider text-[#5B6875]">
-                Property Management
-              </span>
-            </div>
-          </div>
-
-          {/* Close button on mobile */}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close sidebar"
-            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] lg:hidden"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Role Indicator Banner */}
-        <div className="px-4 pt-3 pb-1">
-          <div className="p-2.5 rounded-md bg-[#EAF2F7] border border-[#D9E0E6] text-xs">
-            <span className="text-[10px] uppercase font-bold text-[#5B6875] block tracking-wider">
-              Portal View
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#243447] text-white shadow-sm">
+              <Home className="h-5 w-5" />
             </span>
-            <span className="font-semibold text-[#243447]">
-              {getPortalName(role)}
-            </span>
+            <span className="font-serif text-lg font-bold tracking-tight text-[#243447]">SmartEstate</span>
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto min-h-0">
-          <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#5B6875]">
-            Navigation
-          </p>
+        <nav aria-label={`${getPortalName(role)} navigation`} className="flex min-w-0 flex-1 gap-1 overflow-x-auto pb-0.5 [scrollbar-width:thin] lg:justify-center">
           {menuItems.map((item) => {
             const isActive =
               activeItem === item.id ||
@@ -290,10 +227,10 @@ export default function Sidebar({
                 location.pathname === '/manager/inspections') ||
               (isPropertyManager(role) &&
                 item.id === 'profile' &&
-                location.pathname === '/manager/profile') ||
+                location.pathname === '/manager/account') ||
               (isPropertyOwner(role) &&
                 item.id === 'profile' &&
-                location.pathname === '/owner/profile') ||
+                location.pathname === '/owner/account') ||
               (isPropertyManager(role) &&
                 item.id === 'dashboard' &&
                 location.pathname === '/manager/dashboard')
@@ -311,49 +248,7 @@ export default function Sidebar({
           })}
         </nav>
 
-        {/* SCOUT Assistant Sidebar Section */}
-        <div className="px-3 py-2.5 border-t border-[#D9E0E6] shrink-0 bg-[#F7F8FA]/60">
-          <div className="p-3 rounded-xl bg-white border border-[#D9E0E6] shadow-2xs">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-6 rounded-md bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D] shrink-0">
-                <Bot className="w-3.5 h-3.5" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#243447] leading-tight">
-                    SCOUT
-                  </span>
-                  <span className="text-[9px] font-semibold px-1 py-0.2 rounded bg-[#F7F8FA] text-[#5B6875] border border-[#D9E0E6]">
-                    Unavailable
-                  </span>
-                </div>
-              </div>
-            </div>
-            <p className="text-[11px] text-[#5B6875] leading-snug mb-2.5">
-              Assistant service is not connected
-            </p>
-            <button
-              type="button"
-              onClick={handleOpenScout}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-[#315A7D] hover:bg-[#274B68] text-white text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
-            >
-              <Bot className="w-3.5 h-3.5" />
-              <span>Open SCOUT</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-[#D9E0E6] shrink-0 bg-white">
-          <div className="flex items-center justify-between text-xs text-[#5B6875]">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#3F7D58]"></span>
-              System Active
-            </span>
-            <span className="font-mono text-[11px] text-[#5B6875]">v0.1.0</span>
-          </div>
-        </div>
-      </aside>
-    </>
+      </div>
+    </header>
   )
 }

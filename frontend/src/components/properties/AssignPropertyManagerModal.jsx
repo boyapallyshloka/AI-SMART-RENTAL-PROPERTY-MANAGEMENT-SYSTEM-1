@@ -127,11 +127,11 @@ export default function AssignPropertyManagerModal({
       aria-modal="true"
       aria-labelledby="assign-manager-dialog-title"
     >
-      <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-5 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
+      <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-5 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+        <div className="flex items-start justify-between gap-3 border-b border-[#E3E8DF] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D] shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58] shrink-0">
               <UserCheck className="w-5 h-5" />
             </div>
             <div>
@@ -150,7 +150,7 @@ export default function AssignPropertyManagerModal({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="p-1 rounded-lg text-[#8C9BA8] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors disabled:opacity-50"
+            className="p-1 rounded-lg text-[#8C9BA8] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors disabled:opacity-50"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -159,7 +159,7 @@ export default function AssignPropertyManagerModal({
 
         {/* Current Manager Box if replacing */}
         {isReplacing && (
-          <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-2">
+          <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5B6875]">
                 Currently Assigned Manager
@@ -169,7 +169,7 @@ export default function AssignPropertyManagerModal({
               </span>
             </div>
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-white border border-[#D9E0E6] flex items-center justify-center text-xs font-bold text-[#315A7D] shrink-0">
+              <div className="w-8 h-8 rounded-full bg-white border border-[#E3E8DF] flex items-center justify-center text-xs font-bold text-[#3F7D58] shrink-0">
                 {property?.managerName
                   ? property.managerName
                       .split(' ')
@@ -224,7 +224,7 @@ export default function AssignPropertyManagerModal({
             </label>
 
             {isLoadingManagers ? (
-              <div className="py-8 flex flex-col items-center justify-center border border-[#D9E0E6] rounded-xl bg-[#F7F8FA]">
+              <div className="py-8 flex flex-col items-center justify-center border border-[#E3E8DF] rounded-xl bg-[#F7F7F1]">
                 <Loader size="sm" text="Loading property managers..." center />
               </div>
             ) : fetchError ? (
@@ -260,7 +260,7 @@ export default function AssignPropertyManagerModal({
                 </Button>
               </div>
             ) : managers.length === 0 ? (
-              <div className="p-4 rounded-xl border border-dashed border-[#D9E0E6] bg-[#F7F8FA] text-center space-y-1">
+              <div className="p-4 rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1] text-center space-y-1">
                 <p className="text-xs font-semibold text-[#243447]">
                   No Property Managers Found
                 </p>
@@ -278,7 +278,7 @@ export default function AssignPropertyManagerModal({
                     setSubmitError(null)
                   }}
                   disabled={isSubmitting}
-                  className="w-full text-xs rounded-xl border border-[#D9E0E6] p-2.5 bg-white text-[#243447] focus:outline-none focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D] cursor-pointer disabled:opacity-60"
+                  className="w-full text-xs rounded-xl border border-[#E3E8DF] p-2.5 bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] cursor-pointer disabled:opacity-60"
                   required
                 >
                   <option value="">-- Select Property Manager --</option>
@@ -348,7 +348,7 @@ export default function AssignPropertyManagerModal({
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+          <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
             <Button
               type="button"
               variant="outline"

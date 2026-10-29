@@ -85,14 +85,14 @@ export default function ManagerDashboardPage() {
       <div className="space-y-6">
         {/* Hero / Header Section with Residential Community Framing */}
         <div
-          className="relative overflow-hidden rounded-2xl border border-[#D9E2EC] shadow-xs bg-cover bg-center min-h-[140px] sm:min-h-[170px] flex items-center"
+          className="relative overflow-hidden rounded-2xl border border-[#E3E8DF] shadow-xs bg-cover bg-center min-h-[140px] sm:min-h-[170px] flex items-center"
           style={{ backgroundImage: `url(${ownerHeroBg})` }}
         >
           {/* Soft luminous gradient overlay to ensure contrast and highlight the center sky while framing side buildings */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/75 to-white/92 backdrop-blur-[0.5px]" />
 
           <div className="relative z-10 px-6 sm:px-10 py-8 max-w-3xl">
-            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1B2B4A]">
+            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#243447]">
               Welcome back, {displayName}!
             </h1>
           </div>
@@ -101,10 +101,10 @@ export default function ManagerDashboardPage() {
         {/* Operational Scope Overview */}
         <div className="flex items-center justify-between pt-2">
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#1B2B4A]">
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">
               Manager Overview
             </h2>
-            <p className="text-xs text-[#64748B] mt-0.5">
+            <p className="text-xs text-[#657168] mt-0.5">
               Operational summary across your assigned portfolios and tenant requests
             </p>
           </div>
@@ -113,24 +113,24 @@ export default function ManagerDashboardPage() {
         {/* Metric Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Assigned Properties Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                 Assigned Properties
               </span>
-              <div className="w-9 h-9 rounded-xl border border-[#D9E2EC] bg-[#EBF2F7] flex items-center justify-center shrink-0">
-                <Building2 className="w-5 h-5 text-[#315A7D]" />
+              <div className="w-9 h-9 rounded-xl border border-[#E3E8DF] bg-[#EDF4ED] flex items-center justify-center shrink-0">
+                <Building2 className="w-5 h-5 text-[#3F7D58]" />
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1B2B4A] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
                 {properties.length} {properties.length === 1 ? 'Property' : 'Properties'}
               </p>
-              <p className="text-xs text-[#64748B] mt-1 font-medium">
+              <p className="text-xs text-[#657168] mt-1 font-medium">
                 View and manage your assigned properties
               </p>
             </div>
-            <div className="pt-3 border-t border-[#EDF2F7]">
+            <div className="pt-3 border-t border-[#E9EDE5]">
               <Link to="/manager/properties" className="block">
                 <Button size="sm" variant="outline" className="w-full justify-between rounded-xl" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
                   View Properties
@@ -140,24 +140,24 @@ export default function ManagerDashboardPage() {
           </div>
 
           {/* Applications Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                 Applications
               </span>
-              <div className="w-9 h-9 rounded-xl border border-[#D9E2EC] bg-[#EBF2F7] flex items-center justify-center shrink-0">
-                <FileCheck className="w-5 h-5 text-[#315A7D]" />
+              <div className="w-9 h-9 rounded-xl border border-[#E3E8DF] bg-[#EDF4ED] flex items-center justify-center shrink-0">
+                <FileCheck className="w-5 h-5 text-[#3F7D58]" />
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1B2B4A] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
                 {applications.length} {applications.length === 1 ? 'Application' : 'Applications'}
               </p>
-              <p className="text-xs text-[#64748B] mt-1 font-medium">
+              <p className="text-xs text-[#657168] mt-1 font-medium">
                 Review tenant applications
               </p>
             </div>
-            <div className="pt-3 border-t border-[#EDF2F7]">
+            <div className="pt-3 border-t border-[#E9EDE5]">
               <Link to="/manager/applications" className="block">
                 <Button size="sm" variant="outline" className="w-full justify-between rounded-xl" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
                   Review Applications
@@ -167,7 +167,7 @@ export default function ManagerDashboardPage() {
           </div>
 
           {/* Maintenance Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                 Maintenance &amp; Service
@@ -177,14 +177,14 @@ export default function ManagerDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1B2B4A] font-sans">
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">
                 {maintenanceRequests.length} {maintenanceRequests.length === 1 ? 'Request' : 'Requests'}
               </p>
-              <p className="text-xs text-[#64748B] mt-1 font-medium">
+              <p className="text-xs text-[#657168] mt-1 font-medium">
                 Manage maintenance requests
               </p>
             </div>
-            <div className="pt-3 border-t border-[#EDF2F7]">
+            <div className="pt-3 border-t border-[#E9EDE5]">
               <Link to="/manager/maintenance" className="block">
                 <Button size="sm" variant="outline" className="w-full justify-between rounded-xl" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
                   Manage Maintenance

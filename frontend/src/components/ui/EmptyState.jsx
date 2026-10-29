@@ -20,9 +20,9 @@ export default function EmptyState({
 }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center p-8 sm:p-10 text-center rounded-lg border border-dashed border-[#D9E0E6] bg-white transition-colors ${className}`}
+      className={`flex flex-col items-center justify-center p-8 sm:p-10 text-center rounded-lg border border-dashed border-[#E3E8DF] bg-white transition-colors ${className}`}
     >
-      <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] text-[#315A7D] mb-3">
+      <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-[#3F7D58] mb-3">
         {icon || <FolderOpen className="w-6 h-6" aria-hidden="true" />}
       </div>
 

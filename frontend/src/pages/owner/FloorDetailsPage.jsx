@@ -345,7 +345,7 @@ export default function FloorDetailsPage() {
               Back to Building
             </Button>
           </Link>
-          <div className="p-6 rounded-xl bg-white border border-[#D9E0E6] text-center space-y-4 shadow-xs max-w-lg mx-auto">
+          <div className="p-6 rounded-xl bg-white border border-[#E3E8DF] text-center space-y-4 shadow-xs max-w-lg mx-auto">
             <div className="w-12 h-12 rounded-full bg-[#FDF2F2] border border-[#F8D7DA] flex items-center justify-center text-[#B94A48] mx-auto">
               <AlertCircle className="w-6 h-6" />
             </div>
@@ -441,7 +441,7 @@ export default function FloorDetailsPage() {
           {isTenant ? (
             <Link
               to="/tenant/buildings"
-              className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+              className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
             >
               My Rental Property
             </Link>
@@ -449,7 +449,7 @@ export default function FloorDetailsPage() {
             <>
               <Link
                 to="/owner/properties"
-                className="hover:text-[#315A7D] transition-colors"
+                className="hover:text-[#3F7D58] transition-colors"
               >
                 Properties
               </Link>
@@ -458,7 +458,7 @@ export default function FloorDetailsPage() {
                   <span>/</span>
                   <Link
                     to={`/owner/properties/${floor.propertyId || building?.propertyId || building?.property?.id}`}
-                    className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                    className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
                   >
                     {propertyName || `Property #${floor.propertyId || building?.propertyId || building?.property?.id}`}
                   </Link>
@@ -469,7 +469,7 @@ export default function FloorDetailsPage() {
           <span>/</span>
           <Link
             to={`${basePath}/buildings/${buildingId}`}
-            className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+            className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
           >
             {buildingName}
           </Link>
@@ -519,10 +519,10 @@ export default function FloorDetailsPage() {
         </div>
 
         {/* Floor Overview Header Card */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] mb-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] mb-2">
                 <Layers className="w-3.5 h-3.5" />
                 <span>Floor Overview</span>
               </div>
@@ -530,7 +530,7 @@ export default function FloorDetailsPage() {
                 {floor.floorName}
               </h1>
               <div className="flex items-center gap-2 text-xs text-[#5B6875] mt-1.5 flex-wrap">
-                <Building className="w-3.5 h-3.5 text-[#315A7D] shrink-0" />
+                <Building className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                 <span>
                   Building:{' '}
                   <strong className="text-[#243447] font-semibold">
@@ -551,9 +551,9 @@ export default function FloorDetailsPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="px-4 py-2.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-center">
+              <div className="px-4 py-2.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                 <p className="text-xs uppercase font-semibold tracking-wider text-[#5B6875]">Units</p>
-                <p className="text-xl font-bold text-[#315A7D]">{units.length}</p>
+                <p className="text-xl font-bold text-[#3F7D58]">{units.length}</p>
               </div>
             </div>
           </div>
@@ -604,7 +604,7 @@ export default function FloorDetailsPage() {
               {units.map((unit) => (
                 <div
                   key={unit.unitId}
-                  className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs flex flex-col justify-between hover:border-[#315A7D]/40 transition-colors"
+                  className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs flex flex-col justify-between hover:border-[#3F7D58]/40 transition-colors"
                 >
                   <div className="space-y-3.5">
                     {/* Header: Unit Number, Status, Type */}
@@ -629,7 +629,7 @@ export default function FloorDetailsPage() {
                     </div>
 
                     {/* Rent & Specifications */}
-                    <div className="pt-2 border-t border-[#D9E0E6] space-y-2">
+                    <div className="pt-2 border-t border-[#E3E8DF] space-y-2">
                       <div className="flex items-baseline justify-between">
                         <span className="text-xs text-[#5B6875]">Monthly Rent</span>
                         <span className="text-base font-bold text-[#243447]">
@@ -639,17 +639,17 @@ export default function FloorDetailsPage() {
                       </div>
 
                       <div className="grid grid-cols-3 gap-2 pt-1 text-center">
-                        <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/60">
+                        <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Area</p>
                           <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
                         </div>
 
-                        <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/60">
+                        <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Beds</p>
                           <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.bedrooms ?? '—'}</p>
                         </div>
 
-                        <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/60">
+                        <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/60">
                           <p className="text-[10px] uppercase text-[#5B6875] font-semibold">Baths</p>
                           <p className="text-xs font-bold text-[#243447] mt-0.5">{unit.bathrooms ?? '—'}</p>
                         </div>
@@ -666,7 +666,7 @@ export default function FloorDetailsPage() {
 
                   {/* Actions: View (All Roles), Edit & Delete (Owner Only) */}
                   <div
-                    className={`pt-4 mt-4 border-t border-[#D9E0E6] flex items-center ${
+                    className={`pt-4 mt-4 border-t border-[#E3E8DF] flex items-center ${
                       canManage ? 'justify-between' : 'justify-end'
                     } gap-2 flex-wrap sm:flex-nowrap`}
                   >
@@ -744,10 +744,10 @@ export default function FloorDetailsPage() {
                 role="dialog"
                 aria-modal="true"
               >
-                <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
-                  <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+                <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
+                  <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-[#EAF2F7] text-[#315A7D]">
+                      <div className="p-2 rounded-lg bg-[#EDF4ED] text-[#3F7D58]">
                         <Layers className="w-4 h-4" />
                       </div>
                       <div>
@@ -782,7 +782,7 @@ export default function FloorDetailsPage() {
                     </div>
                   ) : (
                     <form onSubmit={handleFloorSubmit} className="space-y-4">
-                      <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-1">
+                      <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="text-[#5B6875]">Target Building:</span>
                           <strong className="text-[#243447] font-semibold">{buildingName}</strong>
@@ -816,7 +816,7 @@ export default function FloorDetailsPage() {
                         required
                       />
 
-                      <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+                      <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                         <Button
                           type="button"
                           variant="outline"

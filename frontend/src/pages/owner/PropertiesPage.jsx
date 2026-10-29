@@ -238,7 +238,7 @@ export default function PropertiesPage() {
         <RentalDemandPrediction />
 
         {/* Filter Bar */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-5 shadow-sm space-y-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-5 shadow-sm space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
             <div className="lg:col-span-2">
               <Input
@@ -272,7 +272,7 @@ export default function PropertiesPage() {
                   onClick={resetFilters}
                   title="Reset all filters"
                   aria-label="Reset all filters"
-                  className="p-2.5 rounded-lg border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -280,7 +280,7 @@ export default function PropertiesPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
               <strong className="text-[#243447]">
@@ -289,7 +289,7 @@ export default function PropertiesPage() {
               of {properties.length} properties
             </span>
             {hasActiveFilters && (
-              <span className="text-[#315A7D] font-medium">
+              <span className="text-[#3F7D58] font-medium">
                 Filters active
               </span>
             )}
@@ -298,7 +298,7 @@ export default function PropertiesPage() {
 
         {/* Properties Table / Loading State */}
         {isLoading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-sm flex flex-col items-center justify-center min-h-[300px]">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-sm flex flex-col items-center justify-center min-h-[300px]">
             <Loader size="lg" text="Loading properties..." center />
           </div>
         ) : (

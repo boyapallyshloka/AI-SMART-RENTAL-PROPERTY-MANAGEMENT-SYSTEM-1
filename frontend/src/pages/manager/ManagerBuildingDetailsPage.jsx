@@ -495,7 +495,7 @@ export default function ManagerBuildingDetailsPage() {
           <div className="space-y-1">
             <Link
               to={`/manager/properties/${effectivePropertyId}`}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315A7D] hover:text-[#274B68] transition-colors mb-1"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3F7D58] hover:text-[#315F46] transition-colors mb-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>
@@ -503,7 +503,7 @@ export default function ManagerBuildingDetailsPage() {
               </span>
             </Link>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                 Manager Building View
               </span>
               <span className="text-xs text-[#5B6875]">
@@ -517,7 +517,7 @@ export default function ManagerBuildingDetailsPage() {
               variant="outline"
               size="sm"
               onClick={() => setIsEditBuildingOpen(true)}
-              leftIcon={<Pencil className="w-3.5 h-3.5 text-[#315A7D]" />}
+              leftIcon={<Pencil className="w-3.5 h-3.5 text-[#3F7D58]" />}
             >
               Edit Building
             </Button>
@@ -542,10 +542,10 @@ export default function ManagerBuildingDetailsPage() {
         </div>
 
         {/* Building Overview Card */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="space-y-0.5">
-              <span className="font-mono text-[11px] font-bold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
+              <span className="font-mono text-[11px] font-bold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                 Building #{building.buildingId || building.id}
               </span>
               <h1 className="text-2xl font-bold tracking-tight text-[#243447]">
@@ -554,7 +554,7 @@ export default function ManagerBuildingDetailsPage() {
             </div>
 
             <div className="flex items-center gap-3 text-xs">
-              <div className="p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+              <div className="p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                 <span className="text-[#5B6875] block text-[10px] uppercase font-bold tracking-wider">
                   Total Floors
                 </span>
@@ -562,13 +562,13 @@ export default function ManagerBuildingDetailsPage() {
                   {building.totalFloors != null ? building.totalFloors : floors.length}
                 </span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+              <div className="p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                 <span className="text-[#5B6875] block text-[10px] uppercase font-bold tracking-wider">
                   Parent Property
                 </span>
                 <Link
                   to={`/manager/properties/${effectivePropertyId}`}
-                  className="font-bold text-sm text-[#315A7D] hover:underline"
+                  className="font-bold text-sm text-[#3F7D58] hover:underline"
                 >
                   {property?.propertyName || `#${effectivePropertyId}`}
                 </Link>
@@ -590,7 +590,7 @@ export default function ManagerBuildingDetailsPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#315A7D]" />
+              <Layers className="w-5 h-5 text-[#3F7D58]" />
               <h2 className="text-lg font-bold text-[#243447]">
                 Floors & Rental Units ({floors.length} Floors)
               </h2>
@@ -626,10 +626,10 @@ export default function ManagerBuildingDetailsPage() {
                 return (
                   <div
                     key={fId}
-                    className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xs overflow-hidden"
+                    className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xs overflow-hidden"
                   >
                     {/* Floor Header Bar */}
-                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F7F8FA] border-b border-[#D9E0E6]">
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F7F7F1] border-b border-[#E3E8DF]">
                       <div
                         className="flex items-center gap-3 cursor-pointer flex-1"
                         onClick={() => toggleFloorExpand(fId)}
@@ -649,7 +649,7 @@ export default function ManagerBuildingDetailsPage() {
                             <h3 className="text-base font-bold text-[#243447]">
                               {floor.floorName || floor.name || `Floor ${floor.floorNumber}`}
                             </h3>
-                            <span className="font-mono text-[10px] font-bold text-[#315A7D] bg-white px-2 py-0.5 rounded border border-[#D9E0E6]">
+                            <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-white px-2 py-0.5 rounded border border-[#E3E8DF]">
                               Level {floor.floorNumber}
                             </span>
                           </div>
@@ -665,14 +665,14 @@ export default function ManagerBuildingDetailsPage() {
                           size="sm"
                           className="text-xs"
                           onClick={() => handleOpenAddUnit(floor)}
-                          leftIcon={<Plus className="w-3.5 h-3.5 text-[#315A7D]" />}
+                          leftIcon={<Plus className="w-3.5 h-3.5 text-[#3F7D58]" />}
                         >
                           Add Unit
                         </Button>
                         <button
                           type="button"
                           onClick={() => handleOpenEditFloor(floor)}
-                          className="p-1.5 rounded text-[#5B6875] hover:text-[#243447] hover:bg-white border border-[#D9E0E6] transition-colors"
+                          className="p-1.5 rounded text-[#5B6875] hover:text-[#243447] hover:bg-white border border-[#E3E8DF] transition-colors"
                           title="Edit floor"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -712,12 +712,12 @@ export default function ManagerBuildingDetailsPage() {
                               return (
                                 <div
                                   key={uId}
-                                  className="p-4 rounded-xl bg-white border border-[#D9E0E6] hover:border-[#315A7D] transition-all space-y-3 shadow-2xs"
+                                  className="p-4 rounded-xl bg-white border border-[#E3E8DF] hover:border-[#3F7D58] transition-all space-y-3 shadow-2xs"
                                 >
                                   {/* Unit Header */}
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                      <div className="w-7 h-7 rounded-lg bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] font-bold text-xs">
+                                      <div className="w-7 h-7 rounded-lg bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] font-bold text-xs">
                                         <Home className="w-3.5 h-3.5" />
                                       </div>
                                       <div>
@@ -733,7 +733,7 @@ export default function ManagerBuildingDetailsPage() {
                                   </div>
 
                                   {/* Unit Metrics */}
-                                  <div className="grid grid-cols-3 gap-2 text-center text-xs py-1 bg-[#F7F8FA] rounded-lg p-2 border border-[#D9E0E6]">
+                                  <div className="grid grid-cols-3 gap-2 text-center text-xs py-1 bg-[#F7F7F1] rounded-lg p-2 border border-[#E3E8DF]">
                                     <div>
                                       <span className="text-[10px] text-[#5B6875] block uppercase">
                                         Rent
@@ -763,11 +763,11 @@ export default function ManagerBuildingDetailsPage() {
                                   {/* Bed / Bath Specs */}
                                   <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1">
                                     <span className="flex items-center gap-1">
-                                      <Bed className="w-3.5 h-3.5 text-[#315A7D]" />
+                                      <Bed className="w-3.5 h-3.5 text-[#3F7D58]" />
                                       {unit.bedrooms != null ? `${unit.bedrooms} Bed` : '—'}
                                     </span>
                                     <span className="flex items-center gap-1">
-                                      <Bath className="w-3.5 h-3.5 text-[#315A7D]" />
+                                      <Bath className="w-3.5 h-3.5 text-[#3F7D58]" />
                                       {unit.bathrooms != null ? `${unit.bathrooms} Bath` : '—'}
                                     </span>
                                     <span className="font-mono text-[10px] text-[#5B6875]">
@@ -776,7 +776,7 @@ export default function ManagerBuildingDetailsPage() {
                                   </div>
 
                                   {/* Action Buttons */}
-                                  <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between gap-1 text-xs">
+                                  <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between gap-1 text-xs">
                                     <Button
                                       variant="secondary"
                                       size="xs"
@@ -790,7 +790,7 @@ export default function ManagerBuildingDetailsPage() {
                                       <button
                                         type="button"
                                         onClick={() => handleOpenEditUnit(unit, floor)}
-                                        className="p-1 rounded text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA]"
+                                        className="p-1 rounded text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]"
                                         title="Edit unit"
                                       >
                                         <Pencil className="w-3.5 h-3.5" />
@@ -827,8 +827,8 @@ export default function ManagerBuildingDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <h3 className="text-base font-bold text-[#243447]">
                 Edit Building Details
               </h3>
@@ -882,7 +882,7 @@ export default function ManagerBuildingDetailsPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"
@@ -925,8 +925,8 @@ export default function ManagerBuildingDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <h3 className="text-base font-bold text-[#243447]">
                 {editingFloor ? 'Edit Floor' : 'Add New Floor'}
               </h3>
@@ -976,7 +976,7 @@ export default function ManagerBuildingDetailsPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1019,8 +1019,8 @@ export default function ManagerBuildingDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div>
                 <h3 className="text-base font-bold text-[#243447]">
                   {editingUnit ? `Edit Unit ${editingUnit.unitNumber}` : 'Add New Rental Unit'}
@@ -1195,7 +1195,7 @@ export default function ManagerBuildingDetailsPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1227,10 +1227,10 @@ export default function ManagerBuildingDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div>
-                <span className="font-mono text-[10px] font-bold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
+                <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                   Unit #{viewingUnit.unitId || viewingUnit.id}
                 </span>
                 <h3 className="text-lg font-bold text-[#243447] mt-1">
@@ -1247,13 +1247,13 @@ export default function ManagerBuildingDetailsPage() {
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                 <span className="text-[#5B6875] font-semibold">Status:</span>
                 <StatusBadge status={viewingUnit.status} size="sm" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+                <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold">
                     Monthly Rent
                   </span>
@@ -1261,7 +1261,7 @@ export default function ManagerBuildingDetailsPage() {
                     {viewingUnit.monthlyRent != null ? formatCurrency(viewingUnit.monthlyRent) : '—'}
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+                <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold">
                     Security Deposit
                   </span>
@@ -1272,7 +1272,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5 text-center">
+                <div className="p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5 text-center">
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Type
                   </span>
@@ -1280,7 +1280,7 @@ export default function ManagerBuildingDetailsPage() {
                     {viewingUnit.unitType || '—'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5 text-center">
+                <div className="p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5 text-center">
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Bedrooms
                   </span>
@@ -1288,7 +1288,7 @@ export default function ManagerBuildingDetailsPage() {
                     {viewingUnit.bedrooms != null ? viewingUnit.bedrooms : '—'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5 text-center">
+                <div className="p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5 text-center">
                   <span className="text-[#5B6875] text-[10px] uppercase font-bold block">
                     Bathrooms
                   </span>
@@ -1299,7 +1299,7 @@ export default function ManagerBuildingDetailsPage() {
               </div>
 
               {viewingUnit.area != null && (
-                <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] flex justify-between">
+                <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex justify-between">
                   <span className="text-[#5B6875] font-semibold">Total Area:</span>
                   <span className="font-bold text-[#243447]">{viewingUnit.area} sq. ft.</span>
                 </div>
@@ -1310,14 +1310,14 @@ export default function ManagerBuildingDetailsPage() {
                   <span className="text-[#5B6875] font-semibold uppercase text-[10px]">
                     Description
                   </span>
-                  <p className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-[#243447] leading-relaxed">
+                  <p className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-[#243447] leading-relaxed">
                     {viewingUnit.description}
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="pt-3 border-t border-[#D9E0E6] flex justify-end">
+            <div className="pt-3 border-t border-[#E3E8DF] flex justify-end">
               <Button
                 variant="secondary"
                 size="sm"

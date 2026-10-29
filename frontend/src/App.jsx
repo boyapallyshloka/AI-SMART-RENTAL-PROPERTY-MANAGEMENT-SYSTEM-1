@@ -1,9 +1,12 @@
 import { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/notificationcontext";
 import { ScoutProvider } from "./context/ScoutContext";
 import AppRoutes from "./routes/AppRoutes";
+import { createTransitionHistory } from "./routes/transitionHistory";
+
+const history = createTransitionHistory();
 
 function App() {
   useEffect(() => {
@@ -23,7 +26,7 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HistoryRouter history={history} useTransitions={false}>
       <AuthProvider>
         <NotificationProvider>
           <ScoutProvider>
@@ -31,7 +34,7 @@ function App() {
           </ScoutProvider>
         </NotificationProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 

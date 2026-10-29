@@ -166,12 +166,12 @@ export default function TenantApplicationsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader text="Loading your rental applications..." size="md" center />
           </div>
         ) : applications.length === 0 && !error ? (
           /* Empty State */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs">
             <EmptyState
               icon={<FileCheck className="w-8 h-8" />}
               title="No rental applications found"
@@ -187,8 +187,8 @@ export default function TenantApplicationsPage() {
           </div>
         ) : applications.length > 0 ? (
           /* Applications Table */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] shadow-2xs overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-[#D9E0E6] flex items-center justify-between">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] shadow-2xs overflow-hidden">
+            <div className="p-4 sm:p-5 border-b border-[#E3E8DF] flex items-center justify-between">
               <span className="text-xs text-[#5B6875]">
                 Displaying{' '}
                 <strong className="text-[#243447]">
@@ -197,7 +197,7 @@ export default function TenantApplicationsPage() {
                 {applications.length === 1 ? 'application' : 'applications'}
               </span>
               {tenantEmail && (
-                <span className="text-xs text-[#315A7D] font-medium">
+                <span className="text-xs text-[#3F7D58] font-medium">
                   Account: {tenantEmail}
                 </span>
               )}
@@ -206,7 +206,7 @@ export default function TenantApplicationsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">App ID</th>
                     <th className="py-3.5 px-4">Property</th>
                     <th className="py-3.5 px-4">Unit</th>
@@ -217,7 +217,7 @@ export default function TenantApplicationsPage() {
                     <th className="py-3.5 pl-4 pr-6 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {applications.map((app) => {
                     const isPending = (app.status || '').toUpperCase() === 'PENDING'
                     const isWithdrawing = withdrawingId === app.applicationId
@@ -229,13 +229,13 @@ export default function TenantApplicationsPage() {
                     return (
                       <tr
                         key={app.applicationId}
-                        className="hover:bg-[#F7F8FA] transition-colors"
+                        className="hover:bg-[#F7F7F1] transition-colors"
                       >
                         {/* Application ID */}
                         <td className="py-4 pl-6 pr-4 font-mono font-bold text-xs">
                           <Link
                             to={`/tenant/applications/${app.applicationId}`}
-                            className="text-[#315A7D] hover:text-[#214363] hover:underline"
+                            className="text-[#3F7D58] hover:text-[#214363] hover:underline"
                             title="View Application Details"
                           >
                             #{app.applicationId}
@@ -246,17 +246,17 @@ export default function TenantApplicationsPage() {
                         <td className="py-4 px-4 font-semibold text-[#243447] min-w-[180px]">
                           <Link
                             to={`/tenant/applications/${app.applicationId}`}
-                            className="flex items-center gap-2 text-[#243447] hover:text-[#315A7D] hover:underline"
+                            className="flex items-center gap-2 text-[#243447] hover:text-[#3F7D58] hover:underline"
                             title="View Application Details"
                           >
-                            <Building2 className="w-4 h-4 text-[#315A7D] shrink-0" />
+                            <Building2 className="w-4 h-4 text-[#3F7D58] shrink-0" />
                             <span>{propName}</span>
                           </Link>
                         </td>
 
                         {/* Unit */}
                         <td className="py-4 px-4 whitespace-nowrap">
-                          <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20">
+                          <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
                             {unitName}
                           </span>
                         </td>
@@ -307,7 +307,7 @@ export default function TenantApplicationsPage() {
                           <div className="flex items-center justify-end gap-3">
                             <Link
                               to={`/tenant/applications/${app.applicationId}`}
-                              className="text-xs font-semibold text-[#315A7D] hover:text-[#214363] hover:underline transition-colors"
+                              className="text-xs font-semibold text-[#3F7D58] hover:text-[#214363] hover:underline transition-colors"
                             >
                               View Details
                             </Link>

@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams, useParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import AuthLayout from '../../layouts/AuthLayout'
 import { Button, Input } from '../../components/ui'
-import { Lock, CheckCircle2, ArrowRight, AlertCircle, KeyRound } from 'lucide-react'
+import { Lock, CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react'
 
 export default function ResetPasswordPage() {
   const { resetPassword } = useAuth()
@@ -20,7 +20,6 @@ export default function ResetPasswordPage() {
     ''
   ).trim()
 
-  const [token, setToken] = useState(urlToken)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState({})
@@ -29,17 +28,15 @@ export default function ResetPasswordPage() {
   const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
-    if (urlToken) {
-      setToken(urlToken)
-    }
-  }, [urlToken])
+    if (!isSuccess) return undefined
+    const redirectTimer = window.setTimeout(() => {
+      navigate('/login', { replace: true })
+    }, 2500)
+    return () => window.clearTimeout(redirectTimer)
+  }, [isSuccess, navigate])
 
   const validate = () => {
     const errs = {}
-
-    if (!token.trim()) {
-      errs.token = 'Reset token is required'
-    }
 
     if (!password) {
       errs.password = 'New password is required'
@@ -65,7 +62,7 @@ export default function ResetPasswordPage() {
     setErrorMessage('')
     try {
       await resetPassword({
-        token: token.trim(),
+        token: urlToken,
         newPassword: password,
       })
       setIsSuccess(true)
@@ -98,17 +95,30 @@ export default function ResetPasswordPage() {
               Password updated!
             </h2>
             <p className="text-xs text-[#5B6875] mt-1">
-              Your password has been successfully reset. You can now sign in with your new credentials.
+              Your password has been successfully reset. Redirecting you to sign in...
             </p>
           </div>
 
           <div className="pt-2">
             <Link to="/login">
               <Button variant="primary" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                Proceed to Sign In
+                Sign In Now
               </Button>
             </Link>
           </div>
+        </div>
+      ) : !urlToken ? (
+        <div className="space-y-4">
+          <div role="alert" className="p-3.5 rounded-lg bg-[#FDF2F2] border border-[#F8D7DA] text-xs font-medium text-[#B94A48] flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>This password reset link is missing its token. Request a new reset link.</span>
+          </div>
+          <Link to="/forgot-password" className="block">
+            <Button variant="primary" className="w-full">Request a New Link</Button>
+          </Link>
+          <Link to="/login" className="block text-center text-xs font-medium text-[#5B6875] hover:text-[#315A7D]">
+            Return to Sign In
+          </Link>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -117,27 +127,6 @@ export default function ResetPasswordPage() {
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
-          )}
-
-          {urlToken ? (
-            <div className="flex items-center gap-2 px-3 py-2 bg-[#F0FDF4] border border-[#DCFCE7] rounded-lg text-xs text-[#166534]">
-              <CheckCircle2 className="w-4 h-4 text-[#16A34A] shrink-0" />
-              <span>Reset token verified from link</span>
-            </div>
-          ) : (
-            <Input
-              label="Reset Token"
-              type="text"
-              placeholder="Paste reset token from email"
-              value={token}
-              onChange={(e) => {
-                setToken(e.target.value)
-                if (errors.token) setErrors((prev) => ({ ...prev, token: '' }))
-              }}
-              error={errors.token}
-              leftIcon={<KeyRound className="w-4 h-4" />}
-              required
-            />
           )}
 
           <Input
@@ -182,7 +171,7 @@ export default function ResetPasswordPage() {
           <div className="pt-2 text-center text-xs">
             <Link
               to="/login"
-              className="font-medium text-[#5B6875] hover:text-[#315A7D]"
+              className="font-medium text-[#5B6875] hover:text-[#3F7D58]"
             >
               Cancel and return to Sign In
             </Link>

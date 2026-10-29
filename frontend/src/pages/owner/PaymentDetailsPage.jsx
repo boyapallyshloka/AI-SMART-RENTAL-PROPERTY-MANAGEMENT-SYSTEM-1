@@ -382,12 +382,12 @@ export default function PaymentDetailsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading payment invoice details..." size="md" center />
           </div>
         ) : error ? (
           /* Error State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
               icon={<AlertTriangle className="w-8 h-8 text-red-500" />}
               title="Error Loading Invoice"
@@ -401,7 +401,7 @@ export default function PaymentDetailsPage() {
           </div>
         ) : !invoice ? (
           /* Not Found State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
               icon={<FileCheck className="w-8 h-8" />}
               title="Invoice Not Found"
@@ -419,15 +419,15 @@ export default function PaymentDetailsPage() {
           <>
             {/* Notice Banner */}
             {noticeMessage && (
-              <div className="p-4 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] text-[#315A7D] text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xs animate-in fade-in slide-in-from-top-2">
+              <div className="p-4 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] text-[#3F7D58] text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xs animate-in fade-in slide-in-from-top-2">
                 <div className="flex items-center gap-2">
-                  <Info className="w-4 h-4 text-[#315A7D] shrink-0" />
+                  <Info className="w-4 h-4 text-[#3F7D58] shrink-0" />
                   <span>{noticeMessage}</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setNoticeMessage('')}
-                  className="text-[#315A7D] hover:text-[#274B68] font-bold px-1"
+                  className="text-[#3F7D58] hover:text-[#315F46] font-bold px-1"
                 >
                   &times;
                 </button>
@@ -435,7 +435,7 @@ export default function PaymentDetailsPage() {
             )}
 
             {/* Header Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2.5 flex-wrap">
@@ -473,15 +473,15 @@ export default function PaymentDetailsPage() {
             </div>
 
             {/* Payment Timeline */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                <Clock className="w-4 h-4 text-[#315A7D]" />
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <Clock className="w-4 h-4 text-[#3F7D58]" />
                 Invoice Timeline &amp; Status
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
                 {/* Step 1: Invoice Created */}
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1.5 relative">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1.5 relative">
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full bg-[#3F7D58] text-white flex items-center justify-center text-xs font-bold shrink-0">
                       <CheckCircle2 className="w-3.5 h-3.5" />
@@ -496,9 +496,9 @@ export default function PaymentDetailsPage() {
                 </div>
 
                 {/* Step 2: Due Date */}
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1.5 relative">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1.5 relative">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-[#315A7D] text-white flex items-center justify-center text-xs font-bold shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-[#3F7D58] text-white flex items-center justify-center text-xs font-bold shrink-0">
                       <Calendar className="w-3.5 h-3.5" />
                     </div>
                     <span className="text-sm font-semibold text-[#243447]">
@@ -578,9 +578,9 @@ export default function PaymentDetailsPage() {
             {/* Details Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Tenant & Lease Premise Information */}
-              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                  <User className="w-4 h-4 text-[#315A7D]" />
+              <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                  <User className="w-4 h-4 text-[#3F7D58]" />
                   Tenant &amp; Lease Premise
                 </h2>
 
@@ -612,7 +612,7 @@ export default function PaymentDetailsPage() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Unit</span>
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F8FA] text-[#243447] border border-[#D9E0E6]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
                       {invoice.unitNumber}
                     </span>
                   </div>
@@ -623,7 +623,7 @@ export default function PaymentDetailsPage() {
                     </span>
                     <Link
                       to={`${basePath}/agreements`}
-                      className="font-medium text-[#315A7D] hover:underline"
+                      className="font-medium text-[#3F7D58] hover:underline"
                     >
                       {invoice.agreementNumber}
                     </Link>
@@ -632,8 +632,8 @@ export default function PaymentDetailsPage() {
               </div>
 
               {/* Financial & Fee Breakdown */}
-              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                   <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                   Financial Breakdown
                 </h2>
@@ -658,7 +658,7 @@ export default function PaymentDetailsPage() {
                           aria-label="Late fee amount"
                           value={lateFeeDraft}
                           onChange={(event) => setLateFeeDraft(event.target.value)}
-                          className="w-32 rounded-lg border border-[#C8D3DD] px-3 py-1.5 text-right text-sm text-[#243447] outline-none focus:border-[#315A7D] focus:ring-2 focus:ring-[#315A7D]/15"
+                          className="w-32 rounded-lg border border-[#C8D3DD] px-3 py-1.5 text-right text-sm text-[#243447] outline-none focus:border-[#3F7D58] focus:ring-2 focus:ring-[#3F7D58]/15"
                           disabled={isSavingLateFee}
                         />
                       ) : (
@@ -676,7 +676,7 @@ export default function PaymentDetailsPage() {
                         <button
                           type="button"
                           onClick={() => setIsEditingLateFee(true)}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#315A7D] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#274B68] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/30 focus:ring-offset-1"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#3F7D58] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#315F46] focus:outline-none focus:ring-2 focus:ring-[#3F7D58]/30 focus:ring-offset-1"
                         >
                           <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
                           Edit Late Fee
@@ -688,7 +688,7 @@ export default function PaymentDetailsPage() {
                             type="button"
                             onClick={handleSaveLateFee}
                             disabled={isSavingLateFee}
-                            className="rounded-lg bg-[#315A7D] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#274B68] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="rounded-lg bg-[#3F7D58] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#315F46] focus:outline-none focus:ring-2 focus:ring-[#3F7D58]/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             {isSavingLateFee ? 'Saving…' : 'Save'}
                           </button>
@@ -696,7 +696,7 @@ export default function PaymentDetailsPage() {
                             type="button"
                             onClick={cancelLateFeeEdit}
                             disabled={isSavingLateFee}
-                            className="rounded-lg border border-[#C8D3DD] bg-white px-3 py-1.5 text-xs font-semibold text-[#425466] transition-colors hover:bg-[#F4F7F9] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/20 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="rounded-lg border border-[#C8D3DD] bg-white px-3 py-1.5 text-xs font-semibold text-[#425466] transition-colors hover:bg-[#F4F7F9] focus:outline-none focus:ring-2 focus:ring-[#3F7D58]/20 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             Cancel
                           </button>
@@ -705,7 +705,7 @@ export default function PaymentDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-[#D9E0E6]">
+                  <div className="flex items-center justify-between pt-2 border-t border-[#E3E8DF]">
                     <span className="text-xs font-semibold text-[#243447]">
                       Total Invoiced Amount
                     </span>
@@ -721,7 +721,7 @@ export default function PaymentDetailsPage() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between pt-1 border-t border-dashed border-[#D9E0E6]">
+                  <div className="flex items-center justify-between pt-1 border-t border-dashed border-[#E3E8DF]">
                     <span className="text-xs font-semibold text-[#B94A48]">
                       Remaining Balance Due
                     </span>
@@ -734,10 +734,10 @@ export default function PaymentDetailsPage() {
             </div>
 
             {/* Payment Transactions History Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                  <History className="w-4 h-4 text-[#315A7D]" />
+                  <History className="w-4 h-4 text-[#3F7D58]" />
                   Recorded Payment Transactions
                 </h2>
                 <span className="text-xs text-[#5B6875]">
@@ -746,7 +746,7 @@ export default function PaymentDetailsPage() {
               </div>
 
               {transactions.length === 0 ? (
-                <div className="p-8 text-center bg-[#F7F8FA] rounded-xl border border-dashed border-[#D9E0E6]">
+                <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                   <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
                   <p className="text-xs font-semibold text-[#243447]">
                     No Payment Transactions Recorded
@@ -756,10 +756,10 @@ export default function PaymentDetailsPage() {
                   </p>
                 </div>
               ) : (
-                <div className="overflow-x-auto border border-[#D9E0E6] rounded-xl">
+                <div className="overflow-x-auto border border-[#E3E8DF] rounded-xl">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
-                      <tr className="bg-[#F7F8FA] border-b border-[#D9E0E6] text-[11px] font-bold uppercase text-[#5B6875]">
+                      <tr className="bg-[#F7F7F1] border-b border-[#E3E8DF] text-[11px] font-bold uppercase text-[#5B6875]">
                         <th className="py-3 px-4">Transaction ID</th>
                         <th className="py-3 px-4">Date &amp; Time</th>
                         <th className="py-3 px-4">Payment Method</th>
@@ -767,10 +767,10 @@ export default function PaymentDetailsPage() {
                         <th className="py-3 px-4 text-right">Payment Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#D9E0E6]">
+                    <tbody className="divide-y divide-[#E3E8DF]">
                       {transactions.map((txn) => (
-                        <tr key={txn.paymentId} className="hover:bg-[#F7F8FA]">
-                          <td className="py-3 px-4 font-mono font-semibold text-[#315A7D]">
+                        <tr key={txn.paymentId} className="hover:bg-[#F7F7F1]">
+                          <td className="py-3 px-4 font-mono font-semibold text-[#3F7D58]">
                             #{txn.paymentId}
                           </td>
                           <td className="py-3 px-4 text-[#5B6875]">
@@ -796,14 +796,14 @@ export default function PaymentDetailsPage() {
               )}
             </div>
             {/* Official Payment Receipts Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3 flex-wrap gap-2">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <Receipt className="w-4 h-4 text-[#315A7D]" />
+                  <Receipt className="w-4 h-4 text-[#3F7D58]" />
                   <h2 className="text-base font-semibold text-[#243447]">
                     Official Payment Receipts
                   </h2>
-                  <span className="text-xs font-semibold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
+                  <span className="text-xs font-semibold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                     {receipts.length} {receipts.length === 1 ? 'receipt record' : 'receipt records'}
                   </span>
                 </div>
@@ -812,7 +812,7 @@ export default function PaymentDetailsPage() {
                   size="sm"
                   onClick={loadReceipts}
                   disabled={loadingReceipts}
-                  leftIcon={<RefreshCw className={`w-3.5 h-3.5 ${loadingReceipts ? 'animate-spin text-[#315A7D]' : ''}`} />}
+                  leftIcon={<RefreshCw className={`w-3.5 h-3.5 ${loadingReceipts ? 'animate-spin text-[#3F7D58]' : ''}`} />}
                 >
                   Refresh Receipts
                 </Button>
@@ -841,7 +841,7 @@ export default function PaymentDetailsPage() {
                 </div>
               ) : receipts.length === 0 ? (
                 /* Empty State */
-                <div className="p-8 text-center bg-[#F7F8FA] rounded-xl border border-dashed border-[#D9E0E6]">
+                <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                   <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
                   <p className="text-xs font-semibold text-[#243447]">
                     No Payment Receipts Found
@@ -852,10 +852,10 @@ export default function PaymentDetailsPage() {
                 </div>
               ) : (
                 /* Populated Receipts Table */
-                <div className="overflow-x-auto border border-[#D9E0E6] rounded-xl">
+                <div className="overflow-x-auto border border-[#E3E8DF] rounded-xl">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
-                      <tr className="bg-[#F7F8FA] border-b border-[#D9E0E6] text-[11px] font-bold uppercase text-[#5B6875]">
+                      <tr className="bg-[#F7F7F1] border-b border-[#E3E8DF] text-[11px] font-bold uppercase text-[#5B6875]">
                         <th className="py-3 px-3">Receipt #</th>
                         <th className="py-3 px-3">Invoice #</th>
                         <th className="py-3 px-3">Tenant ID</th>
@@ -867,11 +867,11 @@ export default function PaymentDetailsPage() {
                         <th className="py-3 px-3 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#D9E0E6]">
+                    <tbody className="divide-y divide-[#E3E8DF]">
                       {receipts.map((rcp) => (
-                        <tr key={rcp.receiptId} className="hover:bg-[#F7F8FA]">
+                        <tr key={rcp.receiptId} className="hover:bg-[#F7F7F1]">
                           {/* Receipt Number */}
-                          <td className="py-3 px-3 font-mono font-semibold text-[#315A7D] whitespace-nowrap">
+                          <td className="py-3 px-3 font-mono font-semibold text-[#3F7D58] whitespace-nowrap">
                             {rcp.receiptNumber || `REC-${rcp.receiptId}`}
                           </td>
 
@@ -936,11 +936,11 @@ export default function PaymentDetailsPage() {
         {/* ========================================================= */}
         {selectedReceipt && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#D9E0E6] overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#E3E8DF] overflow-hidden max-h-[90vh] flex flex-col">
               {/* Header */}
-              <div className="p-5 border-b border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA] no-print">
+              <div className="p-5 border-b border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1] no-print">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-[#EAF2F7] text-[#315A7D]">
+                  <div className="p-2 rounded-xl bg-[#EDF4ED] text-[#3F7D58]">
                     <Receipt className="w-5 h-5" />
                   </div>
                   <div>
@@ -964,7 +964,7 @@ export default function PaymentDetailsPage() {
               {/* Modal Body */}
               <div className="p-6 space-y-4 overflow-y-auto flex-1">
                 {/* Print Toolbar */}
-                <div className="flex items-center justify-end no-print pb-2 border-b border-[#D9E0E6]">
+                <div className="flex items-center justify-end no-print pb-2 border-b border-[#E3E8DF]">
                   <Button
                     type="button"
                     variant="primary"
@@ -1012,7 +1012,7 @@ export default function PaymentDetailsPage() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA] no-print">
+              <div className="p-4 border-t border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1] no-print">
                 <span className="text-[11px] text-[#5B6875]">
                   Use the Print button above to print or save this receipt as a PDF.
                 </span>

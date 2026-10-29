@@ -198,7 +198,7 @@ export default function UnitDetailsPage() {
               Back to Buildings
             </Button>
           </Link>
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 text-center space-y-4 shadow-2xs">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 text-center space-y-4 shadow-2xs">
             <div className="w-12 h-12 rounded-full bg-[#FDF2F2] flex items-center justify-center text-[#B94A48] mx-auto border border-[#F8D7DA]">
               <AlertCircle className="w-6 h-6" />
             </div>
@@ -289,7 +289,7 @@ export default function UnitDetailsPage() {
           {isTenant ? (
             <Link
               to="/tenant/buildings"
-              className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+              className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
             >
               My Rental Property
             </Link>
@@ -297,7 +297,7 @@ export default function UnitDetailsPage() {
             <>
               <Link
                 to="/owner/properties"
-                className="hover:text-[#315A7D] transition-colors"
+                className="hover:text-[#3F7D58] transition-colors"
               >
                 Properties
               </Link>
@@ -306,7 +306,7 @@ export default function UnitDetailsPage() {
                   <span>/</span>
                   <Link
                     to={`/owner/properties/${targetPropertyId}`}
-                    className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                    className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
                   >
                     {targetPropertyName || `Property #${targetPropertyId}`}
                   </Link>
@@ -319,7 +319,7 @@ export default function UnitDetailsPage() {
               <span>/</span>
               <Link
                 to={`${basePath}/buildings/${targetBuildingId}`}
-                className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
               >
                 {targetBuildingName || `Building #${targetBuildingId}`}
               </Link>
@@ -330,7 +330,7 @@ export default function UnitDetailsPage() {
               <span>/</span>
               <Link
                 to={`${basePath}/buildings/${targetBuildingId}/floors/${targetFloorId}`}
-                className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
               >
                 {targetFloorName || `Floor #${targetFloorId}`}
               </Link>
@@ -400,23 +400,23 @@ export default function UnitDetailsPage() {
         )}
 
         {isTenant && !isCurrentRentedUnit && unit.status === 'VACANT' && (
-          <div className="p-3.5 rounded-lg bg-[#EAF2F7] border border-[#C2D8E8] text-[#274B68] text-xs font-semibold flex items-center justify-between shadow-2xs">
+          <div className="p-3.5 rounded-lg bg-[#EDF4ED] border border-[#C2D8E8] text-[#315F46] text-xs font-semibold flex items-center justify-between shadow-2xs">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#315A7D] shrink-0" />
+              <Sparkles className="w-4 h-4 text-[#3F7D58] shrink-0" />
               <span>Available Vacant Unit &bull; Open for Lease Discovery</span>
             </div>
-            <Link to="/tenant/find-properties" className="text-[#315A7D] hover:underline font-semibold text-xs">
+            <Link to="/tenant/find-properties" className="text-[#3F7D58] hover:underline font-semibold text-xs">
               &larr; Back to Find Properties
             </Link>
           </div>
         )}
 
         {/* Unit Header Card */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase font-bold tracking-wider text-[#315A7D] px-2 py-0.5 rounded bg-[#EAF2F7] border border-[#D9E0E6]">
+                <span className="text-xs uppercase font-bold tracking-wider text-[#3F7D58] px-2 py-0.5 rounded bg-[#EDF4ED] border border-[#E3E8DF]">
                   {unit.unitType || '—'}
                 </span>
                 <span className="text-xs text-[#5B6875] font-mono">
@@ -442,31 +442,31 @@ export default function UnitDetailsPage() {
         {/* Detail Sections Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Section 1: Unit Overview */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Home className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Home className="w-4 h-4 text-[#3F7D58]" />
               <h2 className="font-semibold text-sm text-[#243447]">Unit Overview</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Unit Number</p>
                 <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.unitNumber}</p>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Unit Type</p>
                 <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.unitType || '—'}</p>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Status</p>
                 <div className="mt-1">
                   <StatusBadge status={unit.status} size="sm" />
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Area</p>
                 <p className="font-bold text-sm text-[#243447] mt-0.5">{unit.area == null ? '—' : `${unit.area} sq ft`}</p>
               </div>
@@ -474,15 +474,15 @@ export default function UnitDetailsPage() {
           </div>
 
           {/* Section 2: Location */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <MapPin className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <MapPin className="w-4 h-4 text-[#3F7D58]" />
               <h2 className="font-semibold text-sm text-[#243447]">Location Hierarchy</h2>
             </div>
 
             <div className="space-y-3 text-xs">
               {targetPropertyName && (
-                <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70 flex items-center justify-between">
+                <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Property</p>
                     <p className="font-bold text-sm text-[#243447] mt-0.5">{targetPropertyName}</p>
@@ -490,16 +490,16 @@ export default function UnitDetailsPage() {
                   {targetPropertyId && (
                     <Link
                       to={`/owner/properties/${targetPropertyId}`}
-                      className="text-xs text-[#315A7D] font-semibold hover:underline flex items-center gap-1"
+                      className="text-xs text-[#3F7D58] font-semibold hover:underline flex items-center gap-1"
                     >
-                      <Building2 className="w-4 h-4 text-[#315A7D] shrink-0" />
+                      <Building2 className="w-4 h-4 text-[#3F7D58] shrink-0" />
                     </Link>
                   )}
                 </div>
               )}
 
               {targetBuildingName && (
-                <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70 flex items-center justify-between">
+                <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Building</p>
                     <p className="font-bold text-sm text-[#243447] mt-0.5">{targetBuildingName}</p>
@@ -507,7 +507,7 @@ export default function UnitDetailsPage() {
                   {targetBuildingId && (
                     <Link
                       to={`${basePath}/buildings/${targetBuildingId}`}
-                      className="text-xs text-[#315A7D] font-semibold hover:underline"
+                      className="text-xs text-[#3F7D58] font-semibold hover:underline"
                     >
                       View Building
                     </Link>
@@ -516,7 +516,7 @@ export default function UnitDetailsPage() {
               )}
 
               {targetFloorName && (
-                <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70 flex items-center justify-between">
+                <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center justify-between">
                   <div>
                     <p className="text-[#5B6875] font-medium">Floor</p>
                     <p className="font-bold text-sm text-[#243447] mt-0.5">
@@ -526,7 +526,7 @@ export default function UnitDetailsPage() {
                   {targetBuildingId && targetFloorId && (
                     <Link
                       to={`${basePath}/buildings/${targetBuildingId}/floors/${targetFloorId}`}
-                      className="text-xs text-[#315A7D] font-semibold hover:underline"
+                      className="text-xs text-[#3F7D58] font-semibold hover:underline"
                     >
                       View Floor
                     </Link>
@@ -537,14 +537,14 @@ export default function UnitDetailsPage() {
           </div>
 
           {/* Section 3: Rental & Financials */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <IndianRupee className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
               <h2 className="font-semibold text-sm text-[#243447]">Rental &amp; Financials</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Monthly Rent</p>
                 <p className="font-bold text-base text-[#243447] mt-0.5">
                   {formatCurrency(unit.monthlyRent)}
@@ -552,7 +552,7 @@ export default function UnitDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70">
                 <p className="text-[#5B6875] font-medium">Security Deposit</p>
                 <p className="font-bold text-base text-[#243447] mt-0.5">
                   {formatCurrency(unit.securityDeposit)}
@@ -562,15 +562,15 @@ export default function UnitDetailsPage() {
           </div>
 
           {/* Section 4: Room Details */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Bed className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Bed className="w-4 h-4 text-[#3F7D58]" />
               <h2 className="font-semibold text-sm text-[#243447]">Room Details</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0">
                   <Bed className="w-4 h-4" />
                 </div>
                 <div>
@@ -579,8 +579,8 @@ export default function UnitDetailsPage() {
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]/70 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0">
+              <div className="p-3 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]/70 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0">
                   <Bath className="w-4 h-4" />
                 </div>
                 <div>
@@ -593,8 +593,8 @@ export default function UnitDetailsPage() {
         </div>
 
         {/* Section 5: Description */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-3">
-          <h2 className="font-semibold text-sm text-[#243447] border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-3">
+          <h2 className="font-semibold text-sm text-[#243447] border-b border-[#E3E8DF] pb-3">
             Description
           </h2>
           <p className="text-xs sm:text-sm text-[#5B6875] leading-relaxed">

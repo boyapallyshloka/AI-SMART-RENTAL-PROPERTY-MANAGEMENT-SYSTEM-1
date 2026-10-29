@@ -182,10 +182,10 @@ export default function FindPropertiesPage() {
     >
       <div className="space-y-6 pb-12">
         {/* 1. Hero Header Banner */}
-        <div className="rounded-lg bg-[#315A7D] p-6 sm:p-8 text-white border border-[#274B68] shadow-xs">
+        <div className="rounded-lg bg-[#3F7D58] p-6 sm:p-8 text-white border border-[#315F46] shadow-xs">
           <div className="max-w-2xl space-y-2.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#274B68] text-[#EAF2F7] border border-[#315A7D]">
-              <Sparkles className="w-3.5 h-3.5 text-[#EAF2F7]" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#315F46] text-[#EDF4ED] border border-[#3F7D58]">
+              <Sparkles className="w-3.5 h-3.5 text-[#EDF4ED]" />
               <span>Rental Property Discovery</span>
             </div>
 
@@ -193,26 +193,26 @@ export default function FindPropertiesPage() {
               Find Your Next Home
             </h1>
 
-            <p className="text-xs sm:text-sm text-[#EAF2F7]/90 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#EDF4ED]/90 leading-relaxed">
               Browse properties and vacant units currently returned by SmartEstate.
             </p>
 
             {/* Quick Metrics Bar */}
-            <div className="pt-3 flex flex-wrap gap-4 sm:gap-6 text-xs text-[#EAF2F7] border-t border-[#274B68]">
+            <div className="pt-3 flex flex-wrap gap-4 sm:gap-6 text-xs text-[#EDF4ED] border-t border-[#315F46]">
               <div className="flex items-center gap-2">
-                <Home className="w-4 h-4 text-[#EAF2F7]" />
+                <Home className="w-4 h-4 text-[#EDF4ED]" />
                 <span>
                   <strong className="text-white font-semibold">{errorMessage ? '—' : availableUnits.length}</strong> Vacant Units
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-[#EAF2F7]" />
+                <Building2 className="w-4 h-4 text-[#EDF4ED]" />
                 <span>
                   <strong className="text-white font-semibold">{errorMessage ? '—' : availableProperties.length}</strong> Communities
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <IndianRupee className="w-4 h-4 text-[#EAF2F7]" />
+                <IndianRupee className="w-4 h-4 text-[#EDF4ED]" />
                 <span>
                   {errorMessage ? 'Rent unavailable' : minimumAvailableRent != null ? (
                     <>From <strong className="text-white font-semibold">₹{minimumAvailableRent.toLocaleString('en-IN')}</strong>/mo</>
@@ -245,15 +245,15 @@ export default function FindPropertiesPage() {
 
         {/* 2. Visual Separation: Current Rental Notice (if active lease exists) */}
         {myRental?.property && (
-          <div className="p-4 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0">
+              <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0">
                 <Building2 className="w-4 h-4" />
               </div>
               <div>
                 <p className="font-semibold text-[#243447]">
                   Currently Renting:{' '}
-                  <span className="text-[#315A7D] font-bold">
+                  <span className="text-[#3F7D58] font-bold">
                     {myRental.property.name || myRental.property.propertyName}
                   </span>
                   {myRental.leaseSummary?.unitNumber && ` • Unit ${myRental.leaseSummary.unitNumber}`}
@@ -273,7 +273,7 @@ export default function FindPropertiesPage() {
         )}
 
         {/* 3. Search and Filtering Controls */}
-        <div className="bg-white p-4 sm:p-5 rounded-lg border border-[#D9E0E6] shadow-2xs space-y-4">
+        <div className="bg-white p-4 sm:p-5 rounded-lg border border-[#E3E8DF] shadow-2xs space-y-4">
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
             {/* Search Input */}
             <div className="relative flex-1">
@@ -286,13 +286,13 @@ export default function FindPropertiesPage() {
             </div>
 
             {/* View Toggle */}
-            <div className="flex items-center gap-1.5 p-1 bg-[#F7F8FA] border border-[#D9E0E6] rounded-md shrink-0 self-start lg:self-auto">
+            <div className="flex items-center gap-1.5 p-1 bg-[#F7F7F1] border border-[#E3E8DF] rounded-md shrink-0 self-start lg:self-auto">
               <button
                 type="button"
                 onClick={() => setActiveTab('units')}
                 className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
                   activeTab === 'units'
-                    ? 'bg-white text-[#315A7D] shadow-2xs border border-[#D9E0E6]/80'
+                    ? 'bg-white text-[#3F7D58] shadow-2xs border border-[#E3E8DF]/80'
                     : 'text-[#5B6875] hover:text-[#243447]'
                 }`}
               >
@@ -303,7 +303,7 @@ export default function FindPropertiesPage() {
                 onClick={() => setActiveTab('communities')}
                 className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${
                   activeTab === 'communities'
-                    ? 'bg-white text-[#315A7D] shadow-2xs border border-[#D9E0E6]/80'
+                    ? 'bg-white text-[#3F7D58] shadow-2xs border border-[#E3E8DF]/80'
                     : 'text-[#5B6875] hover:text-[#243447]'
                 }`}
               >
@@ -313,7 +313,7 @@ export default function FindPropertiesPage() {
           </div>
 
           {/* Granular Filters Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-[#D9E0E6]/70">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-[#E3E8DF]/70">
             {/* Property Select */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#5B6875] mb-1">
@@ -376,13 +376,13 @@ export default function FindPropertiesPage() {
 
           {/* Active Filter Clear Helper */}
           {hasActiveFilters && (
-            <div className="flex items-center justify-between pt-2 border-t border-[#D9E0E6]/70 text-xs">
+            <div className="flex items-center justify-between pt-2 border-t border-[#E3E8DF]/70 text-xs">
               <span className="text-[#5B6875]">
                 Showing {filteredUnits.length} vacant {filteredUnits.length === 1 ? 'unit' : 'units'} matching criteria
               </span>
               <button
                 onClick={handleResetFilters}
-                className="text-xs font-semibold text-[#315A7D] hover:underline"
+                className="text-xs font-semibold text-[#3F7D58] hover:underline"
               >
                 Reset All Filters
               </button>
@@ -392,7 +392,7 @@ export default function FindPropertiesPage() {
 
         {/* 4. Results Display */}
         {isLoading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader text="Loading available properties and vacant units..." size="md" center />
           </div>
         ) : activeTab === 'units' ? (
@@ -423,13 +423,13 @@ export default function FindPropertiesPage() {
                 return (
                   <div
                     key={unit.unitId}
-                    className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs flex flex-col justify-between hover:border-[#315A7D]/50 transition-colors"
+                    className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs flex flex-col justify-between hover:border-[#3F7D58]/50 transition-colors"
                   >
                     <div className="space-y-3.5">
                       {/* Top Header: Type & Status */}
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#315A7D] px-2 py-0.5 rounded bg-[#EAF2F7] border border-[#D9E0E6]/80">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#3F7D58] px-2 py-0.5 rounded bg-[#EDF4ED] border border-[#E3E8DF]/80">
                             {unit.unitType}
                           </span>
                           <h2 className="font-serif text-xl font-bold text-[#243447] mt-1.5">
@@ -443,7 +443,7 @@ export default function FindPropertiesPage() {
                       {/* Location Hierarchy */}
                       <div className="space-y-1 text-xs text-[#5B6875] pt-1">
                         <div className="flex items-center gap-1.5 font-semibold text-[#243447]">
-                          <Building className="w-3.5 h-3.5 text-[#315A7D] shrink-0" />
+                          <Building className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                           <span className="truncate">{building?.buildingName}</span>
                         </div>
                         <div className="flex items-center gap-1.5 text-[11px]">
@@ -458,14 +458,14 @@ export default function FindPropertiesPage() {
 
                       {/* Current Community Callout */}
                       {isCurrentComplex && (
-                        <div className="p-2 rounded bg-[#EAF2F7]/70 border border-[#D9E0E6] text-[11px] text-[#315A7D] font-semibold flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#315A7D] shrink-0" />
+                        <div className="p-2 rounded bg-[#EDF4ED]/70 border border-[#E3E8DF] text-[11px] text-[#3F7D58] font-semibold flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58] shrink-0" />
                           <span>Located in your current community complex</span>
                         </div>
                       )}
 
                       {/* Financials & Specifications */}
-                      <div className="pt-3 border-t border-[#D9E0E6] space-y-2.5">
+                      <div className="pt-3 border-t border-[#E3E8DF] space-y-2.5">
                         <div className="flex items-baseline justify-between">
                           <div>
                             <span className="text-xs text-[#5B6875]">Monthly Rent</span>
@@ -484,15 +484,15 @@ export default function FindPropertiesPage() {
 
                         {/* Specs row */}
                         <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                          <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/70">
+                          <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Area</p>
                             <p className="font-bold text-[#243447] mt-0.5">{unit.area} sq ft</p>
                           </div>
-                          <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/70">
+                          <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Beds</p>
                             <p className="font-bold text-[#243447] mt-0.5">{unit.bedrooms}</p>
                           </div>
-                          <div className="p-2 rounded bg-[#F7F8FA] border border-[#D9E0E6]/70">
+                          <div className="p-2 rounded bg-[#F7F7F1] border border-[#E3E8DF]/70">
                             <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Baths</p>
                             <p className="font-bold text-[#243447] mt-0.5">{unit.bathrooms}</p>
                           </div>
@@ -508,7 +508,7 @@ export default function FindPropertiesPage() {
                     </div>
 
                     {/* Discovery Actions (Read-Only) */}
-                    <div className="pt-4 mt-4 border-t border-[#D9E0E6] flex items-center justify-between gap-2">
+                    <div className="pt-4 mt-4 border-t border-[#E3E8DF] flex items-center justify-between gap-2">
                       <Link to={`/tenant/buildings/${building?.buildingId}`}>
                         <Button size="sm" variant="outline">
                           View Building
@@ -551,12 +551,12 @@ export default function FindPropertiesPage() {
                 return (
                   <div
                     key={p.property.id}
-                    className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4 hover:border-[#315A7D]/40 transition-colors"
+                    className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4 hover:border-[#3F7D58]/40 transition-colors"
                   >
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-[#D9E0E6] pb-4">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-[#E3E8DF] pb-4">
                       <div className="space-y-1 max-w-2xl">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                          <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                             {p.property.type}
                           </span>
                           {isCurrentComplex && (
@@ -569,7 +569,7 @@ export default function FindPropertiesPage() {
                           {p.property.name}
                         </h2>
                         <div className="flex items-center gap-1.5 text-xs text-[#5B6875]">
-                          <MapPin className="w-3.5 h-3.5 text-[#315A7D]" />
+                          <MapPin className="w-3.5 h-3.5 text-[#3F7D58]" />
                           <span>{p.property.address}, {p.property.city}, {p.property.state} {p.property.zipCode}</span>
                         </div>
                         {p.property.description && (
@@ -580,13 +580,13 @@ export default function FindPropertiesPage() {
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
-                        <div className="px-3.5 py-2 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-center">
+                        <div className="px-3.5 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                           <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Available</p>
-                          <p className="text-lg font-bold text-[#315A7D]">
+                          <p className="text-lg font-bold text-[#3F7D58]">
                             {p.vacantUnitsCount} {p.vacantUnitsCount === 1 ? 'Unit' : 'Units'}
                           </p>
                         </div>
-                        <div className="px-3.5 py-2 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-center">
+                        <div className="px-3.5 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-center">
                           <p className="text-[10px] uppercase font-semibold text-[#5B6875]">Rent From</p>
                           <p className="text-lg font-bold text-[#243447]">₹{Number(p.minRent).toLocaleString('en-IN')}</p>
                         </div>
@@ -613,14 +613,14 @@ export default function FindPropertiesPage() {
                         {p.buildings.map((b) => (
                           <div
                             key={b.buildingId}
-                            className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] flex flex-col justify-between space-y-3"
+                            className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] flex flex-col justify-between space-y-3"
                           >
                             <div>
                               <div className="flex items-center justify-between">
                                 <h4 className="font-semibold text-sm text-[#243447]">
                                   {b.buildingName}
                                 </h4>
-                                <span className="text-[11px] font-semibold text-[#315A7D]">
+                                <span className="text-[11px] font-semibold text-[#3F7D58]">
                                   {b.vacantUnitsCount} Vacant
                                 </span>
                               </div>
@@ -629,7 +629,7 @@ export default function FindPropertiesPage() {
                               </p>
                             </div>
 
-                            <div className="pt-2 border-t border-[#D9E0E6]/70 flex items-center justify-between">
+                            <div className="pt-2 border-t border-[#E3E8DF]/70 flex items-center justify-between">
                               <span className="text-[11px] text-[#5B6875] font-mono">
                                 ID: {b.buildingId}
                               </span>

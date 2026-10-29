@@ -5,7 +5,8 @@ import {
   getUserById,
   getUserByEmail,
   updateUser,
-  deleteUser,
+  deactivateUser,
+  reactivateUser,
   getUsersByRole,
   getUsersByStatus,
   getUsersByRoleAndStatus,
@@ -36,7 +37,8 @@ import {
   Clock,
   Eye,
   Pencil,
-  Trash2,
+  UserX,
+  UserCheck,
   X,
   AlertCircle,
   Save,
@@ -96,10 +98,11 @@ export default function UserManagementPage() {
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
   const [statusError, setStatusError] = useState('')
 
-  // 4. Delete modal
-  const [userToDelete, setUserToDelete] = useState(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteError, setDeleteError] = useState('')
+  // 4. Account deactivation/reactivation confirmation
+  const [accountActionUser, setAccountActionUser] = useState(null)
+  const [accountAction, setAccountAction] = useState(null)
+  const [isUpdatingAccount, setIsUpdatingAccount] = useState(false)
+  const [accountActionError, setAccountActionError] = useState('')
 
   // Fetch users based on current filters and search query
   const loadUsers = useCallback(async () => {
@@ -261,7 +264,8 @@ export default function UserManagementPage() {
       id: user.id,
       name: user.name,
       email: user.email,
-      newStatus: user.status || USER_STATUSES.ACTIVE,
+      newStatus: user.status === USER_STATUSES.ACTIVE ? '' : user.status,
+      selfDeactivated: user.selfDeactivated === true,
     })
     setStatusError('')
   }
@@ -269,6 +273,10 @@ export default function UserManagementPage() {
   const handleStatusSubmit = async (e) => {
     e.preventDefault()
     if (!statusModalData) return
+    if (!statusModalData.newStatus) {
+      setStatusError('Choose a status before continuing.')
+      return
+    }
 
     setIsUpdatingStatus(true)
     setStatusError('')
@@ -309,30 +317,44 @@ export default function UserManagementPage() {
     }
   }
 
-  // Flow 9: Delete User
-  const handleOpenDelete = (user) => {
-    setUserToDelete(user)
-    setDeleteError('')
+  // Flow 9: Admin deactivation/reactivation (account history is retained)
+  const handleOpenAccountAction = (user, action) => {
+    setAccountActionUser(user)
+    setAccountAction(action)
+    setAccountActionError('')
   }
 
-  const handleDeleteConfirm = async () => {
-    if (!userToDelete) return
-    setIsDeleting(true)
-    setDeleteError('')
+  const handleAccountActionConfirm = async () => {
+    if (!accountActionUser || !accountAction) return
+    setIsUpdatingAccount(true)
+    setAccountActionError('')
     try {
-      await deleteUser(userToDelete.id)
-      setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id))
-      setToast('User deleted successfully.')
-      setUserToDelete(null)
-      if (selectedUser && selectedUser.id === userToDelete.id) {
-        setIsDetailsOpen(false)
-        setSelectedUser(null)
+      let updated
+      if (accountAction === 'deactivate') {
+        await deactivateUser(accountActionUser.id)
+        updated = {
+          ...accountActionUser,
+          status: USER_STATUSES.INACTIVE,
+          accountStatus: USER_STATUSES.INACTIVE,
+          selfDeactivated: false,
+        }
+        setToast('User account deactivated. Account history has been retained.')
+      } else {
+        const response = await reactivateUser(accountActionUser.id)
+        updated = mapBackendUserToUi(response?.data || response)
+        setToast('User account reactivated.')
       }
+      setUsers((prev) => prev.map((u) => u.id === updated.id ? { ...u, ...updated } : u))
+      if (selectedUser?.id === updated.id) {
+        setSelectedUser((prev) => prev ? { ...prev, ...updated } : prev)
+      }
+      setAccountActionUser(null)
+      setAccountAction(null)
     } catch (err) {
-      console.error('Failed to delete user:', err)
-      setDeleteError(err?.message || 'Failed to delete user.')
+      console.error(`Failed to ${accountAction} user account:`, err)
+      setAccountActionError(err?.message || `Failed to ${accountAction} user account.`)
     } finally {
-      setIsDeleting(false)
+      setIsUpdatingAccount(false)
     }
   }
 
@@ -342,14 +364,14 @@ export default function UserManagementPage() {
       case 'OWNER':
         return <Building2 className="w-3.5 h-3.5 text-[#3F7D58]" />
       case 'TENANT':
-        return <User className="w-3.5 h-3.5 text-[#315A7D]" />
+        return <User className="w-3.5 h-3.5 text-[#3F7D58]" />
       case 'PROPERTY_MANAGER':
       case 'MANAGER':
         return <Briefcase className="w-3.5 h-3.5 text-[#5B6875]" />
       case 'SUPER_ADMIN':
       case 'SUPERADMIN':
       case 'ADMIN':
-        return <Shield className="w-3.5 h-3.5 text-[#315A7D]" />
+        return <Shield className="w-3.5 h-3.5 text-[#3F7D58]" />
       default:
         return <User className="w-3.5 h-3.5 text-[#5B6875]" />
     }
@@ -361,16 +383,16 @@ export default function UserManagementPage() {
       case 'OWNER':
         return 'bg-[#EDF7EE] text-[#2A583B] border-[#C6DEC8]'
       case 'TENANT':
-        return 'bg-[#EAF2F7] text-[#274B68] border-[#D9E0E6]'
+        return 'bg-[#EDF4ED] text-[#315F46] border-[#E3E8DF]'
       case 'PROPERTY_MANAGER':
       case 'MANAGER':
-        return 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]'
+        return 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]'
       case 'SUPER_ADMIN':
       case 'SUPERADMIN':
       case 'ADMIN':
-        return 'bg-[#EAF2F7] text-[#315A7D] border-[#D9E0E6]'
+        return 'bg-[#EDF4ED] text-[#3F7D58] border-[#E3E8DF]'
       default:
-        return 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]'
+        return 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]'
     }
   }
 
@@ -430,7 +452,7 @@ export default function UserManagementPage() {
         )}
 
         {/* Search, Role, and Status Filter Bar */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-4 sm:p-5 shadow-2xs space-y-4">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-4 sm:p-5 shadow-2xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
             <div className="sm:col-span-5">
               <form
@@ -471,7 +493,7 @@ export default function UserManagementPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2 rounded-md border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] transition-colors shrink-0"
+                  className="p-2 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -482,14 +504,14 @@ export default function UserManagementPage() {
                 title="Refresh user list"
                 aria-label="Refresh user list"
                 disabled={loading}
-                className="p-2 rounded-md border border-[#D9E0E6] text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors shrink-0 disabled:opacity-50"
+                className="p-2 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors shrink-0 disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
               <strong className="text-[#243447]">
@@ -498,7 +520,7 @@ export default function UserManagementPage() {
               of {users.length} loaded users
             </span>
             {hasActiveFilters && (
-              <span className="text-[#315A7D] font-semibold">
+              <span className="text-[#3F7D58] font-semibold">
                 Filters active
               </span>
             )}
@@ -507,12 +529,12 @@ export default function UserManagementPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader text="Loading user directory from server..." size="md" center />
           </div>
         ) : filteredUsers.length === 0 ? (
           /* Empty State */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs">
             <EmptyState
               icon={<Users className="w-8 h-8" />}
               title="No users match your criteria"
@@ -521,11 +543,11 @@ export default function UserManagementPage() {
           </div>
         ) : (
           /* Responsive Table */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] shadow-2xs overflow-hidden">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] shadow-2xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3 pl-6 pr-4">User Name</th>
                     <th className="py-3 px-4">Email</th>
                     <th className="py-3 px-4">Role</th>
@@ -535,16 +557,16 @@ export default function UserManagementPage() {
                     <th className="py-3 pl-4 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm bg-white">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm bg-white">
                   {filteredUsers.map((u) => (
                     <tr
                       key={u.id}
-                      className="hover:bg-[#F7F8FA] transition-colors"
+                      className="hover:bg-[#F7F7F1] transition-colors"
                     >
                       {/* Name */}
                       <td className="py-3.5 pl-6 pr-4 font-semibold text-[#243447] min-w-[180px]">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center font-bold text-xs text-[#315A7D] shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center font-bold text-xs text-[#3F7D58] shrink-0">
                             {u.name?.charAt(0) || 'U'}
                           </div>
                           <span className="truncate">{u.name}</span>
@@ -604,7 +626,7 @@ export default function UserManagementPage() {
                             onClick={() => handleViewDetails(u.id)}
                             title="View User Details"
                             aria-label={`View details for ${u.name}`}
-                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors"
+                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -613,28 +635,42 @@ export default function UserManagementPage() {
                             onClick={() => handleOpenEdit(u)}
                             title="Edit User Profile"
                             aria-label={`Edit profile for ${u.name}`}
-                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] transition-colors"
+                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => handleOpenStatusModal(u)}
-                            title="Update Account Status"
-                            aria-label={`Update account status for ${u.name}`}
-                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF7EE] transition-colors"
-                          >
-                            <ShieldCheck className="w-4 h-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleOpenDelete(u)}
-                            title="Delete User Account"
-                            aria-label={`Delete account for ${u.name}`}
-                            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#B94A48] hover:bg-[#FDF2F2] transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {!(u.status === USER_STATUSES.INACTIVE && u.selfDeactivated === true) && (
+                            <button
+                              type="button"
+                              onClick={() => handleOpenStatusModal(u)}
+                              title="Update Account Status"
+                              aria-label={`Update account status for ${u.name}`}
+                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF7EE] transition-colors"
+                            >
+                              <ShieldCheck className="w-4 h-4" />
+                            </button>
+                          )}
+                          {u.status === USER_STATUSES.ACTIVE ? (
+                            <button
+                              type="button"
+                              onClick={() => handleOpenAccountAction(u, 'deactivate')}
+                              title="Deactivate User Account"
+                              aria-label={`Deactivate account for ${u.name}`}
+                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#B94A48] hover:bg-[#FDF2F2] transition-colors"
+                            >
+                              <UserX className="w-4 h-4" />
+                            </button>
+                          ) : u.status === USER_STATUSES.INACTIVE && u.selfDeactivated === false ? (
+                            <button
+                              type="button"
+                              onClick={() => handleOpenAccountAction(u, 'reactivate')}
+                              title="Reactivate User Account"
+                              aria-label={`Reactivate account for ${u.name}`}
+                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF7EE] transition-colors"
+                            >
+                              <UserCheck className="w-4 h-4" />
+                            </button>
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -653,10 +689,10 @@ export default function UserManagementPage() {
             aria-modal="true"
             aria-labelledby="user-details-title"
           >
-            <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-5 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between pb-3 border-b border-[#D9E0E6]">
+            <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-5 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E3E8DF]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center font-bold text-sm text-[#315A7D]">
+                  <div className="w-10 h-10 rounded-full bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center font-bold text-sm text-[#3F7D58]">
                     {selectedUser?.name?.charAt(0) || <User className="w-5 h-5" />}
                   </div>
                   <div>
@@ -686,7 +722,7 @@ export default function UserManagementPage() {
                 </div>
               ) : selectedUser ? (
                 <div className="space-y-4 text-xs">
-                  <div className="grid grid-cols-2 gap-3 p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]">
+                  <div className="grid grid-cols-2 gap-3 p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]">
                     <div>
                       <span className="text-[#5B6875] block">First Name</span>
                       <strong className="text-[#243447] font-semibold">{selectedUser.firstName || '—'}</strong>
@@ -726,7 +762,7 @@ export default function UserManagementPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#D9E0E6]">
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E3E8DF]">
                     <Button
                       type="button"
                       variant="outline"
@@ -762,8 +798,8 @@ export default function UserManagementPage() {
             aria-modal="true"
             aria-labelledby="edit-user-title"
           >
-            <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between pb-2 border-b border-[#D9E0E6]">
+            <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E3E8DF]">
                 <h3 id="edit-user-title" className="text-base font-bold text-[#243447]">
                   Edit User Profile
                 </h3>
@@ -839,7 +875,7 @@ export default function UserManagementPage() {
                   disabled={isSubmittingEdit}
                 />
 
-                <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+                <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                   <Button
                     type="button"
                     variant="outline"
@@ -872,8 +908,8 @@ export default function UserManagementPage() {
             aria-modal="true"
             aria-labelledby="change-status-title"
           >
-            <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-[#D9E0E6]">
+            <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E3E8DF]">
                 <h3 id="change-status-title" className="text-base font-bold text-[#243447]">
                   Update User Account Status
                 </h3>
@@ -903,7 +939,7 @@ export default function UserManagementPage() {
                 <Select
                   label="New Account Status"
                   options={[
-                    { value: USER_STATUSES.ACTIVE, label: 'Active (Full Platform Access)' },
+                    { value: '', label: 'Select a status' },
                     { value: USER_STATUSES.INACTIVE, label: 'Inactive (Temporary Suspension)' },
                     { value: USER_STATUSES.BLOCKED, label: 'Blocked (Access Denied)' },
                     { value: USER_STATUSES.PENDING, label: 'Pending (Awaiting Verification)' },
@@ -915,7 +951,7 @@ export default function UserManagementPage() {
                   disabled={isUpdatingStatus}
                 />
 
-                <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+                <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                   <Button
                     type="button"
                     variant="outline"
@@ -940,21 +976,33 @@ export default function UserManagementPage() {
           </div>
         )}
 
-        {/* Modal 4: Delete User Confirmation */}
+        {/* Modal 4: Admin deactivation/reactivation confirmation */}
         <DeleteConfirmModal
-          isOpen={Boolean(userToDelete)}
-          onClose={() => !isDeleting && setUserToDelete(null)}
-          onConfirm={handleDeleteConfirm}
-          title="Delete User Account"
-          itemName={userToDelete ? `${userToDelete.name} (${userToDelete.email})` : ''}
-          consequenceMessage="This will permanently delete this user account from SmartEstate. All credentials will be invalidated. This action cannot be undone."
-          isLoading={isDeleting}
+          isOpen={Boolean(accountActionUser && accountAction)}
+          onClose={() => {
+            if (!isUpdatingAccount) {
+              setAccountActionUser(null)
+              setAccountAction(null)
+              setAccountActionError('')
+            }
+          }}
+          onConfirm={handleAccountActionConfirm}
+          title={accountAction === 'deactivate' ? 'Deactivate User Account' : 'Reactivate User Account'}
+          itemName={accountActionUser ? `${accountActionUser.name} (${accountActionUser.email})` : ''}
+          message={accountAction === 'deactivate'
+            ? `Deactivate ${accountActionUser?.name || 'this user'}? Their User ID and history will be preserved, but they will no longer be able to sign in.`
+            : `Reactivate ${accountActionUser?.name || 'this user'}? They will be able to sign in again.`}
+          consequenceMessage={accountAction === 'deactivate'
+            ? 'This is a soft deactivation. User and history data are retained.'
+            : undefined}
+          confirmText={accountAction === 'deactivate' ? 'Deactivate' : 'Reactivate'}
+          confirmVariant={accountAction === 'deactivate' ? 'danger' : 'primary'}
+          confirmIcon={accountAction === 'deactivate'
+            ? <UserX className="w-3.5 h-3.5" />
+            : <UserCheck className="w-3.5 h-3.5" />}
+          errorMessage={accountActionError}
+          isLoading={isUpdatingAccount}
         />
-        {deleteError && (
-          <div className="p-3 rounded-lg bg-[#FDF2F2] border border-[#F8D7DA] text-xs text-[#B94A48]">
-            {deleteError}
-          </div>
-        )}
       </div>
     </DashboardLayout>
   )

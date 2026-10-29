@@ -4,7 +4,7 @@ import {
   uploadPropertyDocument,
   deletePropertyDocument,
   downloadPropertyDocument,
-  getPropertyPublishEligibility,
+  derivePropertyPublishEligibility,
   PROPERTY_DOCUMENT_TYPES,
   PROPERTY_DOCUMENT_TYPE_LABELS,
   PROPERTY_DOCUMENT_STATUSES,
@@ -83,10 +83,7 @@ export default function PropertyDocumentsSection({
     setIsLoading(true)
     setError(null)
     try {
-      const [docsRes, eligRes] = await Promise.all([
-        getPropertyDocuments(propertyId),
-        getPropertyPublishEligibility(propertyId),
-      ])
+      const docsRes = await getPropertyDocuments(propertyId)
 
       const docList = Array.isArray(docsRes)
         ? docsRes
@@ -95,7 +92,7 @@ export default function PropertyDocumentsSection({
         : []
       setDocuments(docList)
 
-      const eligData = eligRes?.data || eligRes || null
+      const eligData = derivePropertyPublishEligibility(docList)
       setEligibility(eligData)
       if (onEligibilityChange) {
         onEligibilityChange(eligData)
@@ -340,11 +337,11 @@ export default function PropertyDocumentsSection({
       </div>
 
       {/* Document Management Header & Actions */}
-      <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#D9E0E6]">
+      <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E3E8DF]">
           <div>
             <h3 className="font-serif text-lg font-bold text-[#243447] flex items-center gap-2">
-              <FileCheck2 className="w-5 h-5 text-[#315A7D]" />
+              <FileCheck2 className="w-5 h-5 text-[#3F7D58]" />
               Property Documents
             </h3>
             <p className="text-xs text-[#5B6875] mt-0.5">
@@ -424,7 +421,7 @@ export default function PropertyDocumentsSection({
 
         {/* Documents Table / Cards */}
         {!isLoading && !error && documents.length > 0 && (
-          <div className="divide-y divide-[#D9E0E6] mt-2">
+          <div className="divide-y divide-[#E3E8DF] mt-2">
             {documents.map((doc) => {
               const isApproved = doc.status === PROPERTY_DOCUMENT_STATUSES.APPROVED
               const isPending = doc.status === PROPERTY_DOCUMENT_STATUSES.PENDING
@@ -491,7 +488,7 @@ export default function PropertyDocumentsSection({
                           href={doc.documentUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#D9E0E6] bg-white text-[#243447] hover:bg-[#F7F8FA] hover:text-[#315A7D] transition-colors"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
                           title="Open document securely in a new tab"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -502,7 +499,7 @@ export default function PropertyDocumentsSection({
                         type="button"
                         onClick={() => handleDownload(doc)}
                         disabled={downloadingId === doc.documentId}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#D9E0E6] bg-white text-[#243447] hover:bg-[#F7F8FA] hover:text-[#315A7D] transition-colors disabled:opacity-50"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
                         title="Download file"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -513,7 +510,7 @@ export default function PropertyDocumentsSection({
                         <button
                           type="button"
                           onClick={() => handleOpenUpload(doc.documentType, doc)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#315A7D] bg-[#315A7D] text-white hover:bg-[#24435E] transition-colors"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[#3F7D58] bg-[#3F7D58] text-white hover:bg-[#24435E] transition-colors"
                           title="Upload a corrected document to replace this rejected one"
                         >
                           <RotateCcw className="w-3.5 h-3.5" />
@@ -560,10 +557,10 @@ export default function PropertyDocumentsSection({
       {/* Upload Document Modal */}
       {isUploadModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-lg overflow-hidden animate-scale-up">
-            <div className="flex items-center justify-between p-5 border-b border-[#D9E0E6] bg-[#F7F8FA]">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-lg overflow-hidden animate-scale-up">
+            <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
               <div className="flex items-center gap-2">
-                <FileCheck2 className="w-5 h-5 text-[#315A7D]" />
+                <FileCheck2 className="w-5 h-5 text-[#3F7D58]" />
                 <h3 className="font-semibold text-base text-[#243447]">
                   {resubmittingDoc ? 'Replace & Resubmit Property Document' : 'Upload Property Document'}
                 </h3>
@@ -597,7 +594,7 @@ export default function PropertyDocumentsSection({
                 <select
                   value={documentType}
                   onChange={(e) => setDocumentType(e.target.value)}
-                  className="w-full text-sm rounded-lg border border-[#D9E0E6] bg-white text-[#243447] py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#315A7D]"
+                  className="w-full text-sm rounded-lg border border-[#E3E8DF] bg-white text-[#243447] py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#3F7D58]"
                   disabled={isUploading || !!resubmittingDoc}
                 >
                   {Object.entries(PROPERTY_DOCUMENT_TYPES).map(([key, val]) => (
@@ -622,7 +619,7 @@ export default function PropertyDocumentsSection({
                   accept=".pdf,.jpg,.jpeg,.png"
                   onChange={handleFileChange}
                   disabled={isUploading}
-                  className="block w-full text-xs text-[#5B6875] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#EAF2F7] file:text-[#315A7D] hover:file:bg-[#D9E0E6] cursor-pointer"
+                  className="block w-full text-xs text-[#5B6875] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#EDF4ED] file:text-[#3F7D58] hover:file:bg-[#E3E8DF] cursor-pointer"
                 />
                 <p className="text-[11px] text-[#5B6875] mt-1">
                   Supported formats: PDF, JPG, PNG up to 10 MB. Files are stored securely and kept private.
@@ -630,7 +627,7 @@ export default function PropertyDocumentsSection({
               </div>
 
               {selectedFile && (
-                <div className="p-3 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] text-xs space-y-1">
+                <div className="p-3 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] text-xs space-y-1">
                   <div className="font-semibold text-[#243447] flex items-center justify-between">
                     <span>{selectedFile.name}</span>
                     <span className="text-[#5B6875] font-normal">{formatFileSize(selectedFile.size)}</span>
@@ -638,7 +635,7 @@ export default function PropertyDocumentsSection({
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#D9E0E6]">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#E3E8DF]">
                 <Button
                   type="button"
                   variant="outline"

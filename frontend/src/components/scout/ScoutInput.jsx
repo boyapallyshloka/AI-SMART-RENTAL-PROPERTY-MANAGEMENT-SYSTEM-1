@@ -37,7 +37,7 @@ export default function ScoutInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-3 bg-white border-t border-[#D9E0E6] flex items-center gap-2"
+      className="p-3 bg-white border-t border-[#E3E8DF] flex items-center gap-2"
     >
       <div className="relative flex-1">
         <input
@@ -48,7 +48,7 @@ export default function ScoutInput({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full text-xs sm:text-sm bg-[#F7F8FA] border border-[#D9E0E6] rounded-xl px-3.5 py-2.5 text-[#243447] placeholder-[#5B6875] focus:outline-none focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full text-xs sm:text-sm bg-[#F7F7F1] border border-[#E3E8DF] rounded-xl px-3.5 py-2.5 text-[#243447] placeholder-[#5B6875] focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           aria-label="Message to SCOUT"
         />
       </div>
@@ -56,7 +56,7 @@ export default function ScoutInput({
       <button
         type="submit"
         disabled={!inputText.trim() || disabled}
-        className="p-2.5 rounded-xl bg-[#315A7D] hover:bg-[#274B68] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0 flex items-center justify-center shadow-xs cursor-pointer"
+        className="p-2.5 rounded-xl bg-[#3F7D58] hover:bg-[#315F46] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0 flex items-center justify-center shadow-xs cursor-pointer"
         title="Send message"
         aria-label="Send message"
       >

@@ -10,7 +10,7 @@ const createCustomPinIcon = () => {
     className: 'hs-custom-map-pin',
     html: `
       <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-        <svg viewBox="0 0 24 24" width="36" height="36" fill="#315A7D" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="#3F7D58" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
           <circle cx="12" cy="10" r="3" fill="#ffffff"></circle>
         </svg>
@@ -279,7 +279,7 @@ export default function PropertyMapLocationPicker({
       {/* Map Header / Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-1.5 text-[#243447] font-semibold">
-          <MapPin className="w-4 h-4 text-[#315A7D]" />
+          <MapPin className="w-4 h-4 text-[#3F7D58]" />
           <span>Interactive Property Location Map</span>
         </div>
 
@@ -288,13 +288,13 @@ export default function PropertyMapLocationPicker({
             type="button"
             onClick={handleUseCurrentLocation}
             disabled={isLocating}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-[#243447] text-xs font-medium transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-[#243447] text-xs font-medium transition-colors shadow-2xs disabled:opacity-50"
             title="Detect and center map on your current location"
           >
             {isLocating ? (
-              <Loader className="w-3.5 h-3.5 animate-spin text-[#315A7D]" />
+              <Loader className="w-3.5 h-3.5 animate-spin text-[#3F7D58]" />
             ) : (
-              <Navigation className="w-3.5 h-3.5 text-[#315A7D]" />
+              <Navigation className="w-3.5 h-3.5 text-[#3F7D58]" />
             )}
             <span>{isLocating ? 'Locating...' : 'Use My Location'}</span>
           </button>
@@ -304,10 +304,10 @@ export default function PropertyMapLocationPicker({
               type="button"
               onClick={handleRefreshGeocode}
               disabled={isGeocoding}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-[#5B6875] text-xs transition-colors shadow-2xs disabled:opacity-50"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-[#5B6875] text-xs transition-colors shadow-2xs disabled:opacity-50"
               title="Re-fetch address from coordinates"
             >
-              <RotateCw className={`w-3.5 h-3.5 ${isGeocoding ? 'animate-spin text-[#315A7D]' : ''}`} />
+              <RotateCw className={`w-3.5 h-3.5 ${isGeocoding ? 'animate-spin text-[#3F7D58]' : ''}`} />
               <span>Fetch Address</span>
             </button>
           )}
@@ -315,7 +315,7 @@ export default function PropertyMapLocationPicker({
       </div>
 
       {/* Map Container */}
-      <div className="relative rounded-xl overflow-hidden border border-[#D9E0E6] bg-slate-100 shadow-inner">
+      <div className="relative rounded-xl overflow-hidden border border-[#E3E8DF] bg-slate-100 shadow-inner">
         <div
           ref={mapContainerRef}
           className="w-full h-[260px] sm:h-[300px] z-0"
@@ -324,7 +324,7 @@ export default function PropertyMapLocationPicker({
 
         {/* Floating Instructions Banner */}
         <div className="absolute top-2.5 left-2.5 right-2.5 pointer-events-none z-[400] flex justify-between items-start gap-2">
-          <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#D9E0E6] shadow-sm text-[11px] text-[#243447] font-medium flex items-center gap-1.5">
+          <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#E3E8DF] shadow-sm text-[11px] text-[#243447] font-medium flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#3F7D58] animate-pulse shrink-0" />
             <span>Click map or drag pin to position property</span>
           </div>
@@ -375,7 +375,7 @@ export default function PropertyMapLocationPicker({
       </div>
 
       {/* Coordinate Display Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs">
         <div className="flex items-center gap-3 text-[#5B6875]">
           <span>
             Lat:{' '}

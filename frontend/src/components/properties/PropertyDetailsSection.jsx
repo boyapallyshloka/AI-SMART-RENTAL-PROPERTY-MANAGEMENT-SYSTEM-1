@@ -43,7 +43,7 @@ function getAmenityIcon(amenityName = '') {
     return <Zap className="w-4 h-4 text-yellow-500" />
   }
   if (lower.includes('smart') || lower.includes('keyless') || lower.includes('lock') || lower.includes('security')) {
-    return <Key className="w-4 h-4 text-[#315A7D]" />
+    return <Key className="w-4 h-4 text-[#3F7D58]" />
   }
   if (lower.includes('bbq') || lower.includes('fire') || lower.includes('grill') || lower.includes('kitchen')) {
     return <Flame className="w-4 h-4 text-rose-500" />
@@ -145,17 +145,17 @@ export default function PropertyDetailsSection({
   return (
     <div className="space-y-8">
       {/* 1. Key Property Specifications Grid */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs sm:p-6">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs sm:p-6">
         <h3 className="text-base font-bold text-[#243447] mb-4 flex items-center gap-2">
-          <Building className="w-4 h-4 text-[#315A7D]" />
+          <Building className="w-4 h-4 text-[#3F7D58]" />
           <span>Property Overview & Specifications</span>
         </h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {displayType && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Building className="w-4 h-4 text-[#315A7D]" /> Property Type
+                <Building className="w-4 h-4 text-[#3F7D58]" /> Property Type
               </span>
               <p className="text-sm font-bold text-[#243447] capitalize">
                 {displayType}
@@ -164,9 +164,9 @@ export default function PropertyDetailsSection({
           )}
 
           {displayArea != null && Number(displayArea) > 0 && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Maximize2 className="w-4 h-4 text-[#315A7D]" /> Total Area
+                <Maximize2 className="w-4 h-4 text-[#3F7D58]" /> Total Area
               </span>
               <p className="text-sm font-bold text-[#243447]">
                 {displayArea} sq ft
@@ -175,9 +175,9 @@ export default function PropertyDetailsSection({
           )}
 
           {displayFurnishing && displayFurnishing !== 'UNFURNISHED' && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Sofa className="w-4 h-4 text-[#315A7D]" /> Furnishing
+                <Sofa className="w-4 h-4 text-[#3F7D58]" /> Furnishing
               </span>
               <p className="text-sm font-bold text-[#243447] capitalize">
                 {displayFurnishing.toLowerCase()}
@@ -186,9 +186,9 @@ export default function PropertyDetailsSection({
           )}
 
           {displayParking && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Car className="w-4 h-4 text-[#315A7D]" /> Parking
+                <Car className="w-4 h-4 text-[#3F7D58]" /> Parking
               </span>
               <p className="text-sm font-bold text-[#243447]">
                 {displayParking}
@@ -197,9 +197,9 @@ export default function PropertyDetailsSection({
           )}
 
           {yearBuilt != null && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[#315A7D]" /> Year Built
+                <Calendar className="w-4 h-4 text-[#3F7D58]" /> Year Built
               </span>
               <p className="text-sm font-bold text-[#243447]">
                 {yearBuilt}
@@ -208,7 +208,7 @@ export default function PropertyDetailsSection({
           )}
 
           {displayStatus && (
-            <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+            <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
               <span className="text-xs text-[#5B6875] flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#3F7D58]" /> Status
               </span>
@@ -221,14 +221,14 @@ export default function PropertyDetailsSection({
       </div>
 
       {/* 2. Address & Location Details */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
         <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-[#315A7D]" />
+          <MapPin className="w-4 h-4 text-[#3F7D58]" />
           <span>Location & Address</span>
         </h3>
 
         {hasAddress ? (
-          <div className="min-w-0 p-3 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] space-y-2 text-xs sm:p-4">
+          <div className="min-w-0 p-3 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] space-y-2 text-xs sm:p-4">
             {address.addressLine1 && (
               <p className="break-words font-semibold text-sm text-[#243447]">
                 {address.addressLine1}
@@ -273,7 +273,7 @@ export default function PropertyDetailsSection({
             )}
           </div>
         ) : (
-          <div className="p-4 rounded-md bg-[#F7F8FA] border border-dashed border-[#D9E0E6] text-xs text-[#5B6875] flex items-center gap-2">
+          <div className="p-4 rounded-md bg-[#F7F7F1] border border-dashed border-[#E3E8DF] text-xs text-[#5B6875] flex items-center gap-2">
             <Info className="w-4 h-4 text-[#5B6875]" />
             <span>Address details are not currently available for this property.</span>
           </div>
@@ -281,7 +281,7 @@ export default function PropertyDetailsSection({
       </div>
 
       {/* 3. Description Section */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-3 sm:p-6">
         <h3 className="text-base font-bold text-[#243447]">
           About This Property
         </h3>
@@ -291,10 +291,10 @@ export default function PropertyDetailsSection({
       </div>
 
       {/* 4. Real Amenities & Features */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs space-y-4 sm:p-6">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-4 sm:p-6">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#315A7D]" />
+            <Sparkles className="w-4 h-4 text-[#3F7D58]" />
             <span>Amenities & Facilities</span>
           </h3>
         </div>
@@ -307,9 +307,9 @@ export default function PropertyDetailsSection({
               return (
                 <div
                   key={item?.amenityId || idx}
-                  className="flex items-start gap-3 p-3 rounded-md border border-[#D9E0E6] bg-[#F7F8FA]"
+                  className="flex items-start gap-3 p-3 rounded-md border border-[#E3E8DF] bg-[#F7F7F1]"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-[#315A7D] border border-[#D9E0E6] shadow-2xs shrink-0 mt-0.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-2xs shrink-0 mt-0.5">
                     {getAmenityIcon(name)}
                   </div>
                   <div>
@@ -321,7 +321,7 @@ export default function PropertyDetailsSection({
             })}
           </div>
         ) : (
-          <div className="p-4 rounded-md bg-[#F7F8FA] border border-dashed border-[#D9E0E6] text-xs text-[#5B6875] flex items-center gap-2">
+          <div className="p-4 rounded-md bg-[#F7F7F1] border border-dashed border-[#E3E8DF] text-xs text-[#5B6875] flex items-center gap-2">
             <Info className="w-4 h-4 text-[#5B6875]" />
             <span>No specific amenities are currently recorded for this property.</span>
           </div>
@@ -329,11 +329,11 @@ export default function PropertyDetailsSection({
       </div>
 
       {/* Apartment inventory is unit based; houses and villas rent directly. */}
-      {!isDirectRental && <div className="rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs space-y-6 sm:p-6">
-        <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-4">
+      {!isDirectRental && <div className="rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs space-y-6 sm:p-6">
+        <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-4">
           <div>
             <h3 className="text-base font-bold text-[#243447] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#315A7D]" />
+              <Building2 className="w-5 h-5 text-[#3F7D58]" />
               <span>Buildings & Units</span>
             </h3>
             <p className="text-xs text-[#5B6875] mt-0.5">
@@ -353,13 +353,13 @@ export default function PropertyDetailsSection({
               return (
                 <div
                   key={bld.buildingId || bld.id || bIdx}
-                  className="min-w-0 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] p-3 space-y-4 sm:p-5"
+                  className="min-w-0 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-3 space-y-4 sm:p-5"
                 >
                   {/* Building Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#D9E0E6]">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E3E8DF]">
                     <div>
                       <h4 className="font-bold text-sm text-[#243447] flex items-center gap-2">
-                        <Building className="w-4 h-4 text-[#315A7D]" />
+                        <Building className="w-4 h-4 text-[#3F7D58]" />
                         {bName}
                       </h4>
                       {bDesc && <p className="text-xs text-[#5B6875] mt-0.5">{bDesc}</p>}
@@ -367,7 +367,7 @@ export default function PropertyDetailsSection({
                     {/* ONLY display totalFloors if explicitly supplied by backend BuildingResponse */}
                     {bld.totalFloors != null && (
                       <div className="flex items-center gap-2 text-xs text-[#5B6875]">
-                        <span className="bg-white px-2 py-0.5 rounded border border-[#D9E0E6]">
+                        <span className="bg-white px-2 py-0.5 rounded border border-[#E3E8DF]">
                           {bld.totalFloors} Floors
                         </span>
                       </div>
@@ -387,11 +387,11 @@ export default function PropertyDetailsSection({
                         return (
                           <div
                             key={fl.floorId || fl.id || fIdx}
-                            className="min-w-0 bg-white rounded-md border border-[#D9E0E6] p-3 space-y-3 sm:p-4"
+                            className="min-w-0 bg-white rounded-md border border-[#E3E8DF] p-3 space-y-3 sm:p-4"
                           >
                             <div className="flex items-center justify-between">
-                              <h5 className="text-xs font-bold text-[#315A7D] uppercase tracking-wider flex items-center gap-1.5">
-                                <Layers className="w-3.5 h-3.5 text-[#315A7D]" />
+                              <h5 className="text-xs font-bold text-[#3F7D58] uppercase tracking-wider flex items-center gap-1.5">
+                                <Layers className="w-3.5 h-3.5 text-[#3F7D58]" />
                                 {fName}
                               </h5>
                             </div>
@@ -408,7 +408,7 @@ export default function PropertyDetailsSection({
                                   return (
                                     <div
                                       key={u.unitId || u.id || uIdx}
-                                      className="min-w-0 p-3 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] space-y-2.5 flex flex-col justify-between sm:p-3.5"
+                                      className="min-w-0 p-3 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] space-y-2.5 flex flex-col justify-between sm:p-3.5"
                                     >
                                       <div className="space-y-1.5">
                                         <div className="flex items-center justify-between">
@@ -435,19 +435,19 @@ export default function PropertyDetailsSection({
                                           )}
                                           {u.bedrooms != null && (
                                             <span className="flex items-center gap-1">
-                                              <Bed className="w-3.5 h-3.5 text-[#315A7D]" />
+                                              <Bed className="w-3.5 h-3.5 text-[#3F7D58]" />
                                               {u.bedrooms === 0 ? 'Studio' : `${u.bedrooms} Bed${u.bedrooms > 1 ? 's' : ''}`}
                                             </span>
                                           )}
                                           {u.bathrooms != null && (
                                             <span className="flex items-center gap-1">
-                                              <Bath className="w-3.5 h-3.5 text-[#315A7D]" />
+                                              <Bath className="w-3.5 h-3.5 text-[#3F7D58]" />
                                               {u.bathrooms} Bath{u.bathrooms > 1 ? 's' : ''}
                                             </span>
                                           )}
                                           {u.area != null && (
                                             <span className="flex items-center gap-1">
-                                              <Maximize2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                                              <Maximize2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                                               {u.area} sq ft
                                             </span>
                                           )}
@@ -461,11 +461,11 @@ export default function PropertyDetailsSection({
                                       </div>
 
                                       {/* Unit-level Pricing & Apply Action */}
-                                      <div className="pt-2 border-t border-[#D9E0E6] flex flex-wrap items-center justify-between gap-2">
+                                      <div className="pt-2 border-t border-[#E3E8DF] flex flex-wrap items-center justify-between gap-2">
                                         <div className="min-w-0">
                                           {rentFormatted ? (
                                             <div>
-                                              <span className="font-extrabold text-sm text-[#315A7D]">
+                                              <span className="font-extrabold text-sm text-[#3F7D58]">
                                                 {rentFormatted}
                                               </span>
                                               <span className="text-[10px] text-[#5B6875]"> / mo</span>
@@ -485,7 +485,7 @@ export default function PropertyDetailsSection({
                                           <button
                                             type="button"
                                             onClick={() => onSelectUnit(u)}
-                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-[#315A7D] hover:bg-[#274B68] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer shrink-0"
+                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-[#3F7D58] hover:bg-[#315F46] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer shrink-0"
                                           >
                                             <span>Apply</span>
                                             <ArrowRight className="w-3 h-3" />
@@ -515,7 +515,7 @@ export default function PropertyDetailsSection({
             })}
           </div>
         ) : (
-          <div className="p-4 rounded-md bg-[#F7F8FA] border border-dashed border-[#D9E0E6] text-xs text-[#5B6875] flex items-center gap-2">
+          <div className="p-4 rounded-md bg-[#F7F7F1] border border-dashed border-[#E3E8DF] text-xs text-[#5B6875] flex items-center gap-2">
             <Info className="w-4 h-4 text-[#5B6875]" />
             <span>No building or unit structures are currently listed under this property.</span>
           </div>

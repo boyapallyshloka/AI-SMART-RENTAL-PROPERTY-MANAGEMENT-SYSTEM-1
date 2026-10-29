@@ -70,10 +70,10 @@ const getRiskStyle = (rawStatus) => {
 
   return {
     textColor: 'text-[#243447]',
-    bgColor: 'bg-[#F7F8FA]',
-    borderColor: 'border-[#D9E0E6]',
+    bgColor: 'bg-[#F7F7F1]',
+    borderColor: 'border-[#E3E8DF]',
     badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
-    icon: <Shield className="w-5 h-5 text-[#315A7D] shrink-0" />,
+    icon: <Shield className="w-5 h-5 text-[#3F7D58] shrink-0" />,
   }
 }
 
@@ -176,17 +176,17 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4 ${className}`}
+      className={`bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4 ${className}`}
       data-testid="payment-risk-analysis-card"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+      <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
         <div className="flex items-center gap-2">
-          <Shield className="w-4 h-4 text-[#315A7D]" />
+          <Shield className="w-4 h-4 text-[#3F7D58]" />
           <h2 className="text-base font-semibold text-[#243447]">
             Payment-Risk Analysis
           </h2>
-          <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20">
+          <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
             Decision Support
           </span>
         </div>
@@ -302,7 +302,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
             </div>
 
             {/* Risk Probability */}
-            <div className="p-4 rounded-xl border bg-[#F7F8FA] border-[#D9E0E6] flex items-center justify-between">
+            <div className="p-4 rounded-xl border bg-[#F7F7F1] border-[#E3E8DF] flex items-center justify-between">
               <div className="space-y-1">
                 <span className="text-[11px] uppercase tracking-wider font-semibold text-[#5B6875] block">
                   Risk Probability
@@ -312,7 +312,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
                 </div>
               </div>
               {probabilityFormatted != null ? (
-                <span className="text-xs text-[#5B6875] font-medium bg-white px-2.5 py-1 rounded-md border border-[#D9E0E6] shadow-2xs">
+                <span className="text-xs text-[#5B6875] font-medium bg-white px-2.5 py-1 rounded-md border border-[#E3E8DF] shadow-2xs">
                   Estimated Probability
                 </span>
               ) : (
@@ -326,7 +326,7 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
           {/* Model and Version Metadata */}
           <div className="flex items-center justify-between text-xs text-[#5B6875] px-1 pt-0.5">
             <span className="flex items-center gap-1.5 flex-wrap">
-              <Sparkles className="w-3.5 h-3.5 text-[#315A7D]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" />
               <span>
                 Model: <strong className="font-semibold text-[#243447]">{modelName}</strong>
               </span>
@@ -344,8 +344,8 @@ export default function PaymentRiskAnalysisCard({ tenantId, className = '' }) {
       )}
 
       {/* Advisory & Decision Support Disclaimer */}
-      <div className="p-3.5 bg-[#F7F8FA] border border-[#D9E0E6] rounded-xl text-xs text-[#5B6875] flex items-start gap-2.5">
-        <Info className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+      <div className="p-3.5 bg-[#F7F7F1] border border-[#E3E8DF] rounded-xl text-xs text-[#5B6875] flex items-start gap-2.5">
+        <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
           <p className="font-semibold text-[#243447]">
             Advisory Notice (Decision Support Only)

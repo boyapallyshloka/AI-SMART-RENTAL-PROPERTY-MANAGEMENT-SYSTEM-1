@@ -84,9 +84,14 @@ export const updateUser = async (id, userData) => {
   return axiosClient.put(`/users/${id}`, formatUpdateUserRequest(userData))
 }
 
-// DELETE /api/users/{id} (SUPER_ADMIN)
-export const deleteUser = async (id) => {
+// DELETE /api/users/{id} (SUPER_ADMIN; deactivates the account)
+export const deactivateUser = async (id) => {
   return axiosClient.delete(`/users/${id}`)
+}
+
+// PATCH /api/users/{id}/reactivate (SUPER_ADMIN)
+export const reactivateUser = async (id) => {
+  return axiosClient.patch(`/users/${id}/reactivate`)
 }
 
 // GET /api/users/role/{role} (SUPER_ADMIN)

@@ -765,7 +765,7 @@ export default function AddUnitPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875] flex-wrap">
           <Link
             to={backDestination}
-            className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+            className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>
@@ -779,9 +779,9 @@ export default function AddUnitPage() {
         </div>
 
         {/* Page Header */}
-        <div className="border-b border-[#D9E0E6] pb-4">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#315A7D] text-white shadow-xs">
+            <div className="p-2.5 rounded-xl bg-[#3F7D58] text-white shadow-xs">
               <Home className="w-6 h-6" />
             </div>
             <div>
@@ -815,13 +815,13 @@ export default function AddUnitPage() {
         {/* Form Card */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-6"
+          className="bg-white rounded-xl border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-6"
         >
           {/* Location & Saved Property Context Card (Read-only) */}
-          <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-3 text-xs">
+          <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-3 text-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[#243447]">
               <div className="flex items-center gap-2">
-                <Building className="w-4 h-4 text-[#315A7D] shrink-0" />
+                <Building className="w-4 h-4 text-[#3F7D58] shrink-0" />
                 <span>
                   Building: <strong>{building?.buildingName || 'Assigned Building'}</strong>
                 </span>
@@ -832,7 +832,7 @@ export default function AddUnitPage() {
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#315A7D] shrink-0" />
+                <Layers className="w-4 h-4 text-[#3F7D58] shrink-0" />
                 <span>
                   Target Floor:{' '}
                   <strong>
@@ -845,8 +845,8 @@ export default function AddUnitPage() {
             {/* Saved Property Amenities (Read-Only Context) */}
             <div className="pt-2.5 border-t border-[#E5E9EE] space-y-1.5">
               <div className="flex items-center justify-between gap-2 flex-wrap">
-                <span className="font-semibold text-[#315A7D] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#315A7D]" />
+                <span className="font-semibold text-[#3F7D58] flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Saved Property Amenities (Read-Only Context):
                 </span>
                 <span className="text-[11px] text-[#5B6875]">
@@ -864,9 +864,9 @@ export default function AddUnitPage() {
                     return (
                       <span
                         key={amenity?.amenityId || idx}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[#243447] text-[11px] font-medium border border-[#D9E0E6] shadow-2xs"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white text-[#243447] text-[11px] font-medium border border-[#E3E8DF] shadow-2xs"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#315A7D]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#3F7D58]" />
                         {name}
                       </span>
                     )
@@ -882,7 +882,7 @@ export default function AddUnitPage() {
 
           {/* Floor Locking Note in Edit Mode */}
           {isEditMode && (
-            <div className="flex items-center gap-2 text-xs text-[#5B6875] bg-[#F7F8FA] px-3.5 py-2.5 rounded-lg border border-[#D9E0E6]">
+            <div className="flex items-center gap-2 text-xs text-[#5B6875] bg-[#F7F7F1] px-3.5 py-2.5 rounded-lg border border-[#E3E8DF]">
               <Lock className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
               <span>Floor and building assignment are locked to this unit's registered location.</span>
             </div>
@@ -894,7 +894,7 @@ export default function AddUnitPage() {
 
           {/* Section: Unit Overview & Classification */}
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#315A7D] border-b border-[#D9E0E6] pb-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#3F7D58] border-b border-[#E3E8DF] pb-2">
               Unit Overview &amp; Type
             </h2>
 
@@ -975,7 +975,7 @@ export default function AddUnitPage() {
 
           {/* Section: Rental & Financials */}
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#315A7D] border-b border-[#D9E0E6] pb-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#3F7D58] border-b border-[#E3E8DF] pb-2">
               Rental &amp; Deposit
             </h2>
 
@@ -1020,7 +1020,7 @@ export default function AddUnitPage() {
                         onClick={handlePredictRent}
                         disabled={isPredicting || (preflightStatus && !preflightStatus.ok)}
                         isLoading={isPredicting}
-                        leftIcon={<Sparkles className="w-3.5 h-3.5 text-[#315A7D]" />}
+                        leftIcon={<Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" />}
                         className="text-xs"
                         title={
                           preflightStatus && !preflightStatus.ok
@@ -1032,8 +1032,8 @@ export default function AddUnitPage() {
                       </Button>
 
                       {predictedRentDisplay && !predictionError && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#EAF2F7] text-[#315A7D] text-xs font-semibold border border-[#D9E0E6]">
-                          <Sparkles className="w-3.5 h-3.5 text-[#315A7D]" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#EDF4ED] text-[#3F7D58] text-xs font-semibold border border-[#E3E8DF]">
+                          <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" />
                           AI Predicted Rent: {predictedRentDisplay}
                         </span>
                       )}
@@ -1093,7 +1093,7 @@ export default function AddUnitPage() {
 
           {/* Section: Description */}
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#315A7D] border-b border-[#D9E0E6] pb-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#3F7D58] border-b border-[#E3E8DF] pb-2">
               Description (Optional)
             </h2>
 
@@ -1107,7 +1107,7 @@ export default function AddUnitPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-4 border-t border-[#D9E0E6] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#E3E8DF] flex items-center justify-end gap-3">
             <Button
               type="button"
               variant="outline"

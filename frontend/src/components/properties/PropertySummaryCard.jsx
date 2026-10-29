@@ -40,12 +40,12 @@ export default function PropertySummaryCard({ properties = [] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {/* 1. Total Properties */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
             Portfolio Size
           </span>
-          <div className="p-2.5 rounded-md bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+          <div className="p-2.5 rounded-md bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
             <Building2 className="w-5 h-5" />
           </div>
         </div>
@@ -57,16 +57,16 @@ export default function PropertySummaryCard({ properties = [] }) {
             Active real estate listings
           </p>
         </div>
-        <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between text-[11px] text-[#5B6875]">
+        <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-[11px] text-[#5B6875]">
           <span>Portfolio status</span>
-          <span className="text-[#315A7D] font-semibold">
+          <span className="text-[#3F7D58] font-semibold">
             {totalProperties > 0 ? 'Managed' : 'No properties'}
           </span>
         </div>
       </div>
 
       {/* 2. Total Units & Explicit Status Breakdown */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
             Total Units
@@ -89,7 +89,7 @@ export default function PropertySummaryCard({ properties = [] }) {
             ) : 'Unit data unavailable'}
           </p>
         </div>
-        <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between text-[11px] text-[#5B6875]">
+        <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-[11px] text-[#5B6875]">
           <span>Ready to lease</span>
           <span className="text-[#3F7D58] font-semibold">
             {vacantUnits ?? '—'} Vacant
@@ -98,12 +98,12 @@ export default function PropertySummaryCard({ properties = [] }) {
       </div>
 
       {/* 3. Occupancy Rate */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
             Occupancy Rate
           </span>
-          <div className="p-2.5 rounded-md bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+          <div className="p-2.5 rounded-md bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
             <Users className="w-5 h-5" />
           </div>
         </div>
@@ -112,24 +112,24 @@ export default function PropertySummaryCard({ properties = [] }) {
             {occupancyRate == null ? '—' : `${occupancyRate}%`}
           </p>
           {occupancyRate != null && (
-            <div className="w-full bg-[#F7F8FA] border border-[#D9E0E6] h-2 rounded-full mt-2 overflow-hidden">
+            <div className="w-full bg-[#F7F7F1] border border-[#E3E8DF] h-2 rounded-full mt-2 overflow-hidden">
               <div
-                className="bg-[#315A7D] h-full rounded-full transition-all duration-300"
+                className="bg-[#3F7D58] h-full rounded-full transition-all duration-300"
                 style={{ width: `${occupancyRate}%` }}
               />
             </div>
           )}
         </div>
-        <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between text-[11px] text-[#5B6875]">
+        <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-[11px] text-[#5B6875]">
           <span>Target: &gt;90%</span>
-          <span className="text-[#315A7D] font-semibold">
+          <span className="text-[#3F7D58] font-semibold">
             {occupancyRate == null ? 'Unavailable' : occupancyRate >= 80 ? 'Healthy' : 'Below Target'}
           </span>
         </div>
       </div>
 
       {/* 4. Estimated Monthly Revenue (OCCUPIED Units Only) */}
-      <div className="rounded-lg border border-[#D9E0E6] bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
             Est. Monthly Revenue
@@ -146,7 +146,7 @@ export default function PropertySummaryCard({ properties = [] }) {
             Occupied unit receivables
           </p>
         </div>
-        <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between text-[11px] text-[#5B6875]">
+        <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-[11px] text-[#5B6875]">
           <span>Yielding units</span>
           <span className="text-[#B7791F] font-semibold">
             {occupiedUnits ?? '—'} Occupied

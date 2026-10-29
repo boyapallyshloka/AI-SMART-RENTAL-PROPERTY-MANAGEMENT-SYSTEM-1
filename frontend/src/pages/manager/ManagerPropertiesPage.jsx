@@ -246,7 +246,7 @@ export default function ManagerPropertiesPage() {
                 Assigned Properties
               </h1>
               {!loading && !error && (
-                <span className="font-mono text-xs font-bold text-[#315A7D] bg-[#EAF2F7] px-2.5 py-1 rounded-md border border-[#D9E0E6]">
+                <span className="font-mono text-xs font-bold text-[#3F7D58] bg-[#EDF4ED] px-2.5 py-1 rounded-md border border-[#E3E8DF]">
                   {properties.length} {properties.length === 1 ? 'Property' : 'Properties'}
                 </span>
               )}
@@ -271,7 +271,7 @@ export default function ManagerPropertiesPage() {
 
         {/* Search and Filters Bar (only when properties exist or when filtering) */}
         {!loading && !error && properties.length > 0 && (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-4 shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-4 shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative flex-1 max-w-md">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#5B6875]">
                 <Search className="w-4 h-4" />
@@ -281,7 +281,7 @@ export default function ManagerPropertiesPage() {
                 placeholder="Search by property name, ID, or owner..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full rounded-md text-xs sm:text-sm border border-[#D9E0E6] bg-white text-[#243447] placeholder:text-[#98A2B3] pl-9 pr-3 py-2 focus:outline-none focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D]"
+                className="block w-full rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] placeholder:text-[#98A2B3] pl-9 pr-3 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
               />
               {searchQuery && (
                 <button
@@ -303,7 +303,7 @@ export default function ManagerPropertiesPage() {
                 <select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}
-                  className="rounded-md text-xs sm:text-sm border border-[#D9E0E6] bg-white text-[#243447] px-2.5 py-2 focus:outline-none focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D]"
+                  className="rounded-md text-xs sm:text-sm border border-[#E3E8DF] bg-white text-[#243447] px-2.5 py-2 focus:outline-none focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58]"
                 >
                   <option value="ALL">All Types</option>
                   {availableTypes.map((t) => (
@@ -333,11 +333,11 @@ export default function ManagerPropertiesPage() {
 
         {/* Main Content Area */}
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader size="lg" text="Loading assigned properties..." center />
           </div>
         ) : error ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs space-y-4">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs space-y-4">
             <div className="flex items-start gap-3 text-[#B94A48]">
               <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" />
               <div className="space-y-1">
@@ -373,7 +373,7 @@ export default function ManagerPropertiesPage() {
           </div>
         ) : properties.length === 0 ? (
           <EmptyState
-            icon={<Building2 className="w-8 h-8 text-[#315A7D]" />}
+            icon={<Building2 className="w-8 h-8 text-[#3F7D58]" />}
             title="No properties assigned"
             message="You do not currently have any properties assigned to your management portfolio. Properties assigned by property owners will appear here."
             action={{
@@ -402,12 +402,12 @@ export default function ManagerPropertiesPage() {
             {filteredProperties.map((prop) => (
               <div
                 key={prop.propertyId}
-                className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between space-y-4"
+                className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   {/* Top Bar: Type & Status */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[11px] font-bold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
+                    <span className="font-mono text-[11px] font-bold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                       #{prop.propertyId}
                     </span>
                     <StatusBadge status={prop.status} size="sm" />
@@ -435,10 +435,10 @@ export default function ManagerPropertiesPage() {
                   )}
 
                   {/* Metadata Specs Grid */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#D9E0E6] text-xs">
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#E3E8DF] text-xs">
                     {/* Owner Information */}
                     <div className="flex items-center gap-1.5 text-[#5B6875] truncate">
-                      <User className="w-3.5 h-3.5 shrink-0 text-[#315A7D]" />
+                      <User className="w-3.5 h-3.5 shrink-0 text-[#3F7D58]" />
                       <span className="truncate">
                         {prop.ownerName || (prop.ownerId ? `Owner #${prop.ownerId}` : '—')}
                       </span>
@@ -446,7 +446,7 @@ export default function ManagerPropertiesPage() {
 
                     {/* Total Area */}
                     <div className="flex items-center gap-1.5 text-[#5B6875] truncate">
-                      <Maximize2 className="w-3.5 h-3.5 shrink-0 text-[#315A7D]" />
+                      <Maximize2 className="w-3.5 h-3.5 shrink-0 text-[#3F7D58]" />
                       <span className="truncate">
                         {prop.totalArea != null
                           ? `${Number(prop.totalArea).toLocaleString('en-IN')} sq. ft.`
@@ -456,13 +456,13 @@ export default function ManagerPropertiesPage() {
 
                     {/* Furnishing */}
                     <div className="flex items-center gap-1.5 text-[#5B6875] truncate">
-                      <Sofa className="w-3.5 h-3.5 shrink-0 text-[#315A7D]" />
+                      <Sofa className="w-3.5 h-3.5 shrink-0 text-[#3F7D58]" />
                       <span className="truncate">{formatFurnishing(prop.furnishingStatus)}</span>
                     </div>
 
                     {/* Parking */}
                     <div className="flex items-center gap-1.5 text-[#5B6875] truncate">
-                      <Car className="w-3.5 h-3.5 shrink-0 text-[#315A7D]" />
+                      <Car className="w-3.5 h-3.5 shrink-0 text-[#3F7D58]" />
                       <span className="truncate">
                         {prop.parkingAvailable ? 'Parking Available' : 'No Parking'}
                       </span>
@@ -471,7 +471,7 @@ export default function ManagerPropertiesPage() {
                 </div>
 
                 {/* Footer: Created Date & Action */}
-                <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-between gap-2 text-xs">
+                <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-between gap-2 text-xs">
                   <div className="text-[11px] text-[#5B6875] truncate">
                     <span>Registered Date: </span>
                     <span className="font-medium text-[#243447]">{formatDate(prop.createdAt)}</span>
@@ -542,11 +542,11 @@ function PropertyDetailsSummaryModal({
       <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-white rounded-xl border border-[#D9E0E6] shadow-lg overflow-hidden z-10 flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-2xl bg-white rounded-xl border border-[#E3E8DF] shadow-lg overflow-hidden z-10 flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA] shrink-0">
+        <div className="px-6 py-4 border-b border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D]">
+            <div className="w-8 h-8 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58]">
               <Building2 className="w-4 h-4" />
             </div>
             <div>
@@ -566,7 +566,7 @@ function PropertyDetailsSummaryModal({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] transition-colors"
+            className="p-1.5 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -601,7 +601,7 @@ function PropertyDetailsSummaryModal({
           ) : data ? (
             <div className="space-y-5">
               {/* Primary Summary Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF]">
                 <div className="space-y-0.5">
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                     Property Name
@@ -621,10 +621,10 @@ function PropertyDetailsSummaryModal({
               {/* Description Section */}
               <div className="space-y-1.5">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[#5B6875] flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <FileText className="w-3.5 h-3.5 text-[#3F7D58]" />
                   <span>Description</span>
                 </h4>
-                <div className="p-3.5 rounded-lg bg-white border border-[#D9E0E6] text-xs sm:text-sm text-[#243447] leading-relaxed">
+                <div className="p-3.5 rounded-lg bg-white border border-[#E3E8DF] text-xs sm:text-sm text-[#243447] leading-relaxed">
                   {data.description || 'No description provided for this property.'}
                 </div>
               </div>
@@ -636,7 +636,7 @@ function PropertyDetailsSummaryModal({
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Total Area */}
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Total Area
                     </span>
@@ -648,7 +648,7 @@ function PropertyDetailsSummaryModal({
                   </div>
 
                   {/* Furnishing Status */}
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Furnishing Status
                     </span>
@@ -658,7 +658,7 @@ function PropertyDetailsSummaryModal({
                   </div>
 
                   {/* Parking Availability */}
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Parking
                     </span>
@@ -668,7 +668,7 @@ function PropertyDetailsSummaryModal({
                   </div>
 
                   {/* Year Built */}
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Year Built
                     </span>
@@ -685,7 +685,7 @@ function PropertyDetailsSummaryModal({
                   Ownership & Record Information
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Property Owner
                     </span>
@@ -699,7 +699,7 @@ function PropertyDetailsSummaryModal({
                     )}
                   </div>
 
-                  <div className="p-3 rounded-lg bg-white border border-[#D9E0E6] space-y-0.5">
+                  <div className="p-3 rounded-lg bg-white border border-[#E3E8DF] space-y-0.5">
                     <span className="text-[11px] uppercase font-semibold text-[#5B6875] block">
                       Property Created
                     </span>
@@ -719,7 +719,7 @@ function PropertyDetailsSummaryModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3.5 border-t border-[#D9E0E6] bg-[#F7F8FA] flex items-center justify-end shrink-0">
+        <div className="px-6 py-3.5 border-t border-[#E3E8DF] bg-[#F7F7F1] flex items-center justify-end shrink-0">
           <Button variant="secondary" size="sm" onClick={onClose}>
             Close
           </Button>

@@ -5,6 +5,7 @@ import { ROLES, getRoleLabel } from '../../utils/roles'
 import { getMyManagerProfile } from '../../api/managerProfileApi'
 import ManagerProfileAddressForm from '../../components/properties/ManagerProfileAddressForm'
 import ChangePasswordForm from '../../components/common/ChangePasswordForm'
+import SelfServiceAccountSection from '../../components/common/SelfServiceAccountSection'
 import { Button, StatusBadge, Loader } from '../../components/ui'
 import {
   User,
@@ -76,15 +77,15 @@ export default function ManagerProfilePage() {
     <DashboardLayout
       defaultRole={ROLES.PROPERTY_MANAGER}
       activeItem="profile"
-      pageTitle="Manager Profile"
+      pageTitle="My Account"
     >
       <div className="space-y-6 pb-12 max-w-5xl mx-auto">
         {/* Profile Hero Header Card */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-center gap-4">
               {/* Profile Avatar / Image */}
-              <div className="relative w-16 h-16 rounded-2xl bg-[#EAF2F7] border-2 border-[#D9E0E6] flex items-center justify-center font-bold text-xl text-[#315A7D] shrink-0 overflow-hidden shadow-2xs">
+              <div className="relative w-16 h-16 rounded-2xl bg-[#EDF4ED] border-2 border-[#E3E8DF] flex items-center justify-center font-bold text-xl text-[#3F7D58] shrink-0 overflow-hidden shadow-2xs">
                 {profileData?.profileImage ? (
                   <img
                     src={profileData.profileImage}
@@ -106,7 +107,7 @@ export default function ManagerProfilePage() {
                   <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#243447]">
                     {fullName}
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                     <Shield className="w-3.5 h-3.5" />
                     <span>{getRoleLabel(ROLES.PROPERTY_MANAGER)}</span>
                   </span>
@@ -115,12 +116,12 @@ export default function ManagerProfilePage() {
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-[#5B6875]">
                   <span className="flex items-center gap-1">
-                    <Mail className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Mail className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <strong className="font-medium text-[#243447]">{userEmail}</strong>
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
-                    <Phone className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Phone className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <strong className="font-medium text-[#243447]">{userPhone}</strong>
                   </span>
                 </div>
@@ -143,9 +144,9 @@ export default function ManagerProfilePage() {
           </div>
 
           {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-[#D9E0E6] text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-[#E3E8DF] text-xs">
             <div className="flex items-center gap-2.5 text-[#5B6875]">
-              <Mail className="w-4 h-4 text-[#315A7D] shrink-0" />
+              <Mail className="w-4 h-4 text-[#3F7D58] shrink-0" />
               <div className="truncate">
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Email Address
@@ -157,7 +158,7 @@ export default function ManagerProfilePage() {
             </div>
 
             <div className="flex items-center gap-2.5 text-[#5B6875]">
-              <Phone className="w-4 h-4 text-[#315A7D] shrink-0" />
+              <Phone className="w-4 h-4 text-[#3F7D58] shrink-0" />
               <div>
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Phone
@@ -167,17 +168,17 @@ export default function ManagerProfilePage() {
             </div>
 
             <div className="flex items-center gap-2.5 text-[#5B6875]">
-              <Shield className="w-4 h-4 text-[#315A7D] shrink-0" />
+              <Shield className="w-4 h-4 text-[#3F7D58] shrink-0" />
               <div>
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Account Role
                 </span>
-                <span className="font-semibold text-[#315A7D]">PROPERTY_MANAGER</span>
+                <span className="font-semibold text-[#3F7D58]">PROPERTY_MANAGER</span>
               </div>
             </div>
 
             <div className="flex items-center gap-2.5 text-[#5B6875]">
-              <Calendar className="w-4 h-4 text-[#315A7D] shrink-0" />
+              <Calendar className="w-4 h-4 text-[#3F7D58] shrink-0" />
               <div>
                 <span className="block text-[10px] uppercase font-semibold text-[#5B6875]">
                   Member Since
@@ -193,13 +194,13 @@ export default function ManagerProfilePage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-[#D9E0E6] text-sm font-semibold gap-2">
+        <div className="flex border-b border-[#E3E8DF] text-sm font-semibold gap-2">
           <button
             type="button"
             onClick={() => setActiveTab('profile')}
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'profile'
-                ? 'border-[#315A7D] text-[#315A7D] bg-white rounded-t-lg'
+                ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
                 : 'border-transparent text-[#5B6875] hover:text-[#243447]'
             }`}
           >
@@ -212,7 +213,7 @@ export default function ManagerProfilePage() {
             onClick={() => setActiveTab('security')}
             className={`flex items-center gap-2 px-4 py-2.5 border-b-2 transition-colors cursor-pointer ${
               activeTab === 'security'
-                ? 'border-[#315A7D] text-[#315A7D] bg-white rounded-t-lg'
+                ? 'border-[#3F7D58] text-[#3F7D58] bg-white rounded-t-lg'
                 : 'border-transparent text-[#5B6875] hover:text-[#243447]'
             }`}
           >
@@ -225,11 +226,11 @@ export default function ManagerProfilePage() {
         {activeTab === 'profile' && (
           <div className="space-y-6">
             {isLoading ? (
-              <div className="py-16 flex flex-col items-center justify-center bg-white rounded-2xl border border-[#D9E0E6]">
+              <div className="py-16 flex flex-col items-center justify-center bg-white rounded-2xl border border-[#E3E8DF]">
                 <Loader size="md" text="Loading manager profile and address..." center />
               </div>
             ) : loadError ? (
-              <div className="p-6 rounded-2xl bg-white border border-[#D9E0E6] text-center space-y-3">
+              <div className="p-6 rounded-2xl bg-white border border-[#E3E8DF] text-center space-y-3">
                 <AlertCircle className="w-8 h-8 text-[#B94A48] mx-auto" />
                 <p className="text-sm font-semibold text-[#243447]">
                   Unable to load manager profile
@@ -247,10 +248,10 @@ export default function ManagerProfilePage() {
             ) : (
               <>
                 {/* Account Details Read-Only Summary Card */}
-                <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-                  <div className="border-b border-[#D9E0E6] pb-3">
+                <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+                  <div className="border-b border-[#E3E8DF] pb-3">
                     <h2 className="text-sm font-bold text-[#243447] flex items-center gap-2">
-                      <User className="w-4 h-4 text-[#315A7D]" />
+                      <User className="w-4 h-4 text-[#3F7D58]" />
                       <span>Account Information</span>
                     </h2>
                     <p className="text-xs text-[#5B6875] mt-0.5">
@@ -259,44 +260,44 @@ export default function ManagerProfilePage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">First Name</span>
                       <strong className="text-xs text-[#243447] font-semibold">
                         {profileData?.firstName || '—'}
                       </strong>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Last Name</span>
                       <strong className="text-xs text-[#243447] font-semibold">
                         {profileData?.lastName || '—'}
                       </strong>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Email Address</span>
                       <strong className="text-xs text-[#243447] font-semibold break-all">
                         {userEmail}
                       </strong>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Phone Number</span>
                       <strong className="text-xs text-[#243447] font-semibold">
                         {userPhone}
                       </strong>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Gender</span>
                       <strong className="text-xs text-[#243447] font-semibold capitalize">
                         {userGender}
                       </strong>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <span className="text-[11px] font-medium text-[#5B6875] block">Assigned Role</span>
-                      <div className="flex items-center gap-1 text-[#315A7D] font-semibold mt-0.5">
+                      <div className="flex items-center gap-1 text-[#3F7D58] font-semibold mt-0.5">
                         <Shield className="w-3.5 h-3.5" />
                         <span>PROPERTY_MANAGER</span>
                       </div>
@@ -315,7 +316,7 @@ export default function ManagerProfilePage() {
                 {profileData?.createdAt && (
                   <div className="flex flex-wrap items-center justify-between text-[11px] text-[#5B6875] px-2">
                     <span className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Profile Created: {new Date(profileData.createdAt).toLocaleDateString()}
                     </span>
                     {profileData?.updatedAt && (
@@ -332,18 +333,21 @@ export default function ManagerProfilePage() {
 
         {/* Tab 2: Security & Password Content */}
         {activeTab === 'security' && (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#D9E0E6] pb-3">
-              <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
-                <KeyRound className="w-4 h-4 text-[#315A7D]" />
-                <span>Account Password & Credentials</span>
-              </h2>
-              <p className="text-xs text-[#5B6875] mt-0.5">
-                Ensure your manager account remains secure with strong authentication credentials.
-              </p>
-            </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <div className="border-b border-[#E3E8DF] pb-3">
+                <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                  <KeyRound className="w-4 h-4 text-[#3F7D58]" />
+                  <span>Account Password & Credentials</span>
+                </h2>
+                <p className="text-xs text-[#5B6875] mt-0.5">
+                  Ensure your manager account remains secure with strong authentication credentials.
+                </p>
+              </div>
 
-            <ChangePasswordForm />
+              <ChangePasswordForm />
+            </div>
+            <SelfServiceAccountSection />
           </div>
         )}
       </div>

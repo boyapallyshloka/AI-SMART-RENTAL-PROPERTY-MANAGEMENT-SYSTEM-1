@@ -178,10 +178,10 @@ export default function PropertyCard({
   return (
     <div
       onClick={handleCardClick}
-      className="group flex flex-col overflow-hidden rounded-lg border border-[#D9E0E6] bg-white shadow-2xs hover:shadow-sm hover:border-[#315A7D]/40 transition-all cursor-pointer"
+      className="group flex flex-col overflow-hidden rounded-lg border border-[#E3E8DF] bg-white shadow-2xs hover:shadow-sm hover:border-[#3F7D58]/40 transition-all cursor-pointer"
     >
       {/* Property Image Container */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#EAF2F7]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#EDF4ED]">
         {displayImg && !imageError ? (
           <img
             src={displayImg}
@@ -191,9 +191,9 @@ export default function PropertyCard({
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="h-full w-full flex flex-col items-center justify-center bg-[#F7F8FA] p-4 text-center select-none">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EAF2F7] text-[#315A7D] mb-1.5 shadow-2xs border border-[#D9E0E6]">
-              <Building2 className="w-5 h-5 text-[#315A7D]" />
+          <div className="h-full w-full flex flex-col items-center justify-center bg-[#F7F7F1] p-4 text-center select-none">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF4ED] text-[#3F7D58] mb-1.5 shadow-2xs border border-[#E3E8DF]">
+              <Building2 className="w-5 h-5 text-[#3F7D58]" />
             </div>
             <span className="text-xs font-medium text-[#5B6875] truncate max-w-[180px]">
               {displayName}
@@ -228,7 +228,7 @@ export default function PropertyCard({
             type="button"
             onClick={handleFavoriteClick}
             aria-label={isFav ? 'Remove from favorites' : 'Save to favorites'}
-            className="p-1.5 rounded-md bg-white border border-[#D9E0E6] text-[#5B6875] hover:text-[#B94A48] hover:bg-white transition-colors shadow-2xs"
+            className="p-1.5 rounded-md bg-white border border-[#E3E8DF] text-[#5B6875] hover:text-[#B94A48] hover:bg-white transition-colors shadow-2xs"
           >
             <Heart
               className={`w-4 h-4 ${
@@ -241,7 +241,7 @@ export default function PropertyCard({
         {/* Bottom Property Type Pill */}
         {displayType && (
           <div className="absolute bottom-2.5 left-2.5">
-            <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#315A7D] text-white text-[11px] font-medium capitalize shadow-2xs">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#3F7D58] text-white text-[11px] font-medium capitalize shadow-2xs">
               {displayType.replace(/_/g, ' ')}
             </span>
           </div>
@@ -254,13 +254,13 @@ export default function PropertyCard({
         {hasRent && (
           <div className="flex items-baseline justify-between">
             <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold tracking-tight text-[#315A7D]">
+              <span className="text-xl font-bold tracking-tight text-[#3F7D58]">
                 {formattedRent}
               </span>
               <span className="text-xs text-[#5B6875] font-medium">/ month</span>
             </div>
             {depVal != null && (
-              <span className="text-[11px] text-[#5B6875] bg-[#F7F8FA] border border-[#D9E0E6] px-2 py-0.5 rounded-md">
+              <span className="text-[11px] text-[#5B6875] bg-[#F7F7F1] border border-[#E3E8DF] px-2 py-0.5 rounded-md">
                 Dep: ₹{Number(depVal).toLocaleString('en-IN')}
               </span>
             )}
@@ -269,7 +269,7 @@ export default function PropertyCard({
 
         {/* Title and Location */}
         <div>
-          <h3 className="font-semibold text-sm sm:text-base text-[#243447] line-clamp-1 group-hover:text-[#315A7D] transition-colors">
+          <h3 className="font-semibold text-sm sm:text-base text-[#243447] line-clamp-1 group-hover:text-[#3F7D58] transition-colors">
             {displayName}
           </h3>
           {displayLocation && (
@@ -282,9 +282,9 @@ export default function PropertyCard({
 
         {/* Key Features Grid - displays real specifications without fabricating beds/baths */}
         {(hasBeds || hasBaths || hasArea || hasYear) && (
-          <div className="flex flex-wrap items-center gap-1.5 py-2 border-y border-[#D9E0E6] text-xs text-[#5B6875]">
+          <div className="flex flex-wrap items-center gap-1.5 py-2 border-y border-[#E3E8DF] text-xs text-[#5B6875]">
             {hasBeds && (
-              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F8FA] py-1.5 px-2 rounded-md">
+              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Bed className="w-3.5 h-3.5 text-[#5B6875]" />
                 <span className="font-medium text-[#243447]">
                   {bedrooms === 0 ? 'Studio' : `${bedrooms} Beds`}
@@ -293,21 +293,21 @@ export default function PropertyCard({
             )}
 
             {hasBaths && (
-              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F8FA] py-1.5 px-2 rounded-md">
+              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Bath className="w-3.5 h-3.5 text-[#5B6875]" />
                 <span className="font-medium text-[#243447]">{bathrooms} Baths</span>
               </div>
             )}
 
             {hasArea && (
-              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F8FA] py-1.5 px-2 rounded-md">
+              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Maximize2 className="w-3.5 h-3.5 text-[#5B6875]" />
                 <span className="font-medium text-[#243447]">{displayArea} sqft</span>
               </div>
             )}
 
             {hasYear && !hasBeds && (
-              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F8FA] py-1.5 px-2 rounded-md">
+              <div className="flex-1 min-w-[70px] flex items-center gap-1.5 justify-center bg-[#F7F7F1] py-1.5 px-2 rounded-md">
                 <Calendar className="w-3.5 h-3.5 text-[#5B6875]" />
                 <span className="font-medium text-[#243447]">Built {yearBuilt}</span>
               </div>
@@ -319,13 +319,13 @@ export default function PropertyCard({
         <div className="flex items-center justify-between gap-2 pt-0.5">
           <div className="flex items-center gap-1.5 text-[11px] text-[#5B6875] flex-wrap">
             {displayFurnishing && displayFurnishing !== 'UNFURNISHED' && (
-              <span className="inline-flex items-center gap-1 bg-[#F7F8FA] border border-[#D9E0E6] px-2 py-0.5 rounded capitalize">
+              <span className="inline-flex items-center gap-1 bg-[#F7F7F1] border border-[#E3E8DF] px-2 py-0.5 rounded capitalize">
                 <Sofa className="w-3 h-3 text-[#5B6875]" />
                 {displayFurnishing.replace(/_/g, ' ').toLowerCase()}
               </span>
             )}
             {displayParking && displayParking !== 'None' && displayParking !== 'No Parking' && (
-              <span className="inline-flex items-center gap-1 bg-[#F7F8FA] border border-[#D9E0E6] px-2 py-0.5 rounded">
+              <span className="inline-flex items-center gap-1 bg-[#F7F7F1] border border-[#E3E8DF] px-2 py-0.5 rounded">
                 <Car className="w-3 h-3 text-[#5B6875]" />
                 {displayParking}
               </span>
@@ -334,8 +334,8 @@ export default function PropertyCard({
 
           {/* AI Match Score - only rendered when real score exists */}
           {aiMatchScore !== undefined && aiMatchScore !== null && (
-            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/30 shrink-0">
-              <Sparkles className="w-3 h-3 text-[#315A7D]" />
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/30 shrink-0">
+              <Sparkles className="w-3 h-3 text-[#3F7D58]" />
               <span>{aiMatchScore}% Match</span>
             </div>
           )}
@@ -356,12 +356,12 @@ export default function PropertyCard({
                 </span>
               ))}
             {approxDistanceKm != null && approxDistanceKm > 0 && (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#F7F8FA] text-[#5B6875] border border-[#D9E0E6]">
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#F7F7F1] text-[#5B6875] border border-[#E3E8DF]">
                 ~{approxDistanceKm} km
               </span>
             )}
             {availableUnitsCount != null && availableUnitsCount > 0 && (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                 {availableUnitsCount} {availableUnitsCount === 1 ? 'unit' : 'units'} left
               </span>
             )}
@@ -369,8 +369,8 @@ export default function PropertyCard({
         )}
 
         {/* Card Footer / View Details */}
-        <div className="pt-2 mt-auto flex items-center justify-between border-t border-[#D9E0E6]">
-          <span className="text-xs font-semibold text-[#315A7D] flex items-center gap-1 group-hover:text-[#274B68] transition-colors">
+        <div className="pt-2 mt-auto flex items-center justify-between border-t border-[#E3E8DF]">
+          <span className="text-xs font-semibold text-[#3F7D58] flex items-center gap-1 group-hover:text-[#315F46] transition-colors">
             View Listing
             <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
           </span>

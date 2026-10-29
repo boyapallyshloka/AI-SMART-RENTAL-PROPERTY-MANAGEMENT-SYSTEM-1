@@ -138,7 +138,7 @@ export default function PropertyApprovalPage() {
           <div className="py-16 text-center"><Loader size="lg" /></div>
         ) : properties.length === 0 ? (
           <EmptyState
-            icon={<CheckCircle2 className="h-12 w-12 text-[#315A7D]/40" />}
+            icon={<CheckCircle2 className="h-12 w-12 text-[#3F7D58]/40" />}
             title="No pending property approvals"
             description="Submitted properties awaiting a final decision will appear here."
           />
@@ -155,7 +155,7 @@ export default function PropertyApprovalPage() {
               return (
                 <article
                   key={property.propertyId}
-                  className="rounded-xl border border-[#D9E0E6] bg-white p-5 shadow-sm"
+                  className="rounded-xl border border-[#E3E8DF] bg-white p-5 shadow-sm"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
@@ -180,7 +180,7 @@ export default function PropertyApprovalPage() {
                     </Button>
                   </div>
 
-                  <dl className="mt-4 grid gap-3 border-t border-[#D9E0E6] pt-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
+                  <dl className="mt-4 grid gap-3 border-t border-[#E3E8DF] pt-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
                     <div>
                       <dt className="text-xs text-[#5B6875]">Property type</dt>
                       <dd className="font-medium text-[#243447]">{property.propertyType || '—'}</dd>
@@ -205,7 +205,7 @@ export default function PropertyApprovalPage() {
                     </div>
                   </dl>
 
-                  <div className="mt-4 border-t border-[#D9E0E6] pt-4">
+                  <div className="mt-4 border-t border-[#E3E8DF] pt-4">
                     <h3 className="text-sm font-semibold text-[#243447]">Uploaded documents</h3>
                     {documents.length === 0 ? (
                       <p className="mt-2 text-sm text-[#8A2E2C]">No documents are available for review.</p>
@@ -250,7 +250,7 @@ export default function PropertyApprovalPage() {
             })}
           </div>
         )}
-        <section id="property-document-verification" className="ml-3 scroll-mt-6 space-y-4 border-l-2 border-[#D9E0E6] pl-4 sm:ml-5 sm:pl-6">
+        <section id="property-document-verification" className="ml-3 scroll-mt-6 space-y-4 border-l-2 border-[#E3E8DF] pl-4 sm:ml-5 sm:pl-6">
           <PropertyDocumentReviewPage onDecision={loadSubmissions} />
         </section>
       </div>

@@ -230,7 +230,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
               <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-[#243447]">
                 Property Document Review
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#315A7D] text-white">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#3F7D58] text-white">
                 {documents.length} Pending
               </span>
             </div>
@@ -288,7 +288,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
         )}
 
         {/* Search Bar & Summary Card */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#D9E0E6] shadow-sm">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#E3E8DF] shadow-sm">
           <div className="relative flex-1 max-w-md">
             <Search className="w-4 h-4 text-[#5B6875] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -296,12 +296,12 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
               placeholder="Filter by property, owner, or filename..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#D9E0E6] focus:outline-none focus:ring-2 focus:ring-[#315A7D]"
+              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#E3E8DF] focus:outline-none focus:ring-2 focus:ring-[#3F7D58]"
             />
           </div>
 
           <div className="flex items-center gap-2 text-xs text-[#5B6875]">
-            <FileCheck2 className="w-4 h-4 text-[#315A7D]" />
+            <FileCheck2 className="w-4 h-4 text-[#3F7D58]" />
             <span className="font-semibold text-[#243447]">
               {loading
                 ? 'Loading reviews…'
@@ -320,9 +320,9 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
 
         {/* Empty State */}
         {!loading && propertyGroups.length === 0 && (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 text-center shadow-sm">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 text-center shadow-sm">
             <EmptyState
-              icon={<ShieldCheck className="w-12 h-12 text-[#315A7D]/40" />}
+              icon={<ShieldCheck className="w-12 h-12 text-[#3F7D58]/40" />}
               title="All Caught Up!"
               description={
                 searchQuery
@@ -350,12 +350,12 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
             {propertyGroups.map((group) => (
               <div
                 key={group.propertyId}
-                className="bg-white rounded-2xl border border-[#D9E0E6] shadow-sm overflow-hidden"
+                className="bg-white rounded-2xl border border-[#E3E8DF] shadow-sm overflow-hidden"
               >
                 {/* Property Header */}
-                <div className="p-5 bg-[#F7F8FA] border-b border-[#D9E0E6] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-5 bg-[#F7F7F1] border-b border-[#E3E8DF] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className="p-2.5 rounded-xl bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                    <div className="p-2.5 rounded-xl bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
@@ -363,7 +363,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                         <h2 className="font-bold text-base text-[#243447]">
                           {group.propertyName || `Property #${group.propertyId}`}
                         </h2>
-                        <span className="text-xs font-mono text-[#5B6875] px-2 py-0.5 rounded bg-white border border-[#D9E0E6]">
+                        <span className="text-xs font-mono text-[#5B6875] px-2 py-0.5 rounded bg-white border border-[#E3E8DF]">
                           ID: {group.propertyId}
                         </span>
                         <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
@@ -372,7 +372,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                       </div>
                       <div className="flex items-center gap-4 text-xs text-[#5B6875] mt-1.5 flex-wrap">
                         <span className="flex items-center gap-1">
-                          <User className="w-3.5 h-3.5 text-[#315A7D]" />
+                          <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                           Owner: <strong>{group.ownerName || 'Unknown Owner'}</strong>
                         </span>
                         {group.ownerEmail && (
@@ -387,7 +387,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                 </div>
 
                 {/* Documents List */}
-                <div className="divide-y divide-[#D9E0E6]">
+                <div className="divide-y divide-[#E3E8DF]">
                   {group.documents.map((doc) => {
                     const typeLabel =
                       PROPERTY_DOCUMENT_TYPE_LABELS[doc.documentType] || doc.documentType
@@ -396,7 +396,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                     return (
                       <div
                         key={doc.documentId}
-                        className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-[#F7F8FA]/40 transition-colors"
+                        className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-[#F7F7F1]/40 transition-colors"
                       >
                         <div className="flex items-start gap-3.5">
                           <div className="p-2.5 rounded-xl bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6] shrink-0 mt-0.5">
@@ -408,7 +408,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                                 {typeLabel}
                               </span>
                               {isTitleDeed && (
-                                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#315A7D] text-white">
+                                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#3F7D58] text-white">
                                   Required for Publishing
                                 </span>
                               )}
@@ -434,7 +434,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                               href={doc.documentUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#D9E0E6] bg-white text-[#243447] hover:bg-[#F7F8FA] hover:text-[#315A7D] transition-colors"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors"
                               title="Inspect document securely in a new tab"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -446,7 +446,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                             type="button"
                             onClick={() => handleDownload(doc)}
                             disabled={downloadingId === doc.documentId}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#D9E0E6] bg-white text-[#243447] hover:bg-[#F7F8FA] hover:text-[#315A7D] transition-colors disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E3E8DF] bg-white text-[#243447] hover:bg-[#F7F7F1] hover:text-[#3F7D58] transition-colors disabled:opacity-50"
                             title="Download document file"
                           >
                             <Download className="w-3.5 h-3.5" />
@@ -485,7 +485,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
         {/* Approval Confirmation Modal */}
         {approvingDoc && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-md p-6 space-y-4 animate-scale-up">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-md p-6 space-y-4 animate-scale-up">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-[#EDF7EE] text-[#2A583B] border border-[#C6DEC8]">
                   <CheckCircle2 className="w-6 h-6" />
@@ -498,7 +498,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5">
                 <p>
                   <strong>Property:</strong> {approvingDoc.propertyName}
                 </p>
@@ -544,8 +544,8 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
         {/* Rejection Modal with Mandatory Reason */}
         {rejectingDoc && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-lg overflow-hidden animate-scale-up">
-              <div className="flex items-center justify-between p-5 border-b border-[#D9E0E6] bg-[#FDF2F2]">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-lg overflow-hidden animate-scale-up">
+              <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#FDF2F2]">
                 <div className="flex items-center gap-2.5 text-[#8A2E2C]">
                   <XCircle className="w-5 h-5" />
                   <h3 className="font-semibold text-base">
@@ -562,7 +562,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
               </div>
 
               <form onSubmit={handleRejectSubmit} className="p-6 space-y-4">
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-1">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1">
                   <p>
                     <strong>Property:</strong> {rejectingDoc.propertyName}
                   </p>
@@ -596,7 +596,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                       if (rejectionError) setRejectionError('')
                     }}
                     placeholder="Explain clearly why this document was rejected (e.g. illegible photocopy, missing municipal seal, owner name mismatch, expired certificate)..."
-                    className="w-full text-xs rounded-xl border border-[#D9E0E6] p-3 focus:outline-none focus:ring-2 focus:ring-[#8A2E2C] text-[#243447]"
+                    className="w-full text-xs rounded-xl border border-[#E3E8DF] p-3 focus:outline-none focus:ring-2 focus:ring-[#8A2E2C] text-[#243447]"
                     disabled={isSubmittingRejection}
                   />
                   <p className="text-[11px] text-[#5B6875] mt-1">
@@ -604,7 +604,7 @@ export default function PropertyDocumentReviewPage({ onDecision } = {}) {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#D9E0E6]">
+                <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#E3E8DF]">
                   <Button
                     type="button"
                     variant="outline"

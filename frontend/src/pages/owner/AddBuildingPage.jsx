@@ -344,7 +344,7 @@ export default function AddBuildingPage() {
                   ? `/owner/properties/${formData.propertyId}`
                   : '/owner/properties'
               }
-              className="inline-flex items-center gap-1.5 text-xs text-[#5B6875] hover:text-[#315A7D] font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-[#5B6875] hover:text-[#3F7D58] font-medium transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>
@@ -360,7 +360,7 @@ export default function AddBuildingPage() {
           <div className="flex items-center gap-2 text-xs text-[#5B6875] flex-wrap">
             <Link
               to="/owner/properties"
-              className="hover:text-[#315A7D] transition-colors"
+              className="hover:text-[#3F7D58] transition-colors"
             >
               Properties
             </Link>
@@ -369,7 +369,7 @@ export default function AddBuildingPage() {
                 <span>/</span>
                 <Link
                   to={`/owner/properties/${formData.propertyId}`}
-                  className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                  className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
                 >
                   {targetPropertyName || `Property #${formData.propertyId}`}
                 </Link>
@@ -380,7 +380,7 @@ export default function AddBuildingPage() {
                 <span>/</span>
                 <Link
                   to={`/owner/buildings/${buildingId}`}
-                  className="hover:text-[#315A7D] transition-colors font-medium text-[#5B6875]"
+                  className="hover:text-[#3F7D58] transition-colors font-medium text-[#5B6875]"
                 >
                   {formData.buildingName || 'Building Details'}
                 </Link>
@@ -394,9 +394,9 @@ export default function AddBuildingPage() {
         </div>
 
         {/* Page Header */}
-        <div className="border-b border-[#D9E0E6] pb-4">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#315A7D] text-white shadow-xs">
+            <div className="p-2.5 rounded-xl bg-[#3F7D58] text-white shadow-xs">
               <Building className="w-6 h-6" />
             </div>
             <div>
@@ -426,11 +426,11 @@ export default function AddBuildingPage() {
         {/* Building Form Card */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-6"
+          className="bg-white rounded-xl border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-6"
         >
           {/* Section: Building Details */}
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#315A7D] border-b border-[#D9E0E6] pb-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#3F7D58] border-b border-[#E3E8DF] pb-2">
               Building Specifications
             </h2>
 
@@ -440,8 +440,8 @@ export default function AddBuildingPage() {
                 <label className="text-xs font-semibold text-[#243447] block mb-1.5">
                   Property
                 </label>
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-xs">
-                  <div className="p-2 rounded-lg bg-white border border-[#D9E0E6] text-[#315A7D] shadow-2xs">
+                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs">
+                  <div className="p-2 rounded-lg bg-white border border-[#E3E8DF] text-[#3F7D58] shadow-2xs">
                     <Building2 className="w-4 h-4" />
                   </div>
                   <div>
@@ -523,7 +523,7 @@ export default function AddBuildingPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-4 border-t border-[#D9E0E6] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#E3E8DF] flex items-center justify-end gap-3">
             <Button
               type="button"
               variant="outline"

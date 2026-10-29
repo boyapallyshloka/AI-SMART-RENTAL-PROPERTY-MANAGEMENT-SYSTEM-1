@@ -1564,7 +1564,7 @@ export default function PropertyDetailsPage() {
           <div className="flex items-center gap-2 text-xs text-[#5B6875]">
             <Link
               to="/owner/properties"
-              className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+              className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Properties</span>
@@ -1581,9 +1581,9 @@ export default function PropertyDetailsPage() {
               size="sm"
               leftIcon={
                 property.propertyManagerId ? (
-                  <UserCheck className="w-4 h-4 text-[#315A7D]" />
+                  <UserCheck className="w-4 h-4 text-[#3F7D58]" />
                 ) : (
-                  <UserPlus className="w-4 h-4 text-[#315A7D]" />
+                  <UserPlus className="w-4 h-4 text-[#3F7D58]" />
                 )
               }
               onClick={() => {
@@ -1601,7 +1601,7 @@ export default function PropertyDetailsPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+                  leftIcon={<Plus className="w-4 h-4 text-[#3F7D58]" />}
                 >
                   Add Building
                 </Button>
@@ -1636,11 +1636,11 @@ export default function PropertyDetailsPage() {
         </div>
 
         {/* Title & Quick Info Banner */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                   {property.type}
                 </span>
                 <div className="flex items-center gap-2">
@@ -1650,7 +1650,7 @@ export default function PropertyDetailsPage() {
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
                     disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED'}
-                    className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
+                    className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
                     {property.status && !CANONICAL_PROPERTY_STATUSES.includes(property.status) && (
@@ -1708,7 +1708,7 @@ export default function PropertyDetailsPage() {
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
                     property.propertyManagerId
                       ? 'bg-[#EDF7EE] text-[#2A583B] border-[#C6DEC8] hover:bg-[#E2F2E4]'
-                      : 'bg-[#F7F8FA] text-[#5B6875] border-[#D9E0E6] hover:bg-[#EAF2F7] hover:text-[#315A7D]'
+                      : 'bg-[#F7F7F1] text-[#5B6875] border-[#E3E8DF] hover:bg-[#EDF4ED] hover:text-[#3F7D58]'
                   }`}
                   title={
                     property.propertyManagerId
@@ -1752,11 +1752,11 @@ export default function PropertyDetailsPage() {
               </p>
             </div>
 
-            <div className="text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-[#D9E0E6]">
+            <div className="text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-[#E3E8DF]">
               <p className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                 Total Area
               </p>
-              <p className="text-3xl font-extrabold text-[#315A7D] tracking-tight">
+              <p className="text-3xl font-extrabold text-[#3F7D58] tracking-tight">
                 {property.totalArea != null ? Number(property.totalArea).toLocaleString() : '—'}
                 <span className="text-xs text-[#5B6875] font-normal"> sq ft</span>
               </p>
@@ -1775,10 +1775,10 @@ export default function PropertyDetailsPage() {
         </div>
 
         {/* Hero Gallery Grid */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-6 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-6 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2">
-              <ImageIcon className="w-4 h-4 text-[#315A7D]" />
+              <ImageIcon className="w-4 h-4 text-[#3F7D58]" />
               <h2 className="text-base font-semibold text-[#243447]">
                 Property Photos & Media
               </h2>
@@ -1791,14 +1791,14 @@ export default function PropertyDetailsPage() {
 
             <div className="flex items-center gap-2">
               <label
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
                   isUploadingImage ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
                 {isUploadingImage ? (
                   <Loader size="xs" />
                 ) : (
-                  <Upload className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Upload className="w-3.5 h-3.5 text-[#3F7D58]" />
                 )}
                 <span>{isUploadingImage ? 'Uploading...' : 'Upload Photo'}</span>
                 <input
@@ -1831,7 +1831,7 @@ export default function PropertyDetailsPage() {
             </div>
           ) : propertyImages.length > 0 ? (
             <div className="space-y-3">
-              <div className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[21/9] max-h-[460px] bg-slate-900 border border-[#D9E0E6]">
+              <div className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[21/9] max-h-[460px] bg-slate-900 border border-[#E3E8DF]">
                 <img
                   src={resolveImageUrl(currentImage?.imageUrl)}
                   alt={property.name}
@@ -1908,7 +1908,7 @@ export default function PropertyDetailsPage() {
                       onClick={() => setSelectedImageIndex(idx)}
                       className={`relative w-20 h-14 sm:w-28 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
                         selectedImageIndex === idx
-                          ? 'border-[#315A7D] ring-2 ring-[#315A7D]/30 opacity-100'
+                          ? 'border-[#3F7D58] ring-2 ring-[#3F7D58]/30 opacity-100'
                           : 'border-transparent opacity-60 hover:opacity-100'
                       }`}
                     >
@@ -1928,8 +1928,8 @@ export default function PropertyDetailsPage() {
               )}
             </div>
           ) : (
-            <div className="rounded-2xl border-2 border-dashed border-[#D9E0E6] bg-[#F7F8FA] p-8 sm:p-12 flex flex-col items-center justify-center text-center">
-              <div className="p-3.5 rounded-full bg-[#EAF2F7] text-[#315A7D] mb-3">
+            <div className="rounded-2xl border-2 border-dashed border-[#E3E8DF] bg-[#F7F7F1] p-8 sm:p-12 flex flex-col items-center justify-center text-center">
+              <div className="p-3.5 rounded-full bg-[#EDF4ED] text-[#3F7D58] mb-3">
                 <ImageIcon className="w-8 h-8" />
               </div>
               <h3 className="text-sm font-semibold text-[#243447]">
@@ -1938,7 +1938,7 @@ export default function PropertyDetailsPage() {
               <p className="text-xs text-[#5B6875] max-w-sm mt-1 mb-4">
                 Showcase this property with photos of the exterior, interior living spaces, architecture, and amenities.
               </p>
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#315A7D] hover:bg-[#254663] text-white text-xs font-semibold shadow-sm transition-colors">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#3F7D58] hover:bg-[#254663] text-white text-xs font-semibold shadow-sm transition-colors">
                 <Plus className="w-4 h-4" />
                 <span>Upload First Photo</span>
                 <input
@@ -1958,11 +1958,11 @@ export default function PropertyDetailsPage() {
           {/* Main Column: Address & Specs & Amenities & Description */}
           <div className="lg:col-span-2 space-y-6">
             {/* Property Location & Address */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div>
                   <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#315A7D]" />
+                    <MapPin className="w-4 h-4 text-[#3F7D58]" />
                     Property Address
                   </h2>
                   <p className="text-xs text-[#5B6875] mt-0.5">
@@ -2194,12 +2194,12 @@ export default function PropertyDetailsPage() {
                           required
                         />
                         {isSearchingPincode ? (
-                          <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#315A7D] bg-white/90 px-1 py-0.5 rounded pointer-events-none">
+                          <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#3F7D58] bg-white/90 px-1 py-0.5 rounded pointer-events-none">
                             <Loader size="xs" />
                             <span>Searching...</span>
                           </div>
                         ) : isLookingUpPincode ? (
-                          <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#315A7D] bg-white/90 px-1 py-0.5 rounded pointer-events-none">
+                          <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#3F7D58] bg-white/90 px-1 py-0.5 rounded pointer-events-none">
                             <Loader size="xs" />
                             <span>Resolving...</span>
                           </div>
@@ -2211,7 +2211,7 @@ export default function PropertyDetailsPage() {
                         <div
                           id="pincode-suggestions-list"
                           role="listbox"
-                          className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-[#D9E0E6] rounded-xl shadow-lg max-h-56 overflow-y-auto"
+                          className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-[#E3E8DF] rounded-xl shadow-lg max-h-56 overflow-y-auto"
                         >
                           {isSearchingPincode && pincodeSuggestions.length === 0 ? (
                             <div className="p-3 text-xs text-[#5B6875] flex items-center gap-2">
@@ -2229,7 +2229,7 @@ export default function PropertyDetailsPage() {
                             </div>
                           ) : (
                             <div>
-                              <div className="px-3 py-1.5 bg-[#F7F8FA] border-b border-[#D9E0E6] text-[10px] font-semibold text-[#5B6875] flex justify-between items-center">
+                              <div className="px-3 py-1.5 bg-[#F7F7F1] border-b border-[#E3E8DF] text-[10px] font-semibold text-[#5B6875] flex justify-between items-center">
                                 <span>Suggestions ({pincodeSuggestions.length})</span>
                                 <span className="text-[9px] text-[#98A2B3]">Use ↑↓ to navigate, Enter to select</span>
                               </div>
@@ -2249,7 +2249,7 @@ export default function PropertyDetailsPage() {
                                       onMouseEnter={() => setHighlightedPincodeIndex(idx)}
                                       className={`px-3 py-2 text-xs cursor-pointer flex items-center justify-between transition-colors ${
                                         isHighlighted
-                                          ? 'bg-[#F0F5FA] text-[#315A7D]'
+                                          ? 'bg-[#F0F5FA] text-[#3F7D58]'
                                           : 'hover:bg-slate-50 text-[#243447]'
                                       }`}
                                     >
@@ -2261,7 +2261,7 @@ export default function PropertyDetailsPage() {
                                           {[sugg.district, sugg.state].filter(Boolean).join(', ') || 'India'}
                                         </span>
                                       </div>
-                                      <span className="text-[10px] font-medium text-[#315A7D] bg-white border border-[#D9E0E6] px-1.5 py-0.5 rounded shadow-2xs">
+                                      <span className="text-[10px] font-medium text-[#3F7D58] bg-white border border-[#E3E8DF] px-1.5 py-0.5 rounded shadow-2xs">
                                         Select & Autofill
                                       </span>
                                     </li>
@@ -2292,9 +2292,9 @@ export default function PropertyDetailsPage() {
                     </div>
 
                     {areaSuggestions.length > 0 && (
-                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#F0F5FA] border border-[#D9E0E6] text-xs space-y-1.5">
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-[#F0F5FA] border border-[#E3E8DF] text-xs space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-semibold text-[#315A7D]">
+                          <span className="text-[11px] font-semibold text-[#3F7D58]">
                             Suggested Localities (India Post for {addressForm.pincode})
                           </span>
                           <span className="text-[10px] text-[#5B6875]">Click to auto-fill Area</span>
@@ -2307,8 +2307,8 @@ export default function PropertyDetailsPage() {
                               onClick={() => handleSelectArea(sugg)}
                               className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors border ${
                                 addressForm.area.toLowerCase() === sugg.toLowerCase()
-                                  ? 'bg-[#315A7D] text-white border-[#315A7D] shadow-2xs'
-                                  : 'bg-white text-[#243447] border-[#D9E0E6] hover:bg-slate-50'
+                                  ? 'bg-[#3F7D58] text-white border-[#3F7D58] shadow-2xs'
+                                  : 'bg-white text-[#243447] border-[#E3E8DF] hover:bg-slate-50'
                               }`}
                             >
                               {sugg}
@@ -2346,7 +2346,7 @@ export default function PropertyDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#D9E0E6]">
+                  <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#E3E8DF]">
                     <Button
                       variant="outline"
                       size="sm"
@@ -2392,7 +2392,7 @@ export default function PropertyDetailsPage() {
               ) : addressData ? (
                 <div className="space-y-3 pt-1">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Address Line 1</p>
                       <p className="font-semibold text-[#243447]">
                         {addressData.addressLine1}
@@ -2400,7 +2400,7 @@ export default function PropertyDetailsPage() {
                     </div>
 
                     {addressData.addressLine2 ? (
-                      <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                      <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                         <p className="text-[#5B6875] font-medium mb-0.5">Address Line 2</p>
                         <p className="font-semibold text-[#243447]">
                           {addressData.addressLine2}
@@ -2408,13 +2408,13 @@ export default function PropertyDetailsPage() {
                       </div>
                     ) : null}
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Area</p>
                       <p className="font-semibold text-[#243447]">{addressData.area}</p>
                     </div>
 
                     {addressData.areaType ? (
-                      <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                      <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                         <p className="text-[#5B6875] font-medium mb-0.5">Area Type</p>
                         <p className="font-semibold text-[#243447]">
                           {formatAreaType(addressData.areaType)}
@@ -2422,14 +2422,14 @@ export default function PropertyDetailsPage() {
                       </div>
                     ) : null}
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">City & State</p>
                       <p className="font-semibold text-[#243447]">
                         {addressData.city}, {addressData.state}
                       </p>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                    <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                       <p className="text-[#5B6875] font-medium mb-0.5">Country & Pincode</p>
                       <p className="font-semibold text-[#243447]">
                         {addressData.country} — {addressData.pincode}
@@ -2438,10 +2438,10 @@ export default function PropertyDetailsPage() {
                   </div>
 
                   {(addressData.latitude != null || addressData.longitude != null) && (
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#5B6875] px-1 pt-1 border-t border-[#D9E0E6]/50">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#5B6875] px-1 pt-1 border-t border-[#E3E8DF]/50">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#243447]">GPS Coordinates:</span>
-                        <span className="font-mono text-[11px] bg-[#F7F8FA] px-2 py-0.5 rounded border border-[#D9E0E6]">
+                        <span className="font-mono text-[11px] bg-[#F7F7F1] px-2 py-0.5 rounded border border-[#E3E8DF]">
                           {addressData.latitude ?? '—'}, {addressData.longitude ?? '—'}
                         </span>
                       </div>
@@ -2450,7 +2450,7 @@ export default function PropertyDetailsPage() {
                           href={`https://www.openstreetmap.org/?mlat=${addressData.latitude}&mlon=${addressData.longitude}#map=16/${addressData.latitude}/${addressData.longitude}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#315A7D] hover:underline font-medium inline-flex items-center gap-1 text-xs"
+                          className="text-[#3F7D58] hover:underline font-medium inline-flex items-center gap-1 text-xs"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                           <span>View on OpenStreetMap</span>
@@ -2460,8 +2460,8 @@ export default function PropertyDetailsPage() {
                   )}
                 </div>
               ) : (
-                <div className="p-8 rounded-xl bg-[#F7F8FA] border border-dashed border-[#D9E0E6] text-center space-y-3">
-                  <div className="w-10 h-10 mx-auto rounded-full bg-[#EAF2F7] flex items-center justify-center text-[#315A7D]">
+                <div className="p-8 rounded-xl bg-[#F7F7F1] border border-dashed border-[#E3E8DF] text-center space-y-3">
+                  <div className="w-10 h-10 mx-auto rounded-full bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58]">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -2483,10 +2483,10 @@ export default function PropertyDetailsPage() {
             </div>
 
             {isDirectRentalProperty && (
-              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-5">
-                <div className="border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-5">
+                <div className="border-b border-[#E3E8DF] pb-3">
                   <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                    <Home className="w-4 h-4 text-[#315A7D]" />
+                    <Home className="w-4 h-4 text-[#3F7D58]" />
                     Rental Details &amp; M1 Rent Prediction
                   </h2>
                   <p className="mt-1 text-xs text-[#5B6875]">
@@ -2520,7 +2520,7 @@ export default function PropertyDetailsPage() {
                             setDirectRentalForm((previous) => ({ ...previous, [field]: event.target.value }))
                             setDirectRentalError(null)
                           }}
-                          className="mt-1 w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447] outline-none focus:border-[#315A7D]"
+                          className="mt-1 w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
                         />
                       </label>
                     ))}
@@ -2537,7 +2537,7 @@ export default function PropertyDetailsPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                       <h3 className="text-sm font-semibold text-[#243447] flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#315A7D]" /> M1 Rent Prediction
+                        <Sparkles className="w-4 h-4 text-[#3F7D58]" /> M1 Rent Prediction
                       </h3>
                       <p className="mt-1 text-xs text-[#5B6875]">
                         Uses the saved property address, area, BHK, bathrooms, floor, furnishing, parking, year built, and amenities.
@@ -2569,14 +2569,14 @@ export default function PropertyDetailsPage() {
             )}
 
             {/* Property Specs */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm">
               <h2 className="text-base font-semibold text-[#243447] mb-4">
                 Property Dimensions & Specs
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                   <div className="flex items-center gap-1.5 text-xs text-[#5B6875] mb-1">
-                    <Maximize2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Maximize2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Total Area</span>
                   </div>
                   <p className="text-lg font-bold text-[#243447]">
@@ -2584,9 +2584,9 @@ export default function PropertyDetailsPage() {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                   <div className="flex items-center gap-1.5 text-xs text-[#5B6875] mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Year Built</span>
                   </div>
                   <p className="text-lg font-bold text-[#243447]">
@@ -2594,9 +2594,9 @@ export default function PropertyDetailsPage() {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                   <div className="flex items-center gap-1.5 text-xs text-[#5B6875] mb-1">
-                    <Home className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Home className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Furnishing</span>
                   </div>
                   <p className="text-sm font-bold text-[#243447] truncate">
@@ -2604,9 +2604,9 @@ export default function PropertyDetailsPage() {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                   <div className="flex items-center gap-1.5 text-xs text-[#5B6875] mb-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                     <span>Parking</span>
                   </div>
                   <p className="text-sm font-bold text-[#243447] truncate">
@@ -2615,7 +2615,7 @@ export default function PropertyDetailsPage() {
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-[#D9E0E6] flex items-center justify-between text-xs text-[#5B6875]">
+              <div className="mt-4 pt-4 border-t border-[#E3E8DF] flex items-center justify-between text-xs text-[#5B6875]">
                 <span>Property Classification:</span>
                 <span className="font-semibold text-[#243447]">
                   {property.propertyType || property.type || '—'}
@@ -2624,8 +2624,8 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Included Amenities */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#B7791F]" />
                   <h2 className="text-base font-semibold text-[#243447]">
@@ -2642,7 +2642,7 @@ export default function PropertyDetailsPage() {
                     variant="outline"
                     size="xs"
                     onClick={handleOpenAddAmenity}
-                    leftIcon={<Plus className="w-3.5 h-3.5 text-[#315A7D]" />}
+                    leftIcon={<Plus className="w-3.5 h-3.5 text-[#3F7D58]" />}
                   >
                     Add Amenity
                   </Button>
@@ -2664,7 +2664,7 @@ export default function PropertyDetailsPage() {
 
               {/* Inline Add / Create Amenity Panel */}
               {isAddAmenityOpen && (
-                <div className="p-4 rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] space-y-3">
+                <div className="p-4 rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-bold text-[#243447]">
                       {isCreatingNewAmenity
@@ -2678,7 +2678,7 @@ export default function PropertyDetailsPage() {
                           setIsCreatingNewAmenity(!isCreatingNewAmenity)
                           setNewAmenityError(null)
                         }}
-                        className="text-xs text-[#315A7D] hover:underline font-semibold"
+                        className="text-xs text-[#3F7D58] hover:underline font-semibold"
                       >
                         {isCreatingNewAmenity
                           ? '← Select existing'
@@ -2709,7 +2709,7 @@ export default function PropertyDetailsPage() {
                               setSelectedAmenityIdToAdd(e.target.value)
                             }
                             disabled={isSubmittingAmenity}
-                            className="w-full text-xs rounded-lg border border-[#D9E0E6] p-2 bg-white text-[#243447] focus:outline-none focus:border-[#315A7D]"
+                            className="w-full text-xs rounded-lg border border-[#E3E8DF] p-2 bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58]"
                           >
                             <option value="">-- Choose an amenity --</option>
                             {unassignedAmenities.map((a) => (
@@ -2832,7 +2832,7 @@ export default function PropertyDetailsPage() {
                   {propertyAmenities.map((amenity) => (
                     <div
                       key={amenity.amenityId}
-                      className="group relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-xs text-[#243447] font-medium hover:border-[#B7791F]/50 transition-colors"
+                      className="group relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs text-[#243447] font-medium hover:border-[#B7791F]/50 transition-colors"
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0" />
@@ -2864,7 +2864,7 @@ export default function PropertyDetailsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center rounded-xl border border-dashed border-[#D9E0E6] bg-[#F7F8FA]/50">
+                <div className="py-8 text-center rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1]/50">
                   <Sparkles className="w-7 h-7 text-[#B7791F]/60 mx-auto mb-2" />
                   <p className="text-xs font-semibold text-[#243447]">
                     No amenities specified yet.
@@ -2878,7 +2878,7 @@ export default function PropertyDetailsPage() {
                       variant="outline"
                       size="xs"
                       onClick={handleOpenAddAmenity}
-                      leftIcon={<Plus className="w-3.5 h-3.5 text-[#315A7D]" />}
+                      leftIcon={<Plus className="w-3.5 h-3.5 text-[#3F7D58]" />}
                     >
                       Add First Amenity
                     </Button>
@@ -2888,7 +2888,7 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Description */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
               <h2 className="text-base font-semibold text-[#243447]">
                 About this Property
               </h2>
@@ -2899,10 +2899,10 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Apartment buildings use the hierarchy; houses and villas rent directly. */}
-            {!isDirectRentalProperty && <div id="buildings-section" className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+            {!isDirectRentalProperty && <div id="buildings-section" className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-[#315A7D]" />
+                  <Building2 className="w-4 h-4 text-[#3F7D58]" />
                   <h2 className="text-base font-semibold text-[#243447]">
                     Buildings
                   </h2>
@@ -2919,7 +2919,7 @@ export default function PropertyDetailsPage() {
                   <Button
                     variant="outline"
                     size="xs"
-                    leftIcon={<Plus className="w-3.5 h-3.5 text-[#315A7D]" />}
+                    leftIcon={<Plus className="w-3.5 h-3.5 text-[#3F7D58]" />}
                   >
                     Add Building
                   </Button>
@@ -2952,15 +2952,15 @@ export default function PropertyDetailsPage() {
                   {propertyBuildings.map((b) => (
                     <div
                       key={b.buildingId}
-                      className="group p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] hover:border-[#315A7D]/40 transition-all shadow-2xs space-y-3"
+                      className="group p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] hover:border-[#3F7D58]/40 transition-all shadow-2xs space-y-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2.5">
-                          <div className="p-2 rounded-lg bg-white border border-[#D9E0E6] text-[#315A7D] group-hover:bg-[#315A7D] group-hover:text-white transition-colors">
+                          <div className="p-2 rounded-lg bg-white border border-[#E3E8DF] text-[#3F7D58] group-hover:bg-[#3F7D58] group-hover:text-white transition-colors">
                             <Building className="w-4 h-4" />
                           </div>
                           <div>
-                            <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#315A7D] transition-colors">
+                            <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#3F7D58] transition-colors">
                               {b.buildingName}
                             </h3>
                             {(b.propertyName || property.name) && (
@@ -2978,9 +2978,9 @@ export default function PropertyDetailsPage() {
                         </p>
                       )}
 
-                      <div className="flex items-center gap-3 text-xs pt-1 border-t border-[#D9E0E6]/60">
+                      <div className="flex items-center gap-3 text-xs pt-1 border-t border-[#E3E8DF]/60">
                         <span className="inline-flex items-center gap-1 text-[#5B6875] font-medium">
-                          <Layers className="w-3.5 h-3.5 text-[#315A7D]" />
+                          <Layers className="w-3.5 h-3.5 text-[#3F7D58]" />
                           <span>{b.totalFloors ?? '—'} Floors</span>
                         </span>
                         <span>&bull;</span>
@@ -2992,7 +2992,7 @@ export default function PropertyDetailsPage() {
 
                       {/* Nested Floors & Units representation */}
                       {Array.isArray(b.floors) && b.floors.length > 0 && (
-                        <div className="pt-2 border-t border-[#D9E0E6]/60 space-y-2">
+                        <div className="pt-2 border-t border-[#E3E8DF]/60 space-y-2">
                           <div className="text-[11px] font-semibold text-[#5B6875] uppercase tracking-wider flex items-center justify-between">
                             <span>Floors &amp; Units</span>
                             <span>{b.floors.length} {b.floors.length === 1 ? 'Floor' : 'Floors'}</span>
@@ -3001,11 +3001,11 @@ export default function PropertyDetailsPage() {
                             {b.floors.map((fl) => (
                               <div
                                 key={fl.floorId || fl.floorNumber}
-                                className="p-2 rounded-lg bg-white border border-[#D9E0E6] text-xs space-y-1"
+                                className="p-2 rounded-lg bg-white border border-[#E3E8DF] text-xs space-y-1"
                               >
                                 <div className="flex items-center justify-between font-semibold text-[#243447]">
                                   <span className="flex items-center gap-1">
-                                    <Layers className="w-3 h-3 text-[#315A7D]" />
+                                    <Layers className="w-3 h-3 text-[#3F7D58]" />
                                     {fl.floorName || `Floor ${fl.floorNumber}`}
                                   </span>
                                   <span className="text-[11px] text-[#5B6875] font-normal">
@@ -3020,7 +3020,7 @@ export default function PropertyDetailsPage() {
                                         className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border ${
                                           u.status === 'OCCUPIED'
                                             ? 'bg-[#EDF7EE] text-[#2A583B] border-[#C6DEC8]'
-                                            : 'bg-[#F7F8FA] text-[#5B6875] border-[#D9E0E6]'
+                                            : 'bg-[#F7F7F1] text-[#5B6875] border-[#E3E8DF]'
                                         }`}
                                         title={`Unit ${u.unitNumber} (${u.unitType || 'Unit'})${u.monthlyRent ? ` - ${formatCurrency(u.monthlyRent)}/mo` : ''}`}
                                       >
@@ -3042,10 +3042,10 @@ export default function PropertyDetailsPage() {
                         </div>
                       )}
 
-                      <div className="pt-2 border-t border-[#D9E0E6]/60 flex items-center justify-between gap-2">
+                      <div className="pt-2 border-t border-[#E3E8DF]/60 flex items-center justify-between gap-2">
                         <Link
                           to={`/owner/buildings/${b.buildingId}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315A7D] hover:text-[#254663] transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3F7D58] hover:text-[#254663] transition-colors"
                         >
                           <span>View Building Details</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -3068,8 +3068,8 @@ export default function PropertyDetailsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center rounded-xl border border-dashed border-[#D9E0E6] bg-[#F7F8FA]/50">
-                  <Building2 className="w-8 h-8 text-[#315A7D]/40 mx-auto mb-2" />
+                <div className="py-8 text-center rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1]/50">
+                  <Building2 className="w-8 h-8 text-[#3F7D58]/40 mx-auto mb-2" />
                   <p className="text-xs font-semibold text-[#243447]">
                     No buildings added yet.
                   </p>
@@ -3103,19 +3103,19 @@ export default function PropertyDetailsPage() {
           {/* Right Sidebar: Occupancy & Financials & Actions */}
           <div className="space-y-6">
             {/* Occupancy Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#315A7D]" />
+                  <Users className="w-4 h-4 text-[#3F7D58]" />
                   Occupancy Metrics
                 </h2>
-                <span className="text-xs font-bold text-[#315A7D]">
+                <span className="text-xs font-bold text-[#3F7D58]">
                   {occupancyPct == null ? '—' : `${occupancyPct}%`}
                 </span>
               </div>
 
               <div className="space-y-3">
-                <div className="w-full bg-[#F7F8FA] h-2.5 rounded-full overflow-hidden border border-[#D9E0E6]">
+                <div className="w-full bg-[#F7F7F1] h-2.5 rounded-full overflow-hidden border border-[#E3E8DF]">
                   <div
                     className={`h-full rounded-full transition-all ${
                       occupancyPct == null
@@ -3123,7 +3123,7 @@ export default function PropertyDetailsPage() {
                         : occupancyPct >= 90
                         ? 'bg-[#3F7D58]'
                         : occupancyPct >= 50
-                        ? 'bg-[#315A7D]'
+                        ? 'bg-[#3F7D58]'
                         : 'bg-[#B7791F]'
                     }`}
                     style={{ width: `${occupancyPct ?? 0}%` }}
@@ -3131,7 +3131,7 @@ export default function PropertyDetailsPage() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-center pt-2">
-                  <div className="p-2 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+                  <div className="p-2 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
                     <p className="text-xs text-[#5B6875]">Total</p>
                     <p className="text-sm font-bold text-[#243447]">
                       {total ?? '—'}
@@ -3154,10 +3154,10 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Property Manager Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <div className="flex items-center gap-2">
-                  <UserCheck className="w-4 h-4 text-[#315A7D]" />
+                  <UserCheck className="w-4 h-4 text-[#3F7D58]" />
                   <h2 className="text-base font-semibold text-[#243447]">
                     Property Manager
                   </h2>
@@ -3168,7 +3168,7 @@ export default function PropertyDetailsPage() {
                     Assigned
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F7F8FA] text-[#5B6875] border border-[#D9E0E6]">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F7F7F1] text-[#5B6875] border border-[#E3E8DF]">
                     Not Assigned
                   </span>
                 )}
@@ -3189,8 +3189,8 @@ export default function PropertyDetailsPage() {
 
               {property.propertyManagerId ? (
                 <div className="space-y-4">
-                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
-                    <div className="w-10 h-10 rounded-full bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D] font-bold text-xs shrink-0">
+                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
+                    <div className="w-10 h-10 rounded-full bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58] font-bold text-xs shrink-0">
                       {property.managerName
                         ? property.managerName
                             .split(' ')
@@ -3210,7 +3210,7 @@ export default function PropertyDetailsPage() {
                             <Mail className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                             <a
                               href={`mailto:${property.managerEmail}`}
-                              className="hover:text-[#315A7D] truncate underline decoration-dotted"
+                              className="hover:text-[#3F7D58] truncate underline decoration-dotted"
                             >
                               {property.managerEmail}
                             </a>
@@ -3222,7 +3222,7 @@ export default function PropertyDetailsPage() {
                             {property.managerPhone ? (
                               <a
                                 href={`tel:${property.managerPhone}`}
-                                className="hover:text-[#315A7D]"
+                                className="hover:text-[#3F7D58]"
                               >
                                 {property.managerPhone}
                               </a>
@@ -3244,7 +3244,7 @@ export default function PropertyDetailsPage() {
                         setManagerActionError(null)
                         setIsAssignManagerOpen(true)
                       }}
-                      leftIcon={<UserCheck className="w-3.5 h-3.5 text-[#315A7D]" />}
+                      leftIcon={<UserCheck className="w-3.5 h-3.5 text-[#3F7D58]" />}
                     >
                       Replace Manager
                     </Button>
@@ -3265,7 +3265,7 @@ export default function PropertyDetailsPage() {
                 </div>
               ) : (
                 <div className="py-4 text-center space-y-3">
-                  <div className="w-11 h-11 rounded-full bg-[#F7F8FA] border border-[#D9E0E6] flex items-center justify-center text-[#5B6875] mx-auto">
+                  <div className="w-11 h-11 rounded-full bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-center text-[#5B6875] mx-auto">
                     <UserX className="w-5 h-5 text-[#8C9BA8]" />
                   </div>
                   <div className="space-y-1">
@@ -3293,12 +3293,12 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Property Overview Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
               <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                <Building className="w-4 h-4 text-[#315A7D]" />
+                <Building className="w-4 h-4 text-[#3F7D58]" />
                 Property Specifications
               </h2>
-              <div className="space-y-2 text-xs divide-y divide-[#D9E0E6]">
+              <div className="space-y-2 text-xs divide-y divide-[#E3E8DF]">
                 <div className="flex justify-between pt-2">
                   <span className="text-[#5B6875]">Property Type:</span>
                   <span className="font-semibold text-[#243447]">
@@ -3341,7 +3341,7 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Actions Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-sm space-y-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-sm space-y-3">
               <h2 className="text-base font-semibold text-[#243447]">
                 Quick Actions
               </h2>
@@ -3351,9 +3351,9 @@ export default function PropertyDetailsPage() {
                   className="w-full justify-start"
                   leftIcon={
                     property.propertyManagerId ? (
-                      <UserCheck className="w-4 h-4 text-[#315A7D]" />
+                      <UserCheck className="w-4 h-4 text-[#3F7D58]" />
                     ) : (
-                      <UserPlus className="w-4 h-4 text-[#315A7D]" />
+                      <UserPlus className="w-4 h-4 text-[#3F7D58]" />
                     )
                   }
                   onClick={() => {
@@ -3372,7 +3372,7 @@ export default function PropertyDetailsPage() {
                     <Button
                       variant="outline"
                       className="w-full justify-start"
-                      leftIcon={<Plus className="w-4 h-4 text-[#315A7D]" />}
+                      leftIcon={<Plus className="w-4 h-4 text-[#3F7D58]" />}
                     >
                       Add Building ({propertyBuildings.length} active)
                     </Button>
@@ -3392,7 +3392,7 @@ export default function PropertyDetailsPage() {
                     Generate Tenant Agreement
                   </Button>
                 </Link>
-                <p className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-xs text-[#5B6875]">
+                <p className="rounded-md border border-[#E3E8DF] bg-[#F7F7F1] p-3 text-xs text-[#5B6875]">
                   Inspection scheduling is unavailable because the backend does not provide an inspection-request service.
                 </p>
                 <Button

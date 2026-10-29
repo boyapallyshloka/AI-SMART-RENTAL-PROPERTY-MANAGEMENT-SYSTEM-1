@@ -35,9 +35,9 @@ export default function TenantDocumentsCard({ tenantId }) {
   }, [tenantId])
 
   return (
-    <section className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-      <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-        <FileText className="w-4 h-4 text-[#315A7D]" /> Supporting Documents
+    <section className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+      <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+        <FileText className="w-4 h-4 text-[#3F7D58]" /> Supporting Documents
       </h2>
       {loading ? (
         <p className="text-sm text-[#5B6875] flex items-center gap-2"><LoaderCircle className="w-4 h-4 animate-spin" /> Loading documents…</p>
@@ -54,7 +54,7 @@ export default function TenantDocumentsCard({ tenantId }) {
                 <p className="text-xs text-[#5B6875]">{labelForType(document.documentType)} · {document.verificationStatus || 'Pending'}</p>
               </div>
               {document.documentUrl ? (
-                <a href={document.documentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#315A7D] hover:underline">
+                <a href={document.documentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#3F7D58] hover:underline">
                   View document <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               ) : <span className="text-xs text-[#8A2E2C]">Document link unavailable</span>}

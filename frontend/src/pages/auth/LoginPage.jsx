@@ -117,6 +117,7 @@ export default function LoginPage() {
     <AuthLayout
       title="Sign in to SmartEstate"
       subtitle="Access your smart rental property management portal"
+      cityBackdrop
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {authError && (
@@ -128,7 +129,7 @@ export default function LoginPage() {
             {verificationEmail && (
               <button
                 type="button"
-                className="mt-2 font-semibold text-[#315A7D] underline"
+                className="mt-2 font-semibold text-[#3F7D58] underline"
                 onClick={() =>
                   navigate('/verify-email', {
                     state: { email: verificationEmail },
@@ -165,7 +166,7 @@ export default function LoginPage() {
             </span>
             <Link
               to="/forgot-password"
-              className="text-xs font-medium text-[#315A7D] hover:underline"
+              className="text-xs font-medium text-[#3F7D58] hover:underline"
             >
               Forgot password?
             </Link>
@@ -192,7 +193,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-[#5B6875] hover:text-[#315A7D]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-[#5B6875] hover:text-[#3F7D58]"
             >
               {showPassword ? (
                 <EyeOff className="w-4 h-4" />
@@ -216,7 +217,7 @@ export default function LoginPage() {
             Don't have an account?{' '}
             <Link
               to="/register"
-              className="font-semibold text-[#315A7D] hover:underline"
+              className="font-semibold text-[#3F7D58] hover:underline"
             >
               Create an account
             </Link>

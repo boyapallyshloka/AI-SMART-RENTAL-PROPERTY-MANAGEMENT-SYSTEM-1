@@ -15,21 +15,21 @@ export default function ScoutAssistant({
   if (!isEmbedded && !isOpen) return null
 
   const containerClasses = isEmbedded
-    ? `h-full min-h-[420px] w-full overflow-hidden rounded-xl border border-[#D9E0E6] bg-white ${className}`
-    : `fixed bottom-5 right-5 z-50 flex h-[420px] max-h-[85vh] w-[94vw] flex-col overflow-hidden rounded-2xl border border-[#D9E0E6] bg-white shadow-2xl sm:w-[400px] ${className}`
+    ? `h-full min-h-[420px] w-full overflow-hidden rounded-xl border border-[#E3E8DF] bg-white ${className}`
+    : `fixed bottom-5 right-5 z-50 flex h-[420px] max-h-[85vh] w-[94vw] flex-col overflow-hidden rounded-2xl border border-[#E3E8DF] bg-white shadow-2xl sm:w-[400px] ${className}`
 
   return (
     <section className={containerClasses} role="dialog" aria-label="SCOUT assistant availability">
-      <header className="flex items-center justify-between border-b border-[#D9E0E6] px-4 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#E3E8DF] px-4 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9E0E6] bg-[#EAF2F7] text-[#315A7D]"><Bot className="h-4 w-4" /></span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#E3E8DF] bg-[#EDF4ED] text-[#3F7D58]"><Bot className="h-4 w-4" /></span>
           <div>
             <h2 className="text-sm font-bold text-[#243447]">SCOUT</h2>
             <p className="text-[11px] text-[#5B6875]">SmartEstate assistant</p>
           </div>
         </div>
         {!isEmbedded && (
-          <button type="button" onClick={close} className="rounded-md p-2 text-[#5B6875] hover:bg-[#F7F8FA]" aria-label="Close SCOUT">
+          <button type="button" onClick={close} className="rounded-md p-2 text-[#5B6875] hover:bg-[#F7F7F1]" aria-label="Close SCOUT">
             <X className="h-4 w-4" />
           </button>
         )}

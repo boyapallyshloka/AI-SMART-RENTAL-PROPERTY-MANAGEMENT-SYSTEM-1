@@ -545,13 +545,13 @@ export default function ManagerPropertyDetailsPage() {
           <div className="space-y-1">
             <Link
               to="/manager/properties"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315A7D] hover:text-[#274B68] transition-colors mb-1"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3F7D58] hover:text-[#315F46] transition-colors mb-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Assigned Properties</span>
             </Link>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                 Manager Property View
               </span>
               <span className="text-xs text-[#5B6875]">
@@ -568,7 +568,7 @@ export default function ManagerPropertyDetailsPage() {
                 setPropertyUpdateError(null)
                 setIsEditPropertyOpen(true)
               }}
-              leftIcon={<Edit className="w-4 h-4 text-[#315A7D]" />}
+              leftIcon={<Edit className="w-4 h-4 text-[#3F7D58]" />}
             >
               Edit Property
             </Button>
@@ -584,14 +584,14 @@ export default function ManagerPropertyDetailsPage() {
         </div>
 
         {/* Primary Property Info Banner */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#D9E0E6] pb-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E3E8DF] pb-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="font-mono text-xs font-bold text-[#315A7D] bg-[#EAF2F7] px-2.5 py-0.5 rounded border border-[#D9E0E6]">
+                <span className="font-mono text-xs font-bold text-[#3F7D58] bg-[#EDF4ED] px-2.5 py-0.5 rounded border border-[#E3E8DF]">
                   ID: #{property.propertyId}
                 </span>
-                <span className="px-2 py-0.5 rounded text-xs font-semibold bg-[#F7F8FA] text-[#5B6875] border border-[#D9E0E6]">
+                <span className="px-2 py-0.5 rounded text-xs font-semibold bg-[#F7F7F1] text-[#5B6875] border border-[#E3E8DF]">
                   {formatPropertyType(property.propertyType)}
                 </span>
                 <StatusBadge status={property.status} size="sm" />
@@ -602,12 +602,12 @@ export default function ManagerPropertyDetailsPage() {
             </div>
 
             {property.ownerName && (
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-0.5">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-0.5">
                 <span className="text-[11px] uppercase font-bold text-[#5B6875] block tracking-wider">
                   Property Owner
                 </span>
                 <p className="font-bold text-[#243447] flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                   <span>{property.ownerName}</span>
                   {property.ownerId && (
                     <span className="font-mono text-[#5B6875] font-normal">
@@ -635,9 +635,9 @@ export default function ManagerPropertyDetailsPage() {
               Property Specifications
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
                 <span className="text-[#5B6875] flex items-center gap-1.5 font-medium">
-                  <Maximize2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Maximize2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Total Area
                 </span>
                 <p className="font-bold text-[#243447] text-sm">
@@ -647,9 +647,9 @@ export default function ManagerPropertyDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
                 <span className="text-[#5B6875] flex items-center gap-1.5 font-medium">
-                  <Sofa className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Sofa className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Furnishing
                 </span>
                 <p className="font-bold text-[#243447] text-sm">
@@ -657,9 +657,9 @@ export default function ManagerPropertyDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
                 <span className="text-[#5B6875] flex items-center gap-1.5 font-medium">
-                  <Car className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Car className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Parking
                 </span>
                 <p className="font-bold text-[#243447] text-sm">
@@ -667,9 +667,9 @@ export default function ManagerPropertyDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
                 <span className="text-[#5B6875] flex items-center gap-1.5 font-medium">
-                  <Calendar className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                   Year Built
                 </span>
                 <p className="font-bold text-[#243447] text-sm">
@@ -681,10 +681,10 @@ export default function ManagerPropertyDetailsPage() {
         </div>
 
         {/* Section: Property Photos & Media Gallery */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-6 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2">
-              <ImageIcon className="w-4 h-4 text-[#315A7D]" />
+              <ImageIcon className="w-4 h-4 text-[#3F7D58]" />
               <h3 className="text-base font-bold text-[#243447]">
                 Property Photos & Media
               </h3>
@@ -697,14 +697,14 @@ export default function ManagerPropertyDetailsPage() {
 
             <div className="flex items-center gap-2">
               <label
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] cursor-pointer transition-colors shadow-2xs ${
                   isUploadingImage ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
                 {isUploadingImage ? (
                   <Loader size="xs" />
                 ) : (
-                  <Upload className="w-3.5 h-3.5 text-[#315A7D]" />
+                  <Upload className="w-3.5 h-3.5 text-[#3F7D58]" />
                 )}
                 <span>{isUploadingImage ? 'Uploading...' : 'Upload Photo'}</span>
                 <input
@@ -740,7 +740,7 @@ export default function ManagerPropertyDetailsPage() {
               {(() => {
                 const currentImg = images[selectedImageIndex] || images[0]
                 return (
-                  <div className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[21/9] max-h-[420px] bg-slate-900 border border-[#D9E0E6]">
+                  <div className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[21/9] max-h-[420px] bg-slate-900 border border-[#E3E8DF]">
                     <img
                       src={resolveImageUrl(currentImg?.imageUrl)}
                       alt={property.propertyName || 'Property photo'}
@@ -817,7 +817,7 @@ export default function ManagerPropertyDetailsPage() {
                       onClick={() => setSelectedImageIndex(idx)}
                       className={`relative w-20 h-14 rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
                         selectedImageIndex === idx
-                          ? 'border-[#315A7D] ring-2 ring-[#315A7D]/30'
+                          ? 'border-[#3F7D58] ring-2 ring-[#3F7D58]/30'
                           : 'border-transparent opacity-70 hover:opacity-100'
                       }`}
                     >
@@ -835,8 +835,8 @@ export default function ManagerPropertyDetailsPage() {
               )}
             </div>
           ) : (
-            <div className="p-8 rounded-xl border border-dashed border-[#D9E0E6] bg-[#F7F8FA] text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#EAF2F7] flex items-center justify-center mx-auto text-[#315A7D]">
+            <div className="p-8 rounded-xl border border-dashed border-[#E3E8DF] bg-[#F7F7F1] text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#EDF4ED] flex items-center justify-center mx-auto text-[#3F7D58]">
                 <ImageIcon className="w-6 h-6" />
               </div>
               <div className="space-y-1">
@@ -852,10 +852,10 @@ export default function ManagerPropertyDetailsPage() {
         </div>
 
         {/* Section 4: Property Address Section */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D]">
+              <div className="w-9 h-9 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58]">
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
@@ -869,7 +869,7 @@ export default function ManagerPropertyDetailsPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#F0F4F8] text-[#5B6875] border border-[#D9E0E6]">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#F0F4F8] text-[#5B6875] border border-[#E3E8DF]">
                 <Lock className="w-3.5 h-3.5 text-[#5B6875]" />
                 Read-Only
               </span>
@@ -881,7 +881,7 @@ export default function ManagerPropertyDetailsPage() {
                     setAddressUpdateError(null)
                     setIsEditAddressOpen(true)
                   }}
-                  leftIcon={<MapPin className="w-3.5 h-3.5 text-[#315A7D]" />}
+                  leftIcon={<MapPin className="w-3.5 h-3.5 text-[#3F7D58]" />}
                 >
                   View Details
                 </Button>
@@ -890,8 +890,8 @@ export default function ManagerPropertyDetailsPage() {
           </div>
 
           {/* Manager Permission Note */}
-          <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[#F0F4F8] border border-[#D9E0E6] text-xs">
-            <Info className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[#F0F4F8] border border-[#E3E8DF] text-xs">
+            <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
               <p className="font-semibold text-[#243447]">
                 Address Management Restricted
@@ -904,7 +904,7 @@ export default function ManagerPropertyDetailsPage() {
 
           {address ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5 sm:col-span-2">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5 sm:col-span-2">
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Address Line
                 </span>
@@ -914,7 +914,7 @@ export default function ManagerPropertyDetailsPage() {
               </div>
 
               {address.area && (
-                <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+                <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                   <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                     Locality / Area
                   </span>
@@ -922,7 +922,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
               )}
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   City & State
                 </span>
@@ -931,7 +931,7 @@ export default function ManagerPropertyDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Postal Code
                 </span>
@@ -940,7 +940,7 @@ export default function ManagerPropertyDetailsPage() {
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-0.5">
+              <div className="p-3 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-0.5">
                 <span className="text-[#5B6875] font-semibold uppercase text-[10px] tracking-wider">
                   Country
                 </span>
@@ -950,8 +950,8 @@ export default function ManagerPropertyDetailsPage() {
               </div>
             </div>
           ) : (
-            <div className="py-8 text-center space-y-2 bg-[#F7F8FA] rounded-xl border border-dashed border-[#D9E0E6] p-6">
-              <div className="w-10 h-10 rounded-full bg-[#EAF2F7] flex items-center justify-center mx-auto text-[#315A7D]">
+            <div className="py-8 text-center space-y-2 bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF] p-6">
+              <div className="w-10 h-10 rounded-full bg-[#EDF4ED] flex items-center justify-center mx-auto text-[#3F7D58]">
                 <MapPin className="w-5 h-5" />
               </div>
               <p className="text-sm font-semibold text-[#243447]">
@@ -965,10 +965,10 @@ export default function ManagerPropertyDetailsPage() {
         </div>
 
         {/* Section 5: Buildings Hierarchy Section */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D]">
+              <div className="w-9 h-9 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58]">
                 <Building className="w-4 h-4" />
               </div>
               <div>
@@ -1009,12 +1009,12 @@ export default function ManagerPropertyDetailsPage() {
                 return (
                   <div
                     key={bId}
-                    className="p-5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] hover:border-[#315A7D] transition-all flex flex-col justify-between space-y-4"
+                    className="p-5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] hover:border-[#3F7D58] transition-all flex flex-col justify-between space-y-4"
                   >
                     <div className="space-y-2">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <span className="font-mono text-[10px] font-bold text-[#315A7D] bg-white px-2 py-0.5 rounded border border-[#D9E0E6]">
+                          <span className="font-mono text-[10px] font-bold text-[#3F7D58] bg-white px-2 py-0.5 rounded border border-[#E3E8DF]">
                             Building #{bId}
                           </span>
                           <h4 className="text-base font-bold text-[#243447] tracking-tight mt-1">
@@ -1045,7 +1045,7 @@ export default function ManagerPropertyDetailsPage() {
                         {b.description || 'No building description provided.'}
                       </p>
 
-                      <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between text-xs">
+                      <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between text-xs">
                         <span className="text-[#5B6875]">Total Floors:</span>
                         <span className="font-bold text-[#243447]">
                           {b.totalFloors != null ? b.totalFloors : '—'}
@@ -1081,10 +1081,10 @@ export default function ManagerPropertyDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#315A7D]" />
+                <Building2 className="w-5 h-5 text-[#3F7D58]" />
                 <h3 className="text-base font-bold text-[#243447]">
                   Edit Property Specifications
                 </h3>
@@ -1234,7 +1234,7 @@ export default function ManagerPropertyDetailsPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1266,10 +1266,10 @@ export default function ManagerPropertyDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-[#315A7D]" />
+                <MapPin className="w-5 h-5 text-[#3F7D58]" />
                 <h3 className="text-base font-bold text-[#243447]">
                   Property Address Details (Read-Only)
                 </h3>
@@ -1382,7 +1382,7 @@ export default function ManagerPropertyDetailsPage() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1416,10 +1416,10 @@ export default function ManagerPropertyDetailsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
               <div className="flex items-center gap-2">
-                <Building className="w-5 h-5 text-[#315A7D]" />
+                <Building className="w-5 h-5 text-[#3F7D58]" />
                 <h3 className="text-base font-bold text-[#243447]">
                   {editingBuilding ? 'Edit Building' : 'Add New Building'}
                 </h3>
@@ -1483,7 +1483,7 @@ export default function ManagerPropertyDetailsPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="secondary"

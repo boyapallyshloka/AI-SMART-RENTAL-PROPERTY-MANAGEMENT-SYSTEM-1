@@ -203,18 +203,18 @@ export default function RegisterPage() {
           </div>
 
           {/* Account Details Summary */}
-          <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-2">
-            <div className="flex justify-between items-center py-1 border-b border-[#D9E0E6]/60">
+          <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-2">
+            <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Account Email:</span>
               <span className="font-mono font-medium text-[#243447]">{registeredData?.email || email}</span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-[#D9E0E6]/60">
+            <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Phone Number:</span>
               <span className="font-mono font-medium text-[#243447]">{registeredData?.phone || phone}</span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-[#D9E0E6]/60">
+            <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Role Requested:</span>
-              <span className="inline-flex items-center gap-1 font-semibold text-[#315A7D]">
+              <span className="inline-flex items-center gap-1 font-semibold text-[#3F7D58]">
                 <Building2 className="w-3.5 h-3.5" />
                 Property Owner
               </span>
@@ -229,7 +229,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Compliance & Next Steps Notice */}
-          <div className="p-3 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] text-xs text-[#274B68] space-y-1.5 leading-relaxed">
+          <div className="p-3 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-xs text-[#315F46] space-y-1.5 leading-relaxed">
             <div className="flex items-center gap-1.5 font-semibold text-[#243447]">
               <CheckCircle2 className="w-4 h-4 text-[#3F7D58]" />
               <span>What happens next?</span>
@@ -252,7 +252,7 @@ export default function RegisterPage() {
 
           <div className="text-center text-xs text-[#5B6875]">
             Need immediate assistance?{' '}
-            <Link to="/contact" className="font-semibold text-[#315A7D] hover:underline">
+            <Link to="/contact" className="font-semibold text-[#3F7D58] hover:underline">
               Contact Support
             </Link>
           </div>
@@ -278,12 +278,12 @@ export default function RegisterPage() {
           <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#243447]">
             I am joining as a
           </label>
-          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6]">
+          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
             <button
               type="button"
               onClick={() => setRole(ROLES.TENANT)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isTenant(role)
-                ? 'bg-white text-[#315A7D] border border-[#D9E0E6] shadow-xs'
+                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
                 : 'text-[#5B6875] hover:text-[#243447]'
                 }`}
             >
@@ -294,7 +294,7 @@ export default function RegisterPage() {
               type="button"
               onClick={() => setRole(ROLES.PROPERTY_OWNER)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyOwner(role)
-                ? 'bg-white text-[#315A7D] border border-[#D9E0E6] shadow-xs'
+                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
                 : 'text-[#5B6875] hover:text-[#243447]'
                 }`}
             >
@@ -305,7 +305,7 @@ export default function RegisterPage() {
               type="button"
               onClick={() => setRole(ROLES.PROPERTY_MANAGER)}
               className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyManager(role)
-                ? 'bg-white text-[#315A7D] border border-[#D9E0E6] shadow-xs'
+                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
                 : 'text-[#5B6875] hover:text-[#243447]'
                 }`}
             >
@@ -414,7 +414,7 @@ export default function RegisterPage() {
               type="button"
               onClick={() => setShowPassword((visible) => !visible)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              className="pointer-events-auto text-[#5B6875] hover:text-[#315A7D]"
+              className="pointer-events-auto text-[#5B6875] hover:text-[#3F7D58]"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -464,7 +464,7 @@ export default function RegisterPage() {
               type="button"
               onClick={() => setShowConfirmPassword((visible) => !visible)}
               aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-              className="pointer-events-auto text-[#5B6875] hover:text-[#315A7D]"
+              className="pointer-events-auto text-[#5B6875] hover:text-[#3F7D58]"
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -499,7 +499,7 @@ export default function RegisterPage() {
           Already have an account?{' '}
           <Link
             to="/login"
-            className="font-semibold text-[#315A7D] hover:underline"
+            className="font-semibold text-[#3F7D58] hover:underline"
           >
             Sign in
           </Link>

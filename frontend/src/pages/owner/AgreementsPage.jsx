@@ -441,7 +441,7 @@ export default function AgreementsPage() {
         </div>
 
         {/* Search & Status Filter Bar */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-5 shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
             <div className="sm:col-span-2">
               <Input
@@ -467,7 +467,7 @@ export default function AgreementsPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -475,7 +475,7 @@ export default function AgreementsPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
               <strong className="text-[#243447]">
@@ -484,7 +484,7 @@ export default function AgreementsPage() {
               of {agreements.length} lease agreements
             </span>
             {hasActiveFilters && (
-              <span className="text-[#315A7D] font-medium">
+              <span className="text-[#3F7D58] font-medium">
                 Filters active
               </span>
             )}
@@ -493,14 +493,14 @@ export default function AgreementsPage() {
 
         {/* Content Section */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading lease agreements..." size="md" center />
           </div>
         ) : filteredAgreements.length === 0 ? (
           /* Empty State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
-              icon={<FileText className="w-8 h-8 text-[#315A7D]" />}
+              icon={<FileText className="w-8 h-8 text-[#3F7D58]" />}
               title="No lease agreements found"
               message={
                 hasActiveFilters
@@ -524,11 +524,11 @@ export default function AgreementsPage() {
           </div>
         ) : (
           /* Agreements Table */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">Agreement #</th>
                     <th className="py-3.5 px-4">Tenant</th>
                     <th className="py-3.5 px-4">Property &amp; Unit</th>
@@ -539,7 +539,7 @@ export default function AgreementsPage() {
                     <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {filteredAgreements.map((agr) => {
                     const statusUpper = String(agr.status || '').toUpperCase()
                     const isDraft = statusUpper === 'DRAFT'
@@ -549,10 +549,10 @@ export default function AgreementsPage() {
                     return (
                       <tr
                         key={agr.agreementId}
-                        className="hover:bg-[#F7F8FA] transition-colors"
+                        className="hover:bg-[#F7F7F1] transition-colors"
                       >
                         {/* Agreement Number */}
-                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs whitespace-nowrap">
+                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs whitespace-nowrap">
                           <button
                             type="button"
                             onClick={() => handleOpenDetails(agr)}
@@ -621,7 +621,7 @@ export default function AgreementsPage() {
                             <button
                               type="button"
                               onClick={() => handleOpenDetails(agr)}
-                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors cursor-pointer"
+                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors cursor-pointer"
                               title="View Agreement Details"
                             >
                               <Eye className="w-4 h-4" />
@@ -635,7 +635,7 @@ export default function AgreementsPage() {
                                 onClick={() =>
                                   handleDownloadDocument(agr.agreementId)
                                 }
-                                className="p-1.5 rounded-md text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors cursor-pointer"
                                 title="Download Agreement PDF"
                               >
                                 <Download className="w-4 h-4" />
@@ -669,13 +669,13 @@ export default function AgreementsPage() {
                                   onClick={() =>
                                     handleGenerateInvoiceForAgreement(agr)
                                   }
-                                  className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#C2D8E8] hover:bg-[#d6e7f4] transition-colors cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
+                                  className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#C2D8E8] hover:bg-[#d6e7f4] transition-colors cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
                                   title="Generate monthly rent invoice for this active agreement"
                                 >
                                   {generatingInvoiceId === agr.agreementId ? (
-                                    <RefreshCw className="w-3 h-3 animate-spin text-[#315A7D]" />
+                                    <RefreshCw className="w-3 h-3 animate-spin text-[#3F7D58]" />
                                   ) : (
-                                    <Receipt className="w-3 h-3 text-[#315A7D]" />
+                                    <Receipt className="w-3 h-3 text-[#3F7D58]" />
                                   )}
                                   <span>Generate Invoice</span>
                                 </button>
@@ -706,11 +706,11 @@ export default function AgreementsPage() {
         {/* Agreement Details Modal */}
         {selectedDetails && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-5 border-b border-[#D9E0E6] bg-[#F7F8FA]">
+              <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#315A7D] text-white flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-lg bg-[#3F7D58] text-white flex items-center justify-center">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
@@ -730,7 +730,7 @@ export default function AgreementsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedDetails(null)}
-                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] transition-colors"
+                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -746,9 +746,9 @@ export default function AgreementsPage() {
 
                 {/* Section: Parties & Premise */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+                  <div className="p-4 rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875] flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Tenant Information
                     </span>
                     <p className="font-semibold text-base text-[#243447]">
@@ -762,9 +762,9 @@ export default function AgreementsPage() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+                  <div className="p-4 rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875] flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <Building2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Rented Unit &amp; Property
                     </span>
                     <p className="font-semibold text-base text-[#243447]">
@@ -781,9 +781,9 @@ export default function AgreementsPage() {
                 </div>
 
                 {/* Section: Term Dates & Schedule */}
-                <div className="rounded-xl border border-[#D9E0E6] p-4 space-y-3">
+                <div className="rounded-xl border border-[#E3E8DF] p-4 space-y-3">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875] flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#315A7D]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                     Lease Schedule &amp; Term
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
@@ -818,7 +818,7 @@ export default function AgreementsPage() {
 
                 {/* Section: Financials & Policy */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3.5 rounded-xl border border-[#D9E0E6] bg-white">
+                  <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Monthly Rent</span>
                     <p className="text-base font-bold text-[#243447] mt-0.5">
                       {formatCurrency(selectedDetails.monthlyRent)}
@@ -826,7 +826,7 @@ export default function AgreementsPage() {
                     <span className="text-[10px] text-[#5B6875]">Due on day {selectedDetails.dueDay ?? '—'}</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-[#D9E0E6] bg-white">
+                  <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Security Deposit</span>
                     <p className="text-base font-bold text-[#243447] mt-0.5">
                       {formatCurrency(selectedDetails.securityDeposit)}
@@ -834,7 +834,7 @@ export default function AgreementsPage() {
                     <span className="text-[10px] text-[#5B6875]">Refundable</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-[#D9E0E6] bg-white">
+                  <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Rent Due Day</span>
                     <p className="text-base font-bold text-[#243447] mt-0.5">
                       {selectedDetails.dueDay == null ? '—' : `Day ${selectedDetails.dueDay}`}
@@ -842,7 +842,7 @@ export default function AgreementsPage() {
                     <span className="text-[10px] text-[#5B6875]">Of each month</span>
                   </div>
 
-                  <div className="p-3.5 rounded-xl border border-[#D9E0E6] bg-white">
+                  <div className="p-3.5 rounded-xl border border-[#E3E8DF] bg-white">
                     <span className="text-xs text-[#5B6875] block">Notice Period</span>
                     <p className="text-base font-bold text-[#243447] mt-0.5">
                       {selectedDetails.noticePeriodDays != null ? `${selectedDetails.noticePeriodDays} Days` : '30 Days'}
@@ -852,7 +852,7 @@ export default function AgreementsPage() {
                 </div>
 
                 {/* Section: Terms and Conditions */}
-                <div className="rounded-xl border border-[#D9E0E6] p-4 space-y-1.5">
+                <div className="rounded-xl border border-[#E3E8DF] p-4 space-y-1.5">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     Terms &amp; Conditions / Special Provisions
                   </span>
@@ -863,10 +863,10 @@ export default function AgreementsPage() {
                 </div>
 
                 {/* Section: Official Document */}
-                <div className="rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#EAF2F7] text-[#315A7D] flex items-center justify-center border border-[#D9E0E6] shrink-0">
-                      <FileCheck className="w-5 h-5 text-[#315A7D]" />
+                    <div className="w-10 h-10 rounded-lg bg-[#EDF4ED] text-[#3F7D58] flex items-center justify-center border border-[#E3E8DF] shrink-0">
+                      <FileCheck className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
                       <p className="font-semibold text-sm text-[#243447]">
@@ -894,7 +894,7 @@ export default function AgreementsPage() {
               </div>
 
               {/* Modal Footer Actions */}
-              <div className="p-4 border-t border-[#D9E0E6] bg-[#F7F8FA] flex items-center justify-between">
+              <div className="p-4 border-t border-[#E3E8DF] bg-[#F7F7F1] flex items-center justify-between">
                 <div>
                   {String(selectedDetails.status).toUpperCase() === 'DRAFT' && (
                     <Button
@@ -964,8 +964,8 @@ export default function AgreementsPage() {
         {/* Record Move-Out Modal */}
         {moveOutTarget && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-md overflow-hidden">
-              <div className="flex items-center justify-between p-5 border-b border-[#D9E0E6] bg-[#F7F8FA]">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-md overflow-hidden">
+              <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
                     <LogOut className="w-4 h-4 text-amber-800" />

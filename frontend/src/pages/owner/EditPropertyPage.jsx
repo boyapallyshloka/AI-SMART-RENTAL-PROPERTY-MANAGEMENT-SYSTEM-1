@@ -127,14 +127,14 @@ export default function EditPropertyPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <Link
             to="/owner/properties"
-            className="hover:text-[#315A7D] transition-colors"
+            className="hover:text-[#3F7D58] transition-colors"
           >
             Properties
           </Link>
           <span>/</span>
           <Link
             to={`/owner/properties/${property.id}`}
-            className="hover:text-[#315A7D] transition-colors truncate max-w-[200px]"
+            className="hover:text-[#3F7D58] transition-colors truncate max-w-[200px]"
           >
             {property.name}
           </Link>
@@ -160,9 +160,9 @@ export default function EditPropertyPage() {
         )}
 
         {/* Header */}
-        <div className="border-b border-[#D9E0E6] pb-4">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#315A7D] text-white shadow-sm">
+            <div className="p-2.5 rounded-xl bg-[#3F7D58] text-white shadow-sm">
               <Edit className="w-6 h-6" />
             </div>
             <div>

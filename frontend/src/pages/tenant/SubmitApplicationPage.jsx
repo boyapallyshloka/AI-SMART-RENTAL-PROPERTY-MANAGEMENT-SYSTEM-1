@@ -563,7 +563,7 @@ export default function SubmitApplicationPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <Link
             to="/tenant/applications"
-            className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+            className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to My Applications</span>
@@ -609,9 +609,9 @@ export default function SubmitApplicationPage() {
         )}
 
         {/* Page Header */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-md bg-[#315A7D] text-white">
+            <div className="p-2.5 rounded-md bg-[#3F7D58] text-white">
               <FileCheck className="w-6 h-6" />
             </div>
             <div>
@@ -631,9 +631,9 @@ export default function SubmitApplicationPage() {
         {/* Application Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Property & Unit Selection */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Building2 className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Building2 className="w-4 h-4 text-[#3F7D58]" />
               {isDirectRental ? '1. Target Property' : '1. Target Property & Unit'}
             </h2>
 
@@ -666,8 +666,8 @@ export default function SubmitApplicationPage() {
             </div>
 
             {isDirectRental && selectedProperty && (
-              <div className="rounded-md border border-[#315A7D]/20 bg-[#EAF2F7]/50 p-3.5 text-xs text-[#5B6875]">
-                <p className="font-semibold text-sm text-[#315A7D]">Whole-property rental</p>
+              <div className="rounded-md border border-[#3F7D58]/20 bg-[#EDF4ED]/50 p-3.5 text-xs text-[#5B6875]">
+                <p className="font-semibold text-sm text-[#3F7D58]">Whole-property rental</p>
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
                   {(propertyDetails?.property?.monthlyRent ?? selectedProperty.monthlyRent) != null && (
                     <span>Monthly rent: <strong>{formatInr(propertyDetails?.property?.monthlyRent ?? selectedProperty.monthlyRent)}</strong></span>
@@ -681,13 +681,13 @@ export default function SubmitApplicationPage() {
 
             {/* Selected Property Details banner */}
             {selectedProperty && (
-              <div className="p-3.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] text-xs text-[#5B6875] space-y-1.5">
+              <div className="p-3.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-xs text-[#5B6875] space-y-1.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-bold text-sm text-[#243447]">
                     {selectedProperty.propertyName || selectedProperty.name}
                   </span>
                   {selectedProperty.propertyType && (
-                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EAF2F7] text-[#315A7D] uppercase">
+                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EDF4ED] text-[#3F7D58] uppercase">
                       {selectedProperty.propertyType}
                     </span>
                   )}
@@ -698,9 +698,9 @@ export default function SubmitApplicationPage() {
 
             {/* Selected Unit Details card */}
             {selectedUnitObj && (
-              <div className="p-3.5 rounded-md bg-[#EAF2F7]/50 border border-[#315A7D]/20 text-xs text-[#243447] space-y-1">
+              <div className="p-3.5 rounded-md bg-[#EDF4ED]/50 border border-[#3F7D58]/20 text-xs text-[#243447] space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm text-[#315A7D]">
+                  <span className="font-bold text-sm text-[#3F7D58]">
                     Selected: Unit {selectedUnitObj.unitNumber}
                   </span>
                   {selectedUnitObj.status && (
@@ -712,7 +712,7 @@ export default function SubmitApplicationPage() {
                 <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-[#5B6875]">
                   {selectedUnitObj.monthlyRent != null && (
                     <span>
-                      Monthly Rent: <strong className="text-[#315A7D]">{formatInr(selectedUnitObj.monthlyRent)}/mo</strong>
+                      Monthly Rent: <strong className="text-[#3F7D58]">{formatInr(selectedUnitObj.monthlyRent)}/mo</strong>
                     </span>
                   )}
                   {selectedUnitObj.securityDeposit != null && (
@@ -729,9 +729,9 @@ export default function SubmitApplicationPage() {
           </div>
 
           {/* Section 2: Personal & Contact Information */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <User className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <User className="w-4 h-4 text-[#3F7D58]" />
               2. Applicant Information
             </h2>
 
@@ -813,8 +813,8 @@ export default function SubmitApplicationPage() {
             </div>
 
             {/* Section 3: Financial & Employment Information */}
-            <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                 3. Employment & Monthly Income
               </h2>
@@ -859,10 +859,10 @@ export default function SubmitApplicationPage() {
             </div>
 
             {/* Section 4: Document Uploads (Real Multipart Upload) */}
-            <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#315A7D]" />
+                  <FileText className="w-4 h-4 text-[#3F7D58]" />
                   4. Supporting Documents (Verification)
                 </h2>
                 <span className="text-[11px] text-[#5B6875]">Verified Tenant Documents</span>
@@ -874,14 +874,14 @@ export default function SubmitApplicationPage() {
 
               <div className="space-y-4">
                 {/* Document 1: Government Photo ID */}
-                <div className="rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] p-4 space-y-2.5">
+                <div className="rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold text-[#243447]">Government Photo ID</span>
                       <select
                         value={photoIdType}
                         onChange={(e) => setPhotoIdType(e.target.value)}
-                        className="text-[11px] font-medium py-0.5 px-2 rounded border border-[#D9E0E6] bg-white text-[#243447] focus:outline-none focus:border-[#315A7D]"
+                        className="text-[11px] font-medium py-0.5 px-2 rounded border border-[#E3E8DF] bg-white text-[#243447] focus:outline-none focus:border-[#3F7D58]"
                       >
                         <option value="DRIVING_LICENSE">Driving License</option>
                         <option value="AADHAAR">Aadhaar Card</option>
@@ -900,12 +900,12 @@ export default function SubmitApplicationPage() {
                   </div>
 
                   {uploadedPhotoId && !selectedPhotoIdFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#D9E0E6] text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#E3E8DF] text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileCheck className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileCheck className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-medium text-[#243447] truncate">{uploadedPhotoId.fileName}</span>
                       </div>
-                      <label className="text-xs font-semibold text-[#315A7D] hover:underline cursor-pointer ml-3 shrink-0">
+                      <label className="text-xs font-semibold text-[#3F7D58] hover:underline cursor-pointer ml-3 shrink-0">
                         <span>Replace</span>
                         <input
                           type="file"
@@ -918,9 +918,9 @@ export default function SubmitApplicationPage() {
                   )}
 
                   {selectedPhotoIdFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#315A7D]/30 text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#3F7D58]/30 text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileText className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileText className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-semibold text-[#243447] truncate">{selectedPhotoIdFile.name}</span>
                         <span className="text-[11px] text-[#5B6875]">({(selectedPhotoIdFile.size / 1024 / 1024).toFixed(2)} MB)</span>
                       </div>
@@ -929,7 +929,7 @@ export default function SubmitApplicationPage() {
                           type="button"
                           disabled={isUploadingPhotoId}
                           onClick={handleUploadPhotoId}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#315A7D] hover:bg-[#274B68] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#3F7D58] hover:bg-[#315F46] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
                         >
                           {isUploadingPhotoId ? (
                             <>
@@ -958,8 +958,8 @@ export default function SubmitApplicationPage() {
 
                   {!uploadedPhotoId && !selectedPhotoIdFile && (
                     <div className="flex items-center gap-3">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
-                        <Upload className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
+                        <Upload className="w-3.5 h-3.5 text-[#3F7D58]" />
                         <span>Choose File</span>
                         <input
                           type="file"
@@ -981,7 +981,7 @@ export default function SubmitApplicationPage() {
                 </div>
 
                 {/* Document 2: Proof of Income */}
-                <div className="rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] p-4 space-y-2.5">
+                <div className="rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <span className="text-xs font-semibold text-[#243447]">Proof of Income</span>
@@ -998,12 +998,12 @@ export default function SubmitApplicationPage() {
                   </div>
 
                   {uploadedIncomeProof && !selectedIncomeFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#D9E0E6] text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#E3E8DF] text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileCheck className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileCheck className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-medium text-[#243447] truncate">{uploadedIncomeProof.fileName}</span>
                       </div>
-                      <label className="text-xs font-semibold text-[#315A7D] hover:underline cursor-pointer ml-3 shrink-0">
+                      <label className="text-xs font-semibold text-[#3F7D58] hover:underline cursor-pointer ml-3 shrink-0">
                         <span>Replace</span>
                         <input
                           type="file"
@@ -1016,9 +1016,9 @@ export default function SubmitApplicationPage() {
                   )}
 
                   {selectedIncomeFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#315A7D]/30 text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#3F7D58]/30 text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileText className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileText className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-semibold text-[#243447] truncate">{selectedIncomeFile.name}</span>
                         <span className="text-[11px] text-[#5B6875]">({(selectedIncomeFile.size / 1024 / 1024).toFixed(2)} MB)</span>
                       </div>
@@ -1027,7 +1027,7 @@ export default function SubmitApplicationPage() {
                           type="button"
                           disabled={isUploadingIncome}
                           onClick={handleUploadIncome}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#315A7D] hover:bg-[#274B68] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#3F7D58] hover:bg-[#315F46] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
                         >
                           {isUploadingIncome ? (
                             <>
@@ -1056,8 +1056,8 @@ export default function SubmitApplicationPage() {
 
                   {!uploadedIncomeProof && !selectedIncomeFile && (
                     <div className="flex items-center gap-3">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
-                        <Upload className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
+                        <Upload className="w-3.5 h-3.5 text-[#3F7D58]" />
                         <span>Choose File</span>
                         <input
                           type="file"
@@ -1079,7 +1079,7 @@ export default function SubmitApplicationPage() {
                 </div>
 
                 {/* Document 3: Rental Reference / Other Supporting Document */}
-                <div className="rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] p-4 space-y-2.5">
+                <div className="rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <span className="text-xs font-semibold text-[#243447]">Rental Reference / Additional Document</span>
@@ -1096,12 +1096,12 @@ export default function SubmitApplicationPage() {
                   </div>
 
                   {uploadedOtherDoc && !selectedOtherFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#D9E0E6] text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#E3E8DF] text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileCheck className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileCheck className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-medium text-[#243447] truncate">{uploadedOtherDoc.fileName}</span>
                       </div>
-                      <label className="text-xs font-semibold text-[#315A7D] hover:underline cursor-pointer ml-3 shrink-0">
+                      <label className="text-xs font-semibold text-[#3F7D58] hover:underline cursor-pointer ml-3 shrink-0">
                         <span>Replace</span>
                         <input
                           type="file"
@@ -1114,9 +1114,9 @@ export default function SubmitApplicationPage() {
                   )}
 
                   {selectedOtherFile && (
-                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#315A7D]/30 text-xs">
+                    <div className="flex items-center justify-between bg-white p-2.5 rounded-md border border-[#3F7D58]/30 text-xs">
                       <div className="flex items-center gap-2 truncate">
-                        <FileText className="w-4 h-4 text-[#315A7D] shrink-0" />
+                        <FileText className="w-4 h-4 text-[#3F7D58] shrink-0" />
                         <span className="font-semibold text-[#243447] truncate">{selectedOtherFile.name}</span>
                         <span className="text-[11px] text-[#5B6875]">({(selectedOtherFile.size / 1024 / 1024).toFixed(2)} MB)</span>
                       </div>
@@ -1125,7 +1125,7 @@ export default function SubmitApplicationPage() {
                           type="button"
                           disabled={isUploadingOther}
                           onClick={handleUploadOther}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#315A7D] hover:bg-[#274B68] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#3F7D58] hover:bg-[#315F46] text-white text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
                         >
                           {isUploadingOther ? (
                             <>
@@ -1154,8 +1154,8 @@ export default function SubmitApplicationPage() {
 
                   {!uploadedOtherDoc && !selectedOtherFile && (
                     <div className="flex items-center gap-3">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#D9E0E6] bg-white hover:bg-[#F7F8FA] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
-                        <Upload className="w-3.5 h-3.5 text-[#315A7D]" />
+                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white hover:bg-[#F7F7F1] text-xs font-semibold text-[#243447] shadow-2xs transition-colors cursor-pointer">
+                        <Upload className="w-3.5 h-3.5 text-[#3F7D58]" />
                         <span>Choose File</span>
                         <input
                           type="file"

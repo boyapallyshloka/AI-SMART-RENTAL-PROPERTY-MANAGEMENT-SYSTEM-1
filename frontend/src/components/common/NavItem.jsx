@@ -1,8 +1,7 @@
 import React from 'react'
 
 /**
- * Enterprise NavItem component for Sidebar navigation
- * Styled with Primary Blue #315A7D and Light Blue #EAF2F7
+ * Compact role navigation item used in the floating top navigation.
  *
  * @param {Object} props
  * @param {React.ReactNode} props.icon
@@ -22,18 +21,18 @@ export default function NavItem({
     <button
       type="button"
       onClick={onClick}
-      className={`group w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors duration-150 select-none text-left ${
+      className={`group inline-flex min-h-10 shrink-0 items-center justify-between gap-2 rounded-full px-3.5 py-2 text-sm transition-all duration-200 select-none ${
         isActive
-          ? 'bg-[#EAF2F7] text-[#315A7D] font-semibold border-l-3 border-[#315A7D]'
-          : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7]/60 font-medium'
+          ? 'bg-[#3F7D58] text-white font-semibold shadow-sm shadow-[#3F7D58]/20'
+          : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#EDF4ED] font-medium'
       }`}
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <span
           className={`shrink-0 transition-colors ${
             isActive
-              ? 'text-[#315A7D]'
-              : 'text-[#5B6875] group-hover:text-[#243447]'
+              ? 'text-white'
+              : 'text-[#5B6875] group-hover:text-[#3F7D58]'
           }`}
         >
           {icon}
@@ -45,8 +44,8 @@ export default function NavItem({
         <span
           className={`text-[11px] font-semibold px-1.5 py-0.5 rounded shrink-0 transition-colors ${
             isActive
-              ? 'bg-[#315A7D] text-white'
-              : 'bg-[#EAF2F7] text-[#5B6875]'
+              ? 'bg-white/20 text-white'
+              : 'bg-[#EDF4ED] text-[#5B6875]'
           }`}
         >
           {badge}

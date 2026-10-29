@@ -119,36 +119,36 @@ export default function ManagerInspectionsPage() {
         {error && <div role="alert" className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div>}
         {notice && <div role="status" className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">{notice}</div>}
 
-        <form onSubmit={handleSubmit} className="rounded-xl border border-[#D9E0E6] bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2"><Plus className="h-5 w-5 text-[#315A7D]" /><h2 className="text-lg font-semibold">Record an Inspection</h2></div>
+        <form onSubmit={handleSubmit} className="rounded-xl border border-[#E3E8DF] bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center gap-2"><Plus className="h-5 w-5 text-[#3F7D58]" /><h2 className="text-lg font-semibold">Record an Inspection</h2></div>
           {properties.length === 0 && !loading ? (
             <p className="rounded-lg bg-[#F3F7FA] p-4 text-sm text-[#5B6875]">No assigned properties are available for inspection.</p>
           ) : (
             <>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <label className="space-y-1 text-sm font-medium">Property <span className="text-red-600">*</span>
-                  <select required value={form.propertyId} onChange={(event) => setForm({ ...form, propertyId: event.target.value })} className="w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 font-normal">
+                  <select required value={form.propertyId} onChange={(event) => setForm({ ...form, propertyId: event.target.value })} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 font-normal">
                     <option value="">Select property</option>
                     {properties.map((property) => <option key={propertyIdOf(property)} value={propertyIdOf(property)}>{propertyNameOf(property)}</option>)}
                   </select>
                 </label>
                 <label className="space-y-1 text-sm font-medium">Inspection date <span className="text-red-600">*</span>
-                  <input required type="date" max={today()} value={form.inspectionDate} onChange={(event) => setForm({ ...form, inspectionDate: event.target.value })} className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+                  <input required type="date" max={today()} value={form.inspectionDate} onChange={(event) => setForm({ ...form, inspectionDate: event.target.value })} className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
                 </label>
                 <label className="space-y-1 text-sm font-medium">Inspector <span className="text-red-600">*</span>
-                  <input required maxLength={120} value={form.inspectorName} onChange={(event) => setForm({ ...form, inspectorName: event.target.value })} placeholder="Inspector name" className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+                  <input required maxLength={120} value={form.inspectorName} onChange={(event) => setForm({ ...form, inspectorName: event.target.value })} placeholder="Inspector name" className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
                 </label>
                 <label className="space-y-1 text-sm font-medium">Result <span className="text-red-600">*</span>
-                  <select value={form.passed} onChange={(event) => setForm({ ...form, passed: event.target.value })} className="w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 font-normal">
+                  <select value={form.passed} onChange={(event) => setForm({ ...form, passed: event.target.value })} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 font-normal">
                     <option value="true">Passed</option><option value="false">Failed</option>
                   </select>
                 </label>
-                <label className="flex items-center gap-2 self-end rounded-lg border border-[#D9E0E6] px-3 py-3 text-sm">
+                <label className="flex items-center gap-2 self-end rounded-lg border border-[#E3E8DF] px-3 py-3 text-sm">
                   <input type="checkbox" checked={form.hasIssuesRequiringAttention} onChange={(event) => setForm({ ...form, hasIssuesRequiringAttention: event.target.checked })} />
                   Issues need attention
                 </label>
                 <label className="space-y-1 text-sm font-medium md:col-span-2 xl:col-span-3">Notes
-                  <textarea maxLength={2000} rows={3} value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} placeholder="Findings or follow-up notes" className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+                  <textarea maxLength={2000} rows={3} value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} placeholder="Findings or follow-up notes" className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
                 </label>
               </div>
               <Button type="submit" disabled={saving || loading || properties.length === 0} leftIcon={<ClipboardCheck className="h-4 w-4" />} className="mt-4">{saving ? 'Saving…' : 'Save Inspection'}</Button>
@@ -157,10 +157,10 @@ export default function ManagerInspectionsPage() {
         </form>
 
         <section className="space-y-3">
-          <div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-[#315A7D]" /><h2 className="text-lg font-semibold">Inspection History</h2><span className="rounded-full bg-[#EAF2F7] px-2.5 py-0.5 text-xs font-semibold text-[#315A7D]">{inspections.length}</span></div>
-          {loading ? <div className="rounded-xl border border-[#D9E0E6] bg-white p-8 text-center text-sm text-[#5B6875]">Loading inspections…</div>
+          <div className="flex items-center gap-2"><CalendarDays className="h-5 w-5 text-[#3F7D58]" /><h2 className="text-lg font-semibold">Inspection History</h2><span className="rounded-full bg-[#EDF4ED] px-2.5 py-0.5 text-xs font-semibold text-[#3F7D58]">{inspections.length}</span></div>
+          {loading ? <div className="rounded-xl border border-[#E3E8DF] bg-white p-8 text-center text-sm text-[#5B6875]">Loading inspections…</div>
             : orderedInspections.length === 0 ? <div className="rounded-xl border border-dashed border-[#C9D7E3] bg-white p-8 text-center text-sm text-[#5B6875]">No inspection records found for your assigned properties.</div>
-              : <div className="overflow-hidden rounded-xl border border-[#D9E0E6] bg-white shadow-sm"><div className="divide-y divide-[#E5EAF0]">
+              : <div className="overflow-hidden rounded-xl border border-[#E3E8DF] bg-white shadow-sm"><div className="divide-y divide-[#E5EAF0]">
                 {orderedInspections.map((inspection) => {
                   const passed = inspection.passed === true
                   const hasIssues = inspection.hasIssuesRequiringAttention === true

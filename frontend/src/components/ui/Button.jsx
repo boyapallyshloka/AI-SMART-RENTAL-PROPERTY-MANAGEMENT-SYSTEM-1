@@ -3,7 +3,7 @@ import Loader from './Loader'
 
 /**
  * Enterprise Button Component for SmartEstate
- * Standardized to the new Primary Blue #315A7D color system
+ * Standardized to the new Primary Blue #3F7D58 color system
  *
  * @param {Object} props
  * @param {'primary' | 'secondary' | 'danger' | 'outline'} [props.variant='primary']
@@ -28,17 +28,17 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-md transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:opacity-60 disabled:bg-[#EAF2F7] disabled:text-[#5B6875] disabled:border-[#D9E0E6] disabled:cursor-not-allowed disabled:pointer-events-none select-none'
+    'inline-flex items-center justify-center font-medium rounded-md transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:opacity-60 disabled:bg-[#EDF4ED] disabled:text-[#5B6875] disabled:border-[#E3E8DF] disabled:cursor-not-allowed disabled:pointer-events-none select-none'
 
   const variantStyles = {
     primary:
-      'bg-[#315A7D] hover:bg-[#274B68] text-white shadow-xs focus-visible:ring-[#315A7D]',
+      'bg-[#3F7D58] hover:bg-[#315F46] text-white shadow-xs focus-visible:ring-[#3F7D58]',
     secondary:
-      'bg-[#EAF2F7] hover:bg-[#D9E6F0] text-[#243447] border border-[#D9E0E6] shadow-xs focus-visible:ring-[#315A7D]',
+      'bg-[#EDF4ED] hover:bg-[#D9E6F0] text-[#243447] border border-[#E3E8DF] shadow-xs focus-visible:ring-[#3F7D58]',
     danger:
       'border border-[#B94A48] text-[#B94A48] bg-white hover:bg-[#FDF2F2] hover:border-[#9B3B39] hover:text-[#9B3B39] shadow-xs focus-visible:ring-[#B94A48]',
     outline:
-      'border border-[#315A7D] text-[#315A7D] hover:bg-[#EAF2F7] bg-white shadow-xs focus-visible:ring-[#315A7D]',
+      'border border-[#3F7D58] text-[#3F7D58] hover:bg-[#EDF4ED] bg-white shadow-xs focus-visible:ring-[#3F7D58]',
   }
 
   const sizeStyles = {

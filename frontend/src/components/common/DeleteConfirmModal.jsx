@@ -22,6 +22,7 @@ export default function DeleteConfirmModal({
   itemName,
   message,
   consequenceMessage,
+  errorMessage,
   isLoading = false,
   confirmText = 'Delete',
   confirmVariant = 'danger',
@@ -36,7 +37,7 @@ export default function DeleteConfirmModal({
       aria-modal="true"
       aria-labelledby="delete-dialog-title"
     >
-      <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
+      <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
         {/* Header with Warning Icon */}
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-full bg-[#FDF2F2] border border-[#EFC8C7] flex items-center justify-center text-[#B94A48] shrink-0">
@@ -67,8 +68,14 @@ export default function DeleteConfirmModal({
           </div>
         )}
 
+        {errorMessage && (
+          <div role="alert" className="p-3 rounded-lg bg-[#FDF2F2] border border-[#F8D7DA] text-xs text-[#B94A48]">
+            {errorMessage}
+          </div>
+        )}
+
         {/* Action Buttons */}
-        <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+        <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
           <Button
             type="button"
             size="sm"

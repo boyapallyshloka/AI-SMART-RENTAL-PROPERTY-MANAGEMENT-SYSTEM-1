@@ -92,10 +92,10 @@ export const getPriorityBadgeClass = (priority) => {
     case 'HIGH':
       return 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]'
     case 'MEDIUM':
-      return 'bg-[#EAF2F7] text-[#315A7D] border-[#D9E0E6]'
+      return 'bg-[#EDF4ED] text-[#3F7D58] border-[#E3E8DF]'
     case 'LOW':
     default:
-      return 'bg-[#F7F8FA] text-[#5B6875] border-[#D9E0E6]'
+      return 'bg-[#F7F7F1] text-[#5B6875] border-[#E3E8DF]'
   }
 }
 

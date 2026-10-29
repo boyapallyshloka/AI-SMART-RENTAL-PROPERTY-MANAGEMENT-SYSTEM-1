@@ -121,13 +121,13 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#D9E0E6]">
+        <div className="flex items-center justify-between pb-3 border-b border-[#E3E8DF]">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center font-bold text-base text-[#315A7D] shrink-0">
+            <div className="w-11 h-11 rounded-full bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center font-bold text-base text-[#3F7D58] shrink-0">
               {displayUser?.avatarText ||
                 displayUser?.name?.charAt(0) || <User className="w-5 h-5" />}
             </div>
@@ -143,7 +143,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
           <button
             type="button"
             onClick={onClose}
-            className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-md hover:bg-[#EAF2F7] transition-colors"
+            className="text-[#5B6875] hover:text-[#243447] p-1.5 rounded-md hover:bg-[#EDF4ED] transition-colors"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
@@ -151,13 +151,13 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-[#D9E0E6] text-xs font-semibold">
+        <div className="flex border-b border-[#E3E8DF] text-xs font-semibold">
           <button
             type="button"
             onClick={() => setActiveTab('profile')}
             className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
               activeTab === 'profile'
-                ? 'border-[#315A7D] text-[#315A7D] bg-[#F7F8FA]'
+                ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
                 : 'border-transparent text-[#5B6875] hover:text-[#243447]'
             }`}
           >
@@ -170,7 +170,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
               onClick={() => setActiveTab('address')}
               className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
                 activeTab === 'address'
-                  ? 'border-[#315A7D] text-[#315A7D] bg-[#F7F8FA]'
+                  ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
                   : 'border-transparent text-[#5B6875] hover:text-[#243447]'
               }`}
             >
@@ -184,7 +184,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
               onClick={() => setActiveTab('address')}
               className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
                 activeTab === 'address'
-                  ? 'border-[#315A7D] text-[#315A7D] bg-[#F7F8FA]'
+                  ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
                   : 'border-transparent text-[#5B6875] hover:text-[#243447]'
               }`}
             >
@@ -197,7 +197,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
             onClick={() => setActiveTab('security')}
             className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
               activeTab === 'security'
-                ? 'border-[#315A7D] text-[#315A7D] bg-[#F7F8FA]'
+                ? 'border-[#3F7D58] text-[#3F7D58] bg-[#F7F7F1]'
                 : 'border-transparent text-[#5B6875] hover:text-[#243447]'
             }`}
           >
@@ -235,7 +235,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
 
                 {/* Profile Information Grid */}
                 {displayUser ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs">
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">First Name</span>
                       <strong className="text-xs text-[#243447] font-semibold">
@@ -268,7 +268,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
                     </div>
                     <div>
                       <span className="text-[11px] font-medium text-[#5B6875] block">Account Role</span>
-                      <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[11px] border font-medium bg-[#EAF2F7] text-[#315A7D] border-[#D9E0E6]">
+                      <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[11px] border font-medium bg-[#EDF4ED] text-[#3F7D58] border-[#E3E8DF]">
                         <Shield className="w-3 h-3" />
                         <span>{getRoleLabel(displayUser.role)}</span>
                       </span>
@@ -294,9 +294,9 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
 
                 {/* Owner Registered Address Overview */}
                 {isOwner && (
-                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] flex items-center justify-between gap-3 text-xs">
+                  <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-start gap-2.5">
-                      <MapPin className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+                      <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                       <div>
                         <span className="font-semibold text-[#243447] block">
                           Official Owner Postal Address
@@ -329,9 +329,9 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
 
                 {/* Manager Operational Address Overview */}
                 {isManager && (
-                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] flex items-center justify-between gap-3 text-xs">
+                  <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-start gap-2.5">
-                      <MapPin className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+                      <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                       <div>
                         <span className="font-semibold text-[#243447] block">
                           Official Manager Operational Address
@@ -369,7 +369,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
         {/* Tab 2: Security & Password */}
         {activeTab === 'security' && (
           <div className="space-y-4 pt-1">
-            <div className="p-3 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] text-xs text-[#315A7D]">
+            <div className="p-3 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-xs text-[#3F7D58]">
               <p className="font-semibold">Update Account Password</p>
               <p className="text-[11px] text-[#5B6875] mt-0.5">
                 Ensure your account stays secure by using a strong, unique password with at least 6 characters.
@@ -414,7 +414,7 @@ export default function ProfileModal({ isOpen, onClose, initialTab = 'profile' }
         )}
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#D9E0E6]">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E3E8DF]">
           <Button
             type="button"
             variant="secondary"

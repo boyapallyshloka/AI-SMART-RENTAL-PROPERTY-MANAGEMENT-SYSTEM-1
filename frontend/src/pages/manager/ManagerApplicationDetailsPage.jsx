@@ -299,7 +299,7 @@ export default function ManagerApplicationDetailsPage() {
           <div className="space-y-1">
             <Link
               to="/manager/applications"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315A7D] hover:text-[#214363] transition-colors mb-1"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3F7D58] hover:text-[#214363] transition-colors mb-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Applications</span>
@@ -309,7 +309,7 @@ export default function ManagerApplicationDetailsPage() {
                 Application Details
               </h1>
               {application?.applicationId && (
-                <span className="font-mono text-xs font-bold text-[#315A7D] bg-[#EAF2F7] px-2.5 py-1 rounded-md border border-[#D9E0E6]">
+                <span className="font-mono text-xs font-bold text-[#3F7D58] bg-[#EDF4ED] px-2.5 py-1 rounded-md border border-[#E3E8DF]">
                   #{application.applicationId}
                 </span>
               )}
@@ -340,8 +340,8 @@ export default function ManagerApplicationDetailsPage() {
               </Button>
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] self-start sm:self-center">
-              <UserCheck className="w-3.5 h-3.5 text-[#315A7D]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] self-start sm:self-center">
+              <UserCheck className="w-3.5 h-3.5 text-[#3F7D58]" />
               <span>Property Manager Oversight</span>
             </div>
           )}
@@ -376,12 +376,12 @@ export default function ManagerApplicationDetailsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-16 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-16 shadow-2xs flex justify-center">
             <Loader text="Loading rental application details..." size="md" center />
           </div>
         ) : error ? (
           /* Error / Empty States */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs">
             {errorType === '404' ? (
               <EmptyState
                 icon={<AlertCircle className="w-10 h-10 text-[#B94A48]" />}
@@ -456,9 +456,9 @@ export default function ManagerApplicationDetailsPage() {
           /* Application Details Content */
           <div className="space-y-6">
             {/* Status Banner Card */}
-            <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-[#F0F4F7] text-[#315A7D]">
+                <div className="p-2.5 rounded-lg bg-[#F0F4F7] text-[#3F7D58]">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
@@ -546,10 +546,10 @@ export default function ManagerApplicationDetailsPage() {
             {/* Grid of Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Property & Unit Information */}
-              <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-                <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                   <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-[#315A7D]" />
+                    <Building2 className="w-4 h-4 text-[#3F7D58]" />
                     Property & Unit Details
                   </h2>
                 </div>
@@ -571,7 +571,7 @@ export default function ManagerApplicationDetailsPage() {
                     </div>
                     <div>
                       <span className="text-xs text-[#5B6875] block">Unit</span>
-                      <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20">
+                      <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
                         {application.unitNumber ? `Unit ${application.unitNumber}` : (application.unitId ? `Unit #${application.unitId}` : '—')}
                       </span>
                     </div>
@@ -589,10 +589,10 @@ export default function ManagerApplicationDetailsPage() {
               </div>
 
               {/* Financial Terms */}
-              <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-                <div className="border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+                <div className="border-b border-[#E3E8DF] pb-3">
                   <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
-                    <IndianRupee className="w-4 h-4 text-[#315A7D]" />
+                    <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                     Rental & Financial Terms
                   </h2>
                 </div>
@@ -622,10 +622,10 @@ export default function ManagerApplicationDetailsPage() {
               </div>
 
               {/* Applicant Profile */}
-              <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-                <div className="border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+                <div className="border-b border-[#E3E8DF] pb-3">
                   <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
-                    <User className="w-4 h-4 text-[#315A7D]" />
+                    <User className="w-4 h-4 text-[#3F7D58]" />
                     Applicant Information
                   </h2>
                 </div>
@@ -676,17 +676,17 @@ export default function ManagerApplicationDetailsPage() {
               </div>
 
               {/* Submission Notes & Message */}
-              <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-                <div className="border-b border-[#D9E0E6] pb-3">
+              <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+                <div className="border-b border-[#E3E8DF] pb-3">
                   <h2 className="text-sm font-bold text-[#243447] uppercase tracking-wider flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#315A7D]" />
+                    <FileText className="w-4 h-4 text-[#3F7D58]" />
                     Applicant Message
                   </h2>
                 </div>
 
                 <div className="text-sm">
                   {application.message ? (
-                    <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-[#243447] whitespace-pre-wrap leading-relaxed text-xs sm:text-sm">
+                    <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-[#243447] whitespace-pre-wrap leading-relaxed text-xs sm:text-sm">
                       {application.message}
                     </div>
                   ) : (
@@ -704,7 +704,7 @@ export default function ManagerApplicationDetailsPage() {
             <PaymentRiskAnalysisCard tenantId={application.tenantId} />
 
             {/* Audit Metadata Footer */}
-            <div className="bg-white rounded-lg border border-[#D9E0E6] px-6 py-4 shadow-2xs text-xs text-[#5B6875] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] px-6 py-4 shadow-2xs text-xs text-[#5B6875] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span>Record Created: </span>
                 <span className="font-medium text-[#243447]">
@@ -731,7 +731,7 @@ export default function ManagerApplicationDetailsPage() {
             aria-modal="true"
             aria-labelledby="approve-modal-title"
           >
-            <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-md w-full p-6 shadow-xl space-y-4 animate-in zoom-in-95 duration-150">
+            <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-md w-full p-6 shadow-xl space-y-4 animate-in zoom-in-95 duration-150">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#EDF7EE] border border-[#C6DEC8] flex items-center justify-center text-[#2A583B] shrink-0">
                   <CheckCircle2 className="w-5 h-5 text-[#3F7D58]" />
@@ -753,7 +753,7 @@ export default function ManagerApplicationDetailsPage() {
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] text-xs text-[#274B68] leading-relaxed">
+              <div className="p-3 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-xs text-[#315F46] leading-relaxed">
                 <p className="font-semibold">Workflow Notice:</p>
                 <p className="mt-0.5">
                   Approving changes the application status to <strong>APPROVED</strong>. This marks the application as officially accepted for this property.
@@ -767,7 +767,7 @@ export default function ManagerApplicationDetailsPage() {
                 </div>
               )}
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   size="sm"
@@ -800,7 +800,7 @@ export default function ManagerApplicationDetailsPage() {
             aria-modal="true"
             aria-labelledby="reject-modal-title"
           >
-            <div className="bg-white rounded-xl border border-[#D9E0E6] max-w-lg w-full p-6 shadow-xl space-y-4 animate-in zoom-in-95 duration-150">
+            <div className="bg-white rounded-xl border border-[#E3E8DF] max-w-lg w-full p-6 shadow-xl space-y-4 animate-in zoom-in-95 duration-150">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#FDF2F2] border border-[#EFC8C7] flex items-center justify-center text-[#B94A48] shrink-0">
                   <AlertTriangle className="w-5 h-5" />
@@ -844,7 +844,7 @@ export default function ManagerApplicationDetailsPage() {
                 </div>
               )}
 
-              <div className="pt-3 border-t border-[#D9E0E6] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-[#E3E8DF] flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   size="sm"

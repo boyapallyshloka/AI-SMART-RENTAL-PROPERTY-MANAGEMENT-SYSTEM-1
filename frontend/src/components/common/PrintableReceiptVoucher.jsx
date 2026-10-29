@@ -136,7 +136,7 @@ export function PrintableReceiptVoucher({
       className={
         isPrintView
           ? 'p-8 bg-white border border-[#CBD5E1] rounded-xl text-[#0F172A] space-y-6'
-          : 'p-6 sm:p-8 rounded-xl bg-white border border-[#D9E0E6] shadow-xs space-y-6 text-[#243447]'
+          : 'p-6 sm:p-8 rounded-xl bg-white border border-[#E3E8DF] shadow-xs space-y-6 text-[#243447]'
       }
       style={{
         boxSizing: 'border-box',
@@ -145,10 +145,10 @@ export function PrintableReceiptVoucher({
       }}
     >
       {/* 1. Header Section */}
-      <div className="flex items-start justify-between border-b border-[#D9E0E6] pb-5 flex-wrap gap-4">
+      <div className="flex items-start justify-between border-b border-[#E3E8DF] pb-5 flex-wrap gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-[#315A7D]" />
+            <Building2 className="w-6 h-6 text-[#3F7D58]" />
             <span className="text-xl font-bold tracking-tight text-[#243447]">
               SmartEstate
             </span>
@@ -164,7 +164,7 @@ export function PrintableReceiptVoucher({
           <span className="inline-block px-3 py-1 rounded-md bg-[#EDF7EE] border border-[#C6DEC8] text-[#2A583B] text-xs font-bold uppercase tracking-wider mb-1.5">
             Payment Receipt
           </span>
-          <p className="text-xs font-mono font-bold text-[#315A7D]">
+          <p className="text-xs font-mono font-bold text-[#3F7D58]">
             {receipt.receiptNumber || `REC-${receipt.receiptId}`}
           </p>
           <p className="text-[11px] text-[#5B6875] mt-0.5">
@@ -175,7 +175,7 @@ export function PrintableReceiptVoucher({
 
       {/* 2. Two-Column Information Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-        <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+        <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B6875] block">
             Tenant &amp; Premises Details
           </span>
@@ -200,7 +200,7 @@ export function PrintableReceiptVoucher({
           </p>
         </div>
 
-        <div className="p-3.5 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] space-y-1">
+        <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] space-y-1">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#5B6875] block">
             Billing &amp; Payment Reference
           </span>
@@ -227,10 +227,10 @@ export function PrintableReceiptVoucher({
       </div>
 
       {/* 3. Financial Breakdown Table */}
-      <div className="border border-[#D9E0E6] rounded-xl overflow-hidden text-xs">
+      <div className="border border-[#E3E8DF] rounded-xl overflow-hidden text-xs">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#F7F8FA] border-b border-[#D9E0E6] text-[11px] font-bold uppercase text-[#5B6875]">
+            <tr className="bg-[#F7F7F1] border-b border-[#E3E8DF] text-[11px] font-bold uppercase text-[#5B6875]">
               <th className="py-2.5 px-4">Description</th>
               <th className="py-2.5 px-4 text-right">Invoiced Amount</th>
               <th className="py-2.5 px-4 text-right">Amount Paid</th>
@@ -266,18 +266,18 @@ export function PrintableReceiptVoucher({
       </div>
 
       {/* 4. Summary Totals Box */}
-      <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-2 text-xs">
+      <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2 text-xs">
         <div className="flex justify-between items-center text-[#5B6875]">
           <span>Total Invoiced</span>
           <span className="font-semibold text-[#243447]">
             {formatCurrency(resolvedInvoicedAmount)}
           </span>
         </div>
-        <div className="flex justify-between items-center text-sm font-bold text-[#2A583B] pt-1 border-t border-[#D9E0E6]">
+        <div className="flex justify-between items-center text-sm font-bold text-[#2A583B] pt-1 border-t border-[#E3E8DF]">
           <span>Amount Paid in this Receipt</span>
           <span>{formatCurrency(receipt.amountPaid)}</span>
         </div>
-        <div className="flex justify-between items-center text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+        <div className="flex justify-between items-center text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
           <span>Remaining Balance on Invoice</span>
           <span
             className={`font-bold ${
@@ -290,7 +290,7 @@ export function PrintableReceiptVoucher({
       </div>
 
       {/* 5. Verification Stamp & Official Footer */}
-      <div className="pt-2 border-t border-[#D9E0E6] flex items-center justify-between flex-wrap gap-2 text-[11px] text-[#5B6875]">
+      <div className="pt-2 border-t border-[#E3E8DF] flex items-center justify-between flex-wrap gap-2 text-[11px] text-[#5B6875]">
         <div className="flex items-center gap-1.5 text-[#2A583B] font-semibold">
           <ShieldCheck className="w-4 h-4 text-[#3F7D58]" />
           <span>Payment Verified &bull; Electronically Generated Receipt</span>

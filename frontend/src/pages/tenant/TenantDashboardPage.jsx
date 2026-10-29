@@ -148,21 +148,21 @@ export default function TenantDashboardPage() {
         )}
 
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading tenancy dashboard..." size="md" center />
           </div>
         ) : (
           <>
             {/* Hero / Header Section with Residential Community Framing */}
             <div
-              className="relative overflow-hidden rounded-2xl border border-[#D9E2EC] shadow-xs bg-cover bg-center min-h-[140px] sm:min-h-[170px] flex items-center"
+              className="relative overflow-hidden rounded-2xl border border-[#E3E8DF] shadow-xs bg-cover bg-center min-h-[140px] sm:min-h-[170px] flex items-center"
               style={{ backgroundImage: `url(${ownerHeroBg})` }}
             >
               {/* Soft luminous gradient overlay to ensure contrast and highlight the center sky while framing side buildings */}
               <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/75 to-white/92 backdrop-blur-[0.5px]" />
 
               <div className="relative z-10 px-6 sm:px-10 py-8 max-w-3xl">
-                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1B2B4A]">
+                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#243447]">
                   Welcome back, {tenantDisplayName}!
                 </h1>
               </div>
@@ -175,8 +175,8 @@ export default function TenantDashboardPage() {
                 value={!sourceAvailability.rental ? '—' : activeUnit ? `Unit ${activeUnit}` : 'No Lease'}
                 subtitle={!sourceAvailability.rental ? 'Rental information unavailable' : activeProperty || 'No active rental agreement'}
                 change={!sourceAvailability.rental ? null : leaseStatus ? `Status: ${leaseStatus}` : null}
-                icon={<Building2 className="w-5 h-5 text-[#315A7D]" />}
-                iconBg="bg-[#EBF2F7] border-[#D9E2EC]"
+                icon={<Building2 className="w-5 h-5 text-[#3F7D58]" />}
+                iconBg="bg-[#EDF4ED] border-[#E3E8DF]"
               />
               <MetricCard
                 title="Billing Status"
@@ -211,13 +211,13 @@ export default function TenantDashboardPage() {
             {/* Recent Records & Quick Actions */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Payment / Invoice History */}
-              <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs space-y-5">
-                <div className="flex items-center justify-between border-b border-[#EDF2F7] pb-4">
+              <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs space-y-5">
+                <div className="flex items-center justify-between border-b border-[#E9EDE5] pb-4">
                   <div>
-                    <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1B2B4A]">
+                    <h2 className="font-serif text-lg sm:text-xl font-bold text-[#243447]">
                       Rent Invoices
                     </h2>
-                    <p className="text-xs text-[#64748B] mt-0.5">Recent statements and payment records</p>
+                    <p className="text-xs text-[#657168] mt-0.5">Recent statements and payment records</p>
                   </div>
                   <Link to="/tenant/payments">
                     <Button size="sm" variant="outline" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
@@ -237,7 +237,7 @@ export default function TenantDashboardPage() {
                     description="You do not have any rent invoices issued to your account."
                   />
                 ) : (
-                  <div className="divide-y divide-[#EDF2F7]">
+                  <div className="divide-y divide-[#E9EDE5]">
                     {invoices.slice(0, 4).map((inv) => {
                       const invId = inv.invoiceId || inv.id
                       const amount = inv.amount ?? inv.totalAmount ?? null
@@ -252,16 +252,16 @@ export default function TenantDashboardPage() {
                               <CreditCard className="w-4 h-4 text-[#2E7D5B]" />
                             </div>
                             <div className="min-w-0">
-                              <p className="font-semibold text-[#1B2B4A] text-xs">
+                              <p className="font-semibold text-[#243447] text-xs">
                                 Invoice #{invId}
                               </p>
-                              <p className="text-[11px] text-[#64748B]">
+                              <p className="text-[11px] text-[#657168]">
                                 Due {inv.dueDate || 'Date unavailable'}
                               </p>
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <span className="font-semibold text-xs text-[#1B2B4A] block">
+                            <span className="font-semibold text-xs text-[#243447] block">
                               {formatCurrency(amount)}
                             </span>
                             <StatusBadge status={inv.status} size="xs" />
@@ -274,12 +274,12 @@ export default function TenantDashboardPage() {
               </div>
 
               {/* Tenant Actions Panel */}
-              <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs space-y-5 flex flex-col justify-between">
+              <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs space-y-5 flex flex-col justify-between">
                 <div>
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1B2B4A]">
+                  <h2 className="font-serif text-lg sm:text-xl font-bold text-[#243447]">
                     Tenant Actions
                   </h2>
-                  <p className="text-xs text-[#64748B] mt-0.5">Quick access to tenancy services</p>
+                  <p className="text-xs text-[#657168] mt-0.5">Quick access to tenancy services</p>
                   <div className="space-y-2.5 mt-4">
                     <Link to="/tenant/maintenance/new" className="block">
                       <Button
@@ -311,13 +311,13 @@ export default function TenantDashboardPage() {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#EDF2F7]">
-                  <div className="p-3.5 rounded-xl bg-[#F0F5FA] border border-[#D9E2EC] text-xs">
-                    <p className="font-semibold text-[#1B2B4A] flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                <div className="pt-4 border-t border-[#E9EDE5]">
+                  <div className="p-3.5 rounded-xl bg-[#F0F5FA] border border-[#E3E8DF] text-xs">
+                    <p className="font-semibold text-[#243447] flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                       Maintenance Status
                     </p>
-                    <p className="text-[#64748B] mt-1.5 leading-relaxed font-normal">
+                    <p className="text-[#657168] mt-1.5 leading-relaxed font-normal">
                       {openMaintenanceCount > 0
                         ? `You have ${openMaintenanceCount} active service request(s) open.`
                         : 'No pending maintenance issues reported.'}
@@ -333,9 +333,9 @@ export default function TenantDashboardPage() {
   )
 }
 
-function MetricCard({ title, value, subtitle, change, icon, iconBg = 'bg-[#EBF2F7] border-[#D9E2EC]' }) {
+function MetricCard({ title, value, subtitle, change, icon, iconBg = 'bg-[#EDF4ED] border-[#E3E8DF]' }) {
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-3">
+    <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 sm:p-6 shadow-xs hover:shadow-sm transition-all duration-200 flex flex-col justify-between space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
           {title}
@@ -345,12 +345,12 @@ function MetricCard({ title, value, subtitle, change, icon, iconBg = 'bg-[#EBF2F
         </div>
       </div>
       <div>
-        <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1B2B4A] font-sans">{value}</p>
-        <p className="text-xs text-[#64748B] mt-1 font-medium">{subtitle}</p>
+        <p className="text-2xl sm:text-3xl font-bold tracking-tight text-[#243447] font-sans">{value}</p>
+        <p className="text-xs text-[#657168] mt-1 font-medium">{subtitle}</p>
       </div>
       {change && (
-        <div className="pt-3 border-t border-[#EDF2F7]">
-          <span className="text-xs font-semibold text-[#315A7D]">{change}</span>
+        <div className="pt-3 border-t border-[#E9EDE5]">
+          <span className="text-xs font-semibold text-[#3F7D58]">{change}</span>
         </div>
       )}
     </div>

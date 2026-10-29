@@ -102,17 +102,17 @@ const metricStyle = {
   otherUnits: { card: 'xl:col-span-4 min-h-[184px] rounded-[30px_12px_30px_12px] border-sky-200 bg-gradient-to-br from-white to-sky-100 text-[#17324D]', icon: 'bg-sky-100 text-sky-800 ring-sky-200', label: 'text-sky-950/80', note: 'text-slate-600', value: 'text-[#17324D]' },
   occupiedDirect: { card: 'rounded-[18px_42px_18px_42px] border-cyan-200 bg-gradient-to-br from-cyan-50 to-white text-[#17324D]', icon: 'bg-cyan-100 text-cyan-800 ring-cyan-200', label: 'text-cyan-950/80', note: 'text-slate-600', value: 'text-cyan-950' },
   homes: { card: 'rounded-[18px_42px_18px_42px] border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-blue-50 text-[#17324D]', icon: 'bg-indigo-100 text-indigo-800 ring-indigo-200', label: 'text-indigo-950/80', note: 'text-slate-600', value: 'text-indigo-950' },
-  apartments: { card: 'rounded-[32px_12px_32px_12px] border-[#C8D9E8] bg-[#EAF2F7] text-[#17324D]', icon: 'bg-white text-[#315A7D] ring-[#C8D9E8]', label: 'text-[#315A7D]', note: 'text-slate-600', value: 'text-[#17324D]' },
+  apartments: { card: 'rounded-[32px_12px_32px_12px] border-[#C8D9E8] bg-[#EDF4ED] text-[#17324D]', icon: 'bg-white text-[#3F7D58] ring-[#C8D9E8]', label: 'text-[#3F7D58]', note: 'text-slate-600', value: 'text-[#17324D]' },
   vacant: { card: 'rounded-[24px_42px_24px_42px] border-blue-200 bg-gradient-to-br from-blue-50 to-sky-100 text-[#17324D]', icon: 'bg-white text-blue-800 ring-blue-200', label: 'text-blue-950/80', note: 'text-slate-600', value: 'text-blue-950' },
   overallRate: { card: 'xl:col-span-6 min-h-[184px] rounded-[42px_18px_42px_18px] border-[#1E527C] bg-gradient-to-br from-[#1A4A70] via-[#23648F] to-[#3986B2] text-white', icon: 'bg-white/15 text-white ring-white/20', label: 'text-white/90', note: 'text-blue-100/80', value: 'text-white' },
   unitRate: { card: 'rounded-[18px_42px_18px_42px] border-blue-200 bg-gradient-to-br from-blue-100 to-white text-[#17324D]', icon: 'bg-white text-blue-800 ring-blue-200', label: 'text-blue-950/80', note: 'text-slate-600', value: 'text-blue-950' },
   vacancyRate: { card: 'rounded-[42px_18px_18px_42px] border-sky-200 bg-sky-50 text-[#17324D]', icon: 'bg-sky-100 text-sky-800 ring-sky-200', label: 'text-sky-950/80', note: 'text-slate-600', value: 'text-sky-950' },
   income: { card: 'xl:col-span-6 min-h-[184px] rounded-[30px_30px_12px_30px] border-[#B9D5E9] bg-gradient-to-br from-[#EAF4FB] via-white to-[#D7EAF7] text-[#17324D]', icon: 'bg-white text-[#1B628F] ring-blue-200', label: 'text-[#1B5277]', note: 'text-slate-600', value: 'text-[#17324D]' },
-  outstanding: { card: 'rounded-[42px_18px_42px_18px] border-[#B7D1E5] bg-[#E6F0F8] text-[#17324D]', icon: 'bg-white text-[#315A7D] ring-[#C8D9E8]', label: 'text-[#315A7D]', note: 'text-slate-600', value: 'text-[#17324D]' },
+  outstanding: { card: 'rounded-[42px_18px_42px_18px] border-[#B7D1E5] bg-[#E6F0F8] text-[#17324D]', icon: 'bg-white text-[#3F7D58] ring-[#C8D9E8]', label: 'text-[#3F7D58]', note: 'text-slate-600', value: 'text-[#17324D]' },
   expenses: { card: 'rounded-[18px_42px_18px_42px] border-indigo-200 bg-gradient-to-br from-indigo-50 to-white text-[#17324D]', icon: 'bg-indigo-100 text-indigo-800 ring-indigo-200', label: 'text-indigo-950/80', note: 'text-slate-600', value: 'text-indigo-950' },
-  maintenanceCost: { card: 'rounded-[30px_12px_30px_12px] border-[#B9D5E9] bg-gradient-to-br from-[#DCEAF5] to-[#F5F9FC] text-[#17324D]', icon: 'bg-white text-[#315A7D] ring-[#B9D5E9]', label: 'text-[#315A7D]', note: 'text-slate-600', value: 'text-[#17324D]' },
+  maintenanceCost: { card: 'rounded-[30px_12px_30px_12px] border-[#B9D5E9] bg-gradient-to-br from-[#DCEAF5] to-[#F5F9FC] text-[#17324D]', icon: 'bg-white text-[#3F7D58] ring-[#B9D5E9]', label: 'text-[#3F7D58]', note: 'text-slate-600', value: 'text-[#17324D]' },
   net: { card: 'xl:col-span-6 min-h-[184px] rounded-[18px_42px_18px_42px] border-[#9FC7E2] bg-gradient-to-br from-[#D8EAF7] via-[#F4F9FC] to-[#C8E0F1] text-[#17324D]', icon: 'bg-white text-[#1B628F] ring-blue-200', label: 'text-[#1B5277]', note: 'text-slate-600', value: 'text-[#17324D]' },
-  requests: { card: 'rounded-[42px_18px_42px_18px] border-[#C8D9E8] bg-white text-[#17324D]', icon: 'bg-[#EAF2F7] text-[#315A7D] ring-[#C8D9E8]', label: 'text-[#315A7D]', note: 'text-slate-600', value: 'text-[#17324D]' },
+  requests: { card: 'rounded-[42px_18px_42px_18px] border-[#C8D9E8] bg-white text-[#17324D]', icon: 'bg-[#EDF4ED] text-[#3F7D58] ring-[#C8D9E8]', label: 'text-[#3F7D58]', note: 'text-slate-600', value: 'text-[#17324D]' },
 }
 
 export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role }) {
@@ -205,7 +205,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
     <div className="space-y-6">
       <form
         onSubmit={handleApplyRange}
-        className="flex flex-col gap-3 rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs sm:flex-row sm:items-end sm:justify-between"
+        className="flex flex-col gap-3 rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs sm:flex-row sm:items-end sm:justify-between"
       >
         <div>
           <p className="text-sm font-semibold text-[#243447]">Reporting period</p>
@@ -220,7 +220,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
               type="date"
               value={startDate}
               onChange={(event) => setStartDate(event.target.value)}
-              className="mt-1 block rounded-md border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447]"
+              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]"
             />
           </label>
           <label className="text-xs font-medium text-[#5B6875]">
@@ -229,7 +229,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
               type="date"
               value={endDate}
               onChange={(event) => setEndDate(event.target.value)}
-              className="mt-1 block rounded-md border border-[#D9E0E6] bg-white px-3 py-2 text-sm text-[#243447]"
+              className="mt-1 block rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-sm text-[#243447]"
             />
           </label>
           <Button type="submit" isLoading={loading} leftIcon={<CalendarDays className="h-4 w-4" />}>
@@ -262,7 +262,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
       )}
 
       {loading ? (
-        <div className="flex justify-center rounded-lg border border-[#D9E0E6] bg-white p-12 shadow-2xs">
+        <div className="flex justify-center rounded-lg border border-[#E3E8DF] bg-white p-12 shadow-2xs">
           <Loader text="Loading live report analytics..." size="md" center />
         </div>
       ) : error ? (
@@ -327,7 +327,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
                     </div>
                   )}
                   {kind === 'requests' && (
-                    <span className="relative z-10 mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#EAF2F7] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#315A7D]">
+                    <span className="relative z-10 mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#EDF4ED] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#3F7D58]">
                       <Wrench className="h-3 w-3" /> Service activity
                     </span>
                   )}
@@ -347,7 +347,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
                   <h2 className="mt-1 text-lg font-semibold text-[#17324D]">Monthly rent collected</h2>
                   <p className="mt-1 text-xs text-[#63788A]">Successful payments during the selected period.</p>
                 </div>
-                <span className="rounded-2xl bg-[#E6F0F8] p-3 text-[#315A7D]"><IndianRupee className="h-5 w-5" /></span>
+                <span className="rounded-2xl bg-[#E6F0F8] p-3 text-[#3F7D58]"><IndianRupee className="h-5 w-5" /></span>
               </div>
               {incomeTrend.length ? (
                 <div className="mt-5 h-72 w-full">
@@ -377,7 +377,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
                   <h2 className="mt-1 text-lg font-semibold text-[#17324D]">Expenses by category</h2>
                   <p className="mt-1 text-xs text-[#63788A]">Recorded costs grouped by type.</p>
                 </div>
-                <span className="rounded-2xl bg-[#DCEAF5] p-3 text-[#315A7D]"><Wrench className="h-5 w-5" /></span>
+                <span className="rounded-2xl bg-[#DCEAF5] p-3 text-[#3F7D58]"><Wrench className="h-5 w-5" /></span>
               </div>
               {expenseBreakdown.length ? (
                 <div className="mt-5 h-72 w-full">
@@ -399,10 +399,10 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
             <div className="flex flex-col gap-3 border-b border-[#DFEAF2] bg-gradient-to-r from-[#F1F7FB] via-white to-[#E7F1F8] p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#5680A0]">Portfolio comparison</p>
-                <h2 className="mt-1 flex items-center gap-2 text-xl font-semibold text-[#17324D]"><Building2 className="h-5 w-5 text-[#315A7D]" />Property performance</h2>
+                <h2 className="mt-1 flex items-center gap-2 text-xl font-semibold text-[#17324D]"><Building2 className="h-5 w-5 text-[#3F7D58]" />Property performance</h2>
                 <p className="mt-1 text-sm text-[#63788A]">Compare occupancy and financial results across each property.</p>
               </div>
-              <span className="w-fit rounded-full border border-[#C8D9E8] bg-white px-3 py-1.5 text-xs font-semibold text-[#315A7D]">{propertyPerformance.length} properties</span>
+              <span className="w-fit rounded-full border border-[#C8D9E8] bg-white px-3 py-1.5 text-xs font-semibold text-[#3F7D58]">{propertyPerformance.length} properties</span>
             </div>
             {propertyPerformance.length ? (
               <div className="grid grid-cols-1 gap-5 p-5 xl:grid-cols-2">
@@ -437,7 +437,7 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
                       <h3 className="text-sm font-semibold text-[#243F56]">Income and costs</h3>
                       <p className="mt-1 text-xs text-[#718698]">Financial results by property</p>
                     </div>
-                    <span className="rounded-xl bg-[#E6F0F8] p-2 text-[#315A7D]"><IndianRupee className="h-4 w-4" /></span>
+                    <span className="rounded-xl bg-[#E6F0F8] p-2 text-[#3F7D58]"><IndianRupee className="h-4 w-4" /></span>
                   </div>
                   <div className="w-full" style={{ height: Math.max(260, propertyPerformance.length * 58) }}>
                     <ResponsiveContainer width="100%" height="100%">

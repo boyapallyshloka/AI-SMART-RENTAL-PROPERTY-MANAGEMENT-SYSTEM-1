@@ -27,8 +27,8 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
       <div
         className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
           isScout
-            ? 'bg-[#EAF2F7] border border-[#D9E0E6] text-[#315A7D]'
-            : 'bg-[#315A7D] text-white'
+            ? 'bg-[#EDF4ED] border border-[#E3E8DF] text-[#3F7D58]'
+            : 'bg-[#3F7D58] text-white'
         }`}
       >
         {isScout ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
@@ -38,14 +38,14 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
       <div
         className={`rounded-2xl px-4 py-3 shadow-xs space-y-1 ${
           isScout
-            ? 'bg-white border border-[#D9E0E6] text-[#243447] rounded-tl-sm text-left'
-            : 'bg-[#315A7D] text-white rounded-tr-sm text-left'
+            ? 'bg-white border border-[#E3E8DF] text-[#243447] rounded-tl-sm text-left'
+            : 'bg-[#3F7D58] text-white rounded-tr-sm text-left'
         }`}
       >
         {/* Header Label for SCOUT */}
         {isScout && (
           <div className="flex items-center justify-between gap-2 pb-0.5">
-            <span className="text-[11px] font-semibold text-[#315A7D] uppercase tracking-wider">
+            <span className="text-[11px] font-semibold text-[#3F7D58] uppercase tracking-wider">
               SCOUT Assistant
             </span>
           </div>
@@ -62,13 +62,13 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
 
         {/* Action Suggestions (optional contextual suggestions) */}
         {isScout && message.suggestions && message.suggestions.length > 0 && (
-          <div className="pt-2 flex flex-wrap gap-1.5 border-t border-[#D9E0E6]/80 mt-2">
+          <div className="pt-2 flex flex-wrap gap-1.5 border-t border-[#E3E8DF]/80 mt-2">
             {message.suggestions.map((suggestion, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => onSelectSuggestion && onSelectSuggestion(suggestion)}
-                className="text-xs font-medium px-2.5 py-1 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] text-[#315A7D] hover:bg-[#EAF2F7] hover:border-[#315A7D] transition-colors"
+                className="text-xs font-medium px-2.5 py-1 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-[#3F7D58] hover:bg-[#EDF4ED] hover:border-[#3F7D58] transition-colors"
               >
                 {suggestion}
               </button>
@@ -80,7 +80,7 @@ export default function ScoutMessage({ message, onSelectSuggestion }) {
         {message.timestamp && (
           <p
             className={`text-[10px] pt-0.5 text-right ${
-              isScout ? 'text-[#5B6875]' : 'text-[#EAF2F7]/80'
+              isScout ? 'text-[#5B6875]' : 'text-[#EDF4ED]/80'
             }`}
           >
             {message.timestamp}

@@ -428,7 +428,7 @@ export default function PaymentsPage() {
         {/* Financial Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {/* Total Collected Rent */}
-          <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs space-y-3">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                 Total Collected Rent
@@ -448,7 +448,7 @@ export default function PaymentsPage() {
           </div>
 
           {/* Pending Rent */}
-          <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs space-y-3">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                 Pending Rent
@@ -468,7 +468,7 @@ export default function PaymentsPage() {
           </div>
 
           {/* Overdue Rent */}
-          <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs space-y-3">
+          <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                 Overdue Rent
@@ -489,7 +489,7 @@ export default function PaymentsPage() {
         </div>
 
         {/* Search & Status Filter Bar */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-5 shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
             <div className="sm:col-span-2">
               <Input
@@ -515,7 +515,7 @@ export default function PaymentsPage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -523,7 +523,7 @@ export default function PaymentsPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
               <strong className="text-[#243447]">
@@ -532,7 +532,7 @@ export default function PaymentsPage() {
               of {invoices.length} rent invoices
             </span>
             {hasActiveFilters && (
-              <span className="text-[#315A7D] font-medium">
+              <span className="text-[#3F7D58] font-medium">
                 Filters active
               </span>
             )}
@@ -541,14 +541,14 @@ export default function PaymentsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading payment invoices..." size="md" center />
           </div>
         ) : filteredInvoices.length === 0 ? (
           /* Empty State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
-              icon={<Receipt className="w-8 h-8 text-[#315A7D]" />}
+              icon={<Receipt className="w-8 h-8 text-[#3F7D58]" />}
               title="No invoices found"
               message={
                 hasActiveFilters
@@ -574,11 +574,11 @@ export default function PaymentsPage() {
           </div>
         ) : (
           /* Invoices Table */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">Invoice #</th>
                     <th className="py-3.5 px-4">Billing Period</th>
                     <th className="py-3.5 px-4">Tenant</th>
@@ -589,14 +589,14 @@ export default function PaymentsPage() {
                     <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {filteredInvoices.map((inv) => (
                     <tr
                       key={inv.invoiceId}
-                      className="hover:bg-[#F7F8FA] transition-colors"
+                      className="hover:bg-[#F7F7F1] transition-colors"
                     >
                       {/* Invoice Number */}
-                      <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs whitespace-nowrap">
+                      <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs whitespace-nowrap">
                         <Link
                           to={`${basePath}/payments/${inv.invoiceId}`}
                           className="hover:underline flex items-center gap-1"
@@ -674,11 +674,11 @@ export default function PaymentsPage() {
                               type="button"
                               onClick={() => handleDownloadInvoice(inv)}
                               disabled={downloadingInvoiceId === inv.invoiceId}
-                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors disabled:opacity-50"
+                              className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors disabled:opacity-50"
                               title="Download official Invoice PDF"
                             >
                               {downloadingInvoiceId === inv.invoiceId ? (
-                                <RefreshCw className="w-4 h-4 animate-spin text-[#315A7D]" />
+                                <RefreshCw className="w-4 h-4 animate-spin text-[#3F7D58]" />
                               ) : (
                                 <Download className="w-4 h-4" />
                               )}
@@ -697,10 +697,10 @@ export default function PaymentsPage() {
         {/* Generate Invoice Modal */}
         {isCreateModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#243447]/60 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-lg overflow-hidden">
-              <div className="flex items-center justify-between p-5 border-b border-[#D9E0E6] bg-[#F7F8FA]">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-lg overflow-hidden">
+              <div className="flex items-center justify-between p-5 border-b border-[#E3E8DF] bg-[#F7F7F1]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-[#315A7D] text-white flex items-center justify-center shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-[#3F7D58] text-white flex items-center justify-center shadow-xs">
                     <Receipt className="w-5 h-5" />
                   </div>
                   <div>
@@ -746,7 +746,7 @@ export default function PaymentsPage() {
                     </p>
                     <Link
                       to={`${basePath}/agreements`}
-                      className="inline-block text-xs font-semibold text-[#315A7D] hover:underline"
+                      className="inline-block text-xs font-semibold text-[#3F7D58] hover:underline"
                     >
                       Go to Agreements &rarr;
                     </Link>
@@ -767,7 +767,7 @@ export default function PaymentsPage() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#D9E0E6]">
+                <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#E3E8DF]">
                   <Button
                     variant="outline"
                     size="sm"

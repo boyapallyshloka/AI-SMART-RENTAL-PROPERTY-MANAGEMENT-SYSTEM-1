@@ -294,7 +294,7 @@ export default function ApplicationDetailsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading rental application details..." size="md" center />
           </div>
         ) : error ? (
@@ -331,9 +331,9 @@ export default function ApplicationDetailsPage() {
           </div>
         ) : !application ? (
           /* Real Not Found State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
-              icon={<FileCheck className="w-8 h-8 text-[#315A7D]" />}
+              icon={<FileCheck className="w-8 h-8 text-[#3F7D58]" />}
               title="Application Not Found"
               message={`No rental application matching reference ID "${id}" could be located.`}
               action={{
@@ -363,7 +363,7 @@ export default function ApplicationDetailsPage() {
             )}
 
             {/* Header Status Card */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 flex-wrap">
@@ -424,7 +424,7 @@ export default function ApplicationDetailsPage() {
                       </Button>
                     </>
                   ) : (
-                    <div className="text-xs text-[#5B6875] font-medium bg-[#F7F8FA] border border-[#D9E0E6] px-3.5 py-2 rounded-xl">
+                    <div className="text-xs text-[#5B6875] font-medium bg-[#F7F7F1] border border-[#E3E8DF] px-3.5 py-2 rounded-xl">
                       Decision recorded ({application.status})
                     </div>
                   )}
@@ -449,9 +449,9 @@ export default function ApplicationDetailsPage() {
             {/* Application Details Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Applicant Details Card */}
-              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                  <User className="w-4 h-4 text-[#315A7D]" />
+              <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                  <User className="w-4 h-4 text-[#3F7D58]" />
                   Applicant Information
                 </h2>
 
@@ -513,9 +513,9 @@ export default function ApplicationDetailsPage() {
               </div>
 
               {/* Property & Unit Details Card */}
-              <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                  <Building2 className="w-4 h-4 text-[#315A7D]" />
+              <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+                <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                  <Building2 className="w-4 h-4 text-[#3F7D58]" />
                   Property & Unit Information
                 </h2>
 
@@ -538,7 +538,7 @@ export default function ApplicationDetailsPage() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Unit Number</span>
-                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F8FA] text-[#243447] border border-[#D9E0E6]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
                       Unit {application.unitNumber || '—'}
                     </span>
                   </div>
@@ -572,13 +572,13 @@ export default function ApplicationDetailsPage() {
             <PaymentRiskAnalysisCard tenantId={application.tenantId} />
 
             {/* Applicant Message / Notes */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-3">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                <FileText className="w-4 h-4 text-[#315A7D]" />
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-3">
+              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <FileText className="w-4 h-4 text-[#3F7D58]" />
                 Applicant Message & Notes
               </h2>
 
-              <p className="text-sm text-[#243447] leading-relaxed bg-[#F7F8FA] p-4 rounded-xl border border-[#D9E0E6]">
+              <p className="text-sm text-[#243447] leading-relaxed bg-[#F7F7F1] p-4 rounded-xl border border-[#E3E8DF]">
                 {application.message && application.message.trim()
                   ? application.message
                   : 'No additional message was included with this rental application.'}
@@ -586,8 +586,8 @@ export default function ApplicationDetailsPage() {
             </div>
 
             {/* Review Audit Information */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-3 text-xs text-[#5B6875]">
-              <h3 className="font-semibold text-sm text-[#243447] border-b border-[#D9E0E6] pb-2">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-3 text-xs text-[#5B6875]">
+              <h3 className="font-semibold text-sm text-[#243447] border-b border-[#E3E8DF] pb-2">
                 Application Timestamps
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
@@ -623,7 +623,7 @@ export default function ApplicationDetailsPage() {
         {/* Modal: Confirm Approval */}
         {showApproveModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-[#D9E0E6]">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-[#E3E8DF]">
               <div className="flex items-center gap-3 text-[#2A583B]">
                 <div className="p-2.5 rounded-xl bg-[#EDF7EE]">
                   <CheckCircle2 className="w-6 h-6 text-[#3F7D58]" />
@@ -678,7 +678,7 @@ export default function ApplicationDetailsPage() {
         {/* Modal: Confirm Rejection */}
         {showRejectModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-[#D9E0E6]">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-[#E3E8DF]">
               <div className="flex items-center gap-3 text-[#8A2E2C]">
                 <div className="p-2.5 rounded-xl bg-[#FDF2F2]">
                   <XCircle className="w-6 h-6 text-[#B94A48]" />

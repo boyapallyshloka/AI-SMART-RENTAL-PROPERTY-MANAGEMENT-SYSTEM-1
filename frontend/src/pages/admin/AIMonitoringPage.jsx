@@ -63,7 +63,7 @@ export default function AIMonitoringPage() {
         <AdminApiUnavailableCard
           title="AI Telemetry & Monitoring API Unavailable"
           subtitle="Administrative Model Observability Endpoints Not Implemented"
-          icon={<Sparkles className="h-5 w-5 text-[#315A7D]" />}
+          icon={<Sparkles className="h-5 w-5 text-[#3F7D58]" />}
           description="Operational machine learning endpoints (such as POST /ai/rent-prediction/predict-unit and maintenance prediction) are active for application workflows, but the backend does not expose authenticated administrative telemetry endpoints for monitoring model health, inference latency, drift detection, or accuracy degradation. In accordance with zero-fake-data policy, no synthetic metrics or mock charts are rendered."
           endpoints={AI_MONITORING_ENDPOINTS}
           backendRequirements={BACKEND_REQUIREMENTS}

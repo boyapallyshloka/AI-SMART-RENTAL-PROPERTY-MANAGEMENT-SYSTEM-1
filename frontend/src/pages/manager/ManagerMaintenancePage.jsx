@@ -722,13 +722,13 @@ export default function ManagerMaintenancePage() {
         )}
 
         {/* Tab Selection */}
-        <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-1">
+        <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-1">
           <button
             type="button"
             onClick={() => setActiveTab('active')}
             className={`px-4 py-2 text-xs font-semibold transition-colors rounded-lg border flex items-center gap-2 ${activeTab === 'active'
               ? 'bg-[#3157AD] text-white shadow-xs'
-              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F7F1]'
               }`}
           >
             <Clock className="w-4 h-4" />
@@ -738,7 +738,7 @@ export default function ManagerMaintenancePage() {
             <span
               className={`px-1.5 py-0.5 font-bold rounded-full text-[10px] ${activeTab === 'active'
                 ? 'bg-white/20 text-white'
-                : 'bg-[#EAF2F7] text-[#315A7D]'
+                : 'bg-[#EDF4ED] text-[#3F7D58]'
                 }`}
             >
               {activeCount}
@@ -749,7 +749,7 @@ export default function ManagerMaintenancePage() {
             onClick={() => setActiveTab('history')}
             className={`px-4 py-2 text-xs font-semibold transition-colors rounded-lg border flex items-center gap-2 ${activeTab === 'history'
               ? 'bg-[#3157AD] text-white shadow-xs'
-              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F7F1]'
               }`}
           >
             <History className="w-4 h-4" />
@@ -757,7 +757,7 @@ export default function ManagerMaintenancePage() {
             <span
               className={`px-1.5 py-0.5 font-bold rounded-full text-[10px] ${activeTab === 'history'
                 ? 'bg-white/20 text-white'
-                : 'bg-[#EAF2F7] text-[#315A7D]'
+                : 'bg-[#EDF4ED] text-[#3F7D58]'
                 }`}
             >
               {historyCount}
@@ -768,7 +768,7 @@ export default function ManagerMaintenancePage() {
             onClick={() => setActiveTab("all")}
             className={`px-4 py-2 font-semibold text-xs transition-colors rounded-lg border flex items-center gap-2 ${activeTab === "all"
               ? 'bg-[#3157AD] text-white shadow-xs'
-              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#3157AD] hover:bg-[#F7F7F1]'
               }`}
           >
 
@@ -776,7 +776,7 @@ export default function ManagerMaintenancePage() {
             <span
               className={`px-1.5 py-0.5 font-bold rounded-full text-[10px] ${activeTab === "all"
                 ? 'bg-white/20 text-white'
-                : 'bg-[#EAF2F7] text-[#3157AD]'
+                : 'bg-[#EDF4ED] text-[#3157AD]'
                 }`}
             >
               {requests.length}
@@ -785,18 +785,18 @@ export default function ManagerMaintenancePage() {
         </div>
 
         {/* Filters */}
-        <div className="rounded-xl border border-[#D9E0E6] p-4 bg-white shadow-sm">
+        <div className="rounded-xl border border-[#E3E8DF] p-4 bg-white shadow-sm">
           <div className="flex flex-col lg:flex-row gap-3 items-stretch">
             {/* Search */}
             <div className="relative flex-1 min-w-0">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#657168]" />
 
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by ticket number, category, description..."
-                className="w-full h-12 pl-11 pr-4 rounded-lg border border-[#D9E0E6] bg-white text-sm text-[#243447] placeholder:text-[#8A9AAF] outline-none focus:ring-2 focus:ring-[#3157AD]/20 focus:border-[#3157AD]"
+                className="w-full h-12 pl-11 pr-4 rounded-lg border border-[#E3E8DF] bg-white text-sm text-[#243447] placeholder:text-[#8A9AAF] outline-none focus:ring-2 focus:ring-[#3157AD]/20 focus:border-[#3157AD]"
               />
             </div>
 
@@ -838,7 +838,7 @@ export default function ManagerMaintenancePage() {
                 onClick={resetFilters}
                 title="Reset filters"
                 aria-label="Reset filters"
-                className="h-12 w-12 rounded-lg border border-[#D9E0E6] text-[#64748B] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0 flex items-center justify-center"
+                className="h-12 w-12 rounded-lg border border-[#E3E8DF] text-[#657168] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0 flex items-center justify-center"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -849,11 +849,11 @@ export default function ManagerMaintenancePage() {
 
         {/* Table / Results */}
         {loading ? (
-          <div className="bg-white rounded-xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading maintenance tickets..." size="md" center />
           </div>
         ) : filteredRequests.length === 0 ? (
-          <div className="bg-white rounded-xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
               icon={<Wrench className="w-8 h-8" />}
               title="No maintenance tickets found"
@@ -861,11 +861,11 @@ export default function ManagerMaintenancePage() {
             />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#D9E0E6] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4 text-[#243447]">Ticket #</th>
                     <th className="py-3.5 px-4 text-[#243447]">Category</th>
                     <th className="py-3.5 px-4 text-[#243447]">Property & Unit</th>
@@ -875,14 +875,14 @@ export default function ManagerMaintenancePage() {
                     <th className="py-3.5 pl-4 pr-6 text-right text-[#243447]">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {filteredRequests.map((req) => {
                     const ticketId = req.requestId || req.id
                     const assignmentObj = ticketAssignments[ticketId]
 
                     return (
-                      <tr key={ticketId} className="hover:bg-[#F7F8FA]/80 transition-colors">
-                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs">
+                      <tr key={ticketId} className="hover:bg-[#F7F7F1]/80 transition-colors">
+                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs">
                           #{ticketId}
                         </td>
                         <td className="py-4 px-4 whitespace-nowrap text-xs font-medium">
@@ -908,7 +908,7 @@ export default function ManagerMaintenancePage() {
                         <td className="py-4 px-4 text-xs whitespace-nowrap">
                           {assignmentObj?.worker ? (
                             <span className="inline-flex items-center gap-1 font-medium text-[#243447]">
-                              <HardHat className="w-3.5 h-3.5 text-[#315A7D]" />
+                              <HardHat className="w-3.5 h-3.5 text-[#3F7D58]" />
                               {assignmentObj.worker.name}
                             </span>
                           ) : (
@@ -942,8 +942,8 @@ export default function ManagerMaintenancePage() {
         {/* Manager Ticket Action & Assignment Modal */}
         {selectedTicket && (
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
-              <div className="p-6 border-b border-[#D9E0E6] flex items-center justify-between">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+              <div className="p-6 border-b border-[#E3E8DF] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <h3 className="text-lg font-bold text-[#243447] font-mono">
                     Ticket #{selectedTicket.requestId || selectedTicket.id}
@@ -968,12 +968,12 @@ export default function ManagerMaintenancePage() {
 
               <div className="p-6 overflow-y-auto space-y-5 text-xs text-[#243447]">
                 {/* Issue Details */}
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-2">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2">
                   <span className="font-bold text-xs text-[#5B6875] uppercase tracking-wider block">
                     Description & Property Context
                   </span>
                   <p className="text-xs leading-relaxed">{selectedTicket.description || 'No description.'}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-[#D9E0E6] text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-[#E3E8DF] text-xs">
                     <div className="flex items-center gap-1.5 text-[#243447]">
                       <Building2 className="w-3.5 h-3.5 text-[#5B6875] shrink-0" />
                       <span className="text-[#5B6875]">Property:</span>
@@ -990,11 +990,11 @@ export default function ManagerMaintenancePage() {
                     </div>
                   </div>
                   {selectedTicket.imageUrl && (
-                    <div className="pt-2 border-t border-[#D9E0E6] space-y-1">
+                    <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
                       <span className="font-semibold text-[11px] text-[#5B6875] block">
                         Attached Issue Photo:
                       </span>
-                      <div className="rounded-lg border border-[#D9E0E6] overflow-hidden bg-white p-1.5 flex justify-center max-h-48">
+                      <div className="rounded-lg border border-[#E3E8DF] overflow-hidden bg-white p-1.5 flex justify-center max-h-48">
                         <img
                           src={selectedTicket.imageUrl}
                           alt="Issue attachment"
@@ -1010,9 +1010,9 @@ export default function ManagerMaintenancePage() {
 
                 {/* AI Prediction Quick Strip if Available */}
                 {modalPrediction && (
-                  <div className="p-3.5 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] space-y-1 text-xs">
-                    <span className="font-bold text-[#315A7D] flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-[#315A7D]" /> AI Risk Forecast:
+                  <div className="p-3.5 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] space-y-1 text-xs">
+                    <span className="font-bold text-[#3F7D58] flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-[#3F7D58]" /> AI Risk Forecast:
                     </span>
                     <p className="text-[#243447]">
                       Risk Level: <strong>{modalPrediction.maintenance_risk?.risk_level || '—'}</strong> &bull; Failure Probability: <strong>{modalPrediction.maintenance_risk?.probability == null ? '—' : `${(Number(modalPrediction.maintenance_risk.probability) * 100).toFixed(1)}%`}</strong> &bull; Forecasted Cost: <strong>{modalPrediction.next_month_maintenance_cost == null ? '—' : `₹${Number(modalPrediction.next_month_maintenance_cost).toFixed(2)}`}</strong>
@@ -1021,7 +1021,7 @@ export default function ManagerMaintenancePage() {
                 )}
 
                 {/* Status Update Actions */}
-                <div className="p-4 rounded-xl border border-[#D9E0E6] space-y-2">
+                <div className="p-4 rounded-xl border border-[#E3E8DF] space-y-2">
                   <span className="font-bold text-xs text-[#5B6875] uppercase tracking-wider block">
                     Operational Status Transition
                   </span>
@@ -1032,8 +1032,8 @@ export default function ManagerMaintenancePage() {
                         type="button"
                         onClick={() => handleModalStatusChange(st)}
                         className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${String(selectedTicket.status).toUpperCase() === st
-                          ? 'bg-[#315A7D] text-white border-[#315A7D]'
-                          : 'bg-[#F7F8FA] text-[#243447] border-[#D9E0E6] hover:bg-[#EAF2F7]'
+                          ? 'bg-[#3F7D58] text-white border-[#3F7D58]'
+                          : 'bg-[#F7F7F1] text-[#243447] border-[#E3E8DF] hover:bg-[#EDF4ED]'
                           }`}
                       >
                         {formatStatusLabel(st)}
@@ -1045,10 +1045,10 @@ export default function ManagerMaintenancePage() {
                 {/* Worker Assignment Form */}
                 <form
                   onSubmit={handleModalAssignWorker}
-                  className="p-4 rounded-xl border border-[#D9E0E6] space-y-3"
+                  className="p-4 rounded-xl border border-[#E3E8DF] space-y-3"
                 >
                   <span className="font-bold text-xs text-[#5B6875] uppercase tracking-wider block flex items-center gap-1.5">
-                    <HardHat className="w-4 h-4 text-[#315A7D]" />
+                    <HardHat className="w-4 h-4 text-[#3F7D58]" />
                     Dispatch Technician / Contractor
                   </span>
 
@@ -1061,7 +1061,7 @@ export default function ManagerMaintenancePage() {
                     <select
                       value={selectedWorkerId}
                       onChange={(e) => setSelectedWorkerId(e.target.value)}
-                      className="w-full p-2.5 rounded-lg border border-[#D9E0E6] text-xs bg-[#F7F8FA]"
+                      className="w-full p-2.5 rounded-lg border border-[#E3E8DF] text-xs bg-[#F7F7F1]"
                     >
                       {availableWorkers.map((w) => (
                         <option key={w.workerId || w.id} value={w.workerId || w.id}>
@@ -1093,7 +1093,7 @@ export default function ManagerMaintenancePage() {
                 </form>
               </div>
 
-              <div className="p-4 border-t border-[#D9E0E6] bg-[#F7F8FA] flex justify-end">
+              <div className="p-4 border-t border-[#E3E8DF] bg-[#F7F7F1] flex justify-end">
                 <Button size="sm" variant="outline" onClick={() => setSelectedTicket(null)}>
                   Close
                 </Button>

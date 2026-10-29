@@ -46,7 +46,7 @@ export default function OwnerPropertyTable({
 
   if (properties.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs">
+      <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs">
         <EmptyState
           icon={<Building2 className="w-8 h-8" />}
           title="No properties found"
@@ -64,11 +64,11 @@ export default function OwnerPropertyTable({
   }
 
   return (
-    <div className="bg-white rounded-lg border border-[#D9E0E6] shadow-2xs overflow-hidden">
+    <div className="bg-white rounded-lg border border-[#E3E8DF] shadow-2xs overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+            <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
               <th className="py-3.5 pl-6 pr-4">Property</th>
               <th className="py-3.5 px-4">Type & Layout</th>
               <th className="py-3.5 px-4">Occupancy</th>
@@ -77,14 +77,14 @@ export default function OwnerPropertyTable({
               <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#D9E0E6] text-sm">
+          <tbody className="divide-y divide-[#E3E8DF] text-sm">
             {properties.map((prop) => {
               const hasImage = Boolean(prop.imageUrl) && !imgErrors[prop.id]
 
               return (
                 <tr
                   key={prop.id}
-                  className="hover:bg-[#F7F8FA] transition-colors group"
+                  className="hover:bg-[#F7F7F1] transition-colors group"
                 >
                   {/* Property Name, Location & Image */}
                   <td className="py-4 pl-6 pr-4 min-w-[260px]">
@@ -93,14 +93,14 @@ export default function OwnerPropertyTable({
                         <img
                           src={prop.imageUrl}
                           alt={prop.name}
-                          className="w-14 h-14 rounded-md object-cover shrink-0 border border-[#D9E0E6] shadow-2xs"
+                          className="w-14 h-14 rounded-md object-cover shrink-0 border border-[#E3E8DF] shadow-2xs"
                           onError={() => {
                             setImgErrors((prev) => ({ ...prev, [prop.id]: true }))
                           }}
                         />
                       ) : (
                         <div
-                          className="w-14 h-14 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] flex flex-col items-center justify-center text-[#8C9BA8] shrink-0"
+                          className="w-14 h-14 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] flex flex-col items-center justify-center text-[#8C9BA8] shrink-0"
                           title="No image available"
                         >
                           <Building2 className="w-5 h-5 text-[#8C9BA8]" />
@@ -112,7 +112,7 @@ export default function OwnerPropertyTable({
                       <div className="min-w-0">
                         <Link
                           to={`/owner/properties/${prop.id}`}
-                          className="font-semibold text-[#243447] hover:text-[#315A7D] transition-colors line-clamp-1"
+                          className="font-semibold text-[#243447] hover:text-[#3F7D58] transition-colors line-clamp-1"
                         >
                           {prop.name}
                         </Link>
@@ -128,7 +128,7 @@ export default function OwnerPropertyTable({
 
                   {/* Type & Specs (Bedrooms, Bathrooms, Area) */}
                   <td className="py-4 px-4 min-w-[160px]">
-                    <span className="inline-block font-medium text-[#243447] text-xs px-2 py-0.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] mb-1">
+                    <span className="inline-block font-medium text-[#243447] text-xs px-2 py-0.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] mb-1">
                       {formatPropertyType(prop.type || prop.propertyType)}
                     </span>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#5B6875]">
@@ -176,13 +176,13 @@ export default function OwnerPropertyTable({
                             {prop.occupancyRate}%
                           </span>
                         </div>
-                        <div className="w-full bg-[#F7F8FA] border border-[#D9E0E6] h-1.5 rounded-full overflow-hidden">
+                        <div className="w-full bg-[#F7F7F1] border border-[#E3E8DF] h-1.5 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${
                               prop.occupancyRate >= 90
                                 ? 'bg-[#3F7D58]'
                                 : prop.occupancyRate >= 50
-                                ? 'bg-[#315A7D]'
+                                ? 'bg-[#3F7D58]'
                                 : 'bg-[#B7791F]'
                             }`}
                             style={{ width: `${prop.occupancyRate}%` }}
@@ -228,7 +228,7 @@ export default function OwnerPropertyTable({
                           value={prop.status}
                           disabled={updatingStatusId === prop.id || updatingStatusId === prop.propertyId}
                           onChange={(e) => onStatusChange(prop.id, e.target.value)}
-                          className="text-xs font-semibold rounded-md border border-[#D9E0E6] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#315A7D] cursor-pointer hover:border-[#315A7D] transition-colors disabled:opacity-60"
+                          className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#243447] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                         >
                           {CANONICAL_PROPERTY_STATUSES.map((st) => (
                             <option key={st} value={st}>
@@ -259,7 +259,7 @@ export default function OwnerPropertyTable({
                           type="button"
                           aria-label="View property details"
                           title="View Details"
-                          className="p-1.5 rounded-md text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors"
+                          className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                         </button>

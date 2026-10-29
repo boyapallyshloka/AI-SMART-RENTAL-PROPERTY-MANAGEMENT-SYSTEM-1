@@ -46,10 +46,10 @@ export default function TermsAndConditionsPage() {
       {/* 01. Acceptance of Terms */}
       <section
         id="acceptance"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             01
           </div>
           <div>
@@ -73,10 +73,10 @@ export default function TermsAndConditionsPage() {
       {/* 02. Platform Scope & Role */}
       <section
         id="platform-scope"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             02
           </div>
           <div>
@@ -92,9 +92,9 @@ export default function TermsAndConditionsPage() {
             SmartEstate provides cloud-based software tools for managing rental properties, tracking unit occupancies, drafting lease records, coordinating maintenance dispatches, and logging rental payments.
           </p>
 
-          <div className="p-4 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6] space-y-2 text-xs">
+          <div className="p-4 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] space-y-2 text-xs">
             <p className="font-semibold text-[#243447] flex items-center gap-1.5">
-              <Scale className="w-4 h-4 text-[#315A7D]" />
+              <Scale className="w-4 h-4 text-[#3F7D58]" />
               Clarification of Software Role
             </p>
             <p className="text-[#5B6875] leading-relaxed">
@@ -107,10 +107,10 @@ export default function TermsAndConditionsPage() {
       {/* 03. User Accounts & Access */}
       <section
         id="user-accounts"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             03
           </div>
           <div>
@@ -127,15 +127,15 @@ export default function TermsAndConditionsPage() {
           </p>
           <ul className="space-y-2 text-xs sm:text-sm">
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span><strong>Credential Security:</strong> You are responsible for safeguarding your login credentials and preventing unauthorized access to your account.</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span><strong>Role Separation:</strong> Users must operate only within their assigned role capabilities (Owner, Tenant, Manager, Administrator). Attempting to bypass role permissions is strictly prohibited.</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span><strong>Notification of Breach:</strong> You must promptly notify SmartEstate if you suspect unauthorized access or security compromises involving your account.</span>
             </li>
           </ul>
@@ -145,10 +145,10 @@ export default function TermsAndConditionsPage() {
       {/* 04. Property Listings & Availability */}
       <section
         id="property-listings"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             04
           </div>
           <div>
@@ -174,10 +174,10 @@ export default function TermsAndConditionsPage() {
       {/* 05. Applications & Lease Agreements */}
       <section
         id="applications-leases"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             05
           </div>
           <div>
@@ -206,10 +206,10 @@ export default function TermsAndConditionsPage() {
       {/* 06. Rent Payments & Financial Records */}
       <section
         id="payments-billing"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             06
           </div>
           <div>
@@ -235,10 +235,10 @@ export default function TermsAndConditionsPage() {
       {/* 07. Maintenance & Emergency Notice */}
       <section
         id="maintenance-emergencies"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             07
           </div>
           <div>
@@ -269,10 +269,10 @@ export default function TermsAndConditionsPage() {
       {/* 08. Prohibited Conduct */}
       <section
         id="prohibited-conduct"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             08
           </div>
           <div>
@@ -298,10 +298,10 @@ export default function TermsAndConditionsPage() {
       {/* 09. Intellectual Property Rights */}
       <section
         id="intellectual-property"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             09
           </div>
           <div>
@@ -325,10 +325,10 @@ export default function TermsAndConditionsPage() {
       {/* 10. Disclaimer of Warranties */}
       <section
         id="warranties-disclaimer"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             10
           </div>
           <div>
@@ -352,10 +352,10 @@ export default function TermsAndConditionsPage() {
       {/* 11. Limitation of Liability */}
       <section
         id="limitation-liability"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             11
           </div>
           <div>
@@ -376,10 +376,10 @@ export default function TermsAndConditionsPage() {
       {/* 12. Suspension & Termination */}
       <section
         id="termination"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             12
           </div>
           <div>
@@ -400,10 +400,10 @@ export default function TermsAndConditionsPage() {
       {/* 13. General Legal Provisions */}
       <section
         id="governing-law"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             13
           </div>
           <div>
@@ -427,10 +427,10 @@ export default function TermsAndConditionsPage() {
       {/* 14. Contact Information */}
       <section
         id="contact"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             14
           </div>
           <div>
@@ -445,7 +445,7 @@ export default function TermsAndConditionsPage() {
           <p>
             If you have questions regarding these Terms &amp; Conditions, please direct inquiries to:
           </p>
-          <div className="p-4 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-1.5 font-mono text-[#243447]">
+          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#243447]">
             <p><strong>SmartEstate Legal &amp; Platform Support</strong></p>
             <p>Support and compliance contact addresses are not configured in this application.</p>
             <p>Platform: SmartEstate Property Management SaaS</p>

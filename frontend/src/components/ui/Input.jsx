@@ -53,12 +53,12 @@ export default function Input({
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
-          className={`block w-full rounded-md text-sm transition-colors border bg-white text-[#243447] placeholder:text-[#98A2B3] focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F8FA] disabled:text-[#5B6875] disabled:cursor-not-allowed ${
+          className={`block w-full rounded-md text-sm transition-colors border bg-white text-[#243447] placeholder:text-[#98A2B3] focus:outline-none focus:ring-1 disabled:opacity-60 disabled:bg-[#F7F7F1] disabled:text-[#5B6875] disabled:cursor-not-allowed ${
             leftIcon ? 'pl-9' : 'pl-3'
           } ${rightIcon ? 'pr-9' : 'pr-3'} py-2 ${
             error
               ? 'border-[#B94A48] focus:border-[#B94A48] focus:ring-[#B94A48]'
-              : 'border-[#D9E0E6] hover:border-[#5B6875] focus:border-[#315A7D] focus:ring-[#315A7D]'
+              : 'border-[#E3E8DF] hover:border-[#5B6875] focus:border-[#3F7D58] focus:ring-[#3F7D58]'
           } ${className}`}
           {...props}
         />

@@ -228,15 +228,15 @@ export default function OwnerProfileAddressForm({
   const formContent = (
     <form onSubmit={handleSubmit} className="space-y-5 text-xs">
       {/* Informational Guidance Notice */}
-      <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F0F4F8] border border-[#D9E0E6] text-[#243447]">
-        <Info className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F0F4F8] border border-[#E3E8DF] text-[#243447]">
+        <Info className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
           <p className="font-semibold text-xs text-[#243447]">
             Owner Official Postal Address
           </p>
           <p className="text-[11px] text-[#5B6875] leading-relaxed">
             This official address is linked to your registered Property Owner profile (via{' '}
-            <code className="px-1 py-0.5 rounded bg-white text-[#315A7D] font-mono text-[10px] border border-[#D9E0E6]">
+            <code className="px-1 py-0.5 rounded bg-white text-[#3F7D58] font-mono text-[10px] border border-[#E3E8DF]">
               /api/owner-profile/me
             </code>
             ) and appears on generated rental agreements and official documentation.
@@ -300,7 +300,7 @@ export default function OwnerProfileAddressForm({
               helperText="Entering a 6-digit pincode automatically auto-fills City, District, and State"
             />
             {isLookingUpPincode && (
-              <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#315A7D] bg-white/95 px-2 py-0.5 rounded pointer-events-none">
+              <div className="absolute right-3 top-8 flex items-center gap-1.5 text-xs text-[#3F7D58] bg-white/95 px-2 py-0.5 rounded pointer-events-none">
                 <Loader size="xs" />
                 <span className="text-[11px] font-medium">Verifying...</span>
               </div>
@@ -327,9 +327,9 @@ export default function OwnerProfileAddressForm({
 
         {/* Locality Suggestions from Pincode */}
         {areaSuggestions.length > 0 && (
-          <div className="p-3 rounded-xl bg-[#F0F5FA] border border-[#D9E0E6] space-y-1.5">
+          <div className="p-3 rounded-xl bg-[#F0F5FA] border border-[#E3E8DF] space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[#315A7D]">
+              <span className="text-[11px] font-semibold text-[#3F7D58]">
                 Suggested Localities (India Post for {formData.pincode})
               </span>
               <span className="text-[10px] text-[#5B6875]">Click to auto-fill Area</span>
@@ -342,8 +342,8 @@ export default function OwnerProfileAddressForm({
                   onClick={() => handleSelectArea(sugg)}
                   className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors border ${
                     formData.area.toLowerCase() === sugg.toLowerCase()
-                      ? 'bg-[#315A7D] text-white border-[#315A7D] shadow-2xs'
-                      : 'bg-white text-[#243447] border-[#D9E0E6] hover:bg-slate-50'
+                      ? 'bg-[#3F7D58] text-white border-[#3F7D58] shadow-2xs'
+                      : 'bg-white text-[#243447] border-[#E3E8DF] hover:bg-slate-50'
                   }`}
                 >
                   {sugg}
@@ -402,7 +402,7 @@ export default function OwnerProfileAddressForm({
       </div>
 
       {/* Form Submission Actions */}
-      <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#D9E0E6]">
+      <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#E3E8DF]">
         <Button
           type="button"
           variant="outline"
@@ -434,10 +434,10 @@ export default function OwnerProfileAddressForm({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-      <div className="border-b border-[#D9E0E6] pb-3 flex items-center justify-between">
+    <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+      <div className="border-b border-[#E3E8DF] pb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] flex items-center justify-center text-[#315A7D]">
+          <div className="w-9 h-9 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] flex items-center justify-center text-[#3F7D58]">
             <MapPin className="w-4 h-4" />
           </div>
           <div>

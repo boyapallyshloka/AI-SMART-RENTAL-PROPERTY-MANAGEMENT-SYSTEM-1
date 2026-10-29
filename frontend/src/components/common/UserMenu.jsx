@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User, Settings, LogOut, ChevronDown, Shield } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { ROLES, normalizeRole, getRoleLabel, isPropertyManager, isPropertyOwner } from '../../utils/roles'
+import { ROLES, normalizeRole, getRoleLabel, isPropertyManager, isPropertyOwner, isTenant } from '../../utils/roles'
 import ProfileModal from './ProfileModal'
 
 /**
  * UserMenu Component for Topbar
- * Updated to use SmartEstate Primary Blue #315A7D
+ * Updated to use SmartEstate Primary Blue #3F7D58
  * Connected to live user profile from GET /api/users/me with ProfileModal
  *
  * @param {Object} props
@@ -82,9 +82,9 @@ export default function UserMenu({ role, onLogout }) {
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="User menu"
-          className="flex items-center gap-2.5 p-1.5 sm:px-2.5 sm:py-1.5 rounded-md hover:bg-[#EAF2F7] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#315A7D]"
+          className="flex items-center gap-2.5 p-1.5 sm:px-2.5 sm:py-1.5 rounded-md hover:bg-[#EDF4ED] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
         >
-          <div className="w-8 h-8 rounded-md bg-[#315A7D] text-white flex items-center justify-center text-xs font-semibold shadow-xs">
+          <div className="w-8 h-8 rounded-md bg-[#3F7D58] text-white flex items-center justify-center text-xs font-semibold shadow-xs">
             {userInfo.avatarText}
           </div>
           <div className="hidden sm:block text-left">
@@ -99,15 +99,15 @@ export default function UserMenu({ role, onLogout }) {
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-60 rounded-lg bg-white border border-[#D9E0E6] shadow-md z-50 overflow-hidden animate-in fade-in">
-            <div className="px-4 py-3 border-b border-[#D9E0E6] bg-[#F7F8FA]">
+          <div className="absolute right-0 mt-2 w-60 rounded-lg bg-white border border-[#E3E8DF] shadow-md z-50 overflow-hidden animate-in fade-in">
+            <div className="px-4 py-3 border-b border-[#E3E8DF] bg-[#F7F7F1]">
               <p className="text-xs font-semibold text-[#243447]">
                 {userInfo.name}
               </p>
               <p className="text-[11px] text-[#5B6875] truncate">
                 {userInfo.email}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+              <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                 <Shield className="w-3 h-3" />
                 <span>{userInfo.roleLabel}</span>
               </div>
@@ -119,34 +119,44 @@ export default function UserMenu({ role, onLogout }) {
                 onClick={() => {
                   setIsOpen(false)
                   if (isPropertyManager(effectiveRole)) {
-                    navigate('/manager/profile')
+                    navigate('/manager/account')
                   } else if (isPropertyOwner(effectiveRole)) {
-                    navigate('/owner/profile')
+                    navigate('/owner/account')
+                  } else if (isTenant(effectiveRole)) {
+                    navigate('/tenant/account')
                   } else {
                     setModalTab('profile')
                     setIsProfileOpen(true)
                   }
                 }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-[#EAF2F7] transition-colors text-left"
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-[#EDF4ED] transition-colors text-left"
               >
                 <User className="w-4 h-4 text-[#5B6875]" />
-                <span>My Profile</span>
+                <span>{effectiveRole === ROLES.SUPER_ADMIN ? 'My Profile' : 'My Account'}</span>
               </button>
               <button
                 type="button"
                 onClick={() => {
                   setIsOpen(false)
-                  setModalTab('security')
-                  setIsProfileOpen(true)
+                  if (isPropertyManager(effectiveRole)) {
+                    navigate('/manager/account')
+                  } else if (isPropertyOwner(effectiveRole)) {
+                    navigate('/owner/account')
+                  } else if (isTenant(effectiveRole)) {
+                    navigate('/tenant/account')
+                  } else {
+                    setModalTab('security')
+                    setIsProfileOpen(true)
+                  }
                 }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-[#EAF2F7] transition-colors text-left"
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md hover:bg-[#EDF4ED] transition-colors text-left"
               >
                 <Settings className="w-4 h-4 text-[#5B6875]" />
                 <span>Account Settings</span>
               </button>
             </div>
 
-            <div className="p-1.5 border-t border-[#D9E0E6]">
+            <div className="p-1.5 border-t border-[#E3E8DF]">
               <button
                 type="button"
                 onClick={handleLogoutClick}

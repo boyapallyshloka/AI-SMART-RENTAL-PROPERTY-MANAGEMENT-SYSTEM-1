@@ -848,7 +848,7 @@ export default function MaintenancePage() {
 
         {/* Navigation Tabs: Active vs. Maintenance History vs. All */}
 
-        <div className="flex items-center gap-2 border-b border-[#D9E0E6] pb-1">
+        <div className="flex items-center gap-2 border-b border-[#E3E8DF] pb-1">
 
           <button
 
@@ -858,9 +858,9 @@ export default function MaintenancePage() {
 
             className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 ${activeTab === 'active'
 
-              ? 'bg-[#315A7D] text-white shadow-xs'
+              ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -872,7 +872,7 @@ export default function MaintenancePage() {
 
             <span
 
-              className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'active' ? 'bg-white/20 text-white' : 'bg-[#EAF2F7] text-[#315A7D]'
+              className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'active' ? 'bg-white/20 text-white' : 'bg-[#EDF4ED] text-[#3F7D58]'
 
                 }`}
 
@@ -892,9 +892,9 @@ export default function MaintenancePage() {
 
             className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 ${activeTab === 'history'
 
-              ? 'bg-[#315A7D] text-white shadow-xs'
+              ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -926,9 +926,9 @@ export default function MaintenancePage() {
 
             className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 ${activeTab === 'all'
 
-              ? 'bg-[#315A7D] text-white shadow-xs'
+              ? 'bg-[#3F7D58] text-white shadow-xs'
 
-              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA]'
+              : 'text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]'
 
               }`}
 
@@ -938,7 +938,7 @@ export default function MaintenancePage() {
 
             <span
 
-              className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-[#F7F8FA] text-[#5B6875]'
+              className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-[#F7F7F1] text-[#5B6875]'
 
                 }`}
 
@@ -954,7 +954,7 @@ export default function MaintenancePage() {
 
         {/* Search & Filters Bar */}
 
-        <div className="bg-white rounded-xl border border-[#D9E0E6] p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-xl border border-[#E3E8DF] p-4 sm:p-5 shadow-xs space-y-4">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
 
@@ -1026,7 +1026,7 @@ export default function MaintenancePage() {
 
                 aria-label="Reset filters"
 
-                className="p-2.5 rounded-lg border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
 
               >
 
@@ -1040,7 +1040,7 @@ export default function MaintenancePage() {
 
         </div>
 
-        <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+        <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
 
           <span>
 
@@ -1058,7 +1058,7 @@ export default function MaintenancePage() {
 
           {hasActiveFilters && (
 
-            <span className="text-[#315A7D] font-medium">
+            <span className="text-[#3F7D58] font-medium">
 
               Filters active
 
@@ -1072,7 +1072,7 @@ export default function MaintenancePage() {
 
         {loading ? (
 
-          <div className="bg-white rounded-xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
 
             <Loader text="Loading maintenance records..." size="md" center />
 
@@ -1081,7 +1081,7 @@ export default function MaintenancePage() {
         ) : filteredRequests.length === 0 ? (
 
 
-          <div className="bg-white rounded-xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] p-8 shadow-xs">
 
             <EmptyState
 
@@ -1136,7 +1136,7 @@ export default function MaintenancePage() {
         ) : (
 
 
-          <div className="bg-white rounded-xl border border-[#D9E0E6] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-[#E3E8DF] shadow-xs overflow-hidden">
 
             <div className="overflow-x-auto">
 
@@ -1144,7 +1144,7 @@ export default function MaintenancePage() {
 
                 <thead>
 
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
 
                     <th className="py-3.5 pl-6 pr-4">Ticket #</th>
 
@@ -1176,7 +1176,7 @@ export default function MaintenancePage() {
 
                 </thead>
 
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
 
                   {filteredRequests.map((req) => {
 
@@ -1200,13 +1200,13 @@ export default function MaintenancePage() {
 
                         key={ticketId}
 
-                        className="hover:bg-[#F7F8FA]/80 transition-colors"
+                        className="hover:bg-[#F7F7F1]/80 transition-colors"
 
                       >
 
                         {/* Ticket Number */}
 
-                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs whitespace-nowrap">
+                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs whitespace-nowrap">
 
                           <Link
 
@@ -1226,7 +1226,7 @@ export default function MaintenancePage() {
 
                         <td className="py-4 px-4 whitespace-nowrap">
 
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F8FA] text-[#243447] border border-[#D9E0E6]">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
 
                             <Wrench className="w-3 h-3 text-[#5B6875]" />
 

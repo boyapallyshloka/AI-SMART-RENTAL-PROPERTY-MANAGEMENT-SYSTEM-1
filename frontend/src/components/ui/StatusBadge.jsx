@@ -6,7 +6,7 @@ import React from 'react'
  * - Success: #3F7D58 (text #2A583B on #EDF7EE)
  * - Warning: #B7791F (text #8A5B16 on #FEF7EC)
  * - Error: #B94A48 (text #8A2E2C on #FDF2F2)
- * - Info/Open: #315A7D (text #274B68 on #EAF2F7)
+ * - Info/Open: #3F7D58 (text #315F46 on #EDF4ED)
  * - Neutral: #5B6875 (text #5B6875 on #F0F4F7)
  */
 const STATUS_CONFIG = {
@@ -124,39 +124,39 @@ const STATUS_CONFIG = {
   // Info / Open / In Progress / Assigned
   open: {
     label: 'Open',
-    badge: 'bg-[#EAF2F7] text-[#274B68] border-[#D9E0E6]',
-    dot: 'bg-[#315A7D]',
+    badge: 'bg-[#EDF4ED] text-[#315F46] border-[#E3E8DF]',
+    dot: 'bg-[#3F7D58]',
   },
   assigned: {
     label: 'Assigned',
-    badge: 'bg-[#EAF2F7] text-[#274B68] border-[#D9E0E6]',
-    dot: 'bg-[#315A7D]',
+    badge: 'bg-[#EDF4ED] text-[#315F46] border-[#E3E8DF]',
+    dot: 'bg-[#3F7D58]',
   },
   'in progress': {
     label: 'In Progress',
-    badge: 'bg-[#EAF2F7] text-[#274B68] border-[#D9E0E6]',
-    dot: 'bg-[#315A7D]',
+    badge: 'bg-[#EDF4ED] text-[#315F46] border-[#E3E8DF]',
+    dot: 'bg-[#3F7D58]',
   },
   inprogress: {
     label: 'In Progress',
-    badge: 'bg-[#EAF2F7] text-[#274B68] border-[#D9E0E6]',
-    dot: 'bg-[#315A7D]',
+    badge: 'bg-[#EDF4ED] text-[#315F46] border-[#E3E8DF]',
+    dot: 'bg-[#3F7D58]',
   },
 
   // Neutral / Secondary / Inactive / Cancelled / Withdrawn
   occupied: {
     label: 'Occupied',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
   closed: {
     label: 'Closed',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
   withdrawn: {
     label: 'Withdrawn',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
   cancelled: {
@@ -166,12 +166,12 @@ const STATUS_CONFIG = {
   },
   refunded: {
     label: 'Refunded',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
   draft: {
     label: 'Draft',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
 }
@@ -193,7 +193,7 @@ export default function StatusBadge({
   const normalizedKey = String(status).trim().toLowerCase()
   const config = STATUS_CONFIG[normalizedKey] || {
     label: normalizedKey ? status : '—',
-    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   }
 

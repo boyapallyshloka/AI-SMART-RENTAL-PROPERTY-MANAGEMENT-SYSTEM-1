@@ -131,7 +131,7 @@ export default function AddPropertyPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <Link
             to="/owner/properties"
-            className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+            className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Properties</span>
@@ -160,9 +160,9 @@ export default function AddPropertyPage() {
         )}
 
         {/* Header */}
-        <div className="border-b border-[#D9E0E6] pb-4">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#315A7D] text-white shadow-sm">
+            <div className="p-2.5 rounded-xl bg-[#3F7D58] text-white shadow-sm">
               <Building2 className="w-6 h-6" />
             </div>
             <div>

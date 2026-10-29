@@ -243,7 +243,7 @@ export default function ApplicationsPage() {
               </h1>
               {/* Only show Total Count badge if NO error occurred and not loading */}
               {!loading && !error && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                   {applications.length} Total
                 </span>
               )}
@@ -271,7 +271,7 @@ export default function ApplicationsPage() {
         </div>
 
         {/* Search & Filters Bar */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-4 sm:p-5 shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
             <div className="lg:col-span-2">
               <label className="block text-xs font-semibold text-[#5B6875] mb-1.5 uppercase tracking-wide">
@@ -313,7 +313,7 @@ export default function ApplicationsPage() {
                   onClick={resetFilters}
                   title="Reset all filters"
                   aria-label="Reset all filters"
-                  className="p-2.5 mb-0.5 rounded-xl border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                  className="p-2.5 mb-0.5 rounded-xl border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -321,7 +321,7 @@ export default function ApplicationsPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-2 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-2 border-t border-[#E3E8DF]">
             <span>
               {!error && !loading ? (
                 <>
@@ -336,12 +336,12 @@ export default function ApplicationsPage() {
               )}
             </span>
             {hasActiveFilters && !error && !loading && (
-              <span className="text-[#315A7D] font-medium">
+              <span className="text-[#3F7D58] font-medium">
                 Filters active &bull;{' '}
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="underline hover:text-[#274B68]"
+                  className="underline hover:text-[#315F46]"
                 >
                   Reset
                 </button>
@@ -352,7 +352,7 @@ export default function ApplicationsPage() {
 
         {/* Main Content: Loading vs Error vs Empty vs Table */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading rental applications..." size="md" center />
           </div>
         ) : error ? (
@@ -384,9 +384,9 @@ export default function ApplicationsPage() {
           </div>
         ) : filteredApplications.length === 0 ? (
           /* Empty State - ONLY displayed when the API successfully returned zero records */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
-              icon={<FileCheck className="w-8 h-8 text-[#315A7D]" />}
+              icon={<FileCheck className="w-8 h-8 text-[#3F7D58]" />}
               title={
                 applications.length === 0
                   ? 'No rental applications'
@@ -410,11 +410,11 @@ export default function ApplicationsPage() {
           </div>
         ) : (
           /* Responsive Applications Table */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">Applicant</th>
                     <th className="py-3.5 px-4">Property / Unit</th>
                     <th className="py-3.5 px-4">Application Date</th>
@@ -424,11 +424,11 @@ export default function ApplicationsPage() {
                     <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {filteredApplications.map((app) => (
                     <tr
                       key={app.applicationId}
-                      className="hover:bg-[#F7F8FA] transition-colors"
+                      className="hover:bg-[#F7F7F1] transition-colors"
                     >
                       {/* Applicant Name & Email */}
                       <td className="py-4 pl-6 pr-4">
@@ -437,7 +437,7 @@ export default function ApplicationsPage() {
                             <span className="font-semibold text-[#243447]">
                               {app.tenantName || 'Applicant'}
                             </span>
-                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-[#F0F4F8] text-[#5B6875] border border-[#D9E0E6]">
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-[#F0F4F8] text-[#5B6875] border border-[#E3E8DF]">
                               #{app.applicationId}
                             </span>
                           </div>

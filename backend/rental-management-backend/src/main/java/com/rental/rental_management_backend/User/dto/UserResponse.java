@@ -36,6 +36,8 @@ public class UserResponse {
 
     private UserStatus status;
 
+    private boolean selfDeactivated;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

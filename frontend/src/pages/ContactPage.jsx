@@ -16,11 +16,11 @@ export default function ContactPage() {
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F8FA] font-sans text-[#243447]">
-      <header className="border-b border-[#D9E0E6] bg-white">
+    <div className="flex min-h-screen flex-col bg-[#F7F7F1] font-sans text-[#243447]">
+      <header className="border-b border-[#E3E8DF] bg-white">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2 font-serif text-lg font-bold">
-            <span className="rounded-md bg-[#315A7D] p-2 text-white"><Home className="h-5 w-5" /></span>
+            <span className="rounded-md bg-[#3F7D58] p-2 text-white"><Home className="h-5 w-5" /></span>
             SmartEstate
           </Link>
           <Link to={dashboardPath}>
@@ -30,8 +30,8 @@ export default function ContactPage() {
       </header>
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 items-center px-4 py-12 sm:px-6">
-        <section className="w-full rounded-xl border border-[#D9E0E6] bg-white p-6 shadow-2xs sm:p-9">
-          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-[#D9E0E6] bg-[#EAF2F7] text-[#315A7D]">
+        <section className="w-full rounded-xl border border-[#E3E8DF] bg-white p-6 shadow-2xs sm:p-9">
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-[#E3E8DF] bg-[#EDF4ED] text-[#3F7D58]">
             <Mail className="h-6 w-6" />
           </div>
           <h1 className="font-serif text-3xl font-bold tracking-tight">Contact Support</h1>

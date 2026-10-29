@@ -82,14 +82,14 @@ export default function LegalPageLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] text-[#243447] font-sans antialiased flex flex-col">
+    <div className="min-h-screen bg-[#F7F7F1] text-[#243447] font-sans antialiased flex flex-col">
       {/* Top Application Header */}
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-[#D9E0E6] shadow-2xs">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-[#E3E8DF] shadow-2xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Brand Identity */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="p-2 rounded-md bg-[#315A7D] text-white group-hover:bg-[#274B68] transition-colors shadow-2xs">
+              <div className="p-2 rounded-md bg-[#3F7D58] text-white group-hover:bg-[#315F46] transition-colors shadow-2xs">
                 <Home className="w-5 h-5" />
               </div>
               <div>
@@ -102,21 +102,21 @@ export default function LegalPageLayout({
               </div>
             </Link>
 
-            <span className="hidden sm:inline-block text-[#D9E0E6] font-light">|</span>
+            <span className="hidden sm:inline-block text-[#E3E8DF] font-light">|</span>
 
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
               <Shield className="w-3.5 h-3.5" />
               <span>Platform Documentation</span>
             </span>
           </div>
 
           {/* Center Navigation Tabs (Privacy vs Terms vs Contact) */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#F7F8FA] p-1 rounded-lg border border-[#D9E0E6]">
+          <nav className="hidden md:flex items-center gap-1 bg-[#F7F7F1] p-1 rounded-lg border border-[#E3E8DF]">
             <Link
               to="/privacy-policy"
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                 activeDoc === 'privacy'
-                  ? 'bg-white text-[#315A7D] font-semibold shadow-2xs border border-[#D9E0E6]'
+                  ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
                   : 'text-[#5B6875] hover:text-[#243447]'
               }`}
             >
@@ -126,7 +126,7 @@ export default function LegalPageLayout({
               to="/terms-and-conditions"
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                 activeDoc === 'terms'
-                  ? 'bg-white text-[#315A7D] font-semibold shadow-2xs border border-[#D9E0E6]'
+                  ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
                   : 'text-[#5B6875] hover:text-[#243447]'
               }`}
             >
@@ -155,12 +155,12 @@ export default function LegalPageLayout({
         </div>
 
         {/* Mobile Tab Strip */}
-        <div className="flex md:hidden border-t border-[#D9E0E6] bg-[#F7F8FA] px-4 py-2 gap-2 text-xs">
+        <div className="flex md:hidden border-t border-[#E3E8DF] bg-[#F7F7F1] px-4 py-2 gap-2 text-xs">
           <Link
             to="/privacy-policy"
             className={`flex-1 text-center py-1.5 rounded-md font-medium ${
               activeDoc === 'privacy'
-                ? 'bg-white text-[#315A7D] font-semibold shadow-2xs border border-[#D9E0E6]'
+                ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
                 : 'text-[#5B6875]'
             }`}
           >
@@ -170,7 +170,7 @@ export default function LegalPageLayout({
             to="/terms-and-conditions"
             className={`flex-1 text-center py-1.5 rounded-md font-medium ${
               activeDoc === 'terms'
-                ? 'bg-white text-[#315A7D] font-semibold shadow-2xs border border-[#D9E0E6]'
+                ? 'bg-white text-[#3F7D58] font-semibold shadow-2xs border border-[#E3E8DF]'
                 : 'text-[#5B6875]'
             }`}
           >
@@ -186,10 +186,10 @@ export default function LegalPageLayout({
       </header>
 
       {/* Hero / Header Section */}
-      <section className="bg-white border-b border-[#D9E0E6] py-10 sm:py-12">
+      <section className="bg-white border-b border-[#E3E8DF] py-10 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
               {activeDoc === 'privacy' ? (
                 <Shield className="w-3.5 h-3.5" />
               ) : (
@@ -207,15 +207,15 @@ export default function LegalPageLayout({
             </p>
 
             {/* Metadata Bar */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-[#5B6875] border-t border-[#D9E0E6]">
+            <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-[#5B6875] border-t border-[#E3E8DF]">
               <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-[#315A7D]" />
+                <Clock className="w-4 h-4 text-[#3F7D58]" />
                 <span>
                   Last Updated: <strong className="text-[#243447] font-medium">{lastUpdated}</strong>
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[#315A7D]" />
+                <Calendar className="w-4 h-4 text-[#3F7D58]" />
                 <span>
                   Effective Date: <strong className="text-[#243447] font-medium">{effectiveDate}</strong>
                 </span>
@@ -223,7 +223,7 @@ export default function LegalPageLayout({
               <button
                 type="button"
                 onClick={handlePrint}
-                className="inline-flex items-center gap-1.5 text-[#315A7D] hover:text-[#274B68] hover:underline cursor-pointer ml-auto"
+                className="inline-flex items-center gap-1.5 text-[#3F7D58] hover:text-[#315F46] hover:underline cursor-pointer ml-auto"
                 title="Print this document"
               >
                 <Printer className="w-4 h-4" />
@@ -239,7 +239,7 @@ export default function LegalPageLayout({
         <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-start">
           {/* Left Sticky Sidebar: Table of Contents & Quick Contact */}
           <aside className="hidden lg:block lg:col-span-4 sticky top-24 space-y-6">
-            <div className="bg-white rounded-lg border border-[#D9E0E6] p-5 shadow-2xs space-y-3">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] p-5 shadow-2xs space-y-3">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                 Table of Contents
               </h2>
@@ -248,24 +248,24 @@ export default function LegalPageLayout({
                   <button
                     key={item.id}
                     onClick={() => handleScrollToSection(item.id)}
-                    className="w-full text-left py-1.5 px-2 rounded text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors flex items-center justify-between group cursor-pointer"
+                    className="w-full text-left py-1.5 px-2 rounded text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors flex items-center justify-between group cursor-pointer"
                   >
                     <span className="truncate">
-                      <span className="font-mono text-[10px] text-[#315A7D] mr-1.5">
+                      <span className="font-mono text-[10px] text-[#3F7D58] mr-1.5">
                         {String(index + 1).padStart(2, '0')}.
                       </span>
                       {item.title}
                     </span>
-                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#315A7D] shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#3F7D58] shrink-0" />
                   </button>
                 ))}
               </nav>
             </div>
 
             {/* Quick Contact & Assistance Box */}
-            <div className="bg-[#EAF2F7] rounded-lg border border-[#D9E0E6] p-5 text-xs space-y-2.5">
+            <div className="bg-[#EDF4ED] rounded-lg border border-[#E3E8DF] p-5 text-xs space-y-2.5">
               <div className="flex items-center gap-2 font-semibold text-[#243447]">
-                <Mail className="w-4 h-4 text-[#315A7D]" />
+                <Mail className="w-4 h-4 text-[#3F7D58]" />
                 <span>Legal & Support Inquiries</span>
               </div>
               <p className="text-[#5B6875] leading-relaxed">
@@ -274,7 +274,7 @@ export default function LegalPageLayout({
               <div className="pt-1">
                 <Link
                   to="/contact"
-                  className="inline-block font-semibold text-[#315A7D] hover:text-[#274B68] hover:underline"
+                  className="inline-block font-semibold text-[#3F7D58] hover:text-[#315F46] hover:underline"
                 >
                   View support contact status
                 </Link>
@@ -285,8 +285,8 @@ export default function LegalPageLayout({
           {/* Right Main Column: Reading Container */}
           <div className="lg:col-span-8 space-y-6 sm:space-y-8 max-w-3xl">
             {/* General Template Disclaimer Banner */}
-            <div className="rounded-lg bg-white border border-[#D9E0E6] p-4 sm:p-5 shadow-2xs flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-[#315A7D] shrink-0 mt-0.5" />
+            <div className="rounded-lg bg-white border border-[#E3E8DF] p-4 sm:p-5 shadow-2xs flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-[#3F7D58] shrink-0 mt-0.5" />
               <div className="text-xs text-[#5B6875] space-y-1">
                 <p className="font-semibold text-[#243447]">
                   Standard Platform Documentation Notice
@@ -303,7 +303,7 @@ export default function LegalPageLayout({
             </div>
 
             {/* Bottom Return Action */}
-            <div className="pt-6 border-t border-[#D9E0E6] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="pt-6 border-t border-[#E3E8DF] flex flex-col sm:flex-row items-center justify-between gap-4">
               <Link to={getDashboardDestination()}>
                 <Button
                   size="md"
@@ -318,7 +318,7 @@ export default function LegalPageLayout({
                 Switch to{' '}
                 <Link
                   to={activeDoc === 'privacy' ? '/terms-and-conditions' : '/privacy-policy'}
-                  className="font-semibold text-[#315A7D] hover:underline"
+                  className="font-semibold text-[#3F7D58] hover:underline"
                 >
                   {activeDoc === 'privacy' ? 'Terms & Conditions' : 'Privacy Policy'}
                 </Link>

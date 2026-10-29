@@ -101,7 +101,7 @@ export default function ManagerTechniciansPage() {
   return (
     <DashboardLayout defaultRole="manager" activeItem="technicians" pageTitle="Maintenance Technicians">
       <div className="space-y-6">
-        <Link to="/manager/maintenance" className="inline-flex items-center gap-2 text-sm font-medium text-[#315A7D] hover:underline">
+        <Link to="/manager/maintenance" className="inline-flex items-center gap-2 text-sm font-medium text-[#3F7D58] hover:underline">
           <ArrowLeft className="h-4 w-4" /> Back to Maintenance
         </Link>
 
@@ -118,26 +118,26 @@ export default function ManagerTechniciansPage() {
         {error && <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
         {notice && <div role="status" className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">{notice}</div>}
 
-        <form onSubmit={handleCreate} className="rounded-xl border border-[#D9E0E6] bg-white p-5 shadow-sm">
+        <form onSubmit={handleCreate} className="rounded-xl border border-[#E3E8DF] bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
-            <Plus className="h-5 w-5 text-[#315A7D]" />
+            <Plus className="h-5 w-5 text-[#3F7D58]" />
             <h2 className="text-lg font-semibold">Add a Technician</h2>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <label className="space-y-1 text-sm font-medium">Technician name <span className="text-red-600">*</span>
-              <input required maxLength={120} value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder="Full name" className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+              <input required maxLength={120} value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder="Full name" className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
             </label>
             <label className="space-y-1 text-sm font-medium">Service <span className="text-red-600">*</span>
-              <select required value={form.specialization} onChange={(event) => setForm({ ...form, specialization: event.target.value })} className="w-full rounded-lg border border-[#D9E0E6] bg-white px-3 py-2 font-normal">
+              <select required value={form.specialization} onChange={(event) => setForm({ ...form, specialization: event.target.value })} className="w-full rounded-lg border border-[#E3E8DF] bg-white px-3 py-2 font-normal">
                 <option value="">Select service</option>
                 {MAINTENANCE_CATEGORIES.map((category) => <option key={category} value={category}>{formatCategoryLabel(category)}</option>)}
               </select>
             </label>
             <label className="space-y-1 text-sm font-medium">Phone
-              <input type="tel" maxLength={30} value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} placeholder="Phone number" className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+              <input type="tel" maxLength={30} value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} placeholder="Phone number" className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
             </label>
             <label className="space-y-1 text-sm font-medium">Email
-              <input type="email" maxLength={160} value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="Email address" className="w-full rounded-lg border border-[#D9E0E6] px-3 py-2 font-normal" />
+              <input type="email" maxLength={160} value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="Email address" className="w-full rounded-lg border border-[#E3E8DF] px-3 py-2 font-normal" />
             </label>
           </div>
           <Button type="submit" variant="primary" disabled={saving || !form.name.trim() || !form.specialization} leftIcon={<Plus className="h-4 w-4" />} className="mt-4">
@@ -146,21 +146,21 @@ export default function ManagerTechniciansPage() {
         </form>
 
         <section className="space-y-4">
-          <div className="flex items-center gap-2"><HardHat className="h-5 w-5 text-[#315A7D]" /><h2 className="text-lg font-semibold">Technicians</h2><span className="rounded-full bg-[#EAF2F7] px-2.5 py-0.5 text-xs font-semibold text-[#315A7D]">{workers.length}</span></div>
+          <div className="flex items-center gap-2"><HardHat className="h-5 w-5 text-[#3F7D58]" /><h2 className="text-lg font-semibold">Technicians</h2><span className="rounded-full bg-[#EDF4ED] px-2.5 py-0.5 text-xs font-semibold text-[#3F7D58]">{workers.length}</span></div>
           {loading ? (
-            <div className="rounded-xl border border-[#D9E0E6] bg-white p-8 text-center text-sm text-[#5B6875]">Loading technicians…</div>
+            <div className="rounded-xl border border-[#E3E8DF] bg-white p-8 text-center text-sm text-[#5B6875]">Loading technicians…</div>
           ) : workers.length === 0 ? (
             <div className="rounded-xl border border-dashed border-[#C9D7E3] bg-white p-8 text-center text-sm text-[#5B6875]">No technicians are registered yet. Add one above to make them available for ticket dispatch.</div>
           ) : groupedWorkers.map(([service, serviceWorkers]) => (
-            <div key={service} className="overflow-hidden rounded-xl border border-[#D9E0E6] bg-white shadow-sm">
-              <div className="flex items-center gap-2 border-b border-[#D9E0E6] bg-[#F3F7FA] px-4 py-3"><Wrench className="h-4 w-4 text-[#315A7D]" /><h3 className="font-semibold">{formatCategoryLabel(service)}</h3><span className="text-xs text-[#5B6875]">{serviceWorkers.length} {serviceWorkers.length === 1 ? 'technician' : 'technicians'}</span></div>
+            <div key={service} className="overflow-hidden rounded-xl border border-[#E3E8DF] bg-white shadow-sm">
+              <div className="flex items-center gap-2 border-b border-[#E3E8DF] bg-[#F3F7FA] px-4 py-3"><Wrench className="h-4 w-4 text-[#3F7D58]" /><h3 className="font-semibold">{formatCategoryLabel(service)}</h3><span className="text-xs text-[#5B6875]">{serviceWorkers.length} {serviceWorkers.length === 1 ? 'technician' : 'technicians'}</span></div>
               <div className="divide-y divide-[#E5EAF0]">
                 {serviceWorkers.map((worker) => {
                   const id = workerId(worker)
                   const available = String(worker.availabilityStatus || 'AVAILABLE').toUpperCase() === 'AVAILABLE'
                   return <article key={id || `${service}-${worker.name}`} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4">
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="rounded-full bg-[#EAF2F7] p-2 text-[#315A7D]"><UserRound className="h-5 w-5" /></span>
+                      <span className="rounded-full bg-[#EDF4ED] p-2 text-[#3F7D58]"><UserRound className="h-5 w-5" /></span>
                       <div className="min-w-0"><p className="font-semibold">{worker.name || 'Unnamed technician'}</p><p className="text-sm text-[#5B6875]">{[worker.phone, worker.email].filter(Boolean).join(' · ') || 'No contact details'}</p></div>
                     </div>
                     <div className="flex items-center gap-3">

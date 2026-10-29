@@ -43,10 +43,10 @@ export default function PrivacyPolicyPage() {
       {/* 01. Introduction */}
       <section
         id="introduction"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             01
           </div>
           <div>
@@ -73,10 +73,10 @@ export default function PrivacyPolicyPage() {
       {/* 02. Information We Collect */}
       <section
         id="data-collection"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             02
           </div>
           <div>
@@ -93,9 +93,9 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-            <div className="p-3.5 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+            <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
               <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-[#315A7D]" />
+                <UserCheck className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Account & Authentication Data
               </p>
               <p className="text-xs text-[#5B6875]">
@@ -103,9 +103,9 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
 
-            <div className="p-3.5 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+            <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
               <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[#315A7D]" />
+                <Building2 className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Property & Unit Listings
               </p>
               <p className="text-xs text-[#5B6875]">
@@ -113,9 +113,9 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
 
-            <div className="p-3.5 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+            <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
               <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
-                <FileCheck className="w-3.5 h-3.5 text-[#315A7D]" />
+                <FileCheck className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Tenancy & Lease Records
               </p>
               <p className="text-xs text-[#5B6875]">
@@ -123,9 +123,9 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
 
-            <div className="p-3.5 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] space-y-1.5">
+            <div className="p-3.5 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] space-y-1.5">
               <p className="font-semibold text-xs text-[#243447] flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-[#315A7D]" />
+                <Database className="w-3.5 h-3.5 text-[#3F7D58]" />
                 Maintenance & Dispatch Logs
               </p>
               <p className="text-xs text-[#5B6875]">
@@ -134,7 +134,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
 
-          <div className="p-3 rounded-md bg-[#EAF2F7] border border-[#D9E0E6] text-xs space-y-1">
+          <div className="p-3 rounded-md bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1">
             <p className="font-semibold text-[#243447]">Payment Processing Notice</p>
             <p className="text-[#5B6875] leading-relaxed">
               SmartEstate records payment status metadata (such as payment dates, amounts, receipt numbers, and payment status indicators). Full credit card numbers and bank routing credentials are processed through designated payment gateways and are not stored in plain text within SmartEstate application databases.
@@ -146,10 +146,10 @@ export default function PrivacyPolicyPage() {
       {/* 03. How We Use Information */}
       <section
         id="data-usage"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             03
           </div>
           <div>
@@ -186,10 +186,10 @@ export default function PrivacyPolicyPage() {
       {/* 04. Information Sharing */}
       <section
         id="data-sharing"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             04
           </div>
           <div>
@@ -206,17 +206,17 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <div className="space-y-3 text-xs sm:text-sm">
-            <div className="border-l-2 border-[#315A7D] pl-3.5 py-0.5">
+            <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
               <strong className="text-[#243447] block">Between Owners and Tenants</strong>
               <span>Property owners and designated managers can view tenant application details, lease terms, and maintenance tickets for their properties. Tenants can view property details, unit assignments, and their own payment histories.</span>
             </div>
 
-            <div className="border-l-2 border-[#315A7D] pl-3.5 py-0.5">
+            <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
               <strong className="text-[#243447] block">Authorized Infrastructure Service Providers</strong>
               <span>We engage trusted cloud hosting, database storage, and transactional notification providers strictly to host and deliver platform functionality. These providers operate under confidentiality agreements.</span>
             </div>
 
-            <div className="border-l-2 border-[#315A7D] pl-3.5 py-0.5">
+            <div className="border-l-2 border-[#3F7D58] pl-3.5 py-0.5">
               <strong className="text-[#243447] block">Legal and Compliance Obligations</strong>
               <span>We may disclose records when required by law, valid court order, administrative subpoena, or to protect the vital interests and safety of users.</span>
             </div>
@@ -232,10 +232,10 @@ export default function PrivacyPolicyPage() {
       {/* 05. Data Retention */}
       <section
         id="data-retention"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             05
           </div>
           <div>
@@ -259,10 +259,10 @@ export default function PrivacyPolicyPage() {
       {/* 06. Security Measures */}
       <section
         id="security-measures"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             06
           </div>
           <div>
@@ -279,15 +279,15 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-2 text-xs sm:text-sm">
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span>Encrypted transmission in transit using modern Transport Layer Security (HTTPS/TLS).</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span>Strict role-based access controls enforcing partition between Owner, Tenant, Manager, and Admin accounts.</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#315A7D] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
               <span>Protected token-based session management and administrative security audit logging.</span>
             </li>
           </ul>
@@ -300,10 +300,10 @@ export default function PrivacyPolicyPage() {
       {/* 07. User Rights */}
       <section
         id="user-rights"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             07
           </div>
           <div>
@@ -336,10 +336,10 @@ export default function PrivacyPolicyPage() {
       {/* 08. Cookies & Local Storage */}
       <section
         id="cookies-storage"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             08
           </div>
           <div>
@@ -368,10 +368,10 @@ export default function PrivacyPolicyPage() {
       {/* 09. Children's Privacy */}
       <section
         id="children-privacy"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             09
           </div>
           <div>
@@ -392,10 +392,10 @@ export default function PrivacyPolicyPage() {
       {/* 10. Policy Updates */}
       <section
         id="policy-updates"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             10
           </div>
           <div>
@@ -416,10 +416,10 @@ export default function PrivacyPolicyPage() {
       {/* 11. Contact Us */}
       <section
         id="contact-us"
-        className="bg-white rounded-lg border border-[#D9E0E6] p-6 sm:p-7 shadow-2xs space-y-4"
+        className="bg-white rounded-lg border border-[#E3E8DF] p-6 sm:p-7 shadow-2xs space-y-4"
       >
-        <div className="flex items-center gap-3 border-b border-[#D9E0E6] pb-3.5">
-          <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 font-mono text-xs font-bold">
+        <div className="flex items-center gap-3 border-b border-[#E3E8DF] pb-3.5">
+          <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 font-mono text-xs font-bold">
             11
           </div>
           <div>
@@ -434,7 +434,7 @@ export default function PrivacyPolicyPage() {
           <p>
             If you have questions, comments, or requests regarding this Privacy Policy or SmartEstate data practices, please reach out to our platform administration team:
           </p>
-          <div className="p-4 rounded-lg bg-[#F7F8FA] border border-[#D9E0E6] text-xs space-y-1.5 font-mono text-[#243447]">
+          <div className="p-4 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-1.5 font-mono text-[#243447]">
             <p><strong>SmartEstate Property Management Platform</strong></p>
             <p>Support and privacy contact addresses are not configured in this application.</p>
             <p>Contact channels will be shown here when configured.</p>

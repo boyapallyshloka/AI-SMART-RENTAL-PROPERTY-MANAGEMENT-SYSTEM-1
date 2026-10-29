@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate, useParams } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import ResolveRouter from "../components/ResolveRouter";
 
@@ -83,6 +83,7 @@ import ContactPage from '../pages/ContactPage'
 import ProtectedRoute from './ProtectedRoute'
 import RoleRoute from './RoleRoute'
 import { ROLES, getDashboardPath, isPropertyOwner, isPropertyManager, normalizeRole } from '../utils/roles'
+import { completeRouteTransition } from './transitionHistory'
 
 /**
  * Root entry: keep role-based dashboard routing and show the welcome page to guests.
@@ -155,6 +156,12 @@ function OwnerOnlyApplicationDetailsRoute({ children }) {
 }
 
 export default function AppRoutes() {
+  const location = useLocation()
+
+  React.useLayoutEffect(() => {
+    completeRouteTransition()
+  }, [location.key])
+
   return (
     <Routes>
       {/* Root entry */}
@@ -269,7 +276,8 @@ export default function AppRoutes() {
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="agreements" element={<AgreementsPage />} />
                 <Route path="agreements/new" element={<CreateAgreementPage />} />
-                <Route path="profile" element={<OwnerProfilePage />} />
+                <Route path="account" element={<OwnerProfilePage />} />
+                <Route path="profile" element={<Navigate to="/owner/account" replace />} />
                 <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/owner/dashboard" replace />} />
               </Routes>
@@ -357,7 +365,8 @@ export default function AppRoutes() {
                 <Route path="payments" element={<PaymentsPage />} />
                 <Route path="payments/:id" element={<PaymentDetailsPage />} />
                 <Route path="reports" element={<ReportsPage role={ROLES.PROPERTY_MANAGER} />} />
-                <Route path="profile" element={<ManagerProfilePage />} />
+                <Route path="account" element={<ManagerProfilePage />} />
+                <Route path="profile" element={<Navigate to="/manager/account" replace />} />
                 <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/manager/dashboard" replace />} />
               </Routes>

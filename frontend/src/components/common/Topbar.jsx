@@ -1,5 +1,4 @@
 import React from 'react'
-import { Menu } from 'lucide-react'
 import NotificationBell from './NotificationBell'
 import UserMenu from './UserMenu'
 import { ROLES } from '../../utils/roles'
@@ -9,35 +8,20 @@ import { ROLES } from '../../utils/roles'
  * High contrast with #243447 headings and #5B6875 secondary text
  *
  * @param {Object} props
- * @param {() => void} props.onMenuClick
  * @param {string} [props.role]
  * @param {string} [props.title='Dashboard']
  * @param {React.ReactNode} [props.actions]
  */
 export default function Topbar({
-  onMenuClick,
   role = ROLES.PROPERTY_OWNER,
   title = 'Dashboard',
   actions,
 }) {
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white border-b border-[#D9E0E6] transition-colors">
-      {/* Left section: Hamburger button & page title */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onMenuClick}
-          aria-label="Open sidebar menu"
-          className="p-2 -ml-1 text-[#5B6875] hover:text-[#243447] hover:bg-[#EAF2F7] rounded-md lg:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#315A7D]"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-
+    <header className="flex min-h-[4.5rem] items-center justify-between border-b border-[#E3E8DF]/50 bg-transparent px-4 py-3 transition-colors sm:px-6 lg:px-10">
+      <div className="flex min-w-0 items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] hidden sm:inline">
-            SmartEstate /
-          </span>
-          <h2 className="text-lg sm:text-xl font-serif font-bold text-[#243447] capitalize tracking-normal">
+          <h2 className="truncate font-serif text-xl font-semibold tracking-tight text-[#243447] sm:text-2xl">
             {title}
           </h2>
         </div>
@@ -50,7 +34,7 @@ export default function Topbar({
         {/* Notification Bell */}
         <NotificationBell />
 
-        <div className="h-5 w-px bg-[#D9E0E6] mx-0.5" />
+        <div className="h-5 w-px bg-[#E3E8DF] mx-0.5" />
 
         {/* User Profile & Logout */}
         <UserMenu role={role} />

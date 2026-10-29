@@ -136,22 +136,22 @@ export default function OwnerVerificationPage() {
                 Pending Owner Account Registrations
               </h2>
               <p className="text-xs text-[#5B6875]">
-                Real database records from <code className="font-mono bg-white px-1 py-0.5 rounded border border-[#D9E0E6]">GET /api/users/filter?role=PROPERTY_OWNER&amp;status=PENDING</code>
+                Real database records from <code className="font-mono bg-white px-1 py-0.5 rounded border border-[#E3E8DF]">GET /api/users/filter?role=PROPERTY_OWNER&amp;status=PENDING</code>
               </p>
             </div>
             {!loading && (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                 {owners.length} Pending Account{owners.length === 1 ? '' : 's'}
               </span>
             )}
           </div>
 
           {loading ? (
-            <div className="flex justify-center rounded-lg border border-[#D9E0E6] bg-white p-12 shadow-2xs">
+            <div className="flex justify-center rounded-lg border border-[#E3E8DF] bg-white p-12 shadow-2xs">
               <Loader text="Loading pending owner accounts from backend..." size="md" center />
             </div>
           ) : owners.length === 0 ? (
-            <div className="rounded-lg border border-[#D9E0E6] bg-white p-8 shadow-2xs">
+            <div className="rounded-lg border border-[#E3E8DF] bg-white p-8 shadow-2xs">
               <EmptyState
                 icon={<ShieldCheck className="h-8 w-8 text-[#3F7D58]" />}
                 title={error ? 'Owner accounts unavailable' : 'No pending owner accounts'}
@@ -163,10 +163,10 @@ export default function OwnerVerificationPage() {
               />
             </div>
           ) : (
-            <div className="overflow-hidden rounded-lg border border-[#D9E0E6] bg-white shadow-2xs">
+            <div className="overflow-hidden rounded-lg border border-[#E3E8DF] bg-white shadow-2xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-[#F7F8FA] text-[11px] uppercase tracking-wider text-[#5B6875] border-b border-[#D9E0E6]">
+                  <thead className="bg-[#F7F7F1] text-[11px] uppercase tracking-wider text-[#5B6875] border-b border-[#E3E8DF]">
                     <tr>
                       <th className="p-3.5">Owner Name</th>
                       <th className="p-3.5">Email</th>
@@ -175,7 +175,7 @@ export default function OwnerVerificationPage() {
                       <th className="p-3.5 text-right">Account Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#D9E0E6]">
+                  <tbody className="divide-y divide-[#E3E8DF]">
                     {owners.map((owner) => {
                       const id = owner.id ?? owner.userId
                       const name =
@@ -184,10 +184,10 @@ export default function OwnerVerificationPage() {
                         `Owner #${id ?? '—'}`
 
                       return (
-                        <tr key={id ?? owner.email} className="hover:bg-[#F7F8FA]/60 transition-colors">
+                        <tr key={id ?? owner.email} className="hover:bg-[#F7F7F1]/60 transition-colors">
                           <td className="p-3.5 font-medium text-[#243447]">
                             <span className="inline-flex items-center gap-2">
-                              <Building2 className="h-4 w-4 text-[#315A7D] shrink-0" />
+                              <Building2 className="h-4 w-4 text-[#3F7D58] shrink-0" />
                               {name}
                             </span>
                           </td>

@@ -1016,13 +1016,13 @@ export default function PropertySearchPage() {
         {/* SECTION 1 — YOUR PREFERENCES ("Find Your Next Home")      */}
         {/* ========================================================= */}
         {isUserTenant && (
-          <div className="rounded-lg bg-white border border-[#D9E0E6] shadow-2xs overflow-hidden">
+          <div className="rounded-lg bg-white border border-[#E3E8DF] shadow-2xs overflow-hidden">
             {/* Preference Section Header */}
-            <div className="p-5 sm:p-6 border-b border-[#D9E0E6] bg-[#F7F8FA]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-5 sm:p-6 border-b border-[#E3E8DF] bg-[#F7F7F1]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20">
-                    <Sliders className="w-3 h-3 text-[#315A7D]" />
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
+                    <Sliders className="w-3 h-3 text-[#3F7D58]" />
                     Your Rental Preferences
                   </span>
                   {hasExistingPreferences ? (
@@ -1050,7 +1050,7 @@ export default function PropertySearchPage() {
                 <button
                   type="button"
                   onClick={() => setIsPreferencesCollapsed((prev) => !prev)}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-[#D9E0E6] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                   title={isPreferencesCollapsed ? 'Expand Preferences Form' : 'Collapse Preferences Form'}
                 >
                   <span>{isPreferencesCollapsed ? 'Edit Preferences' : 'Hide Controls'}</span>
@@ -1097,7 +1097,7 @@ export default function PropertySearchPage() {
               <form onSubmit={handleSavePreferences} className="p-5 sm:p-6 space-y-5">
                 {isPrefLoading ? (
                   <div className="py-8 flex flex-col items-center justify-center text-center space-y-2">
-                    <RefreshCw className="w-5 h-5 text-[#315A7D] animate-spin" />
+                    <RefreshCw className="w-5 h-5 text-[#3F7D58] animate-spin" />
                     <span className="text-xs text-[#5B6875]">Loading your saved preferences...</span>
                   </div>
                 ) : (
@@ -1200,7 +1200,7 @@ export default function PropertySearchPage() {
                         <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                           Parking Requirement
                         </label>
-                        <label className="flex items-center gap-2.5 h-[42px] px-3.5 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] hover:bg-[#EAF2F7]/50 cursor-pointer transition-colors">
+                        <label className="flex items-center gap-2.5 h-[42px] px-3.5 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] hover:bg-[#EDF4ED]/50 cursor-pointer transition-colors">
                           <input
                             type="checkbox"
                             checked={preferenceData.parkingRequired}
@@ -1208,7 +1208,7 @@ export default function PropertySearchPage() {
                               setPreferenceData((prev) => ({ ...prev, parkingRequired: e.target.checked }))
                             }
                             disabled={isPrefSaving}
-                            className="w-4 h-4 rounded text-[#315A7D] focus:ring-[#315A7D] border-[#D9E0E6]"
+                            className="w-4 h-4 rounded text-[#3F7D58] focus:ring-[#3F7D58] border-[#E3E8DF]"
                           />
                           <span className="text-xs font-medium text-[#243447] flex items-center gap-1.5">
                             <Car className="w-3.5 h-3.5 text-[#5B6875]" />
@@ -1265,7 +1265,7 @@ export default function PropertySearchPage() {
 
                         {/* Inline reverse-geocode feedback (loading / error) */}
                         {hubGeoLoading && (
-                          <div className="flex items-center gap-1.5 text-[11px] text-[#315A7D] px-1">
+                          <div className="flex items-center gap-1.5 text-[11px] text-[#3F7D58] px-1">
                             <RefreshCw className="w-3 h-3 animate-spin shrink-0" />
                             <span>Looking up address from coordinates…</span>
                           </div>
@@ -1279,8 +1279,8 @@ export default function PropertySearchPage() {
 
                         {/* Read-only coordinate display */}
                         {preferenceData.preferredLatitude !== '' && preferenceData.preferredLongitude !== '' && (
-                          <div className="flex items-center gap-3 px-2 py-1.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] text-[11px] text-[#5B6875]">
-                            <MapPin className="w-3 h-3 text-[#315A7D] shrink-0" />
+                          <div className="flex items-center gap-3 px-2 py-1.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-[11px] text-[#5B6875]">
+                            <MapPin className="w-3 h-3 text-[#3F7D58] shrink-0" />
                             <span>
                               Lat:{' '}
                               <strong className="font-mono text-[#243447]">{preferenceData.preferredLatitude}</strong>
@@ -1295,7 +1295,7 @@ export default function PropertySearchPage() {
                     </div>
 
                     {/* Preferred amenities are loaded from GET /api/amenities and saved as IDs. */}
-                    <div className="space-y-2 pt-1 border-t border-[#D9E0E6]">
+                    <div className="space-y-2 pt-1 border-t border-[#E3E8DF]">
                       <label className="block text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                         Preferred Amenities
                       </label>
@@ -1315,11 +1315,11 @@ export default function PropertySearchPage() {
                                 aria-pressed={isSelected}
                                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer border ${
                                   isSelected
-                                    ? 'bg-[#EAF2F7] text-[#315A7D] border-[#315A7D]/40 font-semibold'
-                                    : 'bg-white text-[#5B6875] border-[#D9E0E6] hover:bg-[#F7F8FA] hover:text-[#243447]'
+                                    ? 'bg-[#EDF4ED] text-[#3F7D58] border-[#3F7D58]/40 font-semibold'
+                                    : 'bg-white text-[#5B6875] border-[#E3E8DF] hover:bg-[#F7F7F1] hover:text-[#243447]'
                                 }`}
                               >
-                                {isSelected && <Check className="w-3.5 h-3.5 text-[#315A7D]" />}
+                                {isSelected && <Check className="w-3.5 h-3.5 text-[#3F7D58]" />}
                                 <span>{amenity.amenityName || amenity.name}</span>
                               </button>
                             )
@@ -1344,12 +1344,12 @@ export default function PropertySearchPage() {
                     </div>
 
                     {/* Actions Bar */}
-                    <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#D9E0E6]">
+                    <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E3E8DF]">
                       <button
                         type="button"
                         onClick={handleResetPreferences}
                         disabled={isPrefSaving}
-                        className="px-3.5 py-2 rounded-md border border-[#D9E0E6] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] disabled:opacity-50 transition-colors cursor-pointer"
+                        className="px-3.5 py-2 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
                       >
                         Reset Form
                       </button>
@@ -1383,12 +1383,12 @@ export default function PropertySearchPage() {
         {/* SECTION 2 — RECOMMENDED FOR YOU (AI Recommendations)      */}
         {/* ========================================================= */}
         {isUserTenant && (
-          <div className="rounded-lg bg-white border border-[#D9E0E6] p-5 sm:p-6 shadow-2xs space-y-4">
+          <div className="rounded-lg bg-white border border-[#E3E8DF] p-5 sm:p-6 shadow-2xs space-y-4">
             {/* Recommendation Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E6] pb-3.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E8DF] pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-md bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 border border-[#D9E0E6]">
-                  <Sparkles className="w-4 h-4 text-[#315A7D]" />
+                <div className="w-8 h-8 rounded-md bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 border border-[#E3E8DF]">
+                  <Sparkles className="w-4 h-4 text-[#3F7D58]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -1396,7 +1396,7 @@ export default function PropertySearchPage() {
                       Recommended For You
                     </h2>
                     {aiModelVersion && (
-                      <span className="text-[10px] font-mono text-[#5B6875] bg-[#F7F8FA] px-1.5 py-0.5 rounded border border-[#D9E0E6]">
+                      <span className="text-[10px] font-mono text-[#5B6875] bg-[#F7F7F1] px-1.5 py-0.5 rounded border border-[#E3E8DF]">
                         {aiModelVersion}
                       </span>
                     )}
@@ -1414,7 +1414,7 @@ export default function PropertySearchPage() {
 
               <div className="flex items-center gap-2 self-start sm:self-center">
                 {aiRecommendations.length > 0 && !isAiLoading && (
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
                     {aiRecommendations.length} {aiRecommendations.length === 1 ? 'Match' : 'Matches'}
                   </span>
                 )}
@@ -1422,16 +1422,16 @@ export default function PropertySearchPage() {
                   type="button"
                   onClick={handleRefreshRecommendations}
                   disabled={isAiLoading || !isUserTenant}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-[#D9E0E6] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] disabled:opacity-50 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-[#E3E8DF] text-xs font-medium text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] disabled:opacity-50 transition-colors cursor-pointer"
                   title="Refresh AI Recommendations"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin text-[#315A7D]' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin text-[#3F7D58]' : ''}`} />
                   <span className="hidden sm:inline">Refresh</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsAiSectionCollapsed((prev) => !prev)}
-                  className="p-1.5 rounded-md border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-md border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                   title={isAiSectionCollapsed ? 'Expand Recommendations' : 'Collapse Recommendations'}
                 >
                   {isAiSectionCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
@@ -1443,8 +1443,8 @@ export default function PropertySearchPage() {
             {!isAiSectionCollapsed && (
               <>
                 {isAiLoading ? (
-                  <div className="p-8 flex flex-col items-center justify-center text-center space-y-2.5 bg-[#F7F8FA] rounded-lg border border-[#D9E0E6]">
-                    <RefreshCw className="w-6 h-6 text-[#315A7D] animate-spin" />
+                  <div className="p-8 flex flex-col items-center justify-center text-center space-y-2.5 bg-[#F7F7F1] rounded-lg border border-[#E3E8DF]">
+                    <RefreshCw className="w-6 h-6 text-[#3F7D58] animate-spin" />
                     <p className="text-sm font-medium text-[#243447]">Calculating personalized property matches...</p>
                   </div>
                 ) : aiError ? (
@@ -1463,8 +1463,8 @@ export default function PropertySearchPage() {
                     </button>
                   </div>
                 ) : aiRecommendations.length === 0 ? (
-                  <div className="p-8 flex flex-col items-center justify-center text-center space-y-2.5 bg-[#F7F8FA] rounded-lg border border-[#D9E0E6]">
-                    <div className="w-10 h-10 rounded-full bg-[#EAF2F7] flex items-center justify-center text-[#315A7D]">
+                  <div className="p-8 flex flex-col items-center justify-center text-center space-y-2.5 bg-[#F7F7F1] rounded-lg border border-[#E3E8DF]">
+                    <div className="w-10 h-10 rounded-full bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58]">
                       <Sparkles className="w-5 h-5" />
                     </div>
                     <p className="text-sm font-semibold text-[#243447]">
@@ -1519,7 +1519,7 @@ export default function PropertySearchPage() {
         {/* ========================================================= */}
         <div className="space-y-4 pt-1">
           {/* Section 3 Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#D9E0E6] pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E3E8DF] pb-3">
             <div>
               <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#243447]">
                 All Properties
@@ -1529,11 +1529,11 @@ export default function PropertySearchPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-[#5B6875] bg-[#F7F8FA] px-2.5 py-1 rounded-md border border-[#D9E0E6]">
+              <span className="text-xs font-medium text-[#5B6875] bg-[#F7F7F1] px-2.5 py-1 rounded-md border border-[#E3E8DF]">
                 {filteredProperties.length} {filteredProperties.length === 1 ? 'property' : 'properties'} found
               </span>
               {stats.avgRent != null && (
-                <span className="hidden md:inline-flex text-xs font-medium text-[#5B6875] bg-[#F7F8FA] px-2.5 py-1 rounded-md border border-[#D9E0E6]">
+                <span className="hidden md:inline-flex text-xs font-medium text-[#5B6875] bg-[#F7F7F1] px-2.5 py-1 rounded-md border border-[#E3E8DF]">
                   Avg ₹{stats.avgRent}/mo
                 </span>
               )}

@@ -456,7 +456,7 @@ export default function CreateAgreementPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <Link
             to={`${basePath}/agreements`}
-            className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+            className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Agreements</span>
@@ -468,9 +468,9 @@ export default function CreateAgreementPage() {
         </div>
 
         {/* Page Header */}
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#315A7D] text-white shadow-sm">
+            <div className="p-2.5 rounded-xl bg-[#3F7D58] text-white shadow-sm">
               <FileText className="w-6 h-6" />
             </div>
             <div>
@@ -489,12 +489,12 @@ export default function CreateAgreementPage() {
 
         {/* Global Loading State */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading approved applications..." size="md" center />
           </div>
         ) : loadError ? (
           /* Error State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs">
             <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
               <div>
@@ -505,9 +505,9 @@ export default function CreateAgreementPage() {
           </div>
         ) : approvedApplications.length === 0 ? (
           /* Empty Approved Applications State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
-              icon={<FileCheck className="w-8 h-8 text-[#315A7D]" />}
+              icon={<FileCheck className="w-8 h-8 text-[#3F7D58]" />}
               title="No Approved Applications Available"
               message="Rental agreements must be generated from an APPROVED rental application. Review and approve a pending application to create an agreement."
               action={
@@ -571,10 +571,10 @@ export default function CreateAgreementPage() {
             )}
 
             {/* Section 1: Approved Rental Application Selection */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                  <FileCheck className="w-4 h-4 text-[#315A7D]" />
+                  <FileCheck className="w-4 h-4 text-[#3F7D58]" />
                   1. Select Approved Application
                 </h2>
                 <span className="text-xs text-[#5B6875]">
@@ -596,8 +596,8 @@ export default function CreateAgreementPage() {
 
               {/* Real Application Details Summary Card */}
               {selectedApp && (
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-3">
-                  <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#D9E0E6] pb-2.5">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#E3E8DF] pb-2.5">
                     <span className="font-bold text-xs uppercase tracking-wider text-[#5B6875]">
                       Application Details (Verified)
                     </span>
@@ -607,7 +607,7 @@ export default function CreateAgreementPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                     <div className="space-y-1">
                       <span className="text-[#5B6875] flex items-center gap-1 font-medium">
-                        <User className="w-3.5 h-3.5 text-[#315A7D]" />
+                        <User className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Tenant
                       </span>
                       <p className="font-bold text-[#243447]">
@@ -622,7 +622,7 @@ export default function CreateAgreementPage() {
 
                     <div className="space-y-1">
                       <span className="text-[#5B6875] flex items-center gap-1 font-medium">
-                        <Home className="w-3.5 h-3.5 text-[#315A7D]" />
+                        <Home className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Property
                       </span>
                       <p className="font-bold text-[#243447]">
@@ -637,7 +637,7 @@ export default function CreateAgreementPage() {
 
                     <div className="space-y-1">
                       <span className="text-[#5B6875] flex items-center gap-1 font-medium">
-                        <DoorOpen className="w-3.5 h-3.5 text-[#315A7D]" />
+                        <DoorOpen className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Unit
                       </span>
                       <p className="font-bold text-[#243447]">
@@ -651,7 +651,7 @@ export default function CreateAgreementPage() {
 
                     <div className="space-y-1">
                       <span className="text-[#5B6875] flex items-center gap-1 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-[#315A7D]" />
+                        <Calendar className="w-3.5 h-3.5 text-[#3F7D58]" />
                         Preferred Move-in
                       </span>
                       <p className="font-bold text-[#243447]">
@@ -664,8 +664,8 @@ export default function CreateAgreementPage() {
             </div>
 
             {/* Section 2: Financial Terms & Rent Schedule */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
                 <IndianRupee className="w-4 h-4 text-[#3F7D58]" />
                 2. Financial Terms
               </h2>
@@ -724,9 +724,9 @@ export default function CreateAgreementPage() {
             </div>
 
             {/* Section 3: Lease Duration Dates & Special Terms */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-                <Calendar className="w-4 h-4 text-[#315A7D]" />
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+                <Calendar className="w-4 h-4 text-[#3F7D58]" />
                 3. Lease Term Dates & Special Provisions
               </h2>
 
@@ -779,10 +779,10 @@ export default function CreateAgreementPage() {
             </div>
 
             {/* Section 4: Official Agreement Document Upload */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#D9E0E6] pb-3">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-                  <Upload className="w-4 h-4 text-[#315A7D]" />
+                  <Upload className="w-4 h-4 text-[#3F7D58]" />
                   4. Agreement Document (Optional)
                 </h2>
                 <span className="text-xs text-[#5B6875]">PDF, JPG, PNG (Max 10MB)</span>
@@ -818,13 +818,13 @@ export default function CreateAgreementPage() {
                   onClick={() => fileInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
                     isDragOver
-                      ? 'border-[#315A7D] bg-[#EAF2F7]/50'
-                      : 'border-[#D9E0E6] bg-[#F7F8FA] hover:border-[#315A7D]/60 hover:bg-[#F2F6FA]'
+                      ? 'border-[#3F7D58] bg-[#EDF4ED]/50'
+                      : 'border-[#E3E8DF] bg-[#F7F7F1] hover:border-[#3F7D58]/60 hover:bg-[#F2F6FA]'
                   }`}
                 >
                   <div className="flex flex-col items-center justify-center space-y-2.5">
-                    <div className="w-12 h-12 rounded-xl bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] border border-[#D9E0E6]/80 shadow-2xs">
-                      <Upload className="w-5 h-5 text-[#315A7D]" />
+                    <div className="w-12 h-12 rounded-xl bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] border border-[#E3E8DF]/80 shadow-2xs">
+                      <Upload className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-[#243447]">
@@ -834,7 +834,7 @@ export default function CreateAgreementPage() {
                         Accepts PDF documents and images (JPG, PNG) up to 10MB
                       </p>
                     </div>
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#315A7D] mt-1">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#3F7D58] mt-1">
                       <Paperclip className="w-3.5 h-3.5" />
                       Browse Files
                     </span>
@@ -842,10 +842,10 @@ export default function CreateAgreementPage() {
                 </div>
               ) : (
                 /* Selected File Card */
-                <div className="rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#EAF2F7] flex items-center justify-center text-[#315A7D] shrink-0 border border-[#D9E0E6]">
-                      <FileText className="w-5 h-5 text-[#315A7D]" />
+                    <div className="w-10 h-10 rounded-lg bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 border border-[#E3E8DF]">
+                      <FileText className="w-5 h-5 text-[#3F7D58]" />
                     </div>
                     <div>
                       <p className="font-semibold text-sm text-[#243447] truncate max-w-[260px] sm:max-w-md">
@@ -862,7 +862,7 @@ export default function CreateAgreementPage() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isSubmitting || isUploadingDocument}
-                      className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#D9E0E6] text-[#243447] bg-white hover:bg-[#F7F8FA] transition-colors cursor-pointer"
+                      className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E3E8DF] text-[#243447] bg-white hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                     >
                       Change File
                     </button>

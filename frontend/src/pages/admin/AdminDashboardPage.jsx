@@ -141,8 +141,8 @@ export default function AdminDashboardPage() {
       label: 'Total Registered Users',
       value: displayMetric(totalUsers, 'users'),
       subtext: dataAvailability.users ? `${totalUsers} platform accounts in database` : 'User data unavailable',
-      icon: <Users className="w-5 h-5 text-[#315A7D]" />,
-      bg: 'bg-[#EAF2F7] border-[#D9E0E6]',
+      icon: <Users className="w-5 h-5 text-[#3F7D58]" />,
+      bg: 'bg-[#EDF4ED] border-[#E3E8DF]',
       link: '/admin/users',
     },
     {
@@ -173,8 +173,8 @@ export default function AdminDashboardPage() {
       label: 'Registered Tenants',
       value: displayMetric(tenants, 'users'),
       subtext: dataAvailability.users ? 'Tenant and resident accounts' : 'User data unavailable',
-      icon: <UserCheck className="w-5 h-5 text-[#315A7D]" />,
-      bg: 'bg-[#EAF2F7] border-[#D9E0E6]',
+      icon: <UserCheck className="w-5 h-5 text-[#3F7D58]" />,
+      bg: 'bg-[#EDF4ED] border-[#E3E8DF]',
       link: '/admin/users',
     },
     {
@@ -183,15 +183,15 @@ export default function AdminDashboardPage() {
       value: displayMetric(openMaintenance, 'maintenance'),
       subtext: dataAvailability.maintenance ? `${maintenanceRequests.length} total tickets recorded` : 'Maintenance data unavailable',
       icon: <Wrench className="w-5 h-5 text-[#5B6875]" />,
-      bg: 'bg-[#F0F4F7] border-[#D9E0E6]',
+      bg: 'bg-[#F0F4F7] border-[#E3E8DF]',
     },
     {
       id: 'total-invoices',
       label: 'Platform Rent Invoices',
       value: displayMetric(invoices.length, 'invoices'),
       subtext: dataAvailability.invoices ? 'Rent invoice transaction records' : 'Invoice data unavailable',
-      icon: <FileBarChart className="w-5 h-5 text-[#315A7D]" />,
-      bg: 'bg-[#EAF2F7] border-[#D9E0E6]',
+      icon: <FileBarChart className="w-5 h-5 text-[#3F7D58]" />,
+      bg: 'bg-[#EDF4ED] border-[#E3E8DF]',
       link: '/admin/reports',
     },
   ]
@@ -287,7 +287,7 @@ export default function AdminDashboardPage() {
         )}
 
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader text="Loading live administration data from backend..." size="md" center />
           </div>
         ) : (
@@ -299,7 +299,7 @@ export default function AdminDashboardPage() {
                   <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#243447]">
                     Super Admin Control Center
                   </h1>
-                  <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                  <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                     Platform Root
                   </span>
                 </div>
@@ -323,14 +323,14 @@ export default function AdminDashboardPage() {
               {summaryMetrics.map((card) => {
                 const cardContent = (
                   <div
-                    className={`rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs transition-all flex items-start justify-between h-full ${
+                    className={`rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs transition-all flex items-start justify-between h-full ${
                       card.link
-                        ? 'hover:border-[#315A7D] hover:shadow-xs cursor-pointer group'
+                        ? 'hover:border-[#3F7D58] hover:shadow-xs cursor-pointer group'
                         : ''
                     }`}
                   >
                     <div>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block group-hover:text-[#315A7D] transition-colors">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block group-hover:text-[#3F7D58] transition-colors">
                         {card.label}
                       </span>
                       <div className="text-2xl font-bold tracking-tight text-[#243447] mt-1">
@@ -357,10 +357,10 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Platform Registered Users Overview */}
-            <div className="bg-white rounded-lg border border-[#D9E0E6] shadow-2xs overflow-hidden">
-              <div className="p-4 border-b border-[#D9E0E6] bg-[#F7F8FA] flex items-center justify-between">
+            <div className="bg-white rounded-lg border border-[#E3E8DF] shadow-2xs overflow-hidden">
+              <div className="p-4 border-b border-[#E3E8DF] bg-[#F7F7F1] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#315A7D]" />
+                  <Users className="w-4 h-4 text-[#3F7D58]" />
                   <h2 className="text-xs sm:text-sm font-semibold text-[#243447]">
                     Recent Registered Platform Users
                   </h2>
@@ -380,7 +380,7 @@ export default function AdminDashboardPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-xs sm:text-sm">
                     <thead>
-                      <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-semibold uppercase tracking-wider text-[#5B6875]">
+                      <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-semibold uppercase tracking-wider text-[#5B6875]">
                         <th className="py-2.5 pl-4 pr-3">User ID</th>
                         <th className="py-2.5 px-3">Name</th>
                         <th className="py-2.5 px-3">Email</th>
@@ -388,7 +388,7 @@ export default function AdminDashboardPage() {
                         <th className="py-2.5 pl-3 pr-4 text-right">Account Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#D9E0E6]">
+                    <tbody className="divide-y divide-[#E3E8DF]">
                       {users.slice(0, 8).map((u) => {
                         const uid = u.id || u.userId || '—'
                         const displayName =
@@ -401,9 +401,9 @@ export default function AdminDashboardPage() {
                         return (
                           <tr
                             key={uid}
-                            className="hover:bg-[#F7F8FA]/60 transition-colors"
+                            className="hover:bg-[#F7F7F1]/60 transition-colors"
                           >
-                            <td className="py-2.5 pl-4 pr-3 font-mono font-medium text-[#315A7D]">
+                            <td className="py-2.5 pl-4 pr-3 font-mono font-medium text-[#3F7D58]">
                               #{uid}
                             </td>
                             <td className="py-2.5 px-3 font-medium text-[#243447]">
@@ -413,7 +413,7 @@ export default function AdminDashboardPage() {
                               {u.email}
                             </td>
                             <td className="py-2.5 px-3">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                                 {roleStr}
                               </span>
                             </td>
@@ -447,19 +447,19 @@ export default function AdminDashboardPage() {
                   <Link
                     key={mod.name}
                     to={mod.route}
-                    className="block rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-2xs hover:border-[#315A7D] hover:shadow-xs transition-all group"
+                    className="block rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs hover:border-[#3F7D58] hover:shadow-xs transition-all group"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#315A7D] transition-colors">
+                          <h3 className="text-sm font-bold text-[#243447] group-hover:text-[#3F7D58] transition-colors">
                             {mod.name}
                           </h3>
                         </div>
                         <p className="mt-1 text-xs text-[#5B6875]">
                           {mod.description}
                         </p>
-                        <div className="mt-2 text-[11px] font-mono text-[#5B6875] bg-[#F7F8FA] px-2 py-0.5 rounded border border-[#D9E0E6] inline-block">
+                        <div className="mt-2 text-[11px] font-mono text-[#5B6875] bg-[#F7F7F1] px-2 py-0.5 rounded border border-[#E3E8DF] inline-block">
                           {mod.endpoints}
                         </div>
                       </div>

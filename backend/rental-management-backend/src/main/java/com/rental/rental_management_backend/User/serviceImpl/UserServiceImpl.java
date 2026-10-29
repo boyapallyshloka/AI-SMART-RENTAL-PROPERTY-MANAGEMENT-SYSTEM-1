@@ -799,6 +799,7 @@ public class UserServiceImpl implements UserService {
         response.setGender(user.getGender());
         response.setRole(user.getRole());
         response.setStatus(user.getStatus());
+        response.setSelfDeactivated(user.isSelfDeactivated());
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
 

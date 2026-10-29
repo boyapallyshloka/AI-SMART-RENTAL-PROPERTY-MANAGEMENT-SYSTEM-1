@@ -238,7 +238,7 @@ export default function PropertyDetailsPage({
       )
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#F7F8FA] text-[#5B6875] border border-[#D9E0E6]">
+      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#F7F7F1] text-[#5B6875] border border-[#E3E8DF]">
         {status || 'Unknown'}
       </span>
     )
@@ -252,36 +252,36 @@ export default function PropertyDetailsPage({
       <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-screen space-y-6 pb-20 animate-pulse">
           {/* Top Bar Skeleton */}
-          <div className="flex items-center justify-between py-2 border-b border-[#D9E0E6]">
-            <div className="h-6 w-36 bg-[#EAF2F7] rounded-md" />
+          <div className="flex items-center justify-between py-2 border-b border-[#E3E8DF]">
+            <div className="h-6 w-36 bg-[#EDF4ED] rounded-md" />
             <div className="flex gap-2">
-              <div className="h-7 w-20 bg-[#EAF2F7] rounded-md" />
-              <div className="h-7 w-20 bg-[#EAF2F7] rounded-md" />
+              <div className="h-7 w-20 bg-[#EDF4ED] rounded-md" />
+              <div className="h-7 w-20 bg-[#EDF4ED] rounded-md" />
             </div>
           </div>
 
           {/* Header Skeleton */}
           <div className="space-y-3">
             <div className="flex gap-2">
-              <div className="h-5 w-24 bg-[#EAF2F7] rounded-md" />
-              <div className="h-5 w-20 bg-[#EAF2F7] rounded-md" />
+              <div className="h-5 w-24 bg-[#EDF4ED] rounded-md" />
+              <div className="h-5 w-20 bg-[#EDF4ED] rounded-md" />
             </div>
-            <div className="h-8 w-72 bg-[#EAF2F7] rounded-md" />
-            <div className="h-4 w-96 bg-[#EAF2F7] rounded-md" />
+            <div className="h-8 w-72 bg-[#EDF4ED] rounded-md" />
+            <div className="h-4 w-96 bg-[#EDF4ED] rounded-md" />
           </div>
 
           {/* Gallery Skeleton */}
-          <div className="aspect-[16/9] md:aspect-[21/9] w-full rounded-lg bg-[#EAF2F7] border border-[#D9E0E6]" />
+          <div className="aspect-[16/9] md:aspect-[21/9] w-full rounded-lg bg-[#EDF4ED] border border-[#E3E8DF]" />
 
           {/* Two-Column Skeleton */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4">
             <div className="lg:col-span-8 space-y-6">
-              <div className="h-48 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6]" />
-              <div className="h-32 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6]" />
-              <div className="h-64 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6]" />
+              <div className="h-48 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF]" />
+              <div className="h-32 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF]" />
+              <div className="h-64 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF]" />
             </div>
             <div className="lg:col-span-4 space-y-4">
-              <div className="h-80 rounded-lg bg-[#EAF2F7] border border-[#D9E0E6]" />
+              <div className="h-80 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF]" />
             </div>
           </div>
         </div>
@@ -304,7 +304,7 @@ export default function PropertyDetailsPage({
               <ShieldAlert className="h-8 w-8" />
             </div>
           ) : is404 ? (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] mb-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] mb-4">
               <Building2 className="h-8 w-8" />
             </div>
           ) : (
@@ -337,7 +337,7 @@ export default function PropertyDetailsPage({
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center gap-1.5 rounded-md border border-[#D9E0E6] bg-white px-4 py-2 text-xs font-semibold text-[#243447] hover:bg-[#F7F8FA] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-md border border-[#E3E8DF] bg-white px-4 py-2 text-xs font-semibold text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#5B6875]" />
               <span>Back to Properties</span>
@@ -347,7 +347,7 @@ export default function PropertyDetailsPage({
             <button
               type="button"
               onClick={loadDetails}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#315A7D] px-4 py-2 text-xs font-semibold text-white shadow-2xs hover:bg-[#274B68] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-md bg-[#3F7D58] px-4 py-2 text-xs font-semibold text-white shadow-2xs hover:bg-[#315F46] transition-colors cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Try Again</span>
@@ -365,7 +365,7 @@ export default function PropertyDetailsPage({
     return (
       <PageLayout defaultRole="tenant" activeItem="find-properties" pageTitle="Property Details">
         <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] mb-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] mb-3">
             <Building2 className="h-7 w-7" />
           </div>
           <h2 className="text-xl font-bold text-[#243447]">No Property Selected</h2>
@@ -375,7 +375,7 @@ export default function PropertyDetailsPage({
           <button
             type="button"
             onClick={handleBack}
-            className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-[#315A7D] px-4 py-2 text-xs font-semibold text-white shadow-2xs hover:bg-[#274B68] transition-colors cursor-pointer"
+            className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-[#3F7D58] px-4 py-2 text-xs font-semibold text-white shadow-2xs hover:bg-[#315F46] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Browse Properties</span>
@@ -395,13 +395,13 @@ export default function PropertyDetailsPage({
     >
       <div className={`${publicMode ? 'mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8' : 'min-h-screen pb-20'} space-y-6`}>
         {/* 1. Navigation Top Bar */}
-        <div className="flex flex-col gap-3 border-b border-[#D9E0E6] py-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 border-b border-[#E3E8DF] py-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex min-w-0 items-center gap-2 self-start text-sm font-semibold text-[#243447] hover:text-[#315A7D] transition-colors cursor-pointer"
+            className="inline-flex min-w-0 items-center gap-2 self-start text-sm font-semibold text-[#243447] hover:text-[#3F7D58] transition-colors cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4 text-[#315A7D]" />
+            <ArrowLeft className="w-4 h-4 text-[#3F7D58]" />
             <span>Back to All Properties</span>
           </button>
 
@@ -409,7 +409,7 @@ export default function PropertyDetailsPage({
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#D9E0E6] bg-white text-xs font-medium text-[#243447] hover:bg-[#F7F8FA] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#E3E8DF] bg-white text-xs font-medium text-[#243447] hover:bg-[#F7F7F1] transition-colors cursor-pointer"
             >
               <Share2 className="w-3.5 h-3.5 text-[#5B6875]" />
               <span>{copiedLink ? 'Link Copied!' : 'Share'}</span>
@@ -422,7 +422,7 @@ export default function PropertyDetailsPage({
         <div className="min-w-0 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-md text-xs font-semibold bg-[#EAF2F7] text-[#315A7D] border border-[#315A7D]/20 uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-md text-xs font-semibold bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20 uppercase tracking-wider">
                 {property.propertyType || '—'}
               </span>
               {getPropertyStatusBadge(property.status)}
@@ -434,7 +434,7 @@ export default function PropertyDetailsPage({
           </h1>
 
           <p className="flex min-w-0 items-start gap-1.5 text-sm leading-5 text-[#5B6875]">
-            <MapPin className="w-4 h-4 text-[#315A7D] shrink-0" />
+            <MapPin className="w-4 h-4 text-[#3F7D58] shrink-0" />
             <span className="min-w-0 break-words">{formattedAddress || 'Address details in specs below'}</span>
           </p>
         </div>
@@ -444,7 +444,7 @@ export default function PropertyDetailsPage({
           {imageList.length > 0 ? (
             <>
               {/* Main Display Image */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#D9E0E6] bg-[#EAF2F7] shadow-2xs sm:aspect-[16/9] xl:aspect-[21/9]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#E3E8DF] bg-[#EDF4ED] shadow-2xs sm:aspect-[16/9] xl:aspect-[21/9]">
                 <img
                   src={imageList[activeImageIndex] || imageList[0]}
                   alt={`${property.propertyName} preview`}
@@ -469,8 +469,8 @@ export default function PropertyDetailsPage({
                       aria-label={`Show photo ${idx + 1} of ${imageList.length}`}
                       className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-md border-2 transition-all cursor-pointer ${
                         activeImageIndex === idx
-                          ? 'border-[#315A7D] ring-2 ring-[#315A7D]/30'
-                          : 'border-[#D9E0E6] opacity-75 hover:opacity-100'
+                          ? 'border-[#3F7D58] ring-2 ring-[#3F7D58]/30'
+                          : 'border-[#E3E8DF] opacity-75 hover:opacity-100'
                       }`}
                     >
                       <img
@@ -488,8 +488,8 @@ export default function PropertyDetailsPage({
             </>
           ) : (
             /* Clean placeholder when no images are uploaded */
-            <div className="aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full rounded-xl bg-[#F7F8FA] border-2 border-dashed border-[#D9E0E6] flex flex-col items-center justify-center text-center p-6 space-y-2">
-              <div className="p-4 rounded-full bg-[#EAF2F7] text-[#315A7D]">
+            <div className="aspect-[16/9] md:aspect-[21/9] max-h-[560px] w-full rounded-xl bg-[#F7F7F1] border-2 border-dashed border-[#E3E8DF] flex flex-col items-center justify-center text-center p-6 space-y-2">
+              <div className="p-4 rounded-full bg-[#EDF4ED] text-[#3F7D58]">
                 <Building className="w-8 h-8" />
               </div>
               <p className="text-sm font-semibold text-[#243447]">No Photos Uploaded Yet</p>
@@ -519,11 +519,11 @@ export default function PropertyDetailsPage({
 
           {/* Right Column: Sticky Inquiries / Action Card */}
           <div className="lg:col-span-4 lg:sticky lg:top-6 space-y-4">
-            <div className="rounded-lg border border-[#D9E0E6] bg-white p-6 shadow-2xs space-y-5">
+            <div className="rounded-lg border border-[#E3E8DF] bg-white p-6 shadow-2xs space-y-5">
               {/* Header */}
-              <div className="space-y-1 pb-4 border-b border-[#D9E0E6]">
+              <div className="space-y-1 pb-4 border-b border-[#E3E8DF]">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#315A7D] uppercase tracking-wide">
+                  <span className="text-xs font-bold text-[#3F7D58] uppercase tracking-wide">
                     Property Overview
                   </span>
                   {getPropertyStatusBadge(property.status)}
@@ -561,7 +561,7 @@ export default function PropertyDetailsPage({
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.monthlyRent != null && (
                   <div className="flex items-center justify-between py-1">
                     <span>Monthly Rent</span>
-                    <span className="font-semibold text-[#315A7D]">₹{Number(property.monthlyRent).toLocaleString('en-IN')} / mo</span>
+                    <span className="font-semibold text-[#3F7D58]">₹{Number(property.monthlyRent).toLocaleString('en-IN')} / mo</span>
                   </div>
                 )}
                 {['HOUSE', 'VILLA'].includes(String(property.propertyType || '').toUpperCase()) && property.securityDeposit != null && (
@@ -629,19 +629,19 @@ export default function PropertyDetailsPage({
                   onClick={() => {
                     handleApply()
                   }}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[#315A7D] hover:bg-[#274B68] px-5 py-3 text-sm font-semibold text-white shadow-2xs transition-colors cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[#3F7D58] hover:bg-[#315F46] px-5 py-3 text-sm font-semibold text-white shadow-2xs transition-colors cursor-pointer"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Apply for Property</span>
                 </button>
 
-                <p className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] px-4 py-3 text-xs text-[#5B6875]">
+                <p className="rounded-md border border-[#E3E8DF] bg-[#F7F7F1] px-4 py-3 text-xs text-[#5B6875]">
                   Tour scheduling is unavailable because the backend does not provide a tour-request service.
                 </p>
               </div>
 
               {/* Tenant Guarantee Badge */}
-              <div className="rounded-md bg-[#F7F8FA] border border-[#D9E0E6] p-3 flex items-start gap-2.5 text-[11px] text-[#5B6875]">
+              <div className="rounded-md bg-[#F7F7F1] border border-[#E3E8DF] p-3 flex items-start gap-2.5 text-[11px] text-[#5B6875]">
                 <ShieldCheck className="w-4 h-4 text-[#3F7D58] shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-[#243447]">SmartEstate Tenant Protection:</strong> Direct digital lease signing, verified owner listings, and transparent security deposit terms.

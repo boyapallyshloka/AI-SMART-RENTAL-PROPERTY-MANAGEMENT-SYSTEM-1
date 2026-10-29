@@ -26,7 +26,7 @@ export default function RentalDemandPrediction() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="flex items-center gap-2 text-lg font-bold tracking-tight text-[#17324D]">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#315A7D] text-white">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#3F7D58] text-white">
               <TrendingUp className="h-4 w-4" />
             </span>
             Rental demand forecast
@@ -37,13 +37,13 @@ export default function RentalDemandPrediction() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#D5E3EF] bg-white p-2">
-          <CalendarDays className="ml-1 h-4 w-4 text-[#315A7D]" />
+          <CalendarDays className="ml-1 h-4 w-4 text-[#3F7D58]" />
           <label className="sr-only" htmlFor="demand-year">Forecast year</label>
           <select
             id="demand-year"
             value={year}
             onChange={(event) => setYear(Number(event.target.value))}
-            className="rounded-lg border border-[#D9E0E6] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#315A7D]"
+            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
           >
             {[now.getFullYear() - 1, now.getFullYear(), now.getFullYear() + 1].map((option) => (
               <option key={option} value={option}>{option}</option>
@@ -54,7 +54,7 @@ export default function RentalDemandPrediction() {
             id="demand-month"
             value={month}
             onChange={(event) => setMonth(Number(event.target.value))}
-            className="rounded-lg border border-[#D9E0E6] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#315A7D]"
+            className="rounded-lg border border-[#E3E8DF] bg-white px-2.5 py-2 text-sm text-[#243447] outline-none focus:border-[#3F7D58]"
           >
             {months.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -66,20 +66,20 @@ export default function RentalDemandPrediction() {
       <div className="grid gap-3 sm:grid-cols-3">
         {categories.map(({ title, icon: Icon }) => (
           <div key={title} className="flex items-center gap-3 rounded-xl border border-[#D8E5EF] bg-white/90 p-4">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#EAF2F8] text-[#315A7D]">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#EAF2F8] text-[#3F7D58]">
               <Icon className="h-5 w-5" />
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-[#243447]">{title}</p>
               <p className="mt-0.5 text-xs text-[#60758A]">Forecast not available</p>
             </div>
-            <span className="ml-auto text-lg font-semibold text-[#315A7D]">—</span>
+            <span className="ml-auto text-lg font-semibold text-[#3F7D58]">—</span>
           </div>
         ))}
       </div>
 
       <p className="flex items-start gap-2 border-t border-[#D8E5EF] pt-3 text-xs leading-5 text-[#60758A]">
-        <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#315A7D]" />
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#3F7D58]" />
         This is a forecast dashboard layout; it does not display sample or predicted values until the backend service is integrated.
       </p>
     </section>

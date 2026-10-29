@@ -387,7 +387,7 @@ export default function TenantPaymentsPage() {
         email: user?.email || '',
       },
       theme: {
-        color: '#315A7D',
+        color: '#3F7D58',
       },
       // 3. In Checkout's success handler, send parameters to verifyRazorpayPayment
       handler: async function (response) {
@@ -569,15 +569,15 @@ export default function TenantPaymentsPage() {
 
         {/* Informational Banner Notice */}
         {bannerNotice && (
-          <div className="p-4 rounded-xl bg-[#EAF2F7] border border-[#C2D8E8] text-[#315A7D] text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xs animate-in fade-in slide-in-from-top-2">
+          <div className="p-4 rounded-xl bg-[#EDF4ED] border border-[#C2D8E8] text-[#3F7D58] text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xs animate-in fade-in slide-in-from-top-2">
             <div className="flex items-start gap-2.5">
-              <Info className="w-5 h-5 text-[#315A7D] shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-[#3F7D58] shrink-0 mt-0.5" />
               <span className="leading-relaxed">{bannerNotice}</span>
             </div>
             <button
               type="button"
               onClick={() => setBannerNotice('')}
-              className="text-[#315A7D] hover:text-[#274B68] font-bold px-1 ml-2"
+              className="text-[#3F7D58] hover:text-[#315F46] font-bold px-1 ml-2"
             >
               &times;
             </button>
@@ -625,12 +625,12 @@ export default function TenantPaymentsPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-12 shadow-xs flex justify-center">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-12 shadow-xs flex justify-center">
             <Loader text="Loading your billing invoices..." size="md" center />
           </div>
         ) : invoices.length === 0 ? (
           /* Empty State */
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-8 shadow-xs">
+          <div className="bg-white rounded-2xl border border-[#E3E8DF] p-8 shadow-xs">
             <EmptyState
               icon={<CreditCard className="w-8 h-8" />}
               title="No Payment Invoices Found"
@@ -642,7 +642,7 @@ export default function TenantPaymentsPage() {
             {/* 3 Summary Cards: Upcoming Due, Pending Dues, Total Paid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Upcoming Due */}
-              <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs flex items-center justify-between">
+              <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block">
                     Upcoming Due
@@ -658,13 +658,13 @@ export default function TenantPaymentsPage() {
                       : 'No upcoming dues'}
                   </span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6]">
+                <div className="p-3 rounded-xl bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF]">
                   <Clock className="w-5 h-5" />
                 </div>
               </div>
 
               {/* Pending Dues */}
-              <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs flex items-center justify-between">
+              <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block">
                     Pending Dues
@@ -682,7 +682,7 @@ export default function TenantPaymentsPage() {
               </div>
 
               {/* Total Paid */}
-              <div className="rounded-2xl border border-[#D9E0E6] bg-white p-5 shadow-xs flex items-center justify-between">
+              <div className="rounded-2xl border border-[#E3E8DF] bg-white p-5 shadow-xs flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875] block">
                     Total Paid
@@ -701,8 +701,8 @@ export default function TenantPaymentsPage() {
             </div>
 
             {/* Invoices Table */}
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xs overflow-hidden">
-              <div className="p-4 sm:p-5 border-b border-[#D9E0E6] flex items-center justify-between flex-wrap gap-2">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xs overflow-hidden">
+              <div className="p-4 sm:p-5 border-b border-[#E3E8DF] flex items-center justify-between flex-wrap gap-2">
                 <span className="text-xs text-[#5B6875]">
                   Displaying{' '}
                   <strong className="text-[#243447]">
@@ -710,7 +710,7 @@ export default function TenantPaymentsPage() {
                   </strong>{' '}
                   rent billing records for {tenantDisplayName}
                 </span>
-                <span className="text-xs text-[#315A7D] font-medium">
+                <span className="text-xs text-[#3F7D58] font-medium">
                   {tenantEmail}
                 </span>
               </div>
@@ -718,7 +718,7 @@ export default function TenantPaymentsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                    <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                       <th className="py-3.5 pl-6 pr-4">Invoice #</th>
                       <th className="py-3.5 px-4">Period</th>
                       <th className="py-3.5 px-4">Property &amp; Unit</th>
@@ -729,7 +729,7 @@ export default function TenantPaymentsPage() {
                       <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                  <tbody className="divide-y divide-[#E3E8DF] text-sm">
                     {invoices.map((inv) => {
                       const isPaid = String(inv.status).toUpperCase() === 'PAID'
                       const isPartiallyPaid =
@@ -739,10 +739,10 @@ export default function TenantPaymentsPage() {
                       return (
                         <tr
                           key={inv.invoiceId}
-                          className="hover:bg-[#F7F8FA] transition-colors"
+                          className="hover:bg-[#F7F7F1] transition-colors"
                         >
                           {/* Invoice Number */}
-                          <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs whitespace-nowrap">
+                          <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs whitespace-nowrap">
                             {inv.invoiceNumber}
                           </td>
 
@@ -802,7 +802,7 @@ export default function TenantPaymentsPage() {
                               <button
                                 type="button"
                                 onClick={() => handleOpenReceiptsModal(inv)}
-                                className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors border border-transparent hover:border-[#D9E0E6]"
+                                className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors border border-transparent hover:border-[#E3E8DF]"
                                 title="View payment receipts"
                               >
                                 <Receipt className="w-4 h-4" />
@@ -812,7 +812,7 @@ export default function TenantPaymentsPage() {
                               <button
                                 type="button"
                                 onClick={() => handleOpenHistoryModal(inv)}
-                                className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors border border-transparent hover:border-[#D9E0E6]"
+                                className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors border border-transparent hover:border-[#E3E8DF]"
                                 title="View payment transaction history"
                               >
                                 <History className="w-4 h-4" />
@@ -824,11 +824,11 @@ export default function TenantPaymentsPage() {
                                   type="button"
                                   onClick={() => handleDownloadInvoice(inv)}
                                   disabled={isDownloading}
-                                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#315A7D] hover:bg-[#EAF2F7] transition-colors border border-transparent hover:border-[#D9E0E6] disabled:opacity-50"
+                                  className="p-1.5 rounded-lg text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors border border-transparent hover:border-[#E3E8DF] disabled:opacity-50"
                                   title="Download official PDF receipt/invoice"
                                 >
                                   {isDownloading ? (
-                                    <RefreshCw className="w-4 h-4 animate-spin text-[#315A7D]" />
+                                    <RefreshCw className="w-4 h-4 animate-spin text-[#3F7D58]" />
                                   ) : (
                                     <Download className="w-4 h-4" />
                                   )}
@@ -867,11 +867,11 @@ export default function TenantPaymentsPage() {
         {/* ========================================================= */}
         {activePaymentInvoice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl border border-[#D9E0E6] overflow-hidden">
+            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl border border-[#E3E8DF] overflow-hidden">
               {/* Modal Header */}
-              <div className="p-5 border-b border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA]">
+              <div className="p-5 border-b border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1]">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-[#EAF2F7] text-[#315A7D]">
+                  <div className="p-2 rounded-xl bg-[#EDF4ED] text-[#3F7D58]">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
@@ -897,7 +897,7 @@ export default function TenantPaymentsPage() {
               {/* Modal Body */}
               <form onSubmit={handleSubmitPayment} className="p-6 space-y-5">
                 {/* Invoice Financial Snapshot */}
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] grid grid-cols-3 gap-3 text-center">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] grid grid-cols-3 gap-3 text-center">
                   <div>
                     <span className="text-[11px] font-semibold uppercase text-[#5B6875] block">
                       Total Invoiced
@@ -941,7 +941,7 @@ export default function TenantPaymentsPage() {
                       onClick={() =>
                         setPaymentAmount(String(activePaymentInvoice.remainingAmount))
                       }
-                      className="text-[11px] text-[#315A7D] hover:underline font-normal"
+                      className="text-[11px] text-[#3F7D58] hover:underline font-normal"
                     >
                       Pay Full Due
                     </button>
@@ -959,7 +959,7 @@ export default function TenantPaymentsPage() {
                       onChange={(e) => setPaymentAmount(e.target.value)}
                       disabled={isProcessingPayment}
                       placeholder="0.00"
-                      className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-[#D9E0E6] text-sm font-bold text-[#243447] focus:outline-hidden focus:border-[#315A7D] focus:ring-1 focus:ring-[#315A7D] disabled:bg-gray-100"
+                      className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-[#E3E8DF] text-sm font-bold text-[#243447] focus:outline-hidden focus:border-[#3F7D58] focus:ring-1 focus:ring-[#3F7D58] disabled:bg-gray-100"
                       required
                     />
                   </div>
@@ -969,13 +969,13 @@ export default function TenantPaymentsPage() {
                 </div>
 
                 {/* Razorpay Gateway Information */}
-                <div className="p-4 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] space-y-2.5">
+                <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#243447] flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-[#315A7D]" />
+                      <ShieldCheck className="w-4 h-4 text-[#3F7D58]" />
                       Payment Method
                     </span>
-                    <span className="text-[10px] font-semibold text-[#315A7D] bg-[#EAF2F7] px-2 py-0.5 rounded border border-[#D9E0E6]">
+                    <span className="text-[10px] font-semibold text-[#3F7D58] bg-[#EDF4ED] px-2 py-0.5 rounded border border-[#E3E8DF]">
                       Razorpay Secure
                     </span>
                   </div>
@@ -995,7 +995,7 @@ export default function TenantPaymentsPage() {
                 </div>
 
                 {/* Modal Footer Actions */}
-                <div className="pt-2 flex items-center justify-end gap-3 border-t border-[#D9E0E6]">
+                <div className="pt-2 flex items-center justify-end gap-3 border-t border-[#E3E8DF]">
                   <Button
                     type="button"
                     variant="outline"
@@ -1033,9 +1033,9 @@ export default function TenantPaymentsPage() {
         {/* ========================================================= */}
         {historyInvoice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#D9E0E6] overflow-hidden">
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#E3E8DF] overflow-hidden">
               {/* Header */}
-              <div className="p-5 border-b border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA]">
+              <div className="p-5 border-b border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1]">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-xl bg-[#EDF7EE] text-[#3F7D58]">
                     <History className="w-5 h-5" />
@@ -1062,7 +1062,7 @@ export default function TenantPaymentsPage() {
               {/* Body */}
               <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
                 {/* Financial Summary */}
-                <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] flex items-center justify-between text-xs">
+                <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between text-xs">
                   <span>
                     Total Due:{' '}
                     <strong className="text-[#243447]">
@@ -1093,7 +1093,7 @@ export default function TenantPaymentsPage() {
                     <span>{historyError}</span>
                   </div>
                 ) : historyPayments.length === 0 ? (
-                  <div className="p-8 text-center bg-[#F7F8FA] rounded-xl border border-dashed border-[#D9E0E6]">
+                  <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                     <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
                     <p className="text-xs font-semibold text-[#243447]">
                       No Payments Recorded Yet
@@ -1103,10 +1103,10 @@ export default function TenantPaymentsPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="border border-[#D9E0E6] rounded-xl overflow-hidden">
+                  <div className="border border-[#E3E8DF] rounded-xl overflow-hidden">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
-                        <tr className="bg-[#F7F8FA] border-b border-[#D9E0E6] text-[11px] font-bold uppercase text-[#5B6875]">
+                        <tr className="bg-[#F7F7F1] border-b border-[#E3E8DF] text-[11px] font-bold uppercase text-[#5B6875]">
                           <th className="py-2.5 px-3">Txn #</th>
                           <th className="py-2.5 px-3">Date &amp; Time</th>
                           <th className="py-2.5 px-3">Method</th>
@@ -1114,10 +1114,10 @@ export default function TenantPaymentsPage() {
                           <th className="py-2.5 px-3 text-right">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#D9E0E6]">
+                      <tbody className="divide-y divide-[#E3E8DF]">
                         {historyPayments.map((p) => (
-                          <tr key={p.paymentId} className="hover:bg-[#F7F8FA]">
-                            <td className="py-3 px-3 font-mono font-semibold text-[#315A7D]">
+                          <tr key={p.paymentId} className="hover:bg-[#F7F7F1]">
+                            <td className="py-3 px-3 font-mono font-semibold text-[#3F7D58]">
                               #{p.paymentId}
                             </td>
                             <td className="py-3 px-3 text-[#5B6875]">
@@ -1144,7 +1144,7 @@ export default function TenantPaymentsPage() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA]">
+              <div className="p-4 border-t border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1]">
                 <Button
                   variant="outline"
                   size="sm"
@@ -1153,7 +1153,7 @@ export default function TenantPaymentsPage() {
                     handleCloseHistoryModal()
                     handleOpenReceiptsModal(currentInv)
                   }}
-                  leftIcon={<Receipt className="w-3.5 h-3.5 text-[#315A7D]" />}
+                  leftIcon={<Receipt className="w-3.5 h-3.5 text-[#3F7D58]" />}
                 >
                   View Receipts
                 </Button>
@@ -1170,11 +1170,11 @@ export default function TenantPaymentsPage() {
         {/* ========================================================= */}
         {receiptModalInvoice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in">
-            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#D9E0E6] overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#E3E8DF] overflow-hidden max-h-[90vh] flex flex-col">
               {/* Header */}
-              <div className="p-5 border-b border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA] no-print">
+              <div className="p-5 border-b border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1] no-print">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-[#EAF2F7] text-[#315A7D]">
+                  <div className="p-2 rounded-xl bg-[#EDF4ED] text-[#3F7D58]">
                     <Receipt className="w-5 h-5" />
                   </div>
                   <div>
@@ -1202,7 +1202,7 @@ export default function TenantPaymentsPage() {
                 {selectedReceipt ? (
                   <div className="space-y-4">
                     {/* Navigation toolbar (hidden during print) */}
-                    <div className="flex items-center justify-between flex-wrap gap-2 no-print pb-2 border-b border-[#D9E0E6]">
+                    <div className="flex items-center justify-between flex-wrap gap-2 no-print pb-2 border-b border-[#E3E8DF]">
                       <Button
                         type="button"
                         variant="outline"
@@ -1253,7 +1253,7 @@ export default function TenantPaymentsPage() {
                   /* VIEW 2: LIST OF RECEIPTS FOR THIS INVOICE */
                   <div className="space-y-4">
                     {/* Financial Summary */}
-                    <div className="p-3.5 rounded-xl bg-[#F7F8FA] border border-[#D9E0E6] flex items-center justify-between text-xs">
+                    <div className="p-3.5 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex items-center justify-between text-xs">
                       <span>
                         Total Invoiced:{' '}
                         <strong className="text-[#243447]">
@@ -1297,7 +1297,7 @@ export default function TenantPaymentsPage() {
                       </div>
                     ) : invoiceReceipts.length === 0 ? (
                       /* Empty State */
-                      <div className="p-8 text-center bg-[#F7F8FA] rounded-xl border border-dashed border-[#D9E0E6]">
+                      <div className="p-8 text-center bg-[#F7F7F1] rounded-xl border border-dashed border-[#E3E8DF]">
                         <Receipt className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
                         <p className="text-xs font-semibold text-[#243447]">
                           No Receipts Found
@@ -1308,11 +1308,11 @@ export default function TenantPaymentsPage() {
                       </div>
                     ) : (
                       /* Populated Receipt Records Table */
-                      <div className="border border-[#D9E0E6] rounded-xl overflow-hidden">
+                      <div className="border border-[#E3E8DF] rounded-xl overflow-hidden">
                         <div className="overflow-x-auto">
                           <table className="w-full text-left border-collapse text-xs">
                             <thead>
-                              <tr className="bg-[#F7F8FA] border-b border-[#D9E0E6] text-[11px] font-bold uppercase text-[#5B6875]">
+                              <tr className="bg-[#F7F7F1] border-b border-[#E3E8DF] text-[11px] font-bold uppercase text-[#5B6875]">
                                 <th className="py-2.5 px-3">Receipt #</th>
                                 <th className="py-2.5 px-3">Invoice #</th>
                                 <th className="py-2.5 px-3">Date</th>
@@ -1322,10 +1322,10 @@ export default function TenantPaymentsPage() {
                                 <th className="py-2.5 px-3 text-right">Actions</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#D9E0E6]">
+                            <tbody className="divide-y divide-[#E3E8DF]">
                               {invoiceReceipts.map((rcp) => (
-                                <tr key={rcp.receiptId} className="hover:bg-[#F7F8FA]">
-                                  <td className="py-3 px-3 font-mono font-semibold text-[#315A7D] whitespace-nowrap">
+                                <tr key={rcp.receiptId} className="hover:bg-[#F7F7F1]">
+                                  <td className="py-3 px-3 font-mono font-semibold text-[#3F7D58] whitespace-nowrap">
                                     {rcp.receiptNumber || `REC-${rcp.receiptId}`}
                                   </td>
                                   <td className="py-3 px-3 font-mono text-[#243447] whitespace-nowrap">
@@ -1365,7 +1365,7 @@ export default function TenantPaymentsPage() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t border-[#D9E0E6] flex items-center justify-between bg-[#F7F8FA] no-print">
+              <div className="p-4 border-t border-[#E3E8DF] flex items-center justify-between bg-[#F7F7F1] no-print">
                 <span className="text-[11px] text-[#5B6875]">
                   {selectedReceipt
                     ? 'Use the Print button above to save as PDF or print via browser.'

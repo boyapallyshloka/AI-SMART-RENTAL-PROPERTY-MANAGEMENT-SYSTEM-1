@@ -128,8 +128,8 @@ export default function VerifyEmailPage() {
       subtitle="Enter the six-digit code sent to your email address."
     >
       <form onSubmit={handleVerify} className="space-y-4" noValidate>
-        <div className="flex items-start gap-3 rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-sm text-[#5B6875]">
-          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#315A7D]" aria-hidden="true" />
+        <div className="flex items-start gap-3 rounded-md border border-[#E3E8DF] bg-[#F7F7F1] p-3 text-sm text-[#5B6875]">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#3F7D58]" aria-hidden="true" />
           <p>Email verification is required before your SmartEstate account can sign in.</p>
         </div>
 
@@ -189,7 +189,7 @@ export default function VerifyEmailPage() {
             type="button"
             onClick={handleResend}
             disabled={isResending || resendSeconds > 0 || !normalizedEmail}
-            className="font-semibold text-[#315A7D] underline disabled:cursor-not-allowed disabled:text-[#98A2B3] disabled:no-underline"
+            className="font-semibold text-[#3F7D58] underline disabled:cursor-not-allowed disabled:text-[#98A2B3] disabled:no-underline"
           >
             {isResending
               ? 'Sending code…'
@@ -197,7 +197,7 @@ export default function VerifyEmailPage() {
                 ? `Resend code in ${resendSeconds}s`
                 : 'Resend verification code'}
           </button>
-          <Link to="/login" state={{ email: normalizedEmail }} className="font-medium text-[#315A7D] hover:underline">
+          <Link to="/login" state={{ email: normalizedEmail }} className="font-medium text-[#3F7D58] hover:underline">
             Back to sign in
           </Link>
         </div>

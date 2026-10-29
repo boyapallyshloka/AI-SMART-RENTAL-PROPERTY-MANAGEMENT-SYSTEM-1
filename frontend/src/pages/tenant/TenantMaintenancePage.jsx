@@ -356,7 +356,7 @@ export default function TenantMaintenancePage() {
         </div>
 
         {/* Search & Status Filter Bar */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-4 sm:p-5 shadow-2xs space-y-4">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-4 sm:p-5 shadow-2xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
             <div className="lg:col-span-2">
               <Input
@@ -390,7 +390,7 @@ export default function TenantMaintenancePage() {
                   onClick={resetFilters}
                   title="Reset filters"
                   aria-label="Reset filters"
-                  className="p-2.5 rounded-lg border border-[#D9E0E6] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA] transition-colors shrink-0"
+                  className="p-2.5 rounded-lg border border-[#E3E8DF] text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1] transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -398,7 +398,7 @@ export default function TenantMaintenancePage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#D9E0E6]">
+          <div className="flex items-center justify-between text-xs text-[#5B6875] pt-1 border-t border-[#E3E8DF]">
             <span>
               Showing{' '}
               <strong className="text-[#243447]">
@@ -407,7 +407,7 @@ export default function TenantMaintenancePage() {
               of {requests.length} maintenance tickets
             </span>
             {hasActiveFilters && (
-              <span className="text-[#315A7D] font-medium">
+              <span className="text-[#3F7D58] font-medium">
                 Filters active
               </span>
             )}
@@ -416,12 +416,12 @@ export default function TenantMaintenancePage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-12 shadow-2xs flex justify-center">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-12 shadow-2xs flex justify-center">
             <Loader text="Loading your maintenance requests..." size="md" center />
           </div>
         ) : filteredRequests.length === 0 ? (
           /* Empty State */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-8 shadow-2xs">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-8 shadow-2xs">
             <EmptyState
               icon={<Wrench className="w-8 h-8" />}
               title="No maintenance requests found"
@@ -444,11 +444,11 @@ export default function TenantMaintenancePage() {
           </div>
         ) : (
           /* Maintenance Requests Table */
-          <div className="bg-white rounded-lg border border-[#D9E0E6] shadow-2xs overflow-hidden">
+          <div className="bg-white rounded-lg border border-[#E3E8DF] shadow-2xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#D9E0E6] bg-[#F7F8FA] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
+                  <tr className="border-b border-[#E3E8DF] bg-[#F7F7F1] text-[11px] font-bold uppercase tracking-wider text-[#5B6875]">
                     <th className="py-3.5 pl-6 pr-4">Ticket #</th>
                     <th className="py-3.5 px-4">Category</th>
                     <th className="py-3.5 px-4">Description</th>
@@ -458,7 +458,7 @@ export default function TenantMaintenancePage() {
                     <th className="py-3.5 pl-4 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#D9E0E6] text-sm">
+                <tbody className="divide-y divide-[#E3E8DF] text-sm">
                   {filteredRequests.map((req, index) => {
                     const ticketId = req.requestId || req.id || req.ticketNumber || '—'
                     const dateStr = req.requestedDate
@@ -468,16 +468,16 @@ export default function TenantMaintenancePage() {
                     return (
                       <tr
                         key={req.requestId || req.id || req.ticketNumber || index}
-                        className="hover:bg-[#F7F8FA] transition-colors"
+                        className="hover:bg-[#F7F7F1] transition-colors"
                       >
                         {/* Ticket Number */}
-                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#315A7D] text-xs whitespace-nowrap">
+                        <td className="py-4 pl-6 pr-4 font-mono font-semibold text-[#3F7D58] text-xs whitespace-nowrap">
                           #{ticketId}
                         </td>
 
                         {/* Category */}
                         <td className="py-4 px-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F8FA] text-[#243447] border border-[#D9E0E6]">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#F7F7F1] text-[#243447] border border-[#E3E8DF]">
                             {formatCategoryLabel(req.category)}
                           </span>
                         </td>
@@ -536,9 +536,9 @@ export default function TenantMaintenancePage() {
         {/* Ticket Details Inspection Modal */}
         {selectedTicket && (
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl border border-[#D9E0E6] shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
               {/* Modal Header */}
-              <div className="p-6 border-b border-[#D9E0E6] flex items-center justify-between">
+              <div className="p-6 border-b border-[#E3E8DF] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <h3 className="text-lg font-bold text-[#243447] font-mono">
                     Ticket #{selectedTicket.requestId || selectedTicket.id}
@@ -555,7 +555,7 @@ export default function TenantMaintenancePage() {
                 <button
                   type="button"
                   onClick={() => setSelectedTicket(null)}
-                  className="p-1 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F8FA]"
+                  className="p-1 rounded-md text-[#5B6875] hover:text-[#243447] hover:bg-[#F7F7F1]"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -581,7 +581,7 @@ export default function TenantMaintenancePage() {
                 </div>
 
                 {(selectedTicket.propertyId != null || selectedTicket.propertyName) && (
-                  <div className="grid grid-cols-2 gap-4 text-xs pt-2 border-t border-[#D9E0E6]">
+                  <div className="grid grid-cols-2 gap-4 text-xs pt-2 border-t border-[#E3E8DF]">
                     <div>
                       <span className="text-[#5B6875] block">Property:</span>
                       <strong className="text-[#243447]">
@@ -597,21 +597,21 @@ export default function TenantMaintenancePage() {
                   </div>
                 )}
 
-                <div className="pt-2 border-t border-[#D9E0E6] space-y-1">
+                <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
                   <span className="text-xs font-semibold text-[#243447] block">
                     Issue Description:
                   </span>
-                  <p className="text-xs text-[#243447] leading-relaxed bg-[#F7F8FA] p-3 rounded-xl border border-[#D9E0E6]">
+                  <p className="text-xs text-[#243447] leading-relaxed bg-[#F7F7F1] p-3 rounded-xl border border-[#E3E8DF]">
                     {selectedTicket.description || 'No description provided.'}
                   </p>
                 </div>
 
                 {selectedTicket.imageUrl && (
-                  <div className="pt-2 border-t border-[#D9E0E6] space-y-1">
+                  <div className="pt-2 border-t border-[#E3E8DF] space-y-1">
                     <span className="text-xs font-semibold text-[#243447] block">
                       Attached Photo:
                     </span>
-                    <div className="rounded-xl border border-[#D9E0E6] overflow-hidden max-h-48 bg-[#F7F8FA] flex items-center justify-center">
+                    <div className="rounded-xl border border-[#E3E8DF] overflow-hidden max-h-48 bg-[#F7F7F1] flex items-center justify-center">
                       <img
                         src={selectedTicket.imageUrl}
                         alt="Maintenance issue"
@@ -625,7 +625,7 @@ export default function TenantMaintenancePage() {
                 )}
 
                 {selectedTicket.costResponsibility && selectedTicket.cost != null && (
-                  <div className="p-3 rounded-xl bg-[#EAF2F7] border border-[#D9E0E6] text-xs space-y-1 text-[#243447]">
+                  <div className="p-3 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1 text-[#243447]">
                     <div className="font-bold">Maintenance cost allocation</div>
                     <p>{selectedTicket.costResponsibility === 'TENANT_PAID' ? 'Tenant responsible' : 'Owner responsible'}</p>
                     <p>Repair amount: ₹{Number(selectedTicket.cost).toLocaleString('en-IN')}</p>
@@ -649,7 +649,7 @@ export default function TenantMaintenancePage() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 border-t border-[#D9E0E6] bg-[#F7F8FA] flex justify-end">
+              <div className="p-4 border-t border-[#E3E8DF] bg-[#F7F7F1] flex justify-end">
                 <Button
                   size="sm"
                   variant="outline"

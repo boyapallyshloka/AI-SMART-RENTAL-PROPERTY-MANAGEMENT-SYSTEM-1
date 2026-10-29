@@ -287,10 +287,10 @@ export default function OwnerPropertyForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-8" noValidate>
       {/* 1. General Property Information */}
-      <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="border-b border-[#D9E0E6] pb-4">
+      <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-[#315A7D]" />
+            <Building2 className="w-5 h-5 text-[#3F7D58]" />
             General Property Information
           </h2>
           <p className="text-xs text-[#5B6875] mt-0.5">
@@ -324,10 +324,10 @@ export default function OwnerPropertyForm({
       </div>
 
       {/* 2. Specifications & Features */}
-      <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="border-b border-[#D9E0E6] pb-4">
+      <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-            <Layers className="w-5 h-5 text-[#315A7D]" />
+            <Layers className="w-5 h-5 text-[#3F7D58]" />
             Property Specifications
           </h2>
           <p className="text-xs text-[#5B6875] mt-0.5">
@@ -406,10 +406,10 @@ export default function OwnerPropertyForm({
 
       {/* Amenities are associated after the property is created. */}
       {!initialData && (
-        <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="border-b border-[#D9E0E6] pb-4">
+        <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="border-b border-[#E3E8DF] pb-4">
             <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#315A7D]" />
+              <Sparkles className="w-5 h-5 text-[#3F7D58]" />
               Amenities &amp; Facilities
             </h2>
             <p className="text-xs text-[#5B6875] mt-0.5">
@@ -425,7 +425,7 @@ export default function OwnerPropertyForm({
               return (
                 <label
                   key={amenity}
-                  className="flex items-center gap-3 rounded-xl border border-[#D9E0E6] p-3 text-sm text-[#243447] cursor-pointer hover:border-[#315A7D]"
+                  className="flex items-center gap-3 rounded-xl border border-[#E3E8DF] p-3 text-sm text-[#243447] cursor-pointer hover:border-[#3F7D58]"
                 >
                   <input
                     type="checkbox"
@@ -442,7 +442,7 @@ export default function OwnerPropertyForm({
                           : prev.filter((name) => name.toLowerCase() !== amenity.toLowerCase())
                       )
                     }}
-                    className="h-4 w-4 accent-[#315A7D]"
+                    className="h-4 w-4 accent-[#3F7D58]"
                   />
                   <span>{amenity}</span>
                 </label>
@@ -453,10 +453,10 @@ export default function OwnerPropertyForm({
       )}
 
       {/* 3. Description */}
-      <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 sm:p-8 shadow-sm space-y-6">
-        <div className="border-b border-[#D9E0E6] pb-4">
+      <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="border-b border-[#E3E8DF] pb-4">
           <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2">
-            <FileText className="w-5 h-5 text-[#315A7D]" />
+            <FileText className="w-5 h-5 text-[#3F7D58]" />
             Property Description
           </h2>
           <p className="text-xs text-[#5B6875] mt-0.5">

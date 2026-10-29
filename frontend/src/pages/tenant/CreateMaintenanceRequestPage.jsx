@@ -296,7 +296,7 @@ export default function CreateMaintenanceRequestPage() {
         <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <Link
             to="/tenant/maintenance"
-            className="inline-flex items-center gap-1 hover:text-[#315A7D] transition-colors"
+            className="inline-flex items-center gap-1 hover:text-[#3F7D58] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Maintenance</span>
@@ -308,9 +308,9 @@ export default function CreateMaintenanceRequestPage() {
         </div>
 
         {/* Page Header */}
-        <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs">
+        <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-md bg-[#315A7D] text-white">
+            <div className="p-2.5 rounded-md bg-[#3F7D58] text-white">
               <Wrench className="w-6 h-6" />
             </div>
             <div>
@@ -348,9 +348,9 @@ export default function CreateMaintenanceRequestPage() {
         {/* Form Container */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Tenant & Property Identification */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Building2 className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Building2 className="w-4 h-4 text-[#3F7D58]" />
               1. Location & Tenant Details
             </h2>
 
@@ -359,7 +359,7 @@ export default function CreateMaintenanceRequestPage() {
                 <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
                   Tenant Name
                 </label>
-                <div className="p-2.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] text-sm font-medium text-[#243447] flex items-center gap-2">
+                <div className="p-2.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-sm font-medium text-[#243447] flex items-center gap-2">
                   <User className="w-4 h-4 text-[#5B6875] shrink-0" />
                   <span className="truncate">{tenantName}</span>
                 </div>
@@ -385,7 +385,7 @@ export default function CreateMaintenanceRequestPage() {
                         setErrors((prev) => ({ ...prev, propertyId: undefined }))
                       }
                     }}
-                    className="w-full p-2.5 rounded-md bg-white border border-[#D9E0E6] text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#315A7D]"
+                    className="w-full p-2.5 rounded-md bg-white border border-[#E3E8DF] text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#3F7D58]"
                   >
                     {properties.map((prop) => {
                       const propId = prop.propertyId ?? prop.id
@@ -398,14 +398,14 @@ export default function CreateMaintenanceRequestPage() {
                     })}
                   </select>
                 ) : (
-                  <div className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-sm text-[#5B6875]">
+                  <div className="rounded-md border border-[#E3E8DF] bg-[#F7F7F1] p-3 text-sm text-[#5B6875]">
                     No active rental agreement was found. Maintenance requests can only be submitted for a current rental.
                   </div>
                 )}
               </div>
 
               {isDirectRental && (
-                <div className="rounded-md border border-[#D9E0E6] bg-[#F7F8FA] p-3 text-sm text-[#5B6875]">
+                <div className="rounded-md border border-[#E3E8DF] bg-[#F7F7F1] p-3 text-sm text-[#5B6875]">
                   This is a whole-house rental. The request will be attached to the property, so no unit number is needed.
                 </div>
               )}
@@ -414,8 +414,8 @@ export default function CreateMaintenanceRequestPage() {
                   Unit Number
                 </label>
                 {isLoadingUnits ? (
-                  <div className="p-2.5 rounded-md bg-[#F7F8FA] border border-[#D9E0E6] text-sm text-[#5B6875] flex items-center gap-2">
-                    <div className="w-3.5 h-3.5 border-2 border-[#315A7D] border-t-transparent rounded-full animate-spin" />
+                  <div className="p-2.5 rounded-md bg-[#F7F7F1] border border-[#E3E8DF] text-sm text-[#5B6875] flex items-center gap-2">
+                    <div className="w-3.5 h-3.5 border-2 border-[#3F7D58] border-t-transparent rounded-full animate-spin" />
                     <span>Loading units...</span>
                   </div>
                 ) : units.length > 0 ? (
@@ -436,8 +436,8 @@ export default function CreateMaintenanceRequestPage() {
                           setErrors((prev) => ({ ...prev, unitId: undefined }))
                         }
                       }}
-                      className={`w-full p-2.5 rounded-md bg-white border ${errors.unitId ? 'border-[#E05252]' : 'border-[#D9E0E6]'
-                        } text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#315A7D]`}
+                      className={`w-full p-2.5 rounded-md bg-white border ${errors.unitId ? 'border-[#E05252]' : 'border-[#E3E8DF]'
+                        } text-sm font-medium text-[#243447] focus:outline-hidden focus:border-[#3F7D58]`}
                     >
                       {units.map((unit) => {
                         const cleanNum = String(unit.unitNumber || unit.unitId).replace(/^Unit\s*/i, '')
@@ -478,9 +478,9 @@ export default function CreateMaintenanceRequestPage() {
           </div>
 
           {/* Section 2: Repair Information */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Wrench className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Wrench className="w-4 h-4 text-[#3F7D58]" />
               2. Repair Information
             </h2>
 
@@ -533,9 +533,9 @@ export default function CreateMaintenanceRequestPage() {
           </div>
 
           {/* Section 3: Scheduling & Real Image Upload */}
-          <div className="bg-white rounded-lg border border-[#D9E0E6] p-6 shadow-2xs space-y-4">
-            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#D9E0E6] pb-3">
-              <Calendar className="w-4 h-4 text-[#315A7D]" />
+          <div className="bg-white rounded-lg border border-[#E3E8DF] p-6 shadow-2xs space-y-4">
+            <h2 className="text-base font-semibold text-[#243447] flex items-center gap-2 border-b border-[#E3E8DF] pb-3">
+              <Calendar className="w-4 h-4 text-[#3F7D58]" />
               3. Scheduling & Issue Photo
             </h2>
 
@@ -568,7 +568,7 @@ export default function CreateMaintenanceRequestPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full border-2 border-dashed border-[#D9E0E6] hover:border-[#315A7D] rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-center transition-colors bg-[#F7F8FA]"
+                    className="w-full border-2 border-dashed border-[#E3E8DF] hover:border-[#3F7D58] rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-center transition-colors bg-[#F7F7F1]"
                   >
                     <Upload className="w-5 h-5 text-[#5B6875]" />
                     <div>
@@ -581,16 +581,16 @@ export default function CreateMaintenanceRequestPage() {
                     </div>
                   </button>
                 ) : (
-                  <div className="p-3 rounded-xl border border-[#D9E0E6] bg-[#F7F8FA] flex items-center justify-between gap-3">
+                  <div className="p-3 rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 overflow-hidden">
                       {imagePreview ? (
                         <img
                           src={imagePreview}
                           alt="Issue preview"
-                          className="w-10 h-10 object-cover rounded-md border border-[#D9E0E6] shrink-0"
+                          className="w-10 h-10 object-cover rounded-md border border-[#E3E8DF] shrink-0"
                         />
                       ) : (
-                        <ImageIcon className="w-8 h-8 text-[#315A7D] shrink-0" />
+                        <ImageIcon className="w-8 h-8 text-[#3F7D58] shrink-0" />
                       )}
                       <div className="overflow-hidden text-left">
                         <p className="text-xs font-medium text-[#243447] truncate">
@@ -606,7 +606,7 @@ export default function CreateMaintenanceRequestPage() {
                       type="button"
                       onClick={handleRemoveImage}
                       title="Remove image"
-                      className="p-1.5 rounded-md hover:bg-[#EAF2F7] text-[#8A2E2C] transition-colors"
+                      className="p-1.5 rounded-md hover:bg-[#EDF4ED] text-[#8A2E2C] transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>

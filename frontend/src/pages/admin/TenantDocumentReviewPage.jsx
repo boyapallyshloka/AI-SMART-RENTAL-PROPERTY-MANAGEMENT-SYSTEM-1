@@ -113,19 +113,19 @@ export default function TenantDocumentReviewPage() {
           </div>
         )}
 
-        <div className="flex items-center gap-2 rounded-lg border border-[#D9E0E6] bg-white p-4">
-          <FileCheck2 className="h-5 w-5 text-[#315A7D]" />
+        <div className="flex items-center gap-2 rounded-lg border border-[#E3E8DF] bg-white p-4">
+          <FileCheck2 className="h-5 w-5 text-[#3F7D58]" />
             <span className="text-[13px] font-semibold text-[#243447]">
             {loading ? 'Checking tenant profiles…' : `${pendingDocuments.length} pending document${pendingDocuments.length === 1 ? '' : 's'} across ${tenantGroups.length} tenant${tenantGroups.length === 1 ? '' : 's'}`}
           </span>
         </div>
 
         {loading ? (
-          <div className="flex justify-center rounded-xl border border-[#D9E0E6] bg-white p-12">
+          <div className="flex justify-center rounded-xl border border-[#E3E8DF] bg-white p-12">
             <Loader text="Loading pending tenant documents…" size="md" center />
           </div>
         ) : pendingDocuments.length === 0 ? (
-          <div className="rounded-xl border border-[#D9E0E6] bg-white p-8">
+          <div className="rounded-xl border border-[#E3E8DF] bg-white p-8">
             <EmptyState
               icon={<CheckCircle2 className="h-8 w-8 text-[#3F7D58]" />}
               title={failedTenantLoads ? 'Some reviews could not be checked' : 'No pending document reviews'}
@@ -136,13 +136,13 @@ export default function TenantDocumentReviewPage() {
           <div className="space-y-4">
             {tenantGroups.map((group) => (
               <section key={group.tenantId} className="overflow-hidden rounded-xl border border-[#B8CAD9] bg-white shadow-sm">
-                <header className="flex flex-wrap items-center justify-between gap-3 border-l-4 border-[#315A7D] bg-[#EAF2F7] px-5 py-4">
+                <header className="flex flex-wrap items-center justify-between gap-3 border-l-4 border-[#3F7D58] bg-[#EDF4ED] px-5 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#315A7D] text-white">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#3F7D58] text-white">
                       <UserRound className="h-5 w-5" />
                     </span>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#315A7D]">Tenant</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#3F7D58]">Tenant</p>
                       <h2 className="text-base font-bold text-[#243447]">{tenantName(group.tenant)}</h2>
                       <p className="text-xs text-[#5B6875]">{group.tenant.email || '—'} <span className="mx-1">·</span> Tenant #{group.tenantId}</p>
                     </div>
@@ -156,20 +156,20 @@ export default function TenantDocumentReviewPage() {
                   {group.documents.map((item) => {
                     const key = `${item.tenantId}-${item.documentId}`
                     return (
-                      <article key={key} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[#D9E0E6] bg-white p-4 shadow-[0_1px_2px_rgba(36,52,71,0.05)]">
+                      <article key={key} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-[0_1px_2px_rgba(36,52,71,0.05)]">
                         <div className="flex min-w-0 flex-1 items-start gap-3">
-                          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#F0F4F7] text-[#315A7D]">
+                          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#F0F4F7] text-[#3F7D58]">
                             <FileText className="h-4 w-4" />
                           </span>
                           <div className="min-w-0">
                             <p className="break-words text-[13px] font-semibold text-[#243447]">{item.fileName || 'Uploaded document'}</p>
-                            <p className="mt-1 text-xs font-medium text-[#315A7D]">{formatType(item.documentType)}</p>
+                            <p className="mt-1 text-xs font-medium text-[#3F7D58]">{formatType(item.documentType)}</p>
                             {item.uploadedAt && <p className="mt-1 text-xs text-[#748291]">Uploaded {new Date(item.uploadedAt).toLocaleString()}</p>}
                           </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 pl-12 sm:pl-0">
                           {item.documentUrl ? (
-                            <a href={item.documentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border border-[#D9E0E6] px-3 py-2 text-xs font-semibold text-[#315A7D] hover:bg-[#F7F8FA]">
+                            <a href={item.documentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border border-[#E3E8DF] px-3 py-2 text-xs font-semibold text-[#3F7D58] hover:bg-[#F7F7F1]">
                               View document <ExternalLink className="h-3.5 w-3.5" />
                             </a>
                           ) : <span className="text-xs text-[#8A2E2C]">File link unavailable</span>}

@@ -173,7 +173,7 @@ function ExpenseForm({ propertyId, editingExpense, onSuccess, onCancel }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-lg border border-[#D9E0E6] bg-[#F7F8FA] p-4"
+      className="space-y-4 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4"
       noValidate
     >
       <p className="text-sm font-semibold text-[#243447]">
@@ -229,7 +229,7 @@ function ExpenseForm({ propertyId, editingExpense, onSuccess, onCancel }) {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={saving}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#D9E0E6] bg-white px-3 py-2 text-xs font-medium text-[#315A7D] shadow-2xs hover:bg-[#EAF2F7] disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 rounded-md border border-[#E3E8DF] bg-white px-3 py-2 text-xs font-medium text-[#3F7D58] shadow-2xs hover:bg-[#EDF4ED] disabled:opacity-60"
               >
                 <Upload className="h-3.5 w-3.5" />
                 {form.image ? 'Change file' : 'Attach file'}
@@ -293,7 +293,7 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
   }
 
   return (
-    <tr className="group border-t border-[#D9E0E6] hover:bg-[#F7F8FA]">
+    <tr className="group border-t border-[#E3E8DF] hover:bg-[#F7F7F1]">
       <td className="px-3 py-3 text-sm font-medium text-[#243447]">
         {categoryLabel(expense.category)}
       </td>
@@ -304,7 +304,7 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
       </td>
       <td className="px-3 py-3 text-sm text-[#5B6875]">
         {expense.imagePath ? (
-          <span className="flex items-center gap-1 text-xs text-[#315A7D]">
+          <span className="flex items-center gap-1 text-xs text-[#3F7D58]">
             <FileText className="h-3.5 w-3.5" />
             Attached
           </span>
@@ -318,7 +318,7 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
             type="button"
             onClick={() => onEdit(expense)}
             title="Edit"
-            className="rounded p-1 text-[#315A7D] hover:bg-[#EAF2F7]"
+            className="rounded p-1 text-[#3F7D58] hover:bg-[#EDF4ED]"
           >
             <Edit2 className="h-3.5 w-3.5" />
           </button>
@@ -465,7 +465,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
       {/* header */}
       <div className="flex items-center justify-between border-b border-[#D5E3EF] bg-gradient-to-r from-[#EAF2F8] via-[#F5F9FC] to-white px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#315A7D] text-white shadow-sm shadow-[#315A7D]/20">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#3F7D58] text-white shadow-sm shadow-[#3F7D58]/20">
             <Receipt className="h-5 w-5" />
           </span>
           <div>
@@ -483,7 +483,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
           onClick={() => setCollapsed((v) => !v)}
           aria-expanded={!collapsed}
           aria-controls="expense-panel-body"
-          className="rounded-lg p-2 text-[#315A7D] transition hover:bg-white/80 hover:text-[#17324D]"
+          className="rounded-lg p-2 text-[#3F7D58] transition hover:bg-white/80 hover:text-[#17324D]"
         >
           {collapsed ? (
             <ChevronDown className="h-4 w-4" />
@@ -565,7 +565,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
                 <ErrorBanner message={expensesError} onDismiss={() => setExpensesError('')} />
               ) : expenses.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-[#BFD1E1] bg-[#F5F9FC] p-8 text-center text-sm text-[#5B7185]">
-                  <span className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-full bg-[#E5EFF7] text-[#315A7D]"><Receipt className="h-5 w-5" /></span>
+                  <span className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-full bg-[#E5EFF7] text-[#3F7D58]"><Receipt className="h-5 w-5" /></span>
                   No expenses recorded for this property yet.
                 </div>
               ) : (
@@ -593,7 +593,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
                           <th className="px-3 py-2 sr-only">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#D9E0E6]">
+                      <tbody className="divide-y divide-[#E3E8DF]">
                         {expenses.map((exp) => (
                           <ExpenseRow
                             key={exp.expenseId}

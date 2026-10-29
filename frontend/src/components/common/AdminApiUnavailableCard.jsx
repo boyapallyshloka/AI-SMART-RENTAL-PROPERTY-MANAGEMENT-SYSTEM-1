@@ -6,7 +6,7 @@ import { AlertTriangle, Server, Key, FileCode2, Database } from 'lucide-react'
  */
 const METHOD_STYLES = {
   GET: 'bg-[#EDF7EE] text-[#2A583B] border-[#C6DEC8]',
-  POST: 'bg-[#EAF2F7] text-[#315A7D] border-[#D9E0E6]',
+  POST: 'bg-[#EDF4ED] text-[#3F7D58] border-[#E3E8DF]',
   PUT: 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]',
   PATCH: 'bg-[#FEF7EC] text-[#8A5B16] border-[#F4E2B6]',
   DELETE: 'bg-[#FDF2F2] text-[#8A2E2C] border-[#F4B4B4]',
@@ -53,10 +53,10 @@ export default function AdminApiUnavailableCard({
 
       {/* Required Endpoints Specification */}
       {endpoints.length > 0 && (
-        <div className="overflow-hidden rounded-lg border border-[#D9E0E6] bg-white shadow-2xs">
-          <div className="border-b border-[#D9E0E6] bg-[#F7F8FA] px-5 py-3.5 flex items-center justify-between">
+        <div className="overflow-hidden rounded-lg border border-[#E3E8DF] bg-white shadow-2xs">
+          <div className="border-b border-[#E3E8DF] bg-[#F7F7F1] px-5 py-3.5 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Server className="h-4 w-4 text-[#315A7D]" />
+              <Server className="h-4 w-4 text-[#3F7D58]" />
               <h3 className="text-xs sm:text-sm font-semibold text-[#243447]">
                 Required Backend REST Endpoints
               </h3>
@@ -66,14 +66,14 @@ export default function AdminApiUnavailableCard({
             </span>
           </div>
 
-          <div className="divide-y divide-[#D9E0E6]">
+          <div className="divide-y divide-[#E3E8DF]">
             {endpoints.map((ep, idx) => {
               const methodStyle =
                 METHOD_STYLES[ep.method?.toUpperCase()] ||
-                'bg-[#F0F4F7] text-[#5B6875] border-[#D9E0E6]'
+                'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]'
 
               return (
-                <div key={idx} className="p-4 sm:p-5 hover:bg-[#F7F8FA]/50 transition-colors">
+                <div key={idx} className="p-4 sm:p-5 hover:bg-[#F7F7F1]/50 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
@@ -87,7 +87,7 @@ export default function AdminApiUnavailableCard({
                     </div>
 
                     {ep.auth && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#EAF2F7] text-[#315A7D] border border-[#D9E0E6] self-start sm:self-auto">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#EDF4ED] text-[#3F7D58] border border-[#E3E8DF] self-start sm:self-auto">
                         <Key className="h-3 w-3" />
                         {ep.auth}
                       </span>
@@ -103,7 +103,7 @@ export default function AdminApiUnavailableCard({
                       {ep.params?.length > 0 && (
                         <div className="flex items-center gap-1.5">
                           <span className="font-semibold text-[#243447]">Parameters:</span>
-                          <span className="font-mono text-[11px] bg-[#F7F8FA] px-1.5 py-0.5 rounded border border-[#D9E0E6]">
+                          <span className="font-mono text-[11px] bg-[#F7F7F1] px-1.5 py-0.5 rounded border border-[#E3E8DF]">
                             {ep.params.join(', ')}
                           </span>
                         </div>
@@ -112,7 +112,7 @@ export default function AdminApiUnavailableCard({
                       {ep.body && (
                         <div className="flex items-center gap-1.5">
                           <span className="font-semibold text-[#243447]">Payload:</span>
-                          <span className="font-mono text-[11px] bg-[#F7F8FA] px-1.5 py-0.5 rounded border border-[#D9E0E6]">
+                          <span className="font-mono text-[11px] bg-[#F7F7F1] px-1.5 py-0.5 rounded border border-[#E3E8DF]">
                             {ep.body}
                           </span>
                         </div>
@@ -128,7 +128,7 @@ export default function AdminApiUnavailableCard({
 
       {/* Backend Implementation Requirements */}
       {backendRequirements.length > 0 && (
-        <div className="rounded-lg border border-[#D9E0E6] bg-white p-5 shadow-2xs space-y-3">
+        <div className="rounded-lg border border-[#E3E8DF] bg-white p-5 shadow-2xs space-y-3">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#243447]">
             <Database className="h-4 w-4 text-[#3F7D58]" />
             <span>Backend Implementation Checklist</span>
