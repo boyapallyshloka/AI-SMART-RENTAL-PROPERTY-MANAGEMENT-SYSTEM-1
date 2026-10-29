@@ -2,6 +2,7 @@
 package com.rental.rental_management_backend.rental.serviceImpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +32,7 @@ import com.rental.rental_management_backend.rental.dto.RentalAgreementResponse;
 import com.rental.rental_management_backend.rental.entity.RentalAgreement;
 import com.rental.rental_management_backend.rental.entity.RentalApplication;
 import com.rental.rental_management_backend.rental.enums.AgreementStatus;
+import com.rental.rental_management_backend.rental.enums.RentalApplicationStatus;
 import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
 import com.rental.rental_management_backend.rental.service.RentalAgreementPdfService;
@@ -351,6 +353,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
             agreement.setStatus(AgreementStatus.ACTIVE);
             occupyRentalTarget(agreement);
+            rejectCompetingPendingApplications(agreement);
 
         } else if (status == AgreementStatus.EXPIRED) {
 
@@ -410,6 +413,43 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                 currentStatus);
 
         return mapToResponse(updatedAgreement);
+    }
+
+    private void rejectCompetingPendingApplications(
+            RentalAgreement agreement) {
+
+        Long applicationId =
+                agreement.getRentalApplication().getApplicationId();
+        List<RentalApplication> competingApplications;
+
+        if (agreement.getUnit() != null) {
+            competingApplications =
+                    rentalApplicationRepository.findByUnit_UnitIdAndStatus(
+                            agreement.getUnit().getUnitId(),
+                            RentalApplicationStatus.PENDING);
+        } else {
+            Property property = resolveAgreementProperty(agreement);
+            competingApplications =
+                    rentalApplicationRepository
+                            .findByProperty_PropertyIdAndUnitIsNullAndStatus(
+                                    property.getPropertyId(),
+                                    RentalApplicationStatus.PENDING);
+        }
+
+        LocalDateTime reviewedAt = LocalDateTime.now();
+        for (RentalApplication application : competingApplications) {
+            if (application.getApplicationId().equals(applicationId)) {
+                continue;
+            }
+
+            application.setStatus(
+                    RentalApplicationStatus.REJECTED);
+            application.setRejectionReason(
+                    "The rental target is no longer available.");
+            application.setReviewedAt(reviewedAt);
+        }
+
+        rentalApplicationRepository.saveAll(competingApplications);
     }
 
     // =========================================================

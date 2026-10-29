@@ -1,6 +1,11 @@
 
 package com.rental.rental_management_backend.email;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+
+    @Value("${app.frontend.base-url}")
+    private String frontendBaseUrl;
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -361,17 +369,44 @@ public class EmailService {
             String token) {
 
         String subject = "Reset Your AI Smart Rental Password";
+        String baseUrl = frontendBaseUrl.replaceAll("/+$", "");
+        String resetUrl = baseUrl + "/reset-password?token="
+                + URLEncoder.encode(token, StandardCharsets.UTF_8);
+        String safeFirstName = escapeHtml(firstName);
+        String body = "<!doctype html><html><body>"
+                + "<p>Hello " + safeFirstName + ",</p>"
+                + "<p>We received a request to reset your password.</p>"
+                + "<p>This link expires in 15 minutes and can be used only once.</p>"
+                + "<p><a href=\"" + resetUrl + "\" "
+                + "style=\"display:inline-block;padding:12px 20px;"
+                + "background-color:#2563eb;color:#ffffff;text-decoration:none;"
+                + "border-radius:4px\">Reset Password</a></p>"
+                + "<p>If you did not request a password reset, please ignore this email.</p>"
+                + "<p>Thank you,<br>AI Smart Rental Team</p>"
+                + "</body></html>";
 
-        String body = "Hello " + firstName + ",\n\n"
-                + "We received a request to reset your password.\n\n"
-                + "Your password reset token is:\n"
-                + token + "\n\n"
-                + "This token expires in 15 minutes and can be used only once.\n\n"
-                + "If you did not request a password reset, please ignore this email.\n\n"
-                + "Thank you,\nAI Smart Rental Team";
+        try {
+            var message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    message,
+                    false,
+                    StandardCharsets.UTF_8.name());
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(body, true);
+            mailSender.send(message);
+        } catch (jakarta.mail.MessagingException ex) {
+            throw new IllegalStateException(
+                    "Unable to create password reset email", ex);
+        }
+    }
 
-        sendEmail(email, subject, body);
-        
+    private String escapeHtml(String value) {
+        return value.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
     
     public void sendPasswordChangedEmail(

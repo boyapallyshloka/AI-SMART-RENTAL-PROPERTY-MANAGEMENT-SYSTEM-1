@@ -74,6 +74,10 @@ public interface RentalApplicationRepository
             Long unitId,
             RentalApplicationStatus status);
 
+    List<RentalApplication> findByProperty_PropertyIdAndUnitIsNullAndStatus(
+            Long propertyId,
+            RentalApplicationStatus status);
+
     boolean existsByTenant_TenantIdAndUnit_UnitIdAndStatus(
             Long tenantId,
             Long unitId,

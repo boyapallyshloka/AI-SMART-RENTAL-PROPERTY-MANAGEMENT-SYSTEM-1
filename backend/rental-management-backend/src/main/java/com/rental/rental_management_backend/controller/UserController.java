@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -140,10 +141,17 @@ public class UserController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<String> deactivateUser(
             @PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
+        userService.deactivateUser(id);
+        return ResponseEntity.ok("User deactivated successfully");
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PatchMapping("/users/{id}/reactivate")
+    public ResponseEntity<UserResponse> reactivateUser(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(userService.reactivateUser(id));
     }
 
     // USER FILTERING - SUPER ADMIN

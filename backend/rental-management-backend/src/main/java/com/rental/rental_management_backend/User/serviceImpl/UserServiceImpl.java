@@ -726,14 +726,62 @@ public class UserServiceImpl implements UserService {
     // =========================================================
 
     @Override
-    public void deleteUser(Long id) {
+    public void deactivateUser(Long id) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + id));
 
-        emailVerificationOtpRepository.deleteByUser_Id(user.getId());
-        userRepository.delete(user);
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            throw new IllegalArgumentException(
+                    "SUPER_ADMIN accounts cannot be deactivated through this endpoint");
+        }
+
+        if (user.getRole() != RoleType.TENANT
+                && user.getRole() != RoleType.PROPERTY_OWNER
+                && user.getRole() != RoleType.PROPERTY_MANAGER) {
+            throw new IllegalArgumentException(
+                    "Only tenant, property owner, or property manager accounts can be deactivated");
+        }
+
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new IllegalArgumentException(
+                    "Only active accounts can be deactivated");
+        }
+
+        user.setStatus(UserStatus.INACTIVE);
+        user.setSelfDeactivated(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse reactivateUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + id));
+
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            throw new IllegalArgumentException(
+                    "SUPER_ADMIN accounts cannot be reactivated through this endpoint");
+        }
+
+        if (user.getRole() != RoleType.TENANT
+                && user.getRole() != RoleType.PROPERTY_OWNER
+                && user.getRole() != RoleType.PROPERTY_MANAGER) {
+            throw new IllegalArgumentException(
+                    "Only tenant, property owner, or property manager accounts can be reactivated");
+        }
+
+        if (user.getStatus() != UserStatus.INACTIVE
+                || user.isSelfDeactivated()) {
+            throw new IllegalArgumentException(
+                    "Only administratively deactivated accounts can be reactivated");
+        }
+
+        user.setStatus(UserStatus.ACTIVE);
+        user.setSelfDeactivated(false);
+        return mapToResponse(userRepository.save(user));
     }
 
     // =========================================================

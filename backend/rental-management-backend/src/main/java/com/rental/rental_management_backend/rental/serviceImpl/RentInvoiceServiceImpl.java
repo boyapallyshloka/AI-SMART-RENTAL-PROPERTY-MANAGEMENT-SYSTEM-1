@@ -4,16 +4,19 @@ package com.rental.rental_management_backend.rental.serviceImpl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -172,214 +175,175 @@ public class RentInvoiceServiceImpl implements RentInvoiceService {
             );
         }
 
-        // -----------------------------------------------------
-        // 3. Determine next billing month
-        // -----------------------------------------------------
-
         LocalDate billingDate =
                 getNextBillingDate(agreement);
 
-        int billingMonth =
-                billingDate.getMonthValue();
+        YearMonth billingPeriod = YearMonth.from(billingDate);
+        LocalDate dueDate = calculateDueDate(agreement, billingPeriod);
+        return createInvoiceForPeriod(
+                agreement,
+                billingPeriod,
+                dueDate,
+                LocalDate.now());
+    }
 
-        int billingYear =
-                billingDate.getYear();
+    @Override
+    @Transactional
+    public Optional<Long> createScheduledInvoice(
+            Long agreementId,
+            YearMonth billingPeriod,
+            LocalDate today) {
 
-        // -----------------------------------------------------
-        // 4. Prevent duplicate invoice
-        // -----------------------------------------------------
+        if (agreementId == null || billingPeriod == null || today == null) {
+            throw new IllegalArgumentException(
+                    "Agreement, billing period, and date are required");
+        }
+
+        YearMonth currentPeriod = YearMonth.from(today);
+        if (billingPeriod.isBefore(currentPeriod)
+                || billingPeriod.isAfter(currentPeriod.plusMonths(1))) {
+            return Optional.empty();
+        }
+
+        RentalAgreement agreement =
+                rentalAgreementRepository
+                        .findForAccessByAgreementId(agreementId)
+                        .orElseThrow(() -> new IllegalStateException(
+                                "Rental agreement no longer exists"));
+
+        if (!isEligibleForScheduledInvoice(
+                agreement,
+                billingPeriod,
+                today)) {
+            return Optional.empty();
+        }
+
+        LocalDate dueDate = calculateDueDate(agreement, billingPeriod);
+        if (billingPeriod.equals(YearMonth.from(agreement.getStartDate()))
+                && dueDate.isBefore(agreement.getStartDate())) {
+            dueDate = agreement.getStartDate();
+        }
+
+        LocalDate generationDate = dueDate.minusDays(5);
+        if (billingPeriod.equals(YearMonth.from(agreement.getStartDate()))
+                && generationDate.isBefore(agreement.getStartDate())) {
+            generationDate = agreement.getStartDate();
+        }
+        if (today.isBefore(generationDate)) {
+            return Optional.empty();
+        }
+
+        if (rentInvoiceRepository
+                .findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
+                        agreementId,
+                        billingPeriod.getMonthValue(),
+                        billingPeriod.getYear())
+                .isPresent()) {
+            return Optional.empty();
+        }
+
+        RentInvoiceResponse invoice = createInvoiceForPeriod(
+                agreement,
+                billingPeriod,
+                dueDate,
+                today);
+        return Optional.of(invoice.getInvoiceId());
+    }
+
+    private boolean isEligibleForScheduledInvoice(
+            RentalAgreement agreement,
+            YearMonth billingPeriod,
+            LocalDate today) {
+        if (agreement.getAgreementId() == null
+                || agreement.getStatus() != AgreementStatus.ACTIVE
+                || agreement.getTenant() == null
+                || agreement.getTenant().getTenantId() == null
+                || resolveProperty(agreement) == null
+                || agreement.getStartDate() == null
+                || agreement.getEndDate() == null
+                || agreement.getMonthlyRent() == null
+                || agreement.getDueDay() == null
+                || agreement.getDueDay() < 1
+                || agreement.getDueDay() > 31
+                || agreement.getEndDate().isBefore(agreement.getStartDate())
+                || today.isBefore(agreement.getStartDate())) {
+            return false;
+        }
+
+        return !billingPeriod.isBefore(
+                    YearMonth.from(agreement.getStartDate()))
+                && !billingPeriod.isAfter(
+                    YearMonth.from(agreement.getEndDate()));
+    }
+
+    private LocalDate calculateDueDate(
+            RentalAgreement agreement,
+            YearMonth billingPeriod) {
+        Integer dueDay = agreement.getDueDay();
+        if (dueDay == null || dueDay < 1 || dueDay > 31) {
+            throw new IllegalArgumentException(
+                    "Rental agreement does not have a valid rent due day");
+        }
+
+        return billingPeriod.atDay(
+                Math.min(dueDay, billingPeriod.lengthOfMonth()));
+    }
+
+    private RentInvoiceResponse createInvoiceForPeriod(
+            RentalAgreement agreement,
+            YearMonth billingPeriod,
+            LocalDate dueDate,
+            LocalDate invoiceDate) {
+
+        int billingMonth = billingPeriod.getMonthValue();
+        int billingYear = billingPeriod.getYear();
 
         if (rentInvoiceRepository
                 .findByRentalAgreement_AgreementIdAndBillingMonthAndBillingYear(
                         agreement.getAgreementId(),
                         billingMonth,
-                        billingYear
-                )
+                        billingYear)
                 .isPresent()) {
-
-            throw new RuntimeException(
+            throw new IllegalStateException(
                     "Invoice already exists for "
                             + billingMonth
                             + "/"
-                            + billingYear
-            );
+                            + billingYear);
         }
 
-        // -----------------------------------------------------
-        // 5. Create invoice entity
-        // -----------------------------------------------------
-
-        RentInvoice invoice =
-                new RentInvoice();
-
-        invoice.setRentalAgreement(
-                agreement
-        );
-
-        invoice.setTenantId(
-                agreement
-                        .getTenant()
-                        .getTenantId()
-        );
-
+        RentInvoice invoice = new RentInvoice();
+        invoice.setRentalAgreement(agreement);
+        invoice.setTenantId(agreement.getTenant().getTenantId());
         invoice.setUnitId(
                 agreement.getUnit() == null
                         ? null
                         : agreement.getUnit().getUnitId());
+        invoice.setBillingMonth(billingMonth);
+        invoice.setBillingYear(billingYear);
+        invoice.setInvoiceDate(invoiceDate);
+        invoice.setDueDate(dueDate);
 
-        invoice.setBillingMonth(
-                billingMonth
-        );
-
-        invoice.setBillingYear(
-                billingYear
-        );
-
-        invoice.setInvoiceDate(
-                LocalDate.now()
-        );
-
-        // -----------------------------------------------------
-        // 6. Calculate due date
-        // -----------------------------------------------------
-
-        Integer agreementDueDay = agreement.getDueDay();
-        if (agreementDueDay == null
-                || agreementDueDay < 1
-                || agreementDueDay > 31) {
-            throw new IllegalArgumentException(
-                    "Rental agreement does not have a valid rent due day");
-        }
-
-        int dueDay = agreementDueDay;
-
-        LocalDate dueDate;
-
-        int lastDayOfMonth =
-                billingDate.lengthOfMonth();
-
-        if (dueDay > lastDayOfMonth) {
-
-            dueDay = lastDayOfMonth;
-        }
-
-        dueDate =
-                LocalDate.of(
-                        billingYear,
-                        billingMonth,
-                        dueDay
-                );
-
-        invoice.setDueDate(
-                dueDate
-        );
-
-        // -----------------------------------------------------
-        // 7. Rent amount
-        // -----------------------------------------------------
-
-        BigDecimal rentAmount =
-                agreement.getMonthlyRent();
-
-        invoice.setRentAmount(
-                rentAmount
-        );
-
-        // -----------------------------------------------------
-        // 8. Initial late fee
-        // -----------------------------------------------------
-
-        invoice.setLateFee(
-                BigDecimal.ZERO
-        );
-
-        // -----------------------------------------------------
-        // 9. Total amount
-        // -----------------------------------------------------
-
-        invoice.setTotalAmount(
-                rentAmount.add(
-                        BigDecimal.ZERO
-                )
-        );
-
-        // -----------------------------------------------------
-        // 10. Invoice status
-        // -----------------------------------------------------
-
-        invoice.setStatus(
-                InvoiceStatus.PENDING
-        );
-
-        // -----------------------------------------------------
-        // 11. Temporary invoice number
-        // -----------------------------------------------------
-
+        BigDecimal rentAmount = agreement.getMonthlyRent();
+        invoice.setRentAmount(rentAmount);
+        invoice.setLateFee(BigDecimal.ZERO);
+        invoice.setTotalAmount(rentAmount);
+        invoice.setStatus(InvoiceStatus.PENDING);
         invoice.setInvoiceNumber(
-                "TEMP-"
-                        + System.currentTimeMillis()
-        );
+                "TEMP-" + System.currentTimeMillis());
 
-        // -----------------------------------------------------
-        // 12. Save invoice first
-        //     This generates invoiceId
-        // -----------------------------------------------------
-
-        invoice =
-                rentInvoiceRepository.save(
-                        invoice
-                );
-
-        // -----------------------------------------------------
-        // 13. Generate final invoice number
-        // -----------------------------------------------------
-
+        invoice = rentInvoiceRepository.save(invoice);
         invoice.setInvoiceNumber(
                 String.format(
                         "INV-%d-%05d",
                         billingYear,
-                        invoice.getInvoiceId()
-                )
-        );
-
-        // -----------------------------------------------------
-        // 14. Generate PDF
-        // -----------------------------------------------------
-
-        String invoiceDocument =
-                rentInvoicePdfService
-                        .generateInvoicePdf(
-                                invoice
-                        );
+                        invoice.getInvoiceId()));
 
         invoice.setInvoiceDocument(
-                invoiceDocument
-        );
+                rentInvoicePdfService.generateInvoicePdf(invoice));
+        invoice = rentInvoiceRepository.save(invoice);
 
-        // -----------------------------------------------------
-        // 15. Save final invoice
-        // -----------------------------------------------------
-
-        invoice =
-                rentInvoiceRepository.save(
-                        invoice
-                );
-
-        // -----------------------------------------------------
-        // 16. Notify tenant
-        // -----------------------------------------------------
-
-        notifyTenantAboutNewInvoice(
-                invoice
-        );
-
-        // -----------------------------------------------------
-        // 17. Return response
-        // -----------------------------------------------------
-
-        return mapToResponse(
-                invoice
-        );
+        notifyTenantAboutNewInvoice(invoice);
+        return mapToResponse(invoice);
     }
 
     // =========================================================
