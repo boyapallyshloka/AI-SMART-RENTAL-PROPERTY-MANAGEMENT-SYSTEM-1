@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategory;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
-import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.tenant.entity.Tenant;
@@ -60,11 +60,7 @@ public class MaintenanceRequest {
     // UNIT
     // =========================================================
 
-<<<<<<< HEAD
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-=======
     @ManyToOne(fetch = FetchType.EAGER)
->>>>>>> origin/backend/sripriya
     @JoinColumn(name = "unit_id", nullable = true)
     private Unit unit;
 
@@ -159,9 +155,10 @@ public class MaintenanceRequest {
     )
     private BigDecimal cost;
 
+    // Nullable for compatibility with existing maintenance records.
     @Enumerated(EnumType.STRING)
-    @Column(name = "cost_responsibility", length = 20)
-    private MaintenanceCostResponsibility costResponsibility;
+    @Column(name = "payer", length = 20)
+    private MaintenancePayer payer = MaintenancePayer.OWNER_PAID;
 
     // =========================================================
     // CONSTRUCTOR
@@ -181,6 +178,10 @@ public class MaintenanceRequest {
 
         if (status == null) {
             status = MaintenanceStatus.OPEN;
+        }
+
+        if (payer == null) {
+            payer = MaintenancePayer.OWNER_PAID;
         }
     }
 
@@ -288,11 +289,11 @@ public class MaintenanceRequest {
         this.cost = cost;
     }
 
-    public MaintenanceCostResponsibility getCostResponsibility() {
-        return costResponsibility;
+    public MaintenancePayer getPayer() {
+        return payer;
     }
 
-    public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
-        this.costResponsibility = costResponsibility;
+    public void setPayer(MaintenancePayer payer) {
+        this.payer = payer;
     }
 }
