@@ -1,6 +1,5 @@
 package com.rental.rental_management_backend.property.repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,11 +7,8 @@ import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import jakarta.persistence.LockModeType;
 
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
@@ -24,105 +20,10 @@ import com.rental.rental_management_backend.property.enums.PropertyType;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
-    // M3 Rental Demand Prediction: direct-rental House/Villa inventory.
-    @Query("""
-        SELECT COUNT(p)
-        FROM Property p
-        JOIN PropertyAddress pa
-            ON pa.property = p
-        WHERE LOWER(pa.city) = LOWER(:city)
-          AND LOWER(pa.area) = LOWER(:area)
-          AND p.propertyType IN (
-              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
-              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
-          )
-          AND p.status IN (
-              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
-              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
-          )
-        """)
-    long countDirectRentalPropertiesForRentalDemand(
-            @Param("city") String city,
-            @Param("area") String area);
-
-    @Query("""
-        SELECT COUNT(p)
-        FROM Property p
-        JOIN PropertyAddress pa
-            ON pa.property = p
-        WHERE LOWER(pa.city) = LOWER(:city)
-          AND LOWER(pa.area) = LOWER(:area)
-          AND p.propertyType IN (
-              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
-              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
-          )
-          AND p.status = :status
-        """)
-    long countDirectRentalPropertiesByStatusForRentalDemand(
-            @Param("city") String city,
-            @Param("area") String area,
-            @Param("status") PropertyStatus status);
-
-    @Query("""
-        SELECT AVG(p.monthlyRent)
-        FROM Property p
-        JOIN PropertyAddress pa
-            ON pa.property = p
-        WHERE LOWER(pa.city) = LOWER(:city)
-          AND LOWER(pa.area) = LOWER(:area)
-          AND p.propertyType IN (
-              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
-              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
-          )
-          AND p.status IN (
-              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
-              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
-          )
-        """)
-    BigDecimal averageDirectRentalMonthlyRentForRentalDemand(
-            @Param("city") String city,
-            @Param("area") String area);
-
-    @Query("""
-        SELECT COUNT(p.monthlyRent)
-        FROM Property p
-        JOIN PropertyAddress pa
-            ON pa.property = p
-        WHERE LOWER(pa.city) = LOWER(:city)
-          AND LOWER(pa.area) = LOWER(:area)
-          AND p.propertyType IN (
-              com.rental.rental_management_backend.property.enums.PropertyType.HOUSE,
-              com.rental.rental_management_backend.property.enums.PropertyType.VILLA
-          )
-          AND p.status IN (
-              com.rental.rental_management_backend.property.enums.PropertyStatus.AVAILABLE,
-              com.rental.rental_management_backend.property.enums.PropertyStatus.OCCUPIED
-          )
-        """)
-    long countPricedDirectRentalPropertiesForRentalDemand(
-            @Param("city") String city,
-            @Param("area") String area);
-
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
     Optional<Property> findDetailsById(
             @Param("propertyId") Long propertyId);
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT p FROM Property p WHERE p.propertyId = :propertyId")
-    Optional<Property> findByPropertyIdForUpdate(
-            @Param("propertyId") Long propertyId);
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("""
-        SELECT p
-        FROM Property p
-        WHERE p.propertyId = :propertyId
-          AND p.owner = :owner
-        """)
-    Optional<Property> findByPropertyIdAndOwnerForUpdate(
-            @Param("propertyId") Long propertyId,
-            @Param("owner") User owner);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByOwner(User owner);
@@ -148,12 +49,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByStatus(PropertyStatus status);
-
-    @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
-    List<Property> findByStatusAndSubmittedForApprovalTrue(PropertyStatus status);
-
-    @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
-    List<Property> findByStatusIn(List<PropertyStatus> statuses);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByPropertyManager(PropertyManager propertyManager);
@@ -188,31 +83,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
      * to the SAME vacant unit.
      */
     @Query("""
-        SELECT DISTINCT
-            p AS property,
-            COALESCE(
-                (
-                    SELECT primaryImage.imageUrl
-                    FROM PropertyImage primaryImage
-                    WHERE primaryImage.property = p
-                      AND primaryImage.imageId = (
-                          SELECT MIN(primaryImageId.imageId)
-                          FROM PropertyImage primaryImageId
-                          WHERE primaryImageId.property = p
-                            AND primaryImageId.isPrimary = true
-                      )
-                ),
-                (
-                    SELECT fallbackImage.imageUrl
-                    FROM PropertyImage fallbackImage
-                    WHERE fallbackImage.property = p
-                      AND fallbackImage.imageId = (
-                          SELECT MIN(fallbackImageId.imageId)
-                          FROM PropertyImage fallbackImageId
-                          WHERE fallbackImageId.property = p
-                      )
-                )
-            ) AS imageUrl
+        SELECT DISTINCT p
         FROM Property p
         WHERE p.status = :status
 
@@ -325,7 +196,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         )
         """)
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
-    List<PublicPropertySearchResult> searchAvailableProperties(
+    List<Property> searchAvailableProperties(
 
             @Param("status")
             PropertyStatus status,
@@ -355,12 +226,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             Integer bedrooms
     );
 
-    interface PublicPropertySearchResult {
-        Property getProperty();
-
-        String getImageUrl();
-    }
-
     @Query("""
     SELECT new com.rental.rental_management_backend.property.dto.PropertyCardResponse(
         p.propertyId,
@@ -368,9 +233,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         CAST(p.propertyType AS string),
         CAST(p.status AS string),
         p.totalArea,
-        p.bedrooms,
         p.yearBuilt,
-        (SELECT CONCAT(CONCAT(propertyAddress.area, ', '), propertyAddress.city)
+        (SELECT CONCAT(CONCAT(propertyAddress.addressLine1, ', '), propertyAddress.city)
          FROM PropertyAddress propertyAddress
          WHERE propertyAddress.property = p),
         COALESCE(
@@ -420,7 +284,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             CAST(p.propertyType AS string),
             CAST(p.status AS string),
             p.totalArea,
-            p.bedrooms,
             p.yearBuilt,
             (
                 SELECT CONCAT(CONCAT(a.addressLine1, ', '), a.city)

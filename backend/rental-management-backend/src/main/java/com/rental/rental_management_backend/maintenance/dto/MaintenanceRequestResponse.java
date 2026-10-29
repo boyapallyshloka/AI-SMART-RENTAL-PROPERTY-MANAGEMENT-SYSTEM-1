@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceCategory;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.enums.MaintenancePriority;
 import com.rental.rental_management_backend.maintenance.enums.MaintenanceStatus;
-import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
 
 public class MaintenanceRequestResponse {
 
@@ -34,7 +34,7 @@ public class MaintenanceRequestResponse {
 
     private BigDecimal cost;
 
-    private MaintenanceCostResponsibility costResponsibility;
+    private MaintenancePayer payer;
 
     public MaintenanceRequestResponse() {
     }
@@ -135,11 +135,11 @@ public class MaintenanceRequestResponse {
         this.cost = cost;
     }
 
-    public MaintenanceCostResponsibility getCostResponsibility() {
-        return costResponsibility;
+    public MaintenancePayer getPayer() {
+        return payer;
     }
 
-    public void setCostResponsibility(MaintenanceCostResponsibility costResponsibility) {
-        this.costResponsibility = costResponsibility;
+    public void setPayer(MaintenancePayer payer) {
+        this.payer = payer;
     }
 }

@@ -129,12 +129,6 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setAmountPaid(
                 payment.getAmount());
 
-        receipt.setRentAmount(
-                invoice.getRentAmount());
-
-        receipt.setLateFee(
-                invoice.getLateFee());
-
         receipt.setInvoiceTotalAmount(
                 invoice.getTotalAmount());
 
@@ -513,12 +507,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         response.setAmountPaid(
                 receipt.getAmountPaid());
-
-        response.setRentAmount(
-                receipt.getRentAmount());
-
-        response.setLateFee(
-                receipt.getLateFee());
 
         response.setInvoiceTotalAmount(
                 receipt.getInvoiceTotalAmount());

@@ -4,6 +4,8 @@ public enum PropertyStatus {
 
     DRAFT,
     AVAILABLE,
-    NOT_AVAILABLE,
+    PUBLISHED,
     OCCUPIED,
+    UNDER_MAINTENANCE,
+    INACTIVE
 }

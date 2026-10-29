@@ -10,8 +10,6 @@ public class RentalDemandRequestDTO {
     @JsonProperty("area_locality")
     private String areaLocality;
 
-    private Integer year;
-
     private Integer month;
 
     @JsonProperty("property_count")
@@ -61,14 +59,6 @@ public class RentalDemandRequestDTO {
 
     public void setAreaLocality(String areaLocality) {
         this.areaLocality = areaLocality;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
     }
 
     public Integer getMonth() {

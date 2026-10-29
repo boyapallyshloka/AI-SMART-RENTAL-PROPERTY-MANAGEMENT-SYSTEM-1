@@ -21,7 +21,6 @@ import com.rental.rental_management_backend.expense.dto.ExpenseCreateRequest;
 import com.rental.rental_management_backend.expense.dto.ExpenseResponse;
 import com.rental.rental_management_backend.expense.dto.ExpenseUpdateRequest;
 import com.rental.rental_management_backend.expense.entity.Expense;
-import com.rental.rental_management_backend.expense.repository.ExpenseReceiptRepository;
 import com.rental.rental_management_backend.expense.repository.ExpenseRepository;
 import com.rental.rental_management_backend.expense.service.ExpenseService;
 import com.rental.rental_management_backend.property.entity.Property;
@@ -33,7 +32,6 @@ import com.rental.rental_management_backend.property.repository.PropertyReposito
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final ExpenseReceiptRepository expenseReceiptRepository;
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final PropertyManagerRepository propertyManagerRepository;
@@ -42,13 +40,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     public ExpenseServiceImpl(
             ExpenseRepository expenseRepository,
-            ExpenseReceiptRepository expenseReceiptRepository,
             PropertyRepository propertyRepository,
             UserRepository userRepository,
             PropertyManagerRepository propertyManagerRepository) {
 
         this.expenseRepository = expenseRepository;
-        this.expenseReceiptRepository = expenseReceiptRepository;
         this.propertyRepository = propertyRepository;
         this.userRepository = userRepository;
         this.propertyManagerRepository = propertyManagerRepository;
@@ -205,11 +201,6 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Check property access before deleting
         checkPropertyAccess(expense.getProperty());
-
-        // Receipt rows have a restrictive foreign key to expenses. Remove
-        // the generated receipt record first, in the same transaction.
-        expenseReceiptRepository.findByExpense_ExpenseId(expenseId)
-                .ifPresent(expenseReceiptRepository::delete);
 
         expenseRepository.delete(expense);
     }

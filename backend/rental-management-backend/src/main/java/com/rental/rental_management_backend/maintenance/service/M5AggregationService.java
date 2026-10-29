@@ -84,7 +84,7 @@ public class M5AggregationService {
         }
 
         // 3. bedrooms_bhk
-        Integer bedroomsBhk = null;
+        int bedroomsBhk = 1;
 
         if (unit != null) {
             Integer bhk = extractInteger(
@@ -97,14 +97,6 @@ public class M5AggregationService {
             if (bhk != null) {
                 bedroomsBhk = bhk;
             }
-        }
-
-        if (bedroomsBhk == null && property != null && property.getBedrooms() != null) {
-            bedroomsBhk = property.getBedrooms();
-        }
-
-        if (bedroomsBhk == null) {
-            bedroomsBhk = 1;
         }
 
         // 4. amenity_count

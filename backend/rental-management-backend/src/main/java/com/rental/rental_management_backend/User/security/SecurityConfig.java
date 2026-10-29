@@ -129,15 +129,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**")
-                        .permitAll()
-
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/properties/public",
-                                "/api/properties/public/search",
-                                "/api/properties/public/**",
-                                "/api/property-images/public/**")
+                                "/v3/api-docs/**",
+                                "/uploads/property-images/**",
+                                "/uploads/tenant-documents/**",
+                                "/uploads/maintenance/**")
                         .permitAll()
 
                         // -------------------------------------------------

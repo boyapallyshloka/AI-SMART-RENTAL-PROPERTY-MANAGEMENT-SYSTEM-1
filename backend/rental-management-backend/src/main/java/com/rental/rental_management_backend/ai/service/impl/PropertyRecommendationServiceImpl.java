@@ -12,16 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rental.rental_management_backend.User.Repository.UserRepository;
-import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.ai.client.M2RecommendationClient;
 import com.rental.rental_management_backend.ai.dto.AvailableUnitResponse;
 import com.rental.rental_management_backend.ai.dto.M2RecommendationItem;
@@ -33,16 +28,13 @@ import com.rental.rental_management_backend.property.entity.Unit;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
-import com.rental.rental_management_backend.s3.service.S3Service;
-import com.rental.rental_management_backend.tenant.entity.Tenant;
 import com.rental.rental_management_backend.tenant.repository.TenantRepository;
+import com.rental.rental_management_backend.s3.service.S3Service;
 
 @Service
 @Transactional(readOnly = true)
 public class PropertyRecommendationServiceImpl
         implements PropertyRecommendationService {
-
-    private final UserRepository userRepository;
 
     private final TenantRepository tenantRepository;
 
@@ -60,8 +52,6 @@ public class PropertyRecommendationServiceImpl
 
     public PropertyRecommendationServiceImpl(
 
-            UserRepository userRepository,
-
             TenantRepository tenantRepository,
 
             M2RecommendationClient m2RecommendationClient,
@@ -73,8 +63,6 @@ public class PropertyRecommendationServiceImpl
             S3Service s3Service,
 
             ObjectMapper objectMapper) {
-
-        this.userRepository = userRepository;
 
         this.tenantRepository = tenantRepository;
 
@@ -110,30 +98,15 @@ public class PropertyRecommendationServiceImpl
 
         /*
          * ============================================================
-         * 1. VERIFY AUTHENTICATED TENANT
+         * 1. VERIFY TENANT
          * ============================================================
          */
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null
-                || !authentication.isAuthenticated()
-                || authentication.getName() == null
-                || authentication.getName().isBlank()) {
-            throw new AccessDeniedException("Access denied");
-        }
+        tenantRepository.findById(tenantId)
 
-        User authenticatedUser = userRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new AccessDeniedException("Access denied"));
-        Tenant authenticatedTenant = tenantRepository
-                .findByUser(authenticatedUser)
-                .orElseThrow(() -> new AccessDeniedException("Access denied"));
-
-        if (tenantId == null
-                || !authenticatedTenant.getTenantId().equals(tenantId)) {
-            throw new AccessDeniedException("Access denied");
-        }
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Tenant not found with ID: " + tenantId));
 
         /*
          * ============================================================
@@ -239,9 +212,7 @@ public class PropertyRecommendationServiceImpl
 
                         String.valueOf(tenantId),
 
-                        // The M2 contract requires numeric topN; use its supported
-                        // Integer ceiling so it does not truncate matching properties.
-                        Integer.MAX_VALUE,
+                        topN,
 
                         validLatitude,
 

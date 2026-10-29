@@ -19,20 +19,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(
-        name = "rent_invoices",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_rent_invoice_agreement_billing_period",
-                columnNames = {
-                        "agreement_id",
-                        "billing_month",
-                        "billing_year"
-                }))
+@Table(name = "rent_invoices")
 @Getter
 @Setter
 public class RentInvoice {

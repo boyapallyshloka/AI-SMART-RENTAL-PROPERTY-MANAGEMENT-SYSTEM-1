@@ -1,16 +1,12 @@
 
 package com.rental.rental_management_backend.ai.service;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import com.rental.rental_management_backend.User.Repository.UserRepository;
-import com.rental.rental_management_backend.User.entity.User;
-import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.ai.client.M4PaymentRiskClient;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskRequest;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskResponse;
-import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
+import com.rental.rental_management_backend.payment.service.PaymentService;
 
 @Service
 public class M4PaymentRiskService {
@@ -19,9 +15,7 @@ public class M4PaymentRiskService {
 
     private final M4PaymentRiskClient paymentRiskClient;
 
-    private final UserRepository userRepository;
-
-    private final RentalApplicationRepository rentalApplicationRepository;
+    private final PaymentService paymentService;
 
     public M4PaymentRiskService(
 
@@ -29,9 +23,7 @@ public class M4PaymentRiskService {
 
             M4PaymentRiskClient paymentRiskClient,
 
-            UserRepository userRepository,
-
-            RentalApplicationRepository rentalApplicationRepository) {
+            PaymentService paymentService) {
 
         this.aggregationService =
                 aggregationService;
@@ -39,11 +31,8 @@ public class M4PaymentRiskService {
         this.paymentRiskClient =
                 paymentRiskClient;
 
-        this.userRepository =
-                userRepository;
-
-        this.rentalApplicationRepository =
-                rentalApplicationRepository;
+        this.paymentService =
+                paymentService;
     }
 
     public M4PaymentRiskResponse predictPaymentRisk(
@@ -64,29 +53,23 @@ public class M4PaymentRiskService {
                     "Authenticated user is required");
         }
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AccessDeniedException(
-                        "You do not have permission to view this payment-risk prediction"));
-
-        boolean authorized = switch (user.getRole()) {
-            case SUPER_ADMIN -> true;
-            case PROPERTY_OWNER ->
-                    rentalApplicationRepository
-                            .existsPaymentRiskApplicationForTenantAndOwner(
-                                    tenantId,
-                                    user.getId());
-            case PROPERTY_MANAGER ->
-                    rentalApplicationRepository
-                            .existsPaymentRiskApplicationForTenantAndManager(
-                                    tenantId,
-                                    user.getId());
-            case TENANT -> false;
-        };
-
-        if (!authorized) {
-            throw new AccessDeniedException(
-                    "You do not have permission to view this payment-risk prediction");
-        }
+        /*
+         * Step 1:
+         * Reuse the existing payment authorization logic.
+         *
+         * PaymentService already verifies:
+         *
+         * SUPER_ADMIN        -> allowed
+         * PROPERTY_OWNER     -> property ownership checked
+         * PROPERTY_MANAGER   -> managed property checked
+         * TENANT             -> blocked by controller
+         *
+         * This prevents us from creating a second,
+         * different property-authorization implementation.
+         */
+        paymentService.getPaymentsByTenant(
+                tenantId,
+                email);
 
         /*
          * Step 2:

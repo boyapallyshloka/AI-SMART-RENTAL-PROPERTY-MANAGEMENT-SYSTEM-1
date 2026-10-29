@@ -31,17 +31,15 @@ import jakarta.validation.Valid;
 public class PropertyController {
 
     private final PropertyService propertyService;
+
     private final PropertyDetailsService propertyDetailsService;
-    private final com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService;
 
     public PropertyController(
             PropertyService propertyService,
-            PropertyDetailsService propertyDetailsService,
-            com.rental.rental_management_backend.property.service.PropertyDocumentService propertyDocumentService) {
+            PropertyDetailsService propertyDetailsService) {
 
         this.propertyService = propertyService;
         this.propertyDetailsService = propertyDetailsService;
-        this.propertyDocumentService = propertyDocumentService;
     }
 
     /*
@@ -57,13 +55,6 @@ public class PropertyController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
-    }
-
-    @PostMapping("/{id}/submit-for-approval")
-    public ResponseEntity<PropertyResponse> submitPropertyForApproval(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(
-                propertyService.submitPropertyForApproval(id));
     }
 
     /*
@@ -159,19 +150,6 @@ public class PropertyController {
     }
 
     /*
-     * GET PUBLICATION ELIGIBILITY FOR A PROPERTY
-     */
-    @GetMapping("/{id}/publish-eligibility")
-    public ResponseEntity<com.rental.rental_management_backend.property.dto.PropertyPublishEligibilityResponse> getPublishEligibility(
-            @PathVariable Long id,
-            org.springframework.security.core.Authentication authentication) {
-
-        return ResponseEntity.ok(
-                propertyDocumentService.getPublishEligibility(id, authentication.getName())
-        );
-    }
-
-    /*
      * ASSIGN PROPERTY MANAGER
      *
      * The logged-in property owner can assign
@@ -207,4 +185,5 @@ public class PropertyController {
         );
     }
 }
+
 
