@@ -182,6 +182,14 @@ export const logout = async () => {
 }
 
 /**
+ * Deactivate the currently authenticated account.
+ * Backend: DELETE /api/auth/account
+ */
+export const deactivateMyAccount = async () => {
+  return axiosClient.delete('/auth/account')
+}
+
+/**
  * Send password recovery instructions
  * Spring Boot Endpoint: POST /api/auth/forgot-password
  * Request: { email: "user@example.com" }

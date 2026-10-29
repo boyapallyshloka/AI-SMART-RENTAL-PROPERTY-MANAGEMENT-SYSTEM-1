@@ -59,6 +59,7 @@ const OWNER_MENU = [
 
 const TENANT_MENU = [
   { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { id: 'account', label: 'My Account', icon: <User className="w-4 h-4" /> },
   { id: 'buildings', label: 'My Rental Property', icon: <Building2 className="w-4 h-4" /> },
   { id: 'find-properties', label: 'Find Properties', icon: <Search className="w-4 h-4" /> },
   { id: 'my-applications', label: 'My Applications', icon: <FileCheck className="w-4 h-4" /> },
@@ -196,6 +197,7 @@ export default function Sidebar({
       else if (id === 'reports') navigate('/owner/reports')
     } else if (isTenant(role)) {
       if (id === 'dashboard') navigate('/tenant/dashboard')
+      else if (id === 'account') navigate('/tenant/account')
       else if (id === 'buildings' || id === 'my-rental') navigate('/tenant/buildings')
       else if (id === 'find-properties' || id === 'browse') navigate('/tenant/find-properties')
       else if (id === 'my-applications') navigate('/tenant/applications')

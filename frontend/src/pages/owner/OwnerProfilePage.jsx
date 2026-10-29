@@ -5,6 +5,7 @@ import { ROLES, getRoleLabel } from '../../utils/roles'
 import { getMyOwnerProfile } from '../../api/ownerProfileApi'
 import OwnerProfileAddressForm from '../../components/properties/OwnerProfileAddressForm'
 import ChangePasswordForm from '../../components/common/ChangePasswordForm'
+import SelfServiceAccountSection from '../../components/common/SelfServiceAccountSection'
 import { Button, StatusBadge, Loader } from '../../components/ui'
 import {
   User,
@@ -242,18 +243,21 @@ export default function OwnerProfilePage() {
 
         {/* Tab 2: Security & Password Content */}
         {activeTab === 'security' && (
-          <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
-            <div className="border-b border-[#D9E0E6] pb-3">
-              <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
-                <KeyRound className="w-4 h-4 text-[#315A7D]" />
-                <span>Account Password & Credentials</span>
-              </h2>
-              <p className="text-xs text-[#5B6875] mt-0.5">
-                Ensure your owner account remains secure with strong authentication credentials.
-              </p>
-            </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-[#D9E0E6] p-6 shadow-xs space-y-4">
+              <div className="border-b border-[#D9E0E6] pb-3">
+                <h2 className="text-base font-bold text-[#243447] flex items-center gap-2">
+                  <KeyRound className="w-4 h-4 text-[#315A7D]" />
+                  <span>Account Password & Credentials</span>
+                </h2>
+                <p className="text-xs text-[#5B6875] mt-0.5">
+                  Ensure your owner account remains secure with strong authentication credentials.
+                </p>
+              </div>
 
-            <ChangePasswordForm />
+              <ChangePasswordForm />
+            </div>
+            <SelfServiceAccountSection />
           </div>
         )}
       </div>

@@ -38,6 +38,7 @@ import OwnerProfilePage from '../pages/owner/OwnerProfilePage'
 
 // Tenant Dashboard Pages
 import TenantDashboardPage from '../pages/tenant/TenantDashboardPage'
+import TenantAccountPage from '../pages/tenant/TenantAccountPage'
 import TenantApplicationsPage from '../pages/tenant/TenantApplicationsPage'
 import SubmitApplicationPage from '../pages/tenant/SubmitApplicationPage'
 import TenantAgreementPage from '../pages/tenant/TenantAgreementPage'
@@ -285,6 +286,7 @@ export default function AppRoutes() {
             <RoleRoute allowedRole={[ROLES.TENANT]}>
               <Routes>
                 <Route path="dashboard" element={<TenantDashboardPage />} />
+                <Route path="account" element={<TenantAccountPage />} />
                 <Route path="buildings" element={<BuildingsPage />} />
                 <Route path="my-rental" element={<Navigate to="/tenant/buildings" replace />} />
                 <Route path="buildings/:buildingId" element={<BuildingDetailsPage />} />
