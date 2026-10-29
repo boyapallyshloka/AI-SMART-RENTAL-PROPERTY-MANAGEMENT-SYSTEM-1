@@ -154,6 +154,17 @@ public class SecurityConfig {
                         .hasRole("SUPER_ADMIN")
 
                         // =================================================
+                        // PUBLIC PROPERTY BROWSING
+                        // =================================================
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/properties/public",
+                                "/api/properties/public/search",
+                                "/api/properties/public/*")
+                        .permitAll()
+
+                        // =================================================
                         // PROPERTY LIST & DETAILS
                         // OWNER & TENANT BROWSING
                         // =================================================

@@ -3,6 +3,7 @@ package com.rental.rental_management_backend.maintenance.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -632,83 +633,28 @@ public class MaintenanceRequestServiceImpl
                     "You are not allowed to update this maintenance request");
         }
 
-        // -----------------------------------------------------
-        // FIND PROPERTY
-        // -----------------------------------------------------
+        if (existingRequest.getTenant() == null
+                || !Objects.equals(
+                        existingRequest.getTenant().getTenantId(),
+                        request.getTenantId())
+                || existingRequest.getProperty() == null
+                || !Objects.equals(
+                        existingRequest.getProperty().getPropertyId(),
+                        request.getPropertyId())
+                || !Objects.equals(
+                        existingRequest.getUnit() == null
+                                ? null
+                                : existingRequest.getUnit().getUnitId(),
+                        request.getUnitId())) {
 
-        Property property =
-                propertyRepository
-                        .findById(request.getPropertyId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Property not found with ID: "
-                                                + request.getPropertyId()));
-
-        if (role == RoleType.PROPERTY_OWNER) {
-
-            if (property.getOwner() == null
-                    || !user.getId().equals(
-                            property.getOwner().getId())) {
-
-                throw new AccessDeniedException(
-                        "You are not allowed to assign maintenance request "
-                                + "to an unowned property");
-            }
-
-        } else if (role == RoleType.PROPERTY_MANAGER) {
-
-            if (property.getPropertyManager() == null
-                    || property.getPropertyManager().getUser() == null
-                    || !user.getId().equals(
-                            property.getPropertyManager()
-                                    .getUser()
-                                    .getId())) {
-
-                throw new AccessDeniedException(
-                        "You are not allowed to assign maintenance request "
-                                + "to an unmanaged property");
-            }
-        }
-
-        // -----------------------------------------------------
-        // FIND UNIT
-        // -----------------------------------------------------
-
-        Unit unit = validateMaintenanceTarget(
-                property,
-                request.getUnitId());
-
-        // -----------------------------------------------------
-        // TENANT HANDLING
-        // -----------------------------------------------------
-
-        Tenant tenant;
-
-        if (isTenant) {
-
-            tenant =
-                    existingRequest.getTenant();
-
-        } else {
-
-            tenant =
-                    tenantRepository
-                            .findById(request.getTenantId())
-                            .orElseThrow(() ->
-                                    new ResourceNotFoundException(
-                                            "Tenant not found with ID: "
-                                                    + request.getTenantId()));
+            throw new IllegalArgumentException(
+                    "Maintenance request tenant, property, and unit "
+                            + "cannot be changed");
         }
 
         // -----------------------------------------------------
         // UPDATE BASIC FIELDS
         // -----------------------------------------------------
-
-        existingRequest.setTenant(tenant);
-
-        existingRequest.setProperty(property);
-
-        existingRequest.setUnit(unit);
 
         existingRequest.setCategory(
                 request.getCategory());
