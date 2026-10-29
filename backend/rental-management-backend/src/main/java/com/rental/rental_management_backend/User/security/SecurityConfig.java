@@ -99,6 +99,13 @@ public class SecurityConfig {
                 // =================================================
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/auth/account")
+                        .hasAnyRole(
+                                "TENANT",
+                                "PROPERTY_OWNER",
+                                "PROPERTY_MANAGER")
 
                         // -------------------------------------------------
                         // PUBLIC AUTHENTICATION APIs

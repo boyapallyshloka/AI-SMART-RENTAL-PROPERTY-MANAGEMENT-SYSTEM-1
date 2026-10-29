@@ -54,6 +54,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("/auth/account")
+    public ResponseEntity<Void> deactivateMyAccount(
+            Authentication authentication) {
+
+        userService.deactivateMyAccount(authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/auth/verify-email-otp")
     public ResponseEntity<String> verifyEmailOtp(
             @Valid @RequestBody VerifyEmailOtpRequest request) {
