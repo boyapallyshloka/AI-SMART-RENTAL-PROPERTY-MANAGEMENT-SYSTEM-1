@@ -1,3 +1,4 @@
+
 package com.rental.rental_management_backend.reports.service;
 
 import java.math.BigDecimal;
@@ -8,11 +9,11 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.expense.entity.Expense;
 import com.rental.rental_management_backend.expense.repository.ExpenseRepository;
 import com.rental.rental_management_backend.maintenance.entity.MaintenanceRequest;
-import com.rental.rental_management_backend.maintenance.enums.MaintenanceCostResponsibility;
+import com.rental.rental_management_backend.maintenance.enums.MaintenancePayer;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
 import com.rental.rental_management_backend.payment.entity.Payment;
 import com.rental.rental_management_backend.payment.enums.PaymentStatus;
@@ -34,17 +35,13 @@ import com.rental.rental_management_backend.payment.repository.PaymentRepository
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.entity.Unit;
-import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.repository.UnitRepository;
 import com.rental.rental_management_backend.rental.entity.RentInvoice;
-import com.rental.rental_management_backend.rental.entity.RentalAgreement;
-import com.rental.rental_management_backend.rental.enums.AgreementStatus;
 import com.rental.rental_management_backend.rental.enums.InvoiceStatus;
 import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
-import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 import com.rental.rental_management_backend.reports.dto.ReportsAnalyticsResponse;
 import com.rental.rental_management_backend.reports.dto.ReportsAnalyticsResponse.ExpenseBreakdown;
 import com.rental.rental_management_backend.reports.dto.ReportsAnalyticsResponse.MonthlyTrend;
@@ -63,7 +60,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
     private final PropertyManagerRepository propertyManagerRepository;
     private final UnitRepository unitRepository;
     private final RentInvoiceRepository rentInvoiceRepository;
-    private final RentalAgreementRepository rentalAgreementRepository;
     private final PaymentRepository paymentRepository;
     private final ExpenseRepository expenseRepository;
     private final MaintenanceRequestRepository maintenanceRequestRepository;
@@ -74,7 +70,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
             PropertyManagerRepository propertyManagerRepository,
             UnitRepository unitRepository,
             RentInvoiceRepository rentInvoiceRepository,
-            RentalAgreementRepository rentalAgreementRepository,
             PaymentRepository paymentRepository,
             ExpenseRepository expenseRepository,
             MaintenanceRequestRepository maintenanceRequestRepository) {
@@ -84,7 +79,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
         this.propertyManagerRepository = propertyManagerRepository;
         this.unitRepository = unitRepository;
         this.rentInvoiceRepository = rentInvoiceRepository;
-        this.rentalAgreementRepository = rentalAgreementRepository;
         this.paymentRepository = paymentRepository;
         this.expenseRepository = expenseRepository;
         this.maintenanceRequestRepository = maintenanceRequestRepository;
@@ -114,39 +108,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
         Set<Long> propertyIds = properties.stream()
                 .map(Property::getPropertyId)
                 .collect(Collectors.toSet());
-
-        Set<Long> directPropertyIds = properties.stream()
-                .filter(property ->
-                        property.getPropertyType() == PropertyType.HOUSE
-                                || property.getPropertyType() == PropertyType.VILLA)
-                .map(Property::getPropertyId)
-                .collect(Collectors.toSet());
-
-        Set<Long> occupiedDirectPropertyIds = new HashSet<>();
-
-        if (!directPropertyIds.isEmpty()) {
-            for (RentalAgreement agreement
-                    : rentalAgreementRepository.findAllForManagementResponse()) {
-
-                Property directProperty = agreement.getProperty();
-
-                if (directProperty == null
-                        || agreement.getUnit() != null
-                        || agreement.getStatus() != AgreementStatus.ACTIVE
-                        || agreement.getStartDate() == null
-                        || agreement.getEndDate() == null
-                        || agreement.getStartDate().isAfter(endDate)
-                        || agreement.getEndDate().isBefore(endDate)) {
-                    continue;
-                }
-
-                Long directPropertyId = directProperty.getPropertyId();
-
-                if (directPropertyIds.contains(directPropertyId)) {
-                    occupiedDirectPropertyIds.add(directPropertyId);
-                }
-            }
-        }
 
         Map<Long, List<Unit>> unitsByProperty = new HashMap<>();
         Map<Long, Long> propertyIdByUnitId = new HashMap<>();
@@ -180,8 +141,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
 
         List<RentInvoice> invoices = new ArrayList<>();
         Map<Long, Long> propertyIdByInvoiceId = new HashMap<>();
-<<<<<<< HEAD
-=======
 
         for (RentInvoice invoice : rentInvoiceRepository.findAll()) {
             Long propertyId = resolveInvoicePropertyId(invoice);
@@ -193,19 +152,12 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
             invoices.add(invoice);
             propertyIdByInvoiceId.put(invoice.getInvoiceId(), propertyId);
         }
->>>>>>> origin/backend/sripriya
 
-        for (RentInvoice invoice : rentInvoiceRepository.findAll()) {
-            Long propertyId = resolveInvoicePropertyId(
-                    invoice, propertyIdByUnitId);
-
-            if (propertyId == null || !propertyIds.contains(propertyId)) {
-                continue;
-            }
-
-            invoices.add(invoice);
-            propertyIdByInvoiceId.put(invoice.getInvoiceId(), propertyId);
-        }
+        Map<Long, RentInvoice> invoiceById = invoices.stream()
+                .collect(Collectors.toMap(
+                        RentInvoice::getInvoiceId,
+                        Function.identity(),
+                        (first, second) -> first));
 
         Map<Long, BigDecimal> successfulPaymentByInvoice = new HashMap<>();
         Map<Long, BigDecimal> incomeByProperty = zeroAmounts(propertyIds);
@@ -235,7 +187,7 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
 
             Long invoiceId = payment.getInvoice().getInvoiceId();
 
-            if (!propertyIdByInvoiceId.containsKey(invoiceId)) {
+            if (!invoiceById.containsKey(invoiceId)) {
                 continue;
             }
 
@@ -256,12 +208,10 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                 continue;
             }
 
+            RentInvoice invoice = invoiceById.get(invoiceId);
+
             Long propertyId =
-<<<<<<< HEAD
-                    propertyIdByInvoiceId.get(invoiceId);
-=======
                     propertyIdByInvoiceId.get(invoice.getInvoiceId());
->>>>>>> origin/backend/sripriya
 
             if (propertyId == null) {
                 continue;
@@ -381,8 +331,11 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
             if (request.getStatus() == null
                     || !"COMPLETED".equals(request.getStatus().name())
                     || request.getCost() == null
-                    || request.getCostResponsibility() != MaintenanceCostResponsibility.OWNER_PAID
                     || request.getCompletedDate() == null) {
+                continue;
+            }
+
+            if (request.getPayer() == MaintenancePayer.TENANT_PAID) {
                 continue;
             }
 
@@ -405,9 +358,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
         long occupiedUnits = 0;
         long vacantUnits = 0;
         long otherUnits = 0;
-        long totalDirectProperties = 0;
-        long occupiedDirectProperties = 0;
-        long vacantDirectProperties = 0;
 
         BigDecimal totalIncome = BigDecimal.ZERO;
         BigDecimal totalExpenses = BigDecimal.ZERO;
@@ -432,12 +382,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                     .count();
 
             long other = units.size() - occupied - vacant;
-            long totalDirect = directPropertyIds.contains(propertyId) ? 1 : 0;
-            long occupiedDirect =
-                    occupiedDirectPropertyIds.contains(propertyId) ? 1 : 0;
-            long vacantDirect = totalDirect - occupiedDirect;
-            long totalRentableInventory = units.size() + totalDirect;
-            long occupiedRentableInventory = occupied + occupiedDirect;
 
             BigDecimal income =
                     money(incomeByProperty.get(propertyId));
@@ -463,23 +407,12 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                     units.size(),
                     occupied,
                     vacant,
-                    percentage(occupied, units.size()),
-                    totalDirect,
-                    occupiedDirect,
-                    vacantDirect,
-                    totalRentableInventory,
-                    occupiedRentableInventory,
-                    percentage(
-                            occupiedRentableInventory,
-                            totalRentableInventory)));
+                    percentage(occupied, units.size())));
 
             totalUnits += units.size();
             occupiedUnits += occupied;
             vacantUnits += vacant;
             otherUnits += other;
-            totalDirectProperties += totalDirect;
-            occupiedDirectProperties += occupiedDirect;
-            vacantDirectProperties += vacantDirect;
 
             totalIncome = totalIncome.add(income);
             totalExpenses = totalExpenses.add(expenses);
@@ -527,15 +460,7 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                 money(totalExpenses),
                 money(totalMaintenance),
                 money(totalNetIncome),
-                maintenanceCount,
-                totalDirectProperties,
-                occupiedDirectProperties,
-                vacantDirectProperties,
-                totalUnits + totalDirectProperties,
-                occupiedUnits + occupiedDirectProperties,
-                percentage(
-                        occupiedUnits + occupiedDirectProperties,
-                        totalUnits + totalDirectProperties));
+                maintenanceCount);
 
         return new ReportsAnalyticsResponse(
                 startDate.toString(),
@@ -611,22 +536,6 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
     private BigDecimal safe(BigDecimal amount) {
 
         return amount == null ? BigDecimal.ZERO : amount;
-    }
-
-    private Long resolveInvoicePropertyId(
-            RentInvoice invoice,
-            Map<Long, Long> propertyIdByUnitId) {
-
-        if (invoice.getRentalAgreement() != null
-                && invoice.getRentalAgreement().getProperty() != null) {
-            return invoice.getRentalAgreement()
-                    .getProperty()
-                    .getPropertyId();
-        }
-
-        Long unitId = invoice.getUnitId();
-
-        return unitId == null ? null : propertyIdByUnitId.get(unitId);
     }
 
     private BigDecimal money(BigDecimal amount) {
