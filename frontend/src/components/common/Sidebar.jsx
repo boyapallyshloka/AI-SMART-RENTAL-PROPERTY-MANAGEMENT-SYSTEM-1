@@ -11,7 +11,6 @@ import {
   HardHat,
   Wrench,
   BarChart3,
-  Sparkles,
   Search,
   X,
   Users,
@@ -55,7 +54,6 @@ const OWNER_MENU = [
   { id: 'payments', label: 'Payments', icon: <CreditCard className="w-4 h-4" /> },
   { id: 'maintenance', label: 'Maintenance', icon: <Wrench className="w-4 h-4" /> },
   { id: 'reports', label: 'Reports', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'ai-insights', label: 'AI Insights', icon: <Sparkles className="w-4 h-4 text-[#315A7D]" /> },
   { id: 'profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
 ]
 
@@ -196,7 +194,6 @@ export default function Sidebar({
       else if (id === 'maintenance') navigate('/owner/maintenance')
       else if (id === 'profile') navigate('/owner/profile')
       else if (id === 'reports') navigate('/owner/reports')
-      else if (id === 'ai-insights') navigate('/owner/ai-insights')
     } else if (isTenant(role)) {
       if (id === 'dashboard') navigate('/tenant/dashboard')
       else if (id === 'buildings' || id === 'my-rental') navigate('/tenant/buildings')

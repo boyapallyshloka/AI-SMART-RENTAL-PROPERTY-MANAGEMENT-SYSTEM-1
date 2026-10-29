@@ -4,6 +4,7 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 import { useAuth } from '../../context/AuthContext'
 import {
   getInvoiceById,
+  updateInvoiceLateFee,
   INVOICE_STATUSES,
 } from '../../api/invoiceApi'
 import {
@@ -45,6 +46,7 @@ import {
   ShieldCheck,
   Check,
   X,
+  Pencil,
 } from 'lucide-react'
 
 // Date formatter
@@ -132,6 +134,9 @@ export default function PaymentDetailsPage() {
   const [error, setError] = useState(null)
   const [noticeMessage, setNoticeMessage] = useState('')
   const [isDownloading, setIsDownloading] = useState(false)
+  const [isEditingLateFee, setIsEditingLateFee] = useState(false)
+  const [lateFeeDraft, setLateFeeDraft] = useState('0')
+  const [isSavingLateFee, setIsSavingLateFee] = useState(false)
 
   // Receipt Records & Print Modal State
   const [receipts, setReceipts] = useState([])
@@ -249,6 +254,7 @@ export default function PaymentDetailsPage() {
       }
 
       setInvoice(enriched)
+      setLateFeeDraft(String(enriched.lateFee ?? 0))
     } catch (err) {
       console.error('Failed to load invoice details:', err)
       setError(extractErrorMessage(err, 'Failed to load invoice details from the server.'))
@@ -257,6 +263,55 @@ export default function PaymentDetailsPage() {
       setLoadingReceipts(false)
     }
   }, [id, user?.role])
+
+  const handleSaveLateFee = async () => {
+    const enteredAmount = String(lateFeeDraft).trim()
+    if (!/^\d+(\.\d{1,2})?$/.test(enteredAmount)) {
+      setNoticeMessage('Enter a non-negative late fee with up to two decimal places.')
+      return
+    }
+
+    setIsSavingLateFee(true)
+    try {
+      const response = await updateInvoiceLateFee(id, Number(enteredAmount))
+      const updatedInvoice = response?.data || response
+      const lateFee = Number(updatedInvoice?.lateFee ?? enteredAmount)
+      const totalAmount = Number(
+        updatedInvoice?.totalAmount ?? Number(invoice.rentAmount || 0) + lateFee
+      )
+      const totalPaid = Number(updatedInvoice?.totalPaid ?? invoice.totalPaid ?? 0)
+      const remainingAmount = Number(
+        updatedInvoice?.remainingAmount ?? Math.max(0, totalAmount - totalPaid)
+      )
+
+      setInvoice((current) => ({
+        ...current,
+        ...updatedInvoice,
+        lateFee,
+        totalAmount,
+        totalPaid,
+        remainingAmount,
+      }))
+      setLateFeeDraft(String(lateFee))
+      setIsEditingLateFee(false)
+      setNoticeMessage('Late fee updated. Invoice total and balance have been refreshed.')
+    } catch (err) {
+      setNoticeMessage(
+        extractErrorMessage(err, 'Failed to update the late fee. Please try again.')
+      )
+    } finally {
+      setIsSavingLateFee(false)
+    }
+  }
+
+  const canManageLateFee =
+    ['PROPERTY_OWNER', 'PROPERTY_MANAGER', 'SUPER_ADMIN'].includes(user?.role) &&
+    String(invoice?.status || '').toUpperCase() !== 'PAID'
+
+  const cancelLateFeeEdit = () => {
+    setLateFeeDraft(String(invoice?.lateFee ?? 0))
+    setIsEditingLateFee(false)
+  }
 
   // Dedicated receipt refresh callback
   const loadReceipts = useCallback(async () => {
@@ -593,15 +648,61 @@ export default function PaymentDetailsPage() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-[#5B6875]">Late Fee</span>
-                    <span
-                      className={`font-medium ${
-                        Number(invoice.lateFee || 0) > 0
-                          ? 'text-[#B94A48] font-semibold'
-                          : 'text-[#243447]'
-                      }`}
-                    >
-                      {formatCurrency(invoice.lateFee)}
-                    </span>
+                    <div className="flex items-center justify-end gap-2">
+                      {isEditingLateFee ? (
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          inputMode="decimal"
+                          aria-label="Late fee amount"
+                          value={lateFeeDraft}
+                          onChange={(event) => setLateFeeDraft(event.target.value)}
+                          className="w-32 rounded-lg border border-[#C8D3DD] px-3 py-1.5 text-right text-sm text-[#243447] outline-none focus:border-[#315A7D] focus:ring-2 focus:ring-[#315A7D]/15"
+                          disabled={isSavingLateFee}
+                        />
+                      ) : (
+                        <span
+                          className={`font-medium ${
+                            Number(invoice.lateFee || 0) > 0
+                              ? 'text-[#B94A48] font-semibold'
+                              : 'text-[#243447]'
+                          }`}
+                        >
+                          {formatCurrency(invoice.lateFee)}
+                        </span>
+                      )}
+                      {canManageLateFee && !isEditingLateFee && (
+                        <button
+                          type="button"
+                          onClick={() => setIsEditingLateFee(true)}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#315A7D] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#274B68] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/30 focus:ring-offset-1"
+                        >
+                          <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+                          Edit Late Fee
+                        </button>
+                      )}
+                      {canManageLateFee && isEditingLateFee && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={handleSaveLateFee}
+                            disabled={isSavingLateFee}
+                            className="rounded-lg bg-[#315A7D] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#274B68] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {isSavingLateFee ? 'Saving…' : 'Save'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={cancelLateFeeEdit}
+                            disabled={isSavingLateFee}
+                            className="rounded-lg border border-[#C8D3DD] bg-white px-3 py-1.5 text-xs font-semibold text-[#425466] transition-colors hover:bg-[#F4F7F9] focus:outline-none focus:ring-2 focus:ring-[#315A7D]/20 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-[#D9E0E6]">

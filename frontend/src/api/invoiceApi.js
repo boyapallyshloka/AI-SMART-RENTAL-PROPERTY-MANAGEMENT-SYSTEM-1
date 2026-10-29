@@ -40,6 +40,17 @@ export const getInvoiceById = async (invoiceId) => {
 }
 
 /**
+ * Update the late fee for an unpaid rent invoice.
+ * Backend: PATCH /api/rent-invoices/{invoiceId}/late-fee
+ * Body: { lateFee: number }
+ */
+export const updateInvoiceLateFee = async (invoiceId, lateFee) => {
+  return await axiosClient.patch(`/rent-invoices/${invoiceId}/late-fee`, {
+    lateFee: Number(lateFee),
+  })
+}
+
+/**
  * TENANT: Retrieve all rent invoices belonging to the authenticated tenant
  * Endpoint: GET /api/rent-invoices/my
  * Permitted roles: TENANT

@@ -5,19 +5,6 @@ import axiosClient from './axiosClient'
  */
 
 /**
- * Predict rental demand for a locality and month.
- * Backend: POST /api/ai/rental-demand/predict
- * Body: { city, area, year, month }
- */
-export const predictRentalDemand = ({ city, area, year, month }) =>
-  axiosClient.post('/ai/rental-demand/predict', {
-    city: String(city || '').trim(),
-    area: String(area || '').trim(),
-    year: Number(year),
-    month: Number(month),
-  })
-
-/**
  * AI Property Recommendation Module (M2)
  * Spring Boot Endpoint: GET /api/ai/recommendations
  *
