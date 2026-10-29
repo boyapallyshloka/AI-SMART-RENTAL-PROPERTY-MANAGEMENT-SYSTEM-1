@@ -59,7 +59,9 @@ public interface UserService {
 
     UserResponse updateUserStatus(Long id, UserStatus status);
 
-    void deleteUser(Long id);
+    void deactivateUser(Long id);
+
+    UserResponse reactivateUser(Long id);
 
     UserResponse getMyProfile(String email);
 

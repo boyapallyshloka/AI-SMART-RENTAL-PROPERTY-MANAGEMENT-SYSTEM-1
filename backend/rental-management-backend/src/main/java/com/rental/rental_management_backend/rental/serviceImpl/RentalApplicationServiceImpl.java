@@ -36,7 +36,9 @@ import com.rental.rental_management_backend.rental.dto.RentalApplicationCreateRe
 import com.rental.rental_management_backend.rental.dto.RentalApplicationResponse;
 import com.rental.rental_management_backend.rental.dto.RentalApplicationReviewRequest;
 import com.rental.rental_management_backend.rental.entity.RentalApplication;
+import com.rental.rental_management_backend.rental.enums.AgreementStatus;
 import com.rental.rental_management_backend.rental.enums.RentalApplicationStatus;
+import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
 import com.rental.rental_management_backend.rental.service.RentalApplicationService;
 
@@ -49,6 +51,8 @@ public class RentalApplicationServiceImpl
         implements RentalApplicationService {
 
     private final RentalApplicationRepository rentalApplicationRepository;
+
+    private final RentalAgreementRepository rentalAgreementRepository;
 
     private final TenantRepository tenantRepository;
 
@@ -66,6 +70,7 @@ public class RentalApplicationServiceImpl
 
     public RentalApplicationServiceImpl(
             RentalApplicationRepository rentalApplicationRepository,
+            RentalAgreementRepository rentalAgreementRepository,
             TenantRepository tenantRepository,
             UserRepository userRepository,
             UnitRepository unitRepository,
@@ -76,6 +81,9 @@ public class RentalApplicationServiceImpl
 
         this.rentalApplicationRepository =
                 rentalApplicationRepository;
+
+        this.rentalAgreementRepository =
+                rentalAgreementRepository;
 
         this.tenantRepository =
                 tenantRepository;
@@ -227,6 +235,14 @@ public class RentalApplicationServiceImpl
                         "Applications can only be submitted for available properties");
             }
 
+            if (rentalAgreementRepository
+                    .existsByProperty_PropertyIdAndUnitIsNullAndStatus(
+                            requestedProperty.getPropertyId(),
+                            AgreementStatus.ACTIVE)) {
+                throw new IllegalArgumentException(
+                        "This property is no longer available for rental.");
+            }
+
             return new ApplicationTarget(requestedProperty, null);
         }
 
@@ -263,12 +279,46 @@ public class RentalApplicationServiceImpl
                     "Applications can only be submitted for vacant units");
         }
 
+        if (rentalAgreementRepository.existsByUnit_UnitIdAndStatus(
+                unit.getUnitId(),
+                AgreementStatus.ACTIVE)) {
+            throw new IllegalArgumentException(
+                    "This unit is no longer available for rental.");
+        }
+
         return new ApplicationTarget(unitProperty, unit);
     }
 
     private boolean isDirectRentalProperty(Property property) {
         return property.getPropertyType() == PropertyType.HOUSE
                 || property.getPropertyType() == PropertyType.VILLA;
+    }
+
+    private void validateTargetAvailableForApproval(
+            RentalApplication application,
+            Property property) {
+
+        Unit unit = application.getUnit();
+        if (unit != null) {
+            if (unit.getStatus() != UnitStatus.VACANT
+                    || rentalAgreementRepository
+                            .existsByUnit_UnitIdAndStatus(
+                                    unit.getUnitId(),
+                                    AgreementStatus.ACTIVE)) {
+                throw new IllegalArgumentException(
+                        "This unit is no longer available for rental.");
+            }
+            return;
+        }
+
+        if (property.getStatus() != PropertyStatus.AVAILABLE
+                || rentalAgreementRepository
+                        .existsByProperty_PropertyIdAndUnitIsNullAndStatus(
+                                property.getPropertyId(),
+                                AgreementStatus.ACTIVE)) {
+            throw new IllegalArgumentException(
+                    "This property is no longer available for rental.");
+        }
     }
 
     private record ApplicationTarget(Property property, Unit unit) {
@@ -685,6 +735,10 @@ public class RentalApplicationServiceImpl
             throw new IllegalArgumentException(
                     "Application can only be APPROVED "
                             + "or REJECTED");
+        }
+
+        if (newStatus == RentalApplicationStatus.APPROVED) {
+            validateTargetAvailableForApproval(application, property);
         }
 
         // --------------------------------------------------------

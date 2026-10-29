@@ -54,6 +54,8 @@ public interface RentalAgreementRepository
     Optional<RentalAgreement> findForAccessByAgreementId(
             @Param("agreementId") Long agreementId);
 
+    List<RentalAgreement> findByStatus(AgreementStatus status);
+
     Optional<RentalAgreement>
     findByRentalApplication_ApplicationId(Long applicationId);
 
@@ -86,6 +88,10 @@ public interface RentalAgreementRepository
             AgreementStatus status);
 
     boolean existsByProperty_PropertyIdAndStatus(
+            Long propertyId,
+            AgreementStatus status);
+
+    boolean existsByProperty_PropertyIdAndUnitIsNullAndStatus(
             Long propertyId,
             AgreementStatus status);
 
