@@ -40,7 +40,7 @@ public class AutomaticRentInvoiceSchedulerServiceImpl
     }
 
     @Override
-    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Kolkata")
+@Scheduled(cron = "0 0 1 * * *", zone = "Asia/Kolkata")
     public void generateMonthlyInvoices() {
         LocalDate today = LocalDate.now(SCHEDULER_ZONE);
         YearMonth currentPeriod = YearMonth.from(today);
