@@ -147,6 +147,57 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
     }
 
     @Override
+    public PropertyDocumentResponse approveDocument(
+            String email,
+            Long documentId) {
+        User user = getAuthenticatedUser(email);
+        validateSuperAdmin(user);
+        PropertyDocument document = getDocumentById(documentId);
+
+        return mapToAdminResponse(updateVerification(
+                user,
+                document,
+                DocumentVerificationStatus.VERIFIED,
+                null));
+    }
+
+    @Override
+    public PropertyDocumentResponse rejectDocument(
+            String email,
+            Long documentId,
+            String reason) {
+        User user = getAuthenticatedUser(email);
+        validateSuperAdmin(user);
+        if (reason == null || reason.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Rejection reason is required");
+        }
+        if (reason.length() > MAX_REJECTION_REASON_LENGTH) {
+            throw new IllegalArgumentException(
+                    "Rejection reason must not exceed "
+                            + MAX_REJECTION_REASON_LENGTH + " characters");
+        }
+        String trimmedReason = reason.trim();
+
+        PropertyDocument document = getDocumentById(documentId);
+        return mapToAdminResponse(updateVerification(
+                user,
+                document,
+                DocumentVerificationStatus.REJECTED,
+                trimmedReason));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PropertyDocumentDownload downloadAdminDocument(
+            String email,
+            Long documentId) {
+        User user = getAuthenticatedUser(email);
+        validateSuperAdmin(user);
+        return createDownload(getDocumentById(documentId));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public PropertyDocumentResponse getDocument(
             String email,
@@ -171,13 +222,7 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
 
         PropertyDocument document =
                 getDocumentForProperty(propertyId, documentId);
-        validateStoredKey(document.getFilePath(), propertyId);
-        Resource resource = s3Service.downloadFile(document.getFilePath());
-
-        return new PropertyDocumentDownload(
-                resource,
-                document.getFileName(),
-                document.getContentType());
+        return createDownload(document);
     }
 
     @Override
@@ -218,9 +263,19 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
         Property property = getProperty(propertyId);
         PropertyDocument document =
                 getDocumentForProperty(property.getPropertyId(), documentId);
+        return mapToResponse(updateVerification(
+                user,
+                document,
+                request.getStatus(),
+                request.getRejectionReason()));
+    }
 
-        String rejectionReason = request.getRejectionReason();
-        if (request.getStatus() == DocumentVerificationStatus.REJECTED
+    private PropertyDocument updateVerification(
+            User user,
+            PropertyDocument document,
+            DocumentVerificationStatus status,
+            String rejectionReason) {
+        if (status == DocumentVerificationStatus.REJECTED
                 && rejectionReason != null
                 && rejectionReason.length() > MAX_REJECTION_REASON_LENGTH) {
             throw new IllegalArgumentException(
@@ -228,17 +283,23 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
                             + MAX_REJECTION_REASON_LENGTH + " characters");
         }
 
-        document.setVerificationStatus(request.getStatus());
+        document.setVerificationStatus(status);
         document.setVerifiedAt(LocalDateTime.now());
         document.setVerifiedBy(user);
         document.setRejectionReason(
-                request.getStatus() == DocumentVerificationStatus.REJECTED
+                status == DocumentVerificationStatus.REJECTED
                         && rejectionReason != null
                         && !rejectionReason.isBlank()
                                 ? rejectionReason.trim()
                                 : null);
+        return propertyDocumentRepository.save(document);
+    }
 
-        return mapToResponse(propertyDocumentRepository.save(document));
+    private void validateSuperAdmin(User user) {
+        if (user.getRole() != RoleType.SUPER_ADMIN) {
+            throw new AccessDeniedException(
+                    "Only SUPER_ADMIN can manage property documents");
+        }
     }
 
     private User getAuthenticatedUser(String email) {
@@ -266,6 +327,24 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
                 .findByDocumentIdAndProperty_PropertyId(documentId, propertyId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Property document not found"));
+    }
+
+    private PropertyDocument getDocumentById(Long documentId) {
+        return propertyDocumentRepository
+                .findByDocumentIdWithAdminDetails(documentId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property document not found"));
+    }
+
+    private PropertyDocumentDownload createDownload(
+            PropertyDocument document) {
+        Long propertyId = document.getProperty().getPropertyId();
+        validateStoredKey(document.getFilePath(), propertyId);
+        Resource resource = s3Service.downloadFile(document.getFilePath());
+        return new PropertyDocumentDownload(
+                resource,
+                document.getFileName(),
+                document.getContentType());
     }
 
     private void validatePropertyAccess(Property property, User user) {

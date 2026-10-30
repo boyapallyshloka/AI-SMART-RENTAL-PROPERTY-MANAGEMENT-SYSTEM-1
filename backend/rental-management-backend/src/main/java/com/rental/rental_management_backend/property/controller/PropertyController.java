@@ -58,6 +58,13 @@ public class PropertyController {
                 .body(response);
     }
 
+    @PatchMapping("/{propertyId}/submit-for-approval")
+    public ResponseEntity<PropertyResponse> submitForApproval(
+            @PathVariable Long propertyId) {
+        return ResponseEntity.ok(
+                propertyService.submitForApproval(propertyId));
+    }
+
     /*
      * GET LOGGED-IN OWNER'S PROPERTIES OR AVAILABLE PROPERTIES FOR TENANT
      */
@@ -204,5 +211,4 @@ public class PropertyController {
         );
     }
 }
-
 
