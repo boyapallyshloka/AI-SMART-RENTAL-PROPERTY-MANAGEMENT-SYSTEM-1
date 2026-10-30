@@ -3,6 +3,7 @@ package com.rental.rental_management_backend.property.service;
 import java.util.List;
 
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
+import com.rental.rental_management_backend.property.dto.AdminPendingPropertyResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
@@ -13,6 +14,12 @@ public interface PropertyService {
 
     // Owner property management
     PropertyResponse createProperty(PropertyRequest request);
+
+    List<AdminPendingPropertyResponse> getPendingApprovalProperties();
+
+    PropertyResponse approveProperty(Long propertyId);
+
+    PropertyResponse submitForApproval(Long propertyId);
 
     List<PropertyResponse> getMyProperties();
 

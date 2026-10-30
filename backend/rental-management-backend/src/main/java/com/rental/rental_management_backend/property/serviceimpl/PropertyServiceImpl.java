@@ -2,8 +2,12 @@
 package com.rental.rental_management_backend.property.serviceimpl;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,14 +22,19 @@ import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.exception.ResourceNotFoundException;
 import com.rental.rental_management_backend.expense.repository.ExpenseRepository;
 import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
+import com.rental.rental_management_backend.property.dto.AdminPendingPropertyResponse;
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
 import com.rental.rental_management_backend.property.entity.Property;
+import com.rental.rental_management_backend.property.entity.PropertyAddress;
+import com.rental.rental_management_backend.property.entity.PropertyDocument;
 import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
+import com.rental.rental_management_backend.property.enums.PropertyDocumentType;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
+import com.rental.rental_management_backend.property.repository.PropertyAddressRepository;
 import com.rental.rental_management_backend.property.repository.PropertyDocumentRepository;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
@@ -35,12 +44,19 @@ import com.rental.rental_management_backend.rental.repository.RentInvoiceReposit
 import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
 import com.rental.rental_management_backend.s3.service.S3Service;
+import com.rental.rental_management_backend.tenant.enums.DocumentVerificationStatus;
 
 @Service
 @Transactional
 public class PropertyServiceImpl implements PropertyService {
 
+    private static final List<PropertyDocumentType> REQUIRED_APPROVAL_DOCUMENTS =
+            List.of(
+                    PropertyDocumentType.PROPERTY_OWNERSHIP_PROOF,
+                    PropertyDocumentType.PROPERTY_TAX_DOCUMENT);
+
     private final PropertyRepository propertyRepository;
+    private final PropertyAddressRepository propertyAddressRepository;
     private final UserRepository userRepository;
     private final PropertyManagerRepository propertyManagerRepository;
     private final RentalAgreementRepository rentalAgreementRepository;
@@ -54,6 +70,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     public PropertyServiceImpl(
             PropertyRepository propertyRepository,
+            PropertyAddressRepository propertyAddressRepository,
             UserRepository userRepository,
             PropertyManagerRepository propertyManagerRepository,
             RentalAgreementRepository rentalAgreementRepository,
@@ -66,6 +83,7 @@ public class PropertyServiceImpl implements PropertyService {
             S3Service s3Service) {
 
         this.propertyRepository = propertyRepository;
+        this.propertyAddressRepository = propertyAddressRepository;
         this.userRepository = userRepository;
         this.propertyManagerRepository = propertyManagerRepository;
         this.rentalAgreementRepository = rentalAgreementRepository;
@@ -125,6 +143,148 @@ public class PropertyServiceImpl implements PropertyService {
 
 	    return convertToResponse(savedProperty);
 	}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AdminPendingPropertyResponse> getPendingApprovalProperties() {
+        return propertyRepository.findByStatus(PropertyStatus.PENDING_APPROVAL)
+                .stream()
+                .map(this::convertToAdminPendingPropertyResponse)
+                .toList();
+    }
+
+    @Override
+    public PropertyResponse submitForApproval(Long propertyId) {
+        User owner = getLoggedInUser();
+        if (owner.getRole() != RoleType.PROPERTY_OWNER) {
+            throw new AccessDeniedException(
+                    "Only PROPERTY_OWNER can submit properties for approval");
+        }
+
+        Property property = propertyRepository.findDetailsById(propertyId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + propertyId));
+        if (property.getOwner() == null
+                || !Objects.equals(
+                        property.getOwner().getId(),
+                        owner.getId())) {
+            throw new AccessDeniedException(
+                    "You are not authorized to submit this property");
+        }
+        if (property.getStatus() != PropertyStatus.DRAFT) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Only DRAFT properties can be submitted for approval.");
+        }
+
+        validateRequiredPropertyInformation(property);
+        validateRequiredApprovalDocumentsExist(propertyId);
+
+        property.setStatus(PropertyStatus.PENDING_APPROVAL);
+        return convertToResponse(propertyRepository.save(property));
+    }
+
+    @Override
+    public PropertyResponse approveProperty(Long propertyId) {
+        Property property = propertyRepository.findDetailsById(propertyId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Property not found with ID: " + propertyId));
+        if (property.getStatus() != PropertyStatus.PENDING_APPROVAL) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Only properties pending approval can be approved.");
+        }
+
+        validateRequiredApprovalDocumentsVerified(propertyId);
+
+        property.setStatus(PropertyStatus.AVAILABLE);
+        return convertToResponse(propertyRepository.save(property));
+    }
+
+    private AdminPendingPropertyResponse convertToAdminPendingPropertyResponse(
+            Property property) {
+        User owner = property.getOwner();
+        String ownerName = owner == null
+                ? null
+                : ((owner.getFirstName() == null ? "" : owner.getFirstName().trim())
+                        + " "
+                        + (owner.getLastName() == null ? "" : owner.getLastName().trim()))
+                        .trim();
+
+        return new AdminPendingPropertyResponse(
+                property.getPropertyId(),
+                property.getPropertyName(),
+                owner == null ? null : owner.getId(),
+                ownerName == null || ownerName.isBlank() ? null : ownerName,
+                property.getDescription());
+    }
+
+    private void validateRequiredPropertyInformation(Property property) {
+        if (property.getPropertyName() == null
+                || property.getPropertyName().isBlank()
+                || property.getPropertyType() == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property name and type are required before submission.");
+        }
+
+        PropertyAddress address = propertyAddressRepository
+                .findByProperty(property)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "A complete property address is required before submission."));
+        if (isBlank(address.getAddressLine1())
+                || isBlank(address.getArea())
+                || isBlank(address.getCity())
+                || isBlank(address.getState())
+                || isBlank(address.getCountry())
+                || isBlank(address.getPincode())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "A complete property address is required before submission.");
+        }
+    }
+
+    private void validateRequiredApprovalDocumentsExist(Long propertyId) {
+        Set<PropertyDocumentType> uploadedTypes =
+                propertyDocumentRepository
+                        .findByProperty_PropertyIdAndDocumentTypeIn(
+                                propertyId,
+                                REQUIRED_APPROVAL_DOCUMENTS)
+                        .stream()
+                        .map(PropertyDocument::getDocumentType)
+                        .collect(Collectors.toSet());
+        if (!uploadedTypes.containsAll(REQUIRED_APPROVAL_DOCUMENTS)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property ownership proof and property tax documents are required before submission.");
+        }
+    }
+
+    private void validateRequiredApprovalDocumentsVerified(Long propertyId) {
+        List<PropertyDocument> documents = propertyDocumentRepository
+                .findByProperty_PropertyIdAndDocumentTypeIn(
+                        propertyId,
+                        REQUIRED_APPROVAL_DOCUMENTS);
+        Set<PropertyDocumentType> verifiedTypes = documents.stream()
+                .filter(document -> document.getVerificationStatus()
+                        == DocumentVerificationStatus.VERIFIED)
+                .map(PropertyDocument::getDocumentType)
+                .collect(Collectors.toSet());
+        boolean allDocumentsVerified = documents.stream()
+                .allMatch(document -> document.getVerificationStatus()
+                        == DocumentVerificationStatus.VERIFIED);
+        if (!verifiedTypes.containsAll(REQUIRED_APPROVAL_DOCUMENTS)
+                || !allDocumentsVerified) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "All required property documents must be uploaded and verified before approval.");
+        }
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
 
     @Override
     @Transactional(readOnly = true)
