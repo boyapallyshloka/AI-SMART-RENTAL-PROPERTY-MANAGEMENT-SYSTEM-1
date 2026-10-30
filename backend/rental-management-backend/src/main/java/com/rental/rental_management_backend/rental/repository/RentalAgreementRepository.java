@@ -91,6 +91,20 @@ public interface RentalAgreementRepository
             Long propertyId,
             AgreementStatus status);
 
+    @Query("""
+            SELECT agreement
+            FROM RentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE directProperty.propertyId = :propertyId
+               OR unitProperty.propertyId = :propertyId
+            """)
+    List<RentalAgreement> findByPropertyIdIncludingUnitHierarchy(
+            @Param("propertyId") Long propertyId);
+
     boolean existsByProperty_PropertyIdAndUnitIsNullAndStatus(
             Long propertyId,
             AgreementStatus status);

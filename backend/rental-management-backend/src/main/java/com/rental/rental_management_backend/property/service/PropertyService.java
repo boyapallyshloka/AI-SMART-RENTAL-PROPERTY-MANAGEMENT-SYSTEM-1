@@ -22,6 +22,10 @@ public interface PropertyService {
 
     void deleteProperty(Long id);
 
+    PropertyResponse archiveProperty(Long id);
+
+    PropertyResponse reactivateProperty(Long id);
+
     PropertyResponse updatePropertyStatus(
             Long id,
             PropertyStatus status
