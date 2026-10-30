@@ -3,6 +3,8 @@ package com.rental.rental_management_backend.rental.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,6 +30,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/rental-agreements")
 public class RentalAgreementController {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(RentalAgreementController.class);
+
     private final RentalAgreementService rentalAgreementService;
 
     public RentalAgreementController(
@@ -46,10 +51,19 @@ public class RentalAgreementController {
             @Valid @RequestBody RentalAgreementRequest request,
             org.springframework.security.core.Authentication authentication) {
 
+        long startedAt = System.nanoTime();
         String email = authentication.getName();
+        logger.info("Received rental agreement creation request for application {}.",
+                request.getApplicationId());
 
         RentalAgreementResponse response =
                 rentalAgreementService.createAgreement(request, email);
+
+        logger.info(
+                "Created rental agreement {} for application {} in {} ms.",
+                response.getAgreementId(),
+                request.getApplicationId(),
+                (System.nanoTime() - startedAt) / 1_000_000);
 
         return ResponseEntity.ok(response);
     }

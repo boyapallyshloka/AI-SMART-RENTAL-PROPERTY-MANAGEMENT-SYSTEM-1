@@ -397,7 +397,11 @@ export default function TenantApplicationDetailsPage() {
                     <div>
                       <span className="text-xs text-[#5B6875] block">Unit</span>
                       <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#EDF4ED] text-[#3F7D58] border border-[#3F7D58]/20">
-                        {application.unitNumber ? `Unit ${application.unitNumber}` : (application.unitId ? `Unit #${application.unitId}` : '—')}
+                        {application.unitId == null
+                          ? 'Entire property'
+                          : application.unitNumber
+                            ? `Unit ${application.unitNumber}`
+                            : `Unit #${application.unitId}`}
                       </span>
                     </div>
                   </div>

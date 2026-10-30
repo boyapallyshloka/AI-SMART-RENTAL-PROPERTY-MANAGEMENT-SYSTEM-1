@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
@@ -251,6 +252,19 @@ public class MaintenanceRequestController {
     // =========================================================
     // UPDATE STATUS
     // =========================================================
+
+    @PatchMapping("/{ticketId}/cost")
+    @PreAuthorize(
+            "hasAnyRole('PROPERTY_OWNER','PROPERTY_MANAGER','SUPER_ADMIN')"
+    )
+    public ResponseEntity<MaintenanceRequestResponse> updateCost(
+            @PathVariable Long ticketId,
+            @jakarta.validation.Valid @RequestBody
+            MaintenanceCostUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                maintenanceRequestService.updateCost(ticketId, request));
+    }
 
     @PatchMapping("/{ticketId}/status")
     @PreAuthorize(

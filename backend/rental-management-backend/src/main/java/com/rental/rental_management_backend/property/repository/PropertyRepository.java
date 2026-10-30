@@ -51,6 +51,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findByStatus(PropertyStatus status);
 
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
+    List<Property> findByStatusIn(List<PropertyStatus> statuses);
+
+    @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> findByPropertyManager(PropertyManager propertyManager);
 
     // Get all properties assigned using PropertyManager ID
@@ -85,7 +88,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("""
         SELECT DISTINCT p
         FROM Property p
-        WHERE p.status = :status
+        WHERE p.status IN :statuses
 
         AND (
             COALESCE(:searchQuery, '') = ''
@@ -198,8 +201,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @EntityGraph(attributePaths = {"owner", "propertyManager.user"})
     List<Property> searchAvailableProperties(
 
-            @Param("status")
-            PropertyStatus status,
+            @Param("statuses")
+            List<PropertyStatus> statuses,
 
             @Param("searchQuery")
             String searchQuery,
@@ -261,10 +264,10 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         p.securityDeposit
     )
     FROM Property p
-    WHERE p.status = :status
+    WHERE p.status IN :statuses
     """)
     List<PropertyCardResponse> findAvailablePropertyCards(
-            @Param("status") PropertyStatus status);
+            @Param("statuses") List<PropertyStatus> statuses);
 
     /*
      * Lightweight property card lookup for M2 recommendations.

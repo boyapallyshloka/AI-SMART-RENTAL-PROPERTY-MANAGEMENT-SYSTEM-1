@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { StatusBadge, Button, EmptyState, Loader } from '../ui'
-import { CANONICAL_PROPERTY_STATUSES } from '../../api/propertyApi'
+import { OWNER_EDITABLE_PROPERTY_STATUSES } from '../../api/propertyApi'
 import {
   Eye,
   Edit,
@@ -234,7 +234,12 @@ export default function OwnerPropertyTable({
                           onChange={(e) => onStatusChange(prop.id, e.target.value)}
                           className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#111820] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                         >
-                          {CANONICAL_PROPERTY_STATUSES.map((st) => (
+                          {prop.status && !OWNER_EDITABLE_PROPERTY_STATUSES.includes(prop.status) && (
+                            <option key={prop.status} value={prop.status} disabled>
+                              {prop.status === 'PUBLISHED' ? 'Published' : prop.status === 'AVAILABLE' ? 'Available' : prop.status}
+                            </option>
+                          )}
+                          {OWNER_EDITABLE_PROPERTY_STATUSES.map((st) => (
                             <option key={st} value={st}>
                               {st === 'AVAILABLE'
                                 ? 'Approved'

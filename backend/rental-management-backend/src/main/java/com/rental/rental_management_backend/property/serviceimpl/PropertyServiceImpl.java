@@ -197,7 +197,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         validateRequiredApprovalDocumentsVerified(propertyId);
 
-        property.setStatus(PropertyStatus.AVAILABLE);
+        property.setStatus(PropertyStatus.PUBLISHED);
         return convertToResponse(propertyRepository.save(property));
     }
 
@@ -300,7 +300,7 @@ public class PropertyServiceImpl implements PropertyService {
         }
 
         if (user.getRole() == RoleType.TENANT) {
-            return propertyRepository.findByStatus(PropertyStatus.AVAILABLE)
+            return propertyRepository.findByStatusIn(publicPropertyStatuses())
                     .stream()
                     .map(this::convertToResponse)
                     .toList();
@@ -356,7 +356,7 @@ public List<PropertyCardResponse> getAvailableProperties() {
 
 	List<PropertyCardResponse> propertyCards =
 	        propertyRepository.findAvailablePropertyCards(
-	                PropertyStatus.AVAILABLE);
+	                publicPropertyStatuses());
 
 	for (PropertyCardResponse card : propertyCards) {
 	    card.setImageUrl(toPublicImageUrl(card.getImageUrl()));
@@ -402,7 +402,7 @@ private String toPublicImageUrl(String imageUrl) {
                                                 + propertyId
                                 ));
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE) {
+        if (!isPublicPropertyStatus(property.getStatus())) {
 
             throw new RuntimeException(
                     "Property is not available for tenants"
@@ -558,6 +558,14 @@ private String toPublicImageUrl(String imageUrl) {
                                 new ResourceNotFoundException(
                                         "Property not found or you do not have permission"
                                 ));
+
+        if ((status == PropertyStatus.AVAILABLE
+                || status == PropertyStatus.PUBLISHED)
+                && property.getStatus() != status) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Properties become public only after administrator approval.");
+        }
 
         property.setStatus(status);
 
@@ -910,7 +918,7 @@ private String toPublicImageUrl(String imageUrl) {
         }
 
         List<Property> properties = propertyRepository.searchAvailableProperties(
-                PropertyStatus.AVAILABLE,
+                publicPropertyStatuses(),
                 searchQuery,
                 city,
                 propertyType,
@@ -932,6 +940,15 @@ private String toPublicImageUrl(String imageUrl) {
         }
 
         return value.trim();
+    }
+
+    private List<PropertyStatus> publicPropertyStatuses() {
+        return List.of(PropertyStatus.PUBLISHED, PropertyStatus.AVAILABLE);
+    }
+
+    private boolean isPublicPropertyStatus(PropertyStatus status) {
+        return status == PropertyStatus.PUBLISHED
+                || status == PropertyStatus.AVAILABLE;
     }
     
 }

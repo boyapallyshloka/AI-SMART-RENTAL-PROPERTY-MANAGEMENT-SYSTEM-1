@@ -139,12 +139,19 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                     "Rental application does not have a property");
         }
 
+        if (property.getStatus() != PropertyStatus.AVAILABLE
+                && property.getStatus() != PropertyStatus.PUBLISHED) {
+            throw new IllegalStateException(
+                    "Property is not published for rental");
+        }
+
         if (unit == null) {
             if (!isDirectRentalProperty(property)) {
             throw new IllegalStateException(
                         "A unit is required for this property type");
             }
-            if (property.getStatus() != PropertyStatus.AVAILABLE) {
+            if (property.getStatus() != PropertyStatus.AVAILABLE
+                    && property.getStatus() != PropertyStatus.PUBLISHED) {
             throw new IllegalStateException(
                         "House/Villa property is not available for rental");
             }
@@ -231,9 +238,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
         String pdfPath = rentalAgreementPdfService
                 .generateAgreementPdf(savedAgreement);
-
         savedAgreement.setAgreementDocument(pdfPath);
-
         savedAgreement = rentalAgreementRepository.save(savedAgreement);
 
         sendAgreementCreatedEmail(savedAgreement);
@@ -806,7 +811,8 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
                 throw new IllegalStateException(
                         "Agreement must be associated with a valid property or unit");
             }
-            if (property.getStatus() != PropertyStatus.AVAILABLE) {
+            if (property.getStatus() != PropertyStatus.AVAILABLE
+                    && property.getStatus() != PropertyStatus.PUBLISHED) {
                 throw new IllegalStateException(
                         "Agreement cannot be activated because the property is not available");
             }
@@ -818,7 +824,11 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
             return;
         }
 
-        if (unit.getStatus() != UnitStatus.VACANT) {
+        Property unitProperty = resolveUnitProperty(unit);
+        if (unitProperty == null
+                || (unitProperty.getStatus() != PropertyStatus.AVAILABLE
+                    && unitProperty.getStatus() != PropertyStatus.PUBLISHED)
+                || unit.getStatus() != UnitStatus.VACANT) {
             throw new IllegalStateException(
                     "Agreement cannot be activated because the unit is not vacant");
         }
@@ -1121,6 +1131,15 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         Property property = resolveAgreementProperty(agreement);
         if (property != null) {
             response.setPropertyId(property.getPropertyId());
+            response.setPropertyName(property.getPropertyName());
+        } else if (agreement.getUnit() != null
+                && agreement.getUnit().getFloor() != null
+                && agreement.getUnit().getFloor().getBuilding() != null
+                && agreement.getUnit().getFloor().getBuilding().getProperty() != null) {
+            Property unitProperty = agreement.getUnit().getFloor()
+                    .getBuilding().getProperty();
+            response.setPropertyId(unitProperty.getPropertyId());
+            response.setPropertyName(unitProperty.getPropertyName());
         }
 
         if (agreement.getUnit() != null) {

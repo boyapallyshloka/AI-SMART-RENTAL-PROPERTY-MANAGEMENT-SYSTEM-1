@@ -147,6 +147,22 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<PropertyDocumentResponse> getPropertyDocumentsForAdmin(
+            String email,
+            Long propertyId) {
+        User user = getAuthenticatedUser(email);
+        validateSuperAdmin(user);
+        getProperty(propertyId);
+
+        return propertyDocumentRepository
+                .findByProperty_PropertyIdOrderByUploadedAtDesc(propertyId)
+                .stream()
+                .map(this::mapToAdminResponse)
+                .toList();
+    }
+
+    @Override
     public PropertyDocumentResponse approveDocument(
             String email,
             Long documentId) {

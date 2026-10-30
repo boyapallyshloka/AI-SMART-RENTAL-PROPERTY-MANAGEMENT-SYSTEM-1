@@ -218,8 +218,8 @@ public class PropertyAddressServiceImpl
                                                             "Property not found with id: "
                                                                     + propertyId));
 
-                            if (property.getStatus()
-                                    != PropertyStatus.AVAILABLE) {
+                            if (property.getStatus() != PropertyStatus.AVAILABLE
+                                    && property.getStatus() != PropertyStatus.PUBLISHED) {
                                 throw new RuntimeException(
                                         "Property is not available for tenants");
                             }

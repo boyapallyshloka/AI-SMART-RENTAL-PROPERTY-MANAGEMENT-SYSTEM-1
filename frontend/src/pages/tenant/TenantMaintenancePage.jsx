@@ -624,10 +624,10 @@ export default function TenantMaintenancePage() {
                   </div>
                 )}
 
-                {selectedTicket.costResponsibility && selectedTicket.cost != null && (
+                {(selectedTicket.payer || selectedTicket.costResponsibility) && selectedTicket.cost != null && (
                   <div className="p-3 rounded-xl bg-[#EDF4ED] border border-[#E3E8DF] text-xs space-y-1 text-[#111820]">
                     <div className="font-bold">Maintenance cost allocation</div>
-                    <p>{selectedTicket.costResponsibility === 'TENANT_PAID' ? 'Tenant responsible' : 'Owner responsible'}</p>
+                    <p>{(selectedTicket.payer || selectedTicket.costResponsibility) === 'TENANT_PAID' ? 'Tenant responsible' : 'Owner responsible'}</p>
                     <p>Repair amount: ₹{Number(selectedTicket.cost).toLocaleString('en-IN')}</p>
                   </div>
                 )}

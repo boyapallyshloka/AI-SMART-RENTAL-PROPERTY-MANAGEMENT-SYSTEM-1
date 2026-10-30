@@ -20,6 +20,7 @@ import com.rental.rental_management_backend.exception.ResourceNotFoundException;
 
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionRequest;
 import com.rental.rental_management_backend.maintenance.dto.M5PredictionResponse;
+import com.rental.rental_management_backend.maintenance.dto.MaintenanceCostUpdateRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestRequest;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceRequestResponse;
 import com.rental.rental_management_backend.maintenance.dto.MaintenanceStatusUpdateRequest;
@@ -871,6 +872,60 @@ public class MaintenanceRequestServiceImpl
         }
 
         return mapToResponse(updatedRequest);
+    }
+
+    @Override
+    public MaintenanceRequestResponse updateCost(
+            Long ticketId,
+            MaintenanceCostUpdateRequest request) {
+
+        if (request == null || request.getCost() == null
+                || request.getPayer() == null) {
+            throw new IllegalArgumentException(
+                    "Repair cost and cost responsibility are required");
+        }
+        if (request.getCost().signum() < 0) {
+            throw new IllegalArgumentException(
+                    "Repair cost cannot be negative");
+        }
+
+        MaintenanceRequest maintenanceRequest =
+                maintenanceRequestRepository.findById(ticketId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Maintenance request not found with ID: "
+                                        + ticketId));
+
+        User user = getLoggedInUser();
+        RoleType role = user.getRole();
+
+        if (role == RoleType.PROPERTY_OWNER) {
+            if (maintenanceRequest.getProperty() == null
+                    || maintenanceRequest.getProperty().getOwner() == null
+                    || !user.getId().equals(maintenanceRequest.getProperty()
+                            .getOwner().getId())) {
+                throw new AccessDeniedException(
+                        "You are not allowed to update the cost of this maintenance request");
+            }
+        } else if (role == RoleType.PROPERTY_MANAGER) {
+            if (maintenanceRequest.getProperty() == null
+                    || maintenanceRequest.getProperty().getPropertyManager() == null
+                    || maintenanceRequest.getProperty().getPropertyManager()
+                            .getUser() == null
+                    || !user.getId().equals(maintenanceRequest.getProperty()
+                            .getPropertyManager().getUser().getId())) {
+                throw new AccessDeniedException(
+                        "You are not allowed to update the cost of this maintenance request");
+            }
+        } else if (role != RoleType.SUPER_ADMIN) {
+            throw new AccessDeniedException(
+                    "You are not allowed to update the cost of this maintenance request");
+        }
+
+        maintenanceRequest.setCost(request.getCost());
+        maintenanceRequest.setPayer(request.getPayer());
+
+        return mapToResponse(
+                maintenanceRequestRepository.save(maintenanceRequest));
     }
 
     // =========================================================

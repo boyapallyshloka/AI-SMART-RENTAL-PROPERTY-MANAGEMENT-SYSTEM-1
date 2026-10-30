@@ -179,6 +179,11 @@ const STATUS_CONFIG = {
     badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
+  published: {
+    label: 'Published',
+    badge: 'bg-[#EDF7EE] text-[#2A583B] border-[#C6DEC8]',
+    dot: 'bg-[#3F7D58]',
+  },
 }
 
 /**

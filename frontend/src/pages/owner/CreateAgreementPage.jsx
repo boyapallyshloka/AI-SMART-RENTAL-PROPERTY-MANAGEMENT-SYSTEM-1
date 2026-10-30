@@ -7,7 +7,7 @@ import {
   getAllApplications,
   APPLICATION_STATUSES,
 } from '../../api/applicationApi'
-import { createAgreement, uploadAgreementDocument } from '../../api/agreementApi'
+import { createAgreement } from '../../api/agreementApi'
 import {
   Button,
   Input,
@@ -99,9 +99,6 @@ export default function CreateAgreementPage() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileError, setFileError] = useState(null)
   const [isDragOver, setIsDragOver] = useState(false)
-  const [isUploadingDocument, setIsUploadingDocument] = useState(false)
-  const [createdAgreementId, setCreatedAgreementId] = useState(null)
-  const [documentUploadError, setDocumentUploadError] = useState(null)
   const fileInputRef = useRef(null)
 
   // Validation & UI State
@@ -112,7 +109,6 @@ export default function CreateAgreementPage() {
   // Document validation and selection handler
   const validateAndSetFile = (file) => {
     setFileError(null)
-    setDocumentUploadError(null)
 
     if (!file) return
 
@@ -148,7 +144,6 @@ export default function CreateAgreementPage() {
   const handleRemoveFile = () => {
     setSelectedFile(null)
     setFileError(null)
-    setDocumentUploadError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -345,7 +340,6 @@ export default function CreateAgreementPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError(null)
-    setDocumentUploadError(null)
 
     if (!validate()) return
 
@@ -377,23 +371,12 @@ export default function CreateAgreementPage() {
       // 1. Submit rental agreement via existing POST /api/rental-agreements
       const response = await createAgreement(payload)
       agreementId = response?.agreementId || response?.data?.agreementId
-      setCreatedAgreementId(agreementId)
 
-      // 2. If document selected, attempt upload via POST /api/rental-agreements/{agreementId}/document
-      if (selectedFile && agreementId) {
-        setIsUploadingDocument(true)
-        try {
-          await uploadAgreementDocument(agreementId, selectedFile)
-        } catch (uploadErr) {
-          console.warn('Backend agreement document upload note:', uploadErr)
-          // The backend automatically generates and links the official PDF agreement
-        }
-      }
-
-      // 3. Success redirect
+      // 2. Success redirect. The backend currently exposes document download,
+      // but no upload route for an owner-provided attachment.
       const successMessage = `Rental agreement ${
         agreementId ? `#${agreementId} ` : ''
-      }for ${tenantDisplay} (${unitDisplay}) created successfully in DRAFT status! Official PDF agreement generated.`
+      }for ${tenantDisplay} (${unitDisplay}) created successfully in DRAFT status. The official PDF has been generated.${selectedFile ? ' The selected attachment was not uploaded because the backend does not provide an upload endpoint.' : ''}`
 
       navigate(`${basePath}/agreements`, {
         state: { successMessage },
@@ -407,41 +390,6 @@ export default function CreateAgreementPage() {
       setFormError(msg)
     } finally {
       setIsSubmitting(false)
-      setIsUploadingDocument(false)
-    }
-  }
-
-  const handleRetryUpload = async () => {
-    if (!createdAgreementId || !selectedFile) return
-
-    setIsSubmitting(true)
-    setIsUploadingDocument(true)
-    setDocumentUploadError(null)
-
-    const tenantDisplay = selectedApp?.tenantName || 'Tenant'
-    const unitDisplay = isDirectRentalApplication(selectedApp)
-      ? 'Whole property'
-      : selectedApp?.unitNumber
-      ? `Unit #${selectedApp.unitNumber}`
-      : 'Unit'
-
-    try {
-      await uploadAgreementDocument(createdAgreementId, selectedFile)
-      navigate(`${basePath}/agreements`, {
-        state: {
-          successMessage: `Rental agreement #${createdAgreementId} for ${tenantDisplay} (${unitDisplay}) document uploaded successfully!`,
-        },
-      })
-    } catch (err) {
-      console.error('Failed to retry agreement document upload:', err)
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        'Document upload failed. Please try again.'
-      setDocumentUploadError(msg)
-    } finally {
-      setIsSubmitting(false)
-      setIsUploadingDocument(false)
     }
   }
 
@@ -527,45 +475,6 @@ export default function CreateAgreementPage() {
                 <div className="space-y-0.5">
                   <p className="font-semibold">Agreement Creation Failed</p>
                   <p className="text-xs text-red-600">{formError}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Document Upload Failure Recovery Banner */}
-            {documentUploadError && createdAgreementId && (
-              <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs sm:text-sm space-y-3 shadow-xs animate-in fade-in">
-                <div className="flex items-start gap-2.5">
-                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
-                  <div>
-                    <p className="font-semibold text-amber-900">
-                      Rental Agreement #{createdAgreementId} created, but document upload failed
-                    </p>
-                    <p className="text-xs text-amber-800 mt-0.5">
-                      {documentUploadError}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2.5 pl-7">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="primary"
-                    onClick={handleRetryUpload}
-                    isLoading={isUploadingDocument}
-                    leftIcon={<Upload className="w-3.5 h-3.5" />}
-                  >
-                    Retry Document Upload
-                  </Button>
-                  <Link
-                    to="/owner/agreements"
-                    state={{
-                      errorMessage: `Agreement #${createdAgreementId} was created, but document upload failed: ${documentUploadError}.`,
-                    }}
-                  >
-                    <Button type="button" size="sm" variant="outline">
-                      Continue to Agreements
-                    </Button>
-                  </Link>
                 </div>
               </div>
             )}
@@ -789,7 +698,7 @@ export default function CreateAgreementPage() {
               </div>
 
               <p className="text-xs text-[#5B6875] leading-relaxed">
-                SmartEstate automatically generates an official digital Lease Agreement PDF with verified lease terms, payment schedules, and premise details upon creation. If your organization has an additional physical signed contract, you may attach it below.
+                SmartEstate generates the official digital Lease Agreement PDF after creation. Additional signed document uploads are not available yet; any file selected here will not be attached.
               </p>
 
               {/* Hidden native file input */}
@@ -861,7 +770,7 @@ export default function CreateAgreementPage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      disabled={isSubmitting || isUploadingDocument}
+                      disabled={isSubmitting}
                       className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E3E8DF] text-[#111820] bg-white hover:bg-[#F7F7F1] transition-colors cursor-pointer"
                     >
                       Change File
@@ -869,7 +778,7 @@ export default function CreateAgreementPage() {
                     <button
                       type="button"
                       onClick={handleRemoveFile}
-                      disabled={isSubmitting || isUploadingDocument}
+                      disabled={isSubmitting}
                       className="p-1.5 text-xs font-semibold rounded-md border border-red-200 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer"
                       title="Remove file"
                     >
@@ -883,34 +792,20 @@ export default function CreateAgreementPage() {
             {/* Form Actions */}
             <div className="flex items-center justify-end gap-3 pt-2">
               <Link to={`${basePath}/agreements`}>
-                <Button variant="outline" type="button" disabled={isSubmitting || isUploadingDocument}>
+                <Button variant="outline" type="button" disabled={isSubmitting}>
                   Cancel
                 </Button>
               </Link>
 
-              {createdAgreementId && documentUploadError ? (
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={handleRetryUpload}
-                  isLoading={isSubmitting || isUploadingDocument}
-                  leftIcon={<Upload className="w-4 h-4" />}
-                >
-                  Retry Document Upload
-                </Button>
-              ) : (
-                <Button
-                  variant="primary"
-                  type="submit"
-                  isLoading={isSubmitting || isUploadingDocument}
-                  disabled={isSubmitting || approvedApplications.length === 0}
-                  leftIcon={<CheckCircle2 className="w-4 h-4" />}
-                >
-                  {isUploadingDocument
-                    ? 'Uploading Document...'
-                    : 'Create Rental Agreement'}
-                </Button>
-              )}
+              <Button
+                variant="primary"
+                type="submit"
+                isLoading={isSubmitting}
+                disabled={isSubmitting || approvedApplications.length === 0}
+                leftIcon={<CheckCircle2 className="w-4 h-4" />}
+              >
+                Create Rental Agreement
+              </Button>
             </div>
           </form>
         )}

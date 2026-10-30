@@ -24,6 +24,10 @@ public interface PropertyDocumentService {
 
     List<PropertyDocumentResponse> getPendingDocuments();
 
+    List<PropertyDocumentResponse> getPropertyDocumentsForAdmin(
+            String email,
+            Long propertyId);
+
     PropertyDocumentResponse approveDocument(
             String email,
             Long documentId);

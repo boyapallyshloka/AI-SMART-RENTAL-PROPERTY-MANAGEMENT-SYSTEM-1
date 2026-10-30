@@ -140,7 +140,7 @@ export default function PropertyCard({
 
   // Availability / Status: derived from real backend status
   const rawStatus = status || availabilityStatus || ''
-  const isAvailable = rawStatus === 'AVAILABLE' || rawStatus === 'Available Now'
+  const isAvailable = rawStatus === 'AVAILABLE' || rawStatus === 'PUBLISHED' || rawStatus === 'Available Now'
   const displayStatus = rawStatus
     ? rawStatus === 'AVAILABLE'
       ? 'Available'

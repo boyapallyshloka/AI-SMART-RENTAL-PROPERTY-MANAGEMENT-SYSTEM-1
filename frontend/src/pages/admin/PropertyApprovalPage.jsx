@@ -11,6 +11,7 @@ import {
   downloadPropertyDocumentForAdmin,
   getPropertyDocumentsForAdmin,
   PROPERTY_DOCUMENT_TYPE_LABELS,
+  PROPERTY_DOCUMENT_TYPES,
 } from '../../api/propertyDocumentApi'
 
 const unwrapList = (response) => {
@@ -64,11 +65,14 @@ export default function PropertyApprovalPage() {
     setError('')
     setNotice('')
     try {
-      await approveProperty(property.propertyId)
+      const response = await approveProperty(property.propertyId)
+      const approvedProperty = response?.data ?? response
       setProperties((current) =>
         current.filter((item) => item.propertyId !== property.propertyId)
       )
-      setNotice(`"${property.propertyName}" has been approved and is now published and available for rent.`)
+      setNotice(
+        `"${property.propertyName}" has been approved with status ${approvedProperty?.status || 'PUBLISHED'}.`
+      )
     } catch (approveError) {
       console.error(`Failed to approve property ${property.propertyId}:`, approveError)
       setError(
@@ -146,11 +150,21 @@ export default function PropertyApprovalPage() {
           <div className="space-y-5">
             {properties.map((property) => {
               const documents = documentsByProperty[property.propertyId] || []
-              const deedApproved = documents.some(
-                (document) =>
-                  document.documentType === 'TITLE_DEED' &&
-                  document.status === 'APPROVED'
+              const requiredDocumentTypes = [
+                PROPERTY_DOCUMENT_TYPES.TITLE_DEED,
+                PROPERTY_DOCUMENT_TYPES.PROPERTY_TAX_RECEIPT,
+              ]
+              const requiredDocuments = documents.filter((document) =>
+                requiredDocumentTypes.includes(document.documentType)
               )
+              const requiredDocumentsApproved =
+                requiredDocumentTypes.every((type) =>
+                  requiredDocuments.some(
+                    (document) => document.documentType === type
+                  )
+                ) && requiredDocuments.every(
+                  (document) => document.status === 'APPROVED'
+                )
 
               return (
                 <article
@@ -174,7 +188,7 @@ export default function PropertyApprovalPage() {
                     <Button
                       variant="primary"
                       onClick={() => handleApprove(property)}
-                      disabled={!deedApproved || busyPropertyId != null}
+                      disabled={!requiredDocumentsApproved || busyPropertyId != null}
                     >
                       {busyPropertyId === property.propertyId ? 'Approving…' : 'Approve property'}
                     </Button>
@@ -235,9 +249,9 @@ export default function PropertyApprovalPage() {
                         ))}
                       </ul>
                     )}
-                    {!deedApproved && (
+                    {!requiredDocumentsApproved && (
                       <p className="mt-3 text-xs text-[#8A5B16]">
-                        Approve the required title deed in{' '}
+                        Approve both the title deed and property tax receipt in{' '}
                         <Link className="font-semibold underline" to="/admin/owner-verification#property-document-verification">
                           property document review
                         </Link>{' '}

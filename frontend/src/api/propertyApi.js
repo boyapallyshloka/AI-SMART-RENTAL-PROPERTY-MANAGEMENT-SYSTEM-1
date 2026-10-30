@@ -84,11 +84,10 @@ export const mapParkingAvailableToBackend = (parking) => {
  *   - furnishingStatus
  *   - parkingAvailable
  *   - yearBuilt
- *   - bedrooms and bathrooms for HOUSE/VILLA direct rentals
+ *   - monthlyRent, securityDeposit, bedrooms and bathrooms for HOUSE/VILLA direct rentals
  *
  * Strictly EXCLUDES response/status/legacy/UI-only fields:
  *   ownerId, ownerName, propertyId, id, status, createdAt, updatedAt,
- *   monthlyRent, securityDeposit,
  *   address, city, state, zipCode, amenities, buildings, units, images, etc.
  */
 export const buildPropertyRequestPayload = (data = {}) => {
@@ -132,6 +131,14 @@ export const buildPropertyRequestPayload = (data = {}) => {
   const bathrooms = isDirectRental && data.bathrooms != null && data.bathrooms !== '' && Number.isInteger(Number(data.bathrooms))
     ? Number(data.bathrooms)
     : undefined
+  const rawMonthlyRent = data.monthlyRent != null ? data.monthlyRent : data.rent
+  const monthlyRent = isDirectRental && rawMonthlyRent != null && rawMonthlyRent !== '' && Number.isFinite(Number(rawMonthlyRent))
+    ? Number(rawMonthlyRent)
+    : undefined
+  const rawSecurityDeposit = data.securityDeposit != null ? data.securityDeposit : data.deposit
+  const securityDeposit = isDirectRental && rawSecurityDeposit != null && rawSecurityDeposit !== '' && Number.isFinite(Number(rawSecurityDeposit))
+    ? Number(rawSecurityDeposit)
+    : undefined
 
   const payload = {
     propertyName: propertyName || undefined,
@@ -141,6 +148,8 @@ export const buildPropertyRequestPayload = (data = {}) => {
     furnishingStatus,
     parkingAvailable,
     yearBuilt,
+    monthlyRent,
+    securityDeposit,
     bedrooms,
     bathrooms,
   }
@@ -154,8 +163,6 @@ export const buildPropertyRequestPayload = (data = {}) => {
   delete payload.createdAt
   delete payload.updatedAt
 
-  delete payload.monthlyRent
-  delete payload.securityDeposit
   delete payload.deposit
   delete payload.rent
   delete payload.address
@@ -256,15 +263,20 @@ export const CANONICAL_PROPERTY_STATUSES = [
   'INACTIVE',
 ]
 
+// Owners cannot make a draft or pending property public; admin approval does that.
+export const OWNER_EDITABLE_PROPERTY_STATUSES = CANONICAL_PROPERTY_STATUSES.filter(
+  (status) => status !== 'AVAILABLE' && status !== 'PUBLISHED'
+)
+
 /**
  * PUT /api/owner/properties/{id}/status?status={status}
  * Update property lifecycle status using canonical PropertyStatus values
  */
 export const updatePropertyStatus = async (id, status) => {
   const normalizedStatus = String(status || '').trim().toUpperCase()
-  if (!CANONICAL_PROPERTY_STATUSES.includes(normalizedStatus)) {
+  if (!OWNER_EDITABLE_PROPERTY_STATUSES.includes(normalizedStatus)) {
     throw new Error(
-      `Invalid property status: "${status}". Canonical values are: ${CANONICAL_PROPERTY_STATUSES.join(', ')}`
+      `Property status "${status}" cannot be set by an owner. Owner editable values are: ${OWNER_EDITABLE_PROPERTY_STATUSES.join(', ')}`
     )
   }
   return axiosClient.put(`/owner/properties/${id}/status`, null, {
@@ -502,6 +514,7 @@ export const mapOwnerPropertyDetailsToUi = (details, fallbackProp = {}) => {
   const propertyName = prop.propertyName || prop.name || fallback.propertyName || fallback.name || 'Unnamed Property'
   const propertyType = prop.propertyType || prop.type || fallback.propertyType || fallback.type || null
   const status = prop.status || fallback.status || null
+  const isDirectRental = ['HOUSE', 'VILLA'].includes(String(propertyType || '').toUpperCase())
   const description = prop.description || fallback.description || ''
   const totalArea =
     prop.totalArea != null && !isNaN(Number(prop.totalArea))
@@ -601,17 +614,30 @@ export const mapOwnerPropertyDetailsToUi = (details, fallbackProp = {}) => {
       ? allUnits.filter((unit) => unit.status === statusValue).length
       : readCount(field)
 
-  const totalUnits = hasUnitData ? allUnits.length : readCount('totalUnits')
+  // A house or villa is itself one rentable unit, even though it has no
+  // separate Building/Floor/Unit records like an apartment property.
+  const directRentalOccupied = String(status || '').toUpperCase() === 'OCCUPIED'
+  const totalUnits = isDirectRental ? 1 : hasUnitData ? allUnits.length : readCount('totalUnits')
   const vacantUnits = countByStatus('VACANT', 'vacantUnits')
-  const occupiedUnits = countByStatus('OCCUPIED', 'occupiedUnits')
-  const reservedUnits = countByStatus('RESERVED', 'reservedUnits')
-  const maintenanceUnits = countByStatus('MAINTENANCE', 'maintenanceUnits')
+  const occupiedUnits = isDirectRental
+    ? (directRentalOccupied ? 1 : 0)
+    : countByStatus('OCCUPIED', 'occupiedUnits')
+  const directRentalVacantUnits = directRentalOccupied ? 0 : 1
+  const resolvedVacantUnits = isDirectRental
+    ? directRentalVacantUnits
+    : vacantUnits
+  const reservedUnits = isDirectRental ? 0 : countByStatus('RESERVED', 'reservedUnits')
+  const maintenanceUnits = isDirectRental ? 0 : countByStatus('MAINTENANCE', 'maintenanceUnits')
   const occupancyRate = totalUnits > 0 && occupiedUnits != null
     ? Math.round((occupiedUnits / totalUnits) * 100)
     : readCount('occupancyRate')
 
   // Monthly Revenue: Sum of monthlyRent for OCCUPIED units only
-  const occupiedRevenue = hasUnitData
+  const occupiedRevenue = isDirectRental
+    ? directRentalOccupied && Number(prop.monthlyRent) > 0
+      ? Number(prop.monthlyRent)
+      : 0
+    : hasUnitData
     ? allUnits
         .filter((u) => u.status === 'OCCUPIED')
         .reduce((sum, u) => {
@@ -760,7 +786,7 @@ export const mapOwnerPropertyDetailsToUi = (details, fallbackProp = {}) => {
     // Units
     units: allUnits,
     totalUnits,
-    vacantUnits,
+    vacantUnits: resolvedVacantUnits,
     occupiedUnits,
     reservedUnits,
     maintenanceUnits,
@@ -1065,7 +1091,7 @@ export const getPublicPropertyDetails = async (propertyId, { skipAuthToken = fal
 
 /** Admin review APIs for properties submitted by their owners. */
 export const submitPropertyForApproval = async (propertyId) =>
-  axiosClient.post(`/owner/properties/${propertyId}/submit-for-approval`)
+  axiosClient.patch(`/owner/properties/${propertyId}/submit-for-approval`)
 
 export const getPendingPropertyApprovals = async () =>
   axiosClient.get('/admin/properties/pending-approval')

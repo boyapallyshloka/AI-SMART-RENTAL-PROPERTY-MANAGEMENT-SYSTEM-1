@@ -193,7 +193,8 @@ public class PropertyDetailsServiceImpl implements PropertyDetailsService {
                                         "Property not found with ID: "
                                                 + propertyId));
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE) {
+        if (property.getStatus() != PropertyStatus.AVAILABLE
+                && property.getStatus() != PropertyStatus.PUBLISHED) {
 
             throw new ResourceNotFoundException(
                     "Property not found or not available for browsing with ID: "

@@ -134,7 +134,9 @@ export const deletePropertyDocument = async (propertyId, documentId) => {
  * List all pending property documents awaiting review.
  */
 export const getPendingPropertyDocuments = async () => {
-  return axiosClient.get('/admin/property-documents/pending')
+  const response = await axiosClient.get('/admin/property-documents/pending')
+  const documents = response?.data || response
+  return Array.isArray(documents) ? documents.map(normalizePropertyDocument) : documents
 }
 
 /**
@@ -142,7 +144,9 @@ export const getPendingPropertyDocuments = async () => {
  * @param {number|string} propertyId
  */
 export const getPropertyDocumentsForAdmin = async (propertyId) => {
-  return axiosClient.get(`/admin/property-documents/property/${propertyId}`)
+  const response = await axiosClient.get(`/admin/property-documents/property/${propertyId}`)
+  const documents = response?.data || response
+  return Array.isArray(documents) ? documents.map(normalizePropertyDocument) : documents
 }
 
 /**

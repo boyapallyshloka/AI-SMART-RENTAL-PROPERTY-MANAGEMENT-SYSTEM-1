@@ -230,7 +230,8 @@ public class RentalApplicationServiceImpl
                         "House/Villa applications must not include a unit ID");
             }
 
-            if (requestedProperty.getStatus() != PropertyStatus.AVAILABLE) {
+            if (requestedProperty.getStatus() != PropertyStatus.AVAILABLE
+                    && requestedProperty.getStatus() != PropertyStatus.PUBLISHED) {
                 throw new IllegalArgumentException(
                         "Applications can only be submitted for available properties");
             }
@@ -257,6 +258,12 @@ public class RentalApplicationServiceImpl
                         "Unit not found with ID: " + request.getUnitId()));
 
         Property unitProperty = getPropertyFromUnit(unit);
+
+        if (unitProperty.getStatus() != PropertyStatus.AVAILABLE
+                && unitProperty.getStatus() != PropertyStatus.PUBLISHED) {
+            throw new IllegalArgumentException(
+                    "Applications can only be submitted for published properties");
+        }
 
         if (requestedProperty != null
                 && !requestedProperty.getPropertyId()
@@ -311,7 +318,8 @@ public class RentalApplicationServiceImpl
             return;
         }
 
-        if (property.getStatus() != PropertyStatus.AVAILABLE
+        if ((property.getStatus() != PropertyStatus.AVAILABLE
+                && property.getStatus() != PropertyStatus.PUBLISHED)
                 || rentalAgreementRepository
                         .existsByProperty_PropertyIdAndUnitIsNullAndStatus(
                                 property.getPropertyId(),
