@@ -21,7 +21,8 @@ export default function NavItem({
     <button
       type="button"
       onClick={onClick}
-      className={`group inline-flex min-h-10 shrink-0 items-center justify-between gap-2 rounded-full px-3.5 py-2 text-sm transition-all duration-200 select-none ${
+      aria-current={isActive ? 'page' : undefined}
+      className={`group inline-flex min-h-11 shrink-0 items-center justify-between gap-2 rounded-full px-3 sm:px-3.5 py-2 text-sm transition-all duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58] focus-visible:ring-offset-2 ${
         isActive
           ? 'bg-[#3F7D58] text-white font-semibold shadow-sm shadow-[#3F7D58]/20'
           : 'text-[#5B6875] hover:text-[#111820] hover:bg-[#EDF4ED] font-medium'

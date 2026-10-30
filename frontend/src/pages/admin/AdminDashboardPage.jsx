@@ -227,20 +227,6 @@ export default function AdminDashboardPage() {
       endpoints: 'GET /api/owner-documents, PUT verify',
     },
     {
-      name: 'Platform Audit Logs',
-      route: '/admin/audit-logs',
-      status: 'API_REQUIRED',
-      description: 'Administrative mutation logging and security event stream',
-      endpoints: 'GET /api/admin/audit-logs',
-    },
-    {
-      name: 'AI Model Observability',
-      route: '/admin/ai-monitoring',
-      status: 'API_REQUIRED',
-      description: 'Telemetry, latency tracking, and drift detection for M1/M2/M5',
-      endpoints: 'GET /api/admin/ai/metrics',
-    },
-    {
       name: 'Global System Settings',
       route: '/admin/system-settings',
       status: 'API_REQUIRED',

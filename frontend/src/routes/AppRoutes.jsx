@@ -67,8 +67,6 @@ import AdminDashboardPage from '../pages/admin/AdminDashboardPage'
 import UserManagementPage from '../pages/admin/UserManagementPage'
 import OwnerVerificationPage from '../pages/admin/OwnerVerificationPage'
 import TenantDocumentReviewPage from '../pages/admin/TenantDocumentReviewPage'
-import AuditLogsPage from '../pages/admin/AuditLogsPage'
-import AIMonitoringPage from '../pages/admin/AIMonitoringPage'
 import SystemSettingsPage from '../pages/admin/SystemSettingsPage'
 import AdminReportsPage from '../pages/admin/AdminReportsPage'
 
@@ -333,8 +331,6 @@ export default function AppRoutes() {
                 <Route path="property-approvals" element={<Navigate to="/admin/owner-verification#property-review" replace />} />
                 <Route path="tenant-document-review" element={<TenantDocumentReviewPage />} />
                 <Route path="reports" element={<AdminReportsPage />} />
-                <Route path="audit-logs" element={<AuditLogsPage />} />
-                <Route path="ai-monitoring" element={<AIMonitoringPage />} />
                 <Route path="system-settings" element={<SystemSettingsPage />} />
                 <Route Path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />

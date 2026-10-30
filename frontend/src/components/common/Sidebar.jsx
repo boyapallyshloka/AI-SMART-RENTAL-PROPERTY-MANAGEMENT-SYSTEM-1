@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Home,
@@ -13,10 +13,10 @@ import {
   Search,
   Users,
   ShieldCheck,
-  History,
-  Activity,
   Settings,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import NavItem from './NavItem'
 import { getMyProperties } from '../../api/propertyApi'
@@ -70,8 +70,6 @@ const ADMIN_MENU = [
   { id: 'owner-verification', label: 'Owner Verification', icon: <ShieldCheck className="w-4 h-4" /> },
   { id: 'tenant-document-review', label: 'Tenant Document Review', icon: <FileCheck className="w-4 h-4" /> },
   { id: 'reports', label: 'Reports', icon: <BarChart3 className="w-4 h-4" /> },
-  { id: 'audit-logs', label: 'Audit Logs', icon: <History className="w-4 h-4" /> },
-  { id: 'ai-monitoring', label: 'AI Monitoring', icon: <Activity className="w-4 h-4 text-[#3F7D58]" /> },
   { id: 'settings', label: 'System Settings', icon: <Settings className="w-4 h-4" /> },
 ]
 
@@ -89,7 +87,52 @@ export default function Sidebar({
 }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const navigationRef = useRef(null)
   const [propertyCount, setPropertyCount] = useState(null)
+  const [navigationOverflow, setNavigationOverflow] = useState({ hasOverflow: false, canScrollLeft: false, canScrollRight: false })
+
+  const updateNavigationOverflow = useCallback(() => {
+    const navigation = navigationRef.current
+    if (!navigation) return
+    const canScrollLeft = navigation.scrollLeft > 2
+    const canScrollRight = navigation.scrollWidth - navigation.clientWidth - navigation.scrollLeft > 2
+    setNavigationOverflow((current) => {
+      const hasOverflow = canScrollLeft || canScrollRight
+      if (
+        current.hasOverflow === hasOverflow &&
+        current.canScrollLeft === canScrollLeft &&
+        current.canScrollRight === canScrollRight
+      ) return current
+      return { hasOverflow, canScrollLeft, canScrollRight }
+    })
+  }, [])
+
+  useEffect(() => {
+    const navigation = navigationRef.current
+    if (!navigation) return undefined
+    updateNavigationOverflow()
+    navigation.addEventListener('scroll', updateNavigationOverflow, { passive: true })
+    window.addEventListener('resize', updateNavigationOverflow)
+    return () => {
+      navigation.removeEventListener('scroll', updateNavigationOverflow)
+      window.removeEventListener('resize', updateNavigationOverflow)
+    }
+  }, [role, updateNavigationOverflow])
+
+  useEffect(() => {
+    const navigation = navigationRef.current
+    const activeItemElement = navigation?.querySelector('[aria-current="page"]')
+    if (!navigation || !activeItemElement || navigation.scrollWidth <= navigation.clientWidth) return
+
+    const navigationBounds = navigation.getBoundingClientRect()
+    const activeItemBounds = activeItemElement.getBoundingClientRect()
+    const activeItemLeft = activeItemBounds.left - navigationBounds.left + navigation.scrollLeft
+    const targetScrollLeft = activeItemLeft + activeItemBounds.width / 2 - navigation.clientWidth / 2
+    navigation.scrollTo({
+      left: Math.max(0, Math.min(targetScrollLeft, navigation.scrollWidth - navigation.clientWidth)),
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    })
+  }, [activeItem, location.pathname, role])
 
   useEffect(() => {
     let isMounted = true
@@ -139,8 +182,6 @@ export default function Sidebar({
       else if (id === 'owner-verification') navigate('/admin/owner-verification')
       else if (id === 'tenant-document-review') navigate('/admin/tenant-document-review')
       else if (id === 'reports') navigate('/admin/reports')
-      else if (id === 'audit-logs') navigate('/admin/audit-logs')
-      else if (id === 'ai-monitoring') navigate('/admin/ai-monitoring')
       else if (id === 'settings' || id === 'system-settings') navigate('/admin/system-settings')
     } else if (isPropertyManager(role)) {
       if (id === 'dashboard') {
@@ -204,8 +245,20 @@ export default function Sidebar({
           </div>
         </div>
 
-        <nav aria-label={`${getPortalName(role)} navigation`} className="flex min-w-0 flex-1 gap-1 overflow-x-auto pb-0.5 [scrollbar-width:thin] lg:justify-center">
-          {menuItems.map((item) => {
+        <div className="flex min-w-0 flex-1 items-center lg:justify-center">
+          {navigationOverflow.hasOverflow && (
+            <button
+              type="button"
+              onClick={() => navigationRef.current?.scrollBy({ left: -navigationRef.current.clientWidth * 0.7, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+              disabled={!navigationOverflow.canScrollLeft}
+              aria-label={`Scroll ${getPortalName(role)} navigation left`}
+              className="mr-1 inline-flex h-9 w-8 shrink-0 items-center justify-center rounded-full border border-[#D8C6A8]/70 bg-[#F4EBDD] text-[#5B6875] transition hover:bg-white disabled:cursor-default disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+          )}
+          <nav ref={navigationRef} aria-label={`${getPortalName(role)} navigation`} className="flex min-w-0 flex-1 gap-1 overflow-x-auto scroll-smooth pb-0.5 [scrollbar-width:thin] lg:justify-center">
+            {menuItems.map((item) => {
             const isActive =
               activeItem === item.id ||
               (isPropertyManager(role) &&
@@ -245,8 +298,20 @@ export default function Sidebar({
                 onClick={() => handleItemClick(item.id)}
               />
             )
-          })}
-        </nav>
+            })}
+          </nav>
+          {navigationOverflow.hasOverflow && (
+            <button
+              type="button"
+              onClick={() => navigationRef.current?.scrollBy({ left: navigationRef.current.clientWidth * 0.7, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+              disabled={!navigationOverflow.canScrollRight}
+              aria-label={`Scroll ${getPortalName(role)} navigation right`}
+              className="ml-1 inline-flex h-9 w-8 shrink-0 items-center justify-center rounded-full border border-[#D8C6A8]/70 bg-[#F4EBDD] text-[#5B6875] transition hover:bg-white disabled:cursor-default disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
 
       </div>
     </header>

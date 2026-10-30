@@ -5,4 +5,4 @@ Route view components structured by user role and domain:
 - `owner/`: Property owner dashboard, financial overviews, and property portfolios.
 - `manager/`: Property manager maintenance workflows, tenant assignments, and inspections.
 - `tenant/`: Tenant portal for rent payments, lease reviews, and maintenance requests.
-- `admin/`: Platform administrator user controls, audit logs, and system analytics.
+- `admin/`: Platform administrator user controls, verification workflows, and system analytics.

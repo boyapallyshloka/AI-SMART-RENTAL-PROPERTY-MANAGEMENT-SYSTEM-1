@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AlertCircle, ArrowLeft, ArrowRight, BadgeCheck, Building2, MapPin, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react'
+import { AlertCircle, ArrowLeft, ArrowRight, BadgeCheck, Building2, MapPin, Pause, Play, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react'
 import PublicLayout from '../layouts/PublicLayout'
 import goldenHourCity from '../assets/dashboard-city-golden-hour.png'
 import PropertyFilter from '../components/properties/PropertyFilter'
@@ -57,6 +57,7 @@ export default function WelcomePage() {
   }))
   const [sortBy, setSortBy] = useState('newest')
   const [featuredIndex, setFeaturedIndex] = useState(0)
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false)
   const [properties, setProperties] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -112,12 +113,16 @@ export default function WelcomePage() {
   }, [sortedProperties])
 
   useEffect(() => {
-    if (sortedProperties.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (
+      sortedProperties.length < 2 ||
+      isCarouselPaused ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) return undefined
     const timer = window.setInterval(() => {
       setFeaturedIndex((index) => (index + 1) % sortedProperties.length)
     }, 5500)
     return () => window.clearInterval(timer)
-  }, [sortedProperties.length])
+  }, [isCarouselPaused, sortedProperties.length])
 
   const featuredProperty = sortedProperties[featuredIndex] || null
   const featuredImage = [
@@ -198,9 +203,10 @@ export default function WelcomePage() {
             <div className="relative mx-auto w-full max-w-[430px] animate-[fade-in_900ms_ease-out_both] lg:ml-auto lg:mr-2">
               <div className="absolute -inset-4 rounded-[2rem] bg-[#F5D7AA]/20 blur-2xl" />
               <div className="relative overflow-hidden rounded-2xl border border-[#F4EBDD]/80 bg-[#F4EBDD]/95 p-2 shadow-2xl shadow-[#241A14]/35 backdrop-blur-md">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#E8DDCD]" role="region" aria-label="Featured available homes" aria-roledescription="carousel">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#E8DDCD]" role="region" aria-label="Featured available homes" aria-roledescription="carousel" aria-live="off">
                   {featuredProperty ? (
                     <>
+                      <div className="absolute inset-0" role="group" aria-roledescription="slide" aria-label={`${featuredIndex + 1} of ${sortedProperties.length}: ${featuredProperty.propertyName || featuredProperty.name || 'Available home'}`}>
                       <img
                         key={featuredProperty.propertyId ?? featuredProperty.id ?? featuredIndex}
                         src={featuredImage || goldenHourCity}
@@ -214,6 +220,7 @@ export default function WelcomePage() {
                       <span className="absolute bottom-4 left-4 inline-flex max-w-[65%] items-center gap-1.5 truncate text-xs font-semibold text-white">
                         <MapPin className="h-3.5 w-3.5 shrink-0" /> {featuredCity || 'Explore this home'}
                       </span>
+                      </div>
                       {sortedProperties.length > 1 && (
                         <>
                           <button type="button" onClick={() => changeFeaturedProperty(-1)} aria-label="Previous featured home" className="absolute left-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-[#30251F]/45 text-white shadow-sm backdrop-blur transition hover:bg-[#30251F]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
@@ -222,17 +229,28 @@ export default function WelcomePage() {
                           <button type="button" onClick={() => changeFeaturedProperty(1)} aria-label="Next featured home" className="absolute right-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-[#30251F]/45 text-white shadow-sm backdrop-blur transition hover:bg-[#30251F]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                             <ArrowRight className="h-4 w-4" />
                           </button>
-                          <div className="absolute bottom-4 right-4 flex items-center gap-1.5" aria-label={`Home ${featuredIndex + 1} of ${sortedProperties.length}`}>
-                            {sortedProperties.map((property, index) => (
-                              <button
-                                key={property.propertyId ?? property.id ?? index}
-                                type="button"
-                                onClick={() => setFeaturedIndex(index)}
-                                aria-label={`Show home ${index + 1}: ${property.propertyName || property.name || 'Available home'}`}
-                                aria-current={index === featuredIndex ? 'true' : undefined}
-                                className={`h-2 rounded-full transition-all ${index === featuredIndex ? 'w-5 bg-white' : 'w-2 bg-white/60 hover:bg-white/85'}`}
-                              />
-                            ))}
+                          <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setIsCarouselPaused((paused) => !paused)}
+                              aria-label={isCarouselPaused ? 'Resume featured homes slideshow' : 'Pause featured homes slideshow'}
+                              aria-pressed={isCarouselPaused}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/60 bg-[#30251F]/55 text-white shadow-sm backdrop-blur transition hover:bg-[#30251F]/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                            >
+                              {isCarouselPaused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+                            </button>
+                            <div className="flex items-center gap-1.5" role="group" aria-label={`Home ${featuredIndex + 1} of ${sortedProperties.length}`}>
+                              {sortedProperties.map((property, index) => (
+                                <button
+                                  key={property.propertyId ?? property.id ?? index}
+                                  type="button"
+                                  onClick={() => setFeaturedIndex(index)}
+                                  aria-label={`Show home ${index + 1}: ${property.propertyName || property.name || 'Available home'}`}
+                                  aria-current={index === featuredIndex ? 'true' : undefined}
+                                  className={`h-2 rounded-full transition-all ${index === featuredIndex ? 'w-5 bg-white' : 'w-2 bg-white/60 hover:bg-white/85'}`}
+                                />
+                              ))}
+                            </div>
                           </div>
                         </>
                       )}

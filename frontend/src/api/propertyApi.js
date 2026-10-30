@@ -239,6 +239,14 @@ export const deleteProperty = async (id) => {
   return axiosClient.delete(`/owner/properties/${id}`)
 }
 
+/** PATCH /api/owner/properties/{id}/archive */
+export const archiveProperty = async (id) =>
+  axiosClient.patch(`/owner/properties/${id}/archive`)
+
+/** PATCH /api/owner/properties/{id}/reactivate */
+export const reactivateProperty = async (id) =>
+  axiosClient.patch(`/owner/properties/${id}/reactivate`)
+
 export const CANONICAL_PROPERTY_STATUSES = [
   'DRAFT',
   'AVAILABLE',

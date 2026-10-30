@@ -174,6 +174,11 @@ const STATUS_CONFIG = {
     badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
     dot: 'bg-[#5B6875]',
   },
+  archived: {
+    label: 'Archived',
+    badge: 'bg-[#F0F4F7] text-[#5B6875] border-[#E3E8DF]',
+    dot: 'bg-[#5B6875]',
+  },
 }
 
 /**

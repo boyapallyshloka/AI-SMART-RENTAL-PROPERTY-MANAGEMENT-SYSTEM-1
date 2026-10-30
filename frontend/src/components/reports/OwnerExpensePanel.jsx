@@ -173,10 +173,10 @@ function ExpenseForm({ propertyId, editingExpense, onSuccess, onCancel }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-lg border border-[#E3E8DF] bg-[#F7F7F1] p-4"
+      className="space-y-4 rounded-lg border border-[#E3E8DF] bg-[#F8F1E6] p-4"
       noValidate
     >
-      <p className="text-sm font-semibold text-[#111820]">
+      <p className="text-sm font-semibold text-[#243447]">
         {editingExpense ? 'Edit expense' : 'Add new expense'}
       </p>
 
@@ -293,11 +293,11 @@ function ExpenseRow({ expense, onEdit, onDelete }) {
   }
 
   return (
-    <tr className="group border-t border-[#E3E8DF] hover:bg-[#F7F7F1]">
-      <td className="px-3 py-3 text-sm font-medium text-[#111820]">
+    <tr className="group border-t border-[#E3E8DF] hover:bg-[#F8F1E6]">
+      <td className="px-3 py-3 text-sm font-medium text-[#243447]">
         {categoryLabel(expense.category)}
       </td>
-      <td className="px-3 py-3 text-sm text-[#111820]">{formatMoney(expense.amount)}</td>
+      <td className="px-3 py-3 text-sm text-[#243447]">{formatMoney(expense.amount)}</td>
       <td className="px-3 py-3 text-sm text-[#5B6875]">{expense.expenseDate ?? '—'}</td>
       <td className="px-3 py-3 text-sm text-[#5B6875]">
         <span className="line-clamp-1 max-w-[180px]">{expense.description || '—'}</span>
@@ -459,11 +459,11 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
 
   return (
     <section
-      className="overflow-hidden rounded-2xl border border-[#C9D9E8] bg-white shadow-[0_12px_32px_rgba(23,50,77,0.08)]"
+      className="overflow-hidden rounded-2xl border border-[#E3E8DF] bg-[#F8F1E6]/95 shadow-[0_12px_32px_rgba(48,37,31,0.08)]"
       aria-labelledby="expense-panel-heading"
     >
       {/* header */}
-      <div className="flex items-center justify-between border-b border-[#D5E3EF] bg-gradient-to-r from-[#EAF2F8] via-[#F5F9FC] to-white px-5 py-4">
+      <div className="flex items-center justify-between border-b border-[#E3E8DF] bg-[#F1E7D8] px-5 py-4">
         <div className="flex items-center gap-3">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#3F7D58] text-white shadow-sm shadow-[#3F7D58]/20">
             <Receipt className="h-5 w-5" />
@@ -471,11 +471,11 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
           <div>
           <h2
             id="expense-panel-heading"
-            className="text-base font-semibold tracking-tight text-[#17324D] sm:text-lg"
+            className="text-base font-semibold tracking-tight text-[#243447] sm:text-lg"
           >
             Expense Entry &amp; Management
           </h2>
-            <p className="mt-0.5 text-xs text-[#60758A] sm:text-sm">Track property costs and receipts</p>
+            <p className="mt-0.5 text-xs text-[#5B6875] sm:text-sm">Track property costs and receipts</p>
           </div>
         </div>
         <button
@@ -483,7 +483,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
           onClick={() => setCollapsed((v) => !v)}
           aria-expanded={!collapsed}
           aria-controls="expense-panel-body"
-          className="rounded-lg p-2 text-[#3F7D58] transition hover:bg-white/80 hover:text-[#17324D]"
+          className="rounded-lg p-2 text-[#3F7D58] transition hover:bg-[#FBF8F2] hover:text-[#315F46]"
         >
           {collapsed ? (
             <ChevronDown className="h-4 w-4" />
@@ -494,7 +494,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
       </div>
 
       {!collapsed && (
-        <div id="expense-panel-body" className="space-y-4 bg-gradient-to-b from-[#F8FBFE] to-white p-4 sm:p-5">
+        <div id="expense-panel-body" className="space-y-4 bg-[#FBF8F2] p-4 sm:p-5">
           {/* Properties loading/error */}
           {propertiesLoading ? (
             <div className="flex justify-center py-6">
@@ -510,7 +510,7 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
           ) : (
             <>
               {/* Property selector + action bar */}
-              <div className="flex flex-col gap-3 rounded-xl border border-[#D9E6F0] bg-white p-3 shadow-sm sm:flex-row sm:items-end sm:justify-between sm:p-4">
+              <div className="flex flex-col gap-3 rounded-xl border border-[#E3E8DF] bg-[#F8F1E6] p-3 shadow-sm sm:flex-row sm:items-end sm:justify-between sm:p-4">
                 <div className="max-w-sm flex-1">
                   <Select
                     label="Select property"
@@ -564,26 +564,26 @@ export default function OwnerExpensePanel({ onExpenseSaved }) {
               ) : expensesError ? (
                 <ErrorBanner message={expensesError} onDismiss={() => setExpensesError('')} />
               ) : expenses.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-[#BFD1E1] bg-[#F5F9FC] p-8 text-center text-sm text-[#5B7185]">
-                  <span className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-full bg-[#E5EFF7] text-[#3F7D58]"><Receipt className="h-5 w-5" /></span>
+                <div className="rounded-xl border border-dashed border-[#D8C8AA] bg-[#F8F1E6] p-8 text-center text-sm text-[#5B6875]">
+                  <span className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-full bg-[#E8EFE3] text-[#3F7D58]"><Receipt className="h-5 w-5" /></span>
                   No expenses recorded for this property yet.
                 </div>
               ) : (
                 <>
                   {/* summary strip */}
-                  <div className="flex items-center justify-between rounded-xl border border-[#D3E2EF] bg-gradient-to-r from-[#EAF2F8] to-[#F6FAFD] px-4 py-3 text-xs text-[#536C82]">
+                  <div className="flex items-center justify-between rounded-xl border border-[#E3E8DF] bg-[#F1E7D8] px-4 py-3 text-xs text-[#5B6875]">
                     <span className="font-medium">
                       {expenses.length} expense{expenses.length !== 1 ? 's' : ''}
                     </span>
-                    <span className="font-semibold text-[#17324D]">
+                    <span className="font-semibold text-[#243447]">
                       Total <span className="ml-1 text-base">{formatMoney(totalExpenses)}</span>
                     </span>
                   </div>
 
-                  <div className="overflow-hidden rounded-xl border border-[#D8E3EC] bg-white shadow-sm">
+                  <div className="overflow-hidden rounded-xl border border-[#E3E8DF] bg-[#F8F1E6] shadow-sm">
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[640px] text-left text-sm">
-                      <thead className="bg-[#EDF4F9] text-[11px] uppercase tracking-wider text-[#496780]">
+                      <thead className="bg-[#F1E7D8] text-[11px] uppercase tracking-wider text-[#3F7D58]">
                         <tr>
                           <th className="px-3 py-2">Category</th>
                           <th className="px-3 py-2">Amount</th>

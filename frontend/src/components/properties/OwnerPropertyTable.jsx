@@ -6,6 +6,8 @@ import {
   Eye,
   Edit,
   Trash2,
+  Archive,
+  RotateCcw,
   Building2,
   MapPin,
   Bed,
@@ -39,8 +41,10 @@ export default function OwnerPropertyTable({
   properties = [],
   onDelete,
   onStatusChange,
+  onArchiveToggle,
   deletingId = null,
   updatingStatusId = null,
+  updatingLifecycleId = null,
 }) {
   const [imgErrors, setImgErrors] = useState({})
 
@@ -221,7 +225,7 @@ export default function OwnerPropertyTable({
 
                   {/* Status Badge / Selector */}
                   <td className="py-4 px-4 whitespace-nowrap min-w-[140px]">
-                    {onStatusChange && prop.status ? (
+                    {onStatusChange && prop.status && String(prop.status).toUpperCase() !== 'ARCHIVED' ? (
                       <div className="flex items-center gap-2">
                         <select
                           aria-label="Change property status"
@@ -254,6 +258,22 @@ export default function OwnerPropertyTable({
                   {/* Action Buttons */}
                   <td className="py-4 pl-4 pr-6 text-right whitespace-nowrap min-w-[140px]">
                     <div className="flex items-center justify-end gap-1.5">
+                      {onArchiveToggle && (
+                        <button
+                          type="button"
+                          aria-label={String(prop.status).toUpperCase() === 'ARCHIVED' ? 'Reactivate property' : 'Archive property'}
+                          title={String(prop.status).toUpperCase() === 'ARCHIVED' ? 'Reactivate Property' : 'Archive Property'}
+                          disabled={updatingLifecycleId === prop.id || updatingLifecycleId === prop.propertyId}
+                          onClick={() => onArchiveToggle(prop)}
+                          className="p-1.5 rounded-md text-[#5B6875] hover:text-[#3F7D58] hover:bg-[#EDF4ED] transition-colors disabled:opacity-50"
+                        >
+                          {updatingLifecycleId === prop.id || updatingLifecycleId === prop.propertyId
+                            ? <Loader size="xs" />
+                            : String(prop.status).toUpperCase() === 'ARCHIVED'
+                              ? <RotateCcw className="w-4 h-4" />
+                              : <Archive className="w-4 h-4" />}
+                        </button>
+                      )}
                       <Link to={`/owner/properties/${prop.id}`}>
                         <button
                           type="button"

@@ -9,6 +9,8 @@ import {
   mapOwnerPropertyDetailsToUi,
   mapBackendPropertyToUi,
   deleteProperty,
+  archiveProperty,
+  reactivateProperty,
   updatePropertyStatus,
   PROPERTY_TYPES,
   CANONICAL_PROPERTY_STATUSES,
@@ -39,6 +41,7 @@ export default function PropertiesPage() {
   )
   const [deletingId, setDeletingId] = useState(null)
   const [updatingStatusId, setUpdatingStatusId] = useState(null)
+  const [updatingLifecycleId, setUpdatingLifecycleId] = useState(null)
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -118,6 +121,29 @@ export default function PropertiesPage() {
     }
   }
 
+  const handleArchiveToggle = async (property) => {
+    const id = property.id ?? property.propertyId
+    if (!id || updatingLifecycleId) return
+    const isArchived = String(property.status).toUpperCase() === 'ARCHIVED'
+    setUpdatingLifecycleId(id)
+    try {
+      const response = isArchived
+        ? await reactivateProperty(id)
+        : await archiveProperty(id)
+      const result = response?.data ?? response
+      const nextStatus = result?.status || (isArchived ? 'AVAILABLE' : 'ARCHIVED')
+      setProperties((prev) => prev.map((item) =>
+        item.id === id || item.propertyId === id ? { ...item, status: nextStatus } : item
+      ))
+      setToastMessage(isArchived ? 'Property reactivated.' : 'Property archived.')
+      setTimeout(() => setToastMessage(''), 3000)
+    } catch (err) {
+      setError(err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Could not update property archive status.')
+    } finally {
+      setUpdatingLifecycleId(null)
+    }
+  }
+
   // Filtered properties
   const filteredProperties = properties.filter((item) => {
     const name = (item.name || item.propertyName || '').toLowerCase()
@@ -168,6 +194,7 @@ export default function PropertiesPage() {
 
   const statusFilterOptions = [
     { value: 'all', label: 'All Statuses' },
+    { value: 'ARCHIVED', label: 'Archived' },
     ...CANONICAL_PROPERTY_STATUSES.map((s) => ({
       value: s,
       label:
@@ -306,8 +333,10 @@ export default function PropertiesPage() {
             properties={filteredProperties}
             onDelete={handleDelete}
             onStatusChange={handleStatusChange}
+            onArchiveToggle={handleArchiveToggle}
             deletingId={deletingId}
             updatingStatusId={updatingStatusId}
+            updatingLifecycleId={updatingLifecycleId}
           />
         )}
       </div>

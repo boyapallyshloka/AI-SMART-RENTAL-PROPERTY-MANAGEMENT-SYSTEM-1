@@ -6,6 +6,8 @@ import {
   getPropertyById,
   updateProperty,
   deleteProperty,
+  archiveProperty,
+  reactivateProperty,
   updatePropertyStatus,
   submitPropertyForApproval,
   removePropertyManager,
@@ -64,6 +66,8 @@ import {
   AlertCircle,
   AlertTriangle,
   Trash2,
+  Archive,
+  RotateCcw,
   Plus,
   Image as ImageIcon,
   Upload,
@@ -112,6 +116,7 @@ export default function PropertyDetailsPage() {
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+  const [isUpdatingArchive, setIsUpdatingArchive] = useState(false)
   const [isSubmittingForApproval, setIsSubmittingForApproval] = useState(false)
   const [publishEligibility, setPublishEligibility] = useState(null)
   const [addressData, setAddressData] = useState(null)
@@ -502,6 +507,34 @@ export default function PropertyDetailsPage() {
         'Failed to delete property. Please try again.'
       alert(`Error: ${errorMsg}`)
       setIsDeleting(false)
+    }
+  }
+
+  const handleArchiveToggle = async () => {
+    if (!property?.id || isUpdatingArchive) return
+    const isArchived = String(property.status).toUpperCase() === 'ARCHIVED'
+    const confirmed = window.confirm(
+      isArchived
+        ? `Reactivate "${property.name}"? It will become available again.`
+        : `Archive "${property.name}"? You can reactivate it later.`
+    )
+    if (!confirmed) return
+    setIsUpdatingArchive(true)
+    try {
+      const response = isArchived
+        ? await reactivateProperty(property.id)
+        : await archiveProperty(property.id)
+      const result = response?.data ?? response
+      setProperty((current) => current
+        ? { ...current, status: result?.status || (isArchived ? 'AVAILABLE' : 'ARCHIVED') }
+        : current)
+      setToastMessage(isArchived ? 'Property reactivated.' : 'Property archived.')
+      setTimeout(() => setToastMessage(''), 3000)
+    } catch (err) {
+      const errorMsg = err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Could not update property archive status.'
+      alert(`Error: ${errorMsg}`)
+    } finally {
+      setIsUpdatingArchive(false)
     }
   }
 
@@ -1619,6 +1652,15 @@ export default function PropertyDetailsPage() {
             <Button
               variant="outline"
               size="sm"
+              leftIcon={isUpdatingArchive ? <Loader size="xs" /> : (property.status === 'ARCHIVED' ? <RotateCcw className="w-4 h-4" /> : <Archive className="w-4 h-4" />)}
+              onClick={handleArchiveToggle}
+              disabled={isUpdatingArchive || isDeleting}
+            >
+              {isUpdatingArchive ? 'Saving...' : property.status === 'ARCHIVED' ? 'Reactivate' : 'Archive'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               leftIcon={
                 isDeleting ? (
                   <Loader size="xs" />
@@ -1649,7 +1691,7 @@ export default function PropertyDetailsPage() {
                     aria-label="Change property status"
                     value={property.status || ''}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED'}
+                    disabled={isUpdatingStatus || property.submittedForApproval || property.status === 'OCCUPIED' || property.status === 'ARCHIVED'}
                     className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#111820] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
