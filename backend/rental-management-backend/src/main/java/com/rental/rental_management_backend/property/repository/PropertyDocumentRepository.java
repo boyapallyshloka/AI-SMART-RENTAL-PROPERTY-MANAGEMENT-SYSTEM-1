@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.rental.rental_management_backend.property.entity.PropertyDocument;
+import com.rental.rental_management_backend.tenant.enums.DocumentVerificationStatus;
 
 public interface PropertyDocumentRepository
         extends JpaRepository<PropertyDocument, Long> {
@@ -24,4 +25,12 @@ public interface PropertyDocumentRepository
     Optional<PropertyDocument> findByDocumentIdAndProperty_PropertyId(
             Long documentId,
             Long propertyId);
+
+    @EntityGraph(attributePaths = {
+            "property",
+            "property.owner",
+            "verifiedBy"
+    })
+    List<PropertyDocument> findByVerificationStatusOrderByUploadedAtDesc(
+            DocumentVerificationStatus verificationStatus);
 }

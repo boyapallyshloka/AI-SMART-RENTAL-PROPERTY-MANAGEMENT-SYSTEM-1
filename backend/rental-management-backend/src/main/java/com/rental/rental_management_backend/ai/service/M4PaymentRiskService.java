@@ -1,12 +1,19 @@
 
 package com.rental.rental_management_backend.ai.service;
 
+import java.time.LocalDate;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.rental.rental_management_backend.User.Repository.UserRepository;
+import com.rental.rental_management_backend.User.entity.User;
+import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.ai.client.M4PaymentRiskClient;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskRequest;
 import com.rental.rental_management_backend.ai.dto.M4PaymentRiskResponse;
-import com.rental.rental_management_backend.payment.service.PaymentService;
+import com.rental.rental_management_backend.rental.enums.AgreementStatus;
+import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
 
 @Service
 public class M4PaymentRiskService {
@@ -15,7 +22,9 @@ public class M4PaymentRiskService {
 
     private final M4PaymentRiskClient paymentRiskClient;
 
-    private final PaymentService paymentService;
+    private final UserRepository userRepository;
+
+    private final RentalAgreementRepository rentalAgreementRepository;
 
     public M4PaymentRiskService(
 
@@ -23,7 +32,9 @@ public class M4PaymentRiskService {
 
             M4PaymentRiskClient paymentRiskClient,
 
-            PaymentService paymentService) {
+            UserRepository userRepository,
+
+            RentalAgreementRepository rentalAgreementRepository) {
 
         this.aggregationService =
                 aggregationService;
@@ -31,8 +42,11 @@ public class M4PaymentRiskService {
         this.paymentRiskClient =
                 paymentRiskClient;
 
-        this.paymentService =
-                paymentService;
+        this.userRepository =
+                userRepository;
+
+        this.rentalAgreementRepository =
+                rentalAgreementRepository;
     }
 
     public M4PaymentRiskResponse predictPaymentRisk(
@@ -53,23 +67,7 @@ public class M4PaymentRiskService {
                     "Authenticated user is required");
         }
 
-        /*
-         * Step 1:
-         * Reuse the existing payment authorization logic.
-         *
-         * PaymentService already verifies:
-         *
-         * SUPER_ADMIN        -> allowed
-         * PROPERTY_OWNER     -> property ownership checked
-         * PROPERTY_MANAGER   -> managed property checked
-         * TENANT             -> blocked by controller
-         *
-         * This prevents us from creating a second,
-         * different property-authorization implementation.
-         */
-        paymentService.getPaymentsByTenant(
-                tenantId,
-                email);
+        validatePaymentRiskTenantAccess(tenantId, email);
 
         /*
          * Step 2:
@@ -96,5 +94,46 @@ public class M4PaymentRiskService {
         }
 
         return response;
+    }
+
+    private void validatePaymentRiskTenantAccess(
+            Long tenantId,
+            String email) {
+        User user = userRepository.findByEmail(email.trim())
+                .orElseThrow(() -> new AccessDeniedException(
+                        "You are not authorized to view payment risk for this tenant"));
+
+        if (user.getRole() == RoleType.SUPER_ADMIN) {
+            return;
+        }
+
+        LocalDate asOfDate = LocalDate.now();
+        long qualifyingAgreements;
+
+        if (user.getRole() == RoleType.PROPERTY_OWNER) {
+            qualifyingAgreements =
+                    rentalAgreementRepository
+                            .countQualifyingAgreementsForTenantAndOwner(
+                                    tenantId,
+                                    user.getId(),
+                                    AgreementStatus.DRAFT,
+                                    asOfDate);
+        } else if (user.getRole() == RoleType.PROPERTY_MANAGER) {
+            qualifyingAgreements =
+                    rentalAgreementRepository
+                            .countQualifyingAgreementsForTenantAndManager(
+                                    tenantId,
+                                    user.getId(),
+                                    AgreementStatus.DRAFT,
+                                    asOfDate);
+        } else {
+            throw new AccessDeniedException(
+                    "You are not authorized to view payment risk for this tenant");
+        }
+
+        if (qualifyingAgreements == 0) {
+            throw new AccessDeniedException(
+                    "You are not authorized to view payment risk for this tenant");
+        }
     }
 }
