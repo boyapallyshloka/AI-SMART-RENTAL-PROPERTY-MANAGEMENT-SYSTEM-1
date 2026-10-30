@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.rental.rental_management_backend.ai.exception.M4PaymentRiskException;
@@ -102,6 +103,32 @@ public class GlobalExceptionHandler {
                 return buildResponse(
                                 HttpStatus.NOT_FOUND,
                                 ex.getMessage());
+        }
+
+        @ExceptionHandler(ResponseStatusException.class)
+        public ResponseEntity<Map<String, Object>> handleResponseStatusException(
+                        ResponseStatusException ex) {
+
+                var status = ex.getStatusCode();
+                HttpStatus httpStatus = HttpStatus.resolve(status.value());
+                Map<String, Object> response = new HashMap<>();
+
+                response.put("timestamp", LocalDateTime.now());
+                response.put("status", status.value());
+                response.put(
+                                "error",
+                                httpStatus != null
+                                                ? httpStatus.getReasonPhrase()
+                                                : status.toString());
+                response.put(
+                                "message",
+                                ex.getReason() != null
+                                                ? ex.getReason()
+                                                : ex.getMessage());
+
+                return ResponseEntity
+                                .status(status)
+                                .body(response);
         }
 
         @ExceptionHandler(Exception.class)

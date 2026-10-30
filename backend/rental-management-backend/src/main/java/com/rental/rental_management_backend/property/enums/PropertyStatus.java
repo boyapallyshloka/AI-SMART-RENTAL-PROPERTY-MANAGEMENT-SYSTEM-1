@@ -7,5 +7,6 @@ public enum PropertyStatus {
     PUBLISHED,
     OCCUPIED,
     UNDER_MAINTENANCE,
-    INACTIVE
+    INACTIVE,
+    ARCHIVED
 }

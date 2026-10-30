@@ -3,17 +3,21 @@ package com.rental.rental_management_backend.property.serviceimpl;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.rental.rental_management_backend.User.Repository.UserRepository;
 import com.rental.rental_management_backend.User.entity.User;
 import com.rental.rental_management_backend.User.enums.RoleType;
 import com.rental.rental_management_backend.exception.ResourceNotFoundException;
+import com.rental.rental_management_backend.expense.repository.ExpenseRepository;
+import com.rental.rental_management_backend.maintenance.repository.MaintenanceRequestRepository;
 import com.rental.rental_management_backend.property.dto.PropertyCardResponse;
 import com.rental.rental_management_backend.property.dto.PropertyRequest;
 import com.rental.rental_management_backend.property.dto.PropertyResponse;
@@ -22,34 +26,57 @@ import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.enums.FurnishingStatus;
 import com.rental.rental_management_backend.property.enums.PropertyStatus;
 import com.rental.rental_management_backend.property.enums.PropertyType;
+import com.rental.rental_management_backend.property.repository.PropertyDocumentRepository;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
 import com.rental.rental_management_backend.property.service.PropertyService;
+import com.rental.rental_management_backend.rental.enums.AgreementStatus;
+import com.rental.rental_management_backend.rental.repository.RentInvoiceRepository;
+import com.rental.rental_management_backend.rental.repository.RentalAgreementRepository;
+import com.rental.rental_management_backend.rental.repository.RentalApplicationRepository;
 import com.rental.rental_management_backend.s3.service.S3Service;
 
 @Service
 @Transactional
 public class PropertyServiceImpl implements PropertyService {
 
-	private final PropertyRepository propertyRepository;
-	private final UserRepository userRepository;
-	private final PropertyManagerRepository propertyManagerRepository;
-	private final PropertyNotificationDispatcher notificationDispatcher;
-	private final S3Service s3Service;
+    private final PropertyRepository propertyRepository;
+    private final UserRepository userRepository;
+    private final PropertyManagerRepository propertyManagerRepository;
+    private final RentalAgreementRepository rentalAgreementRepository;
+    private final RentalApplicationRepository rentalApplicationRepository;
+    private final RentInvoiceRepository rentInvoiceRepository;
+    private final MaintenanceRequestRepository maintenanceRequestRepository;
+    private final ExpenseRepository expenseRepository;
+    private final PropertyDocumentRepository propertyDocumentRepository;
+    private final PropertyNotificationDispatcher notificationDispatcher;
+    private final S3Service s3Service;
 
-	public PropertyServiceImpl(
-	        PropertyRepository propertyRepository,
-	        UserRepository userRepository,
-	        PropertyManagerRepository propertyManagerRepository,
-	        PropertyNotificationDispatcher notificationDispatcher,
-	        S3Service s3Service) {
+    public PropertyServiceImpl(
+            PropertyRepository propertyRepository,
+            UserRepository userRepository,
+            PropertyManagerRepository propertyManagerRepository,
+            RentalAgreementRepository rentalAgreementRepository,
+            RentalApplicationRepository rentalApplicationRepository,
+            RentInvoiceRepository rentInvoiceRepository,
+            MaintenanceRequestRepository maintenanceRequestRepository,
+            ExpenseRepository expenseRepository,
+            PropertyDocumentRepository propertyDocumentRepository,
+            PropertyNotificationDispatcher notificationDispatcher,
+            S3Service s3Service) {
 
-	    this.propertyRepository = propertyRepository;
-	    this.userRepository = userRepository;
-	    this.propertyManagerRepository = propertyManagerRepository;
-	    this.notificationDispatcher = notificationDispatcher;
-	    this.s3Service = s3Service;
-	}
+        this.propertyRepository = propertyRepository;
+        this.userRepository = userRepository;
+        this.propertyManagerRepository = propertyManagerRepository;
+        this.rentalAgreementRepository = rentalAgreementRepository;
+        this.rentalApplicationRepository = rentalApplicationRepository;
+        this.rentInvoiceRepository = rentInvoiceRepository;
+        this.maintenanceRequestRepository = maintenanceRequestRepository;
+        this.expenseRepository = expenseRepository;
+        this.propertyDocumentRepository = propertyDocumentRepository;
+        this.notificationDispatcher = notificationDispatcher;
+        this.s3Service = s3Service;
+    }
 	@Override
 	public PropertyResponse createProperty(PropertyRequest request) {
 
@@ -285,7 +312,67 @@ private String toPublicImageUrl(String imageUrl) {
                                         "Property not found or you do not have permission"
                                 ));
 
+        validatePropertyCanBeDeleted(property);
+
         propertyRepository.delete(property);
+    }
+
+    @Override
+    public PropertyResponse archiveProperty(Long id) {
+
+        User owner = getLoggedInUser();
+
+        validateOwner(owner);
+
+        Property property =
+                propertyRepository
+                        .findByPropertyIdAndOwner(id, owner)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Property not found or you do not have permission"
+                                ));
+
+        if (property.getStatus() == PropertyStatus.ARCHIVED) {
+            return convertToResponse(property);
+        }
+
+        if (rentalAgreementRepository
+                .existsByProperty_PropertyIdAndStatus(
+                        property.getPropertyId(),
+                        AgreementStatus.ACTIVE)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property cannot be archived while an active rental agreement exists."
+            );
+        }
+
+        property.setStatus(PropertyStatus.ARCHIVED);
+
+        return convertToResponse(propertyRepository.save(property));
+    }
+
+    @Override
+    public PropertyResponse reactivateProperty(Long id) {
+
+        User owner = getLoggedInUser();
+
+        validateOwner(owner);
+
+        Property property =
+                propertyRepository
+                        .findByPropertyIdAndOwner(id, owner)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Property not found or you do not have permission"
+                                ));
+
+        if (property.getStatus() != PropertyStatus.ARCHIVED) {
+            return convertToResponse(property);
+        }
+
+        property.setStatus(PropertyStatus.AVAILABLE);
+
+        return convertToResponse(propertyRepository.save(property));
     }
 
     @Override
@@ -318,6 +405,76 @@ private String toPublicImageUrl(String imageUrl) {
                 propertyRepository.save(property);
 
         return convertToResponse(updatedProperty);
+    }
+
+    private void validatePropertyCanBeDeleted(Property property) {
+
+        Long propertyId = property.getPropertyId();
+
+        if (propertyId == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property cannot be permanently deleted because historical records exist. Archive the property instead."
+            );
+        }
+
+        if (rentalAgreementRepository
+                .existsByProperty_PropertyIdAndStatus(
+                        propertyId,
+                        AgreementStatus.ACTIVE)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property cannot be deleted while an active rental agreement exists."
+            );
+        }
+
+        if (hasBusinessHistory(propertyId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Property cannot be permanently deleted because historical records exist. Archive the property instead."
+            );
+        }
+    }
+
+    private boolean hasBusinessHistory(Long propertyId) {
+
+        if (!rentalApplicationRepository
+                .findAllByPropertyIdIncludingUnitApplications(propertyId)
+                .isEmpty()) {
+            return true;
+        }
+
+        if (!rentalAgreementRepository
+                .findByPropertyIdIncludingUnitHierarchy(propertyId)
+                .isEmpty()) {
+            return true;
+        }
+
+        if (!rentInvoiceRepository
+                .findByAuthorizedPropertyIds(List.of(propertyId))
+                .isEmpty()) {
+            return true;
+        }
+
+        if (!maintenanceRequestRepository
+                .findByPropertyId(propertyId)
+                .isEmpty()) {
+            return true;
+        }
+
+        if (!expenseRepository
+                .findByProperty_PropertyId(propertyId)
+                .isEmpty()) {
+            return true;
+        }
+
+        if (!propertyDocumentRepository
+                .findByProperty_PropertyIdOrderByUploadedAtDesc(propertyId)
+                .isEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 
     private User getLoggedInUser() {
