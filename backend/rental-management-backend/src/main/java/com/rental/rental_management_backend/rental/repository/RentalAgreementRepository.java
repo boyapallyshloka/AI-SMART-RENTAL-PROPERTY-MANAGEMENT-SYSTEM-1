@@ -92,6 +92,130 @@ public interface RentalAgreementRepository
             AgreementStatus status);
 
     @Query("""
+            SELECT COUNT(agreement)
+            FROM RentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE agreement.tenant.tenantId = :tenantId
+              AND agreement.status <> :draftStatus
+              AND agreement.startDate <= :asOfDate
+              AND (directProperty.owner.id = :ownerId
+                    OR unitProperty.owner.id = :ownerId)
+            """)
+    long countQualifyingAgreementsForTenantAndOwner(
+            @Param("tenantId") Long tenantId,
+            @Param("ownerId") Long ownerId,
+            @Param("draftStatus") AgreementStatus draftStatus,
+            @Param("asOfDate") LocalDate asOfDate);
+
+    @Query("""
+            SELECT COUNT(agreement)
+            FROM RentalAgreement agreement
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN directProperty.propertyManager directManager
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            LEFT JOIN unitProperty.propertyManager unitManager
+            WHERE agreement.tenant.tenantId = :tenantId
+              AND agreement.status <> :draftStatus
+              AND agreement.startDate <= :asOfDate
+              AND (directManager.user.id = :managerUserId
+                    OR unitManager.user.id = :managerUserId)
+            """)
+    long countQualifyingAgreementsForTenantAndManager(
+            @Param("tenantId") Long tenantId,
+            @Param("managerUserId") Long managerUserId,
+            @Param("draftStatus") AgreementStatus draftStatus,
+            @Param("asOfDate") LocalDate asOfDate);
+
+    @Query("""
+            SELECT DISTINCT
+                   tenant.tenantId AS tenantId,
+                   TRIM(CONCAT(
+                       CONCAT(COALESCE(tenantUser.firstName, ''), ' '),
+                       COALESCE(tenantUser.lastName, '')
+                   )) AS tenantName,
+                   CASE
+                       WHEN directProperty.owner.id = :ownerId
+                           THEN directProperty.propertyId
+                       ELSE unitProperty.propertyId
+                   END AS propertyId,
+                   CASE
+                       WHEN directProperty.owner.id = :ownerId
+                           THEN directProperty.propertyName
+                       ELSE unitProperty.propertyName
+                   END AS propertyName
+            FROM RentalAgreement agreement
+            JOIN agreement.tenant tenant
+            JOIN tenant.user tenantUser
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            WHERE agreement.status <> :draftStatus
+              AND agreement.startDate <= :asOfDate
+              AND (directProperty.owner.id = :ownerId
+                    OR unitProperty.owner.id = :ownerId)
+            """)
+    List<AccessibleTenantProperty> findQualifyingTenantPropertiesForOwner(
+            @Param("ownerId") Long ownerId,
+            @Param("draftStatus") AgreementStatus draftStatus,
+            @Param("asOfDate") LocalDate asOfDate);
+
+    @Query("""
+            SELECT DISTINCT
+                   tenant.tenantId AS tenantId,
+                   TRIM(CONCAT(
+                       CONCAT(COALESCE(tenantUser.firstName, ''), ' '),
+                       COALESCE(tenantUser.lastName, '')
+                   )) AS tenantName,
+                   CASE
+                       WHEN directManager.user.id = :managerUserId
+                           THEN directProperty.propertyId
+                       ELSE unitProperty.propertyId
+                   END AS propertyId,
+                   CASE
+                       WHEN directManager.user.id = :managerUserId
+                           THEN directProperty.propertyName
+                       ELSE unitProperty.propertyName
+                   END AS propertyName
+            FROM RentalAgreement agreement
+            JOIN agreement.tenant tenant
+            JOIN tenant.user tenantUser
+            LEFT JOIN agreement.property directProperty
+            LEFT JOIN directProperty.propertyManager directManager
+            LEFT JOIN agreement.unit unit
+            LEFT JOIN unit.floor floor
+            LEFT JOIN floor.building building
+            LEFT JOIN building.property unitProperty
+            LEFT JOIN unitProperty.propertyManager unitManager
+            WHERE agreement.status <> :draftStatus
+              AND agreement.startDate <= :asOfDate
+              AND (directManager.user.id = :managerUserId
+                    OR unitManager.user.id = :managerUserId)
+            """)
+    List<AccessibleTenantProperty> findQualifyingTenantPropertiesForManager(
+            @Param("managerUserId") Long managerUserId,
+            @Param("draftStatus") AgreementStatus draftStatus,
+            @Param("asOfDate") LocalDate asOfDate);
+
+    interface AccessibleTenantProperty {
+        Long getTenantId();
+
+        String getTenantName();
+
+        Long getPropertyId();
+
+        String getPropertyName();
+    }
+
+    @Query("""
             SELECT agreement
             FROM RentalAgreement agreement
             LEFT JOIN agreement.property directProperty

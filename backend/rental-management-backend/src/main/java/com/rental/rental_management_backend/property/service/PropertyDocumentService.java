@@ -22,6 +22,8 @@ public interface PropertyDocumentService {
             String email,
             Long propertyId);
 
+    List<PropertyDocumentResponse> getPendingDocuments();
+
     PropertyDocumentResponse getDocument(
             String email,
             Long propertyId,

@@ -9,6 +9,10 @@ public class PropertyDocumentResponse {
 
     private Long documentId;
     private Long propertyId;
+    private String propertyName;
+    private Long ownerId;
+    private String ownerName;
+    private String ownerEmail;
     private PropertyDocumentType documentType;
     private String documentName;
     private String fileName;
@@ -35,6 +39,38 @@ public class PropertyDocumentResponse {
 
     public void setPropertyId(Long propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
     }
 
     public PropertyDocumentType getDocumentType() {

@@ -137,6 +137,17 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<PropertyDocumentResponse> getPendingDocuments() {
+        return propertyDocumentRepository
+                .findByVerificationStatusOrderByUploadedAtDesc(
+                        DocumentVerificationStatus.PENDING)
+                .stream()
+                .map(this::mapToAdminResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public PropertyDocumentResponse getDocument(
             String email,
             Long propertyId,
@@ -383,6 +394,26 @@ public class PropertyDocumentServiceImpl implements PropertyDocumentService {
             response.setVerifiedByName(
                     displayName.isEmpty() ? null : displayName);
         }
+        return response;
+    }
+
+    private PropertyDocumentResponse mapToAdminResponse(
+            PropertyDocument document) {
+        PropertyDocumentResponse response = mapToResponse(document);
+        Property property = document.getProperty();
+        response.setPropertyName(property.getPropertyName());
+
+        User owner = property.getOwner();
+        if (owner != null) {
+            response.setOwnerId(owner.getId());
+            response.setOwnerName(
+                    ((owner.getFirstName() == null ? "" : owner.getFirstName())
+                            + " "
+                            + (owner.getLastName() == null ? "" : owner.getLastName()))
+                            .trim());
+            response.setOwnerEmail(owner.getEmail());
+        }
+
         return response;
     }
 }
