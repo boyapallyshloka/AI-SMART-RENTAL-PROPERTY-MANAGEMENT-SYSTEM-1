@@ -85,6 +85,16 @@ export const createAgreement = async (payload) => {
         ? payload.termsAndConditions.trim()
         : undefined,
     moveInDate: payload.moveInDate || undefined,
+    startDate: payload.startDate || undefined,
+    endDate: payload.endDate || undefined,
+    monthlyRent:
+      payload.monthlyRent != null && payload.monthlyRent !== ''
+        ? Number(payload.monthlyRent)
+        : undefined,
+    securityDeposit:
+      payload.securityDeposit != null && payload.securityDeposit !== ''
+        ? Number(payload.securityDeposit)
+        : undefined,
   }
 
   return await axiosClient.post('/rental-agreements', requestBody)

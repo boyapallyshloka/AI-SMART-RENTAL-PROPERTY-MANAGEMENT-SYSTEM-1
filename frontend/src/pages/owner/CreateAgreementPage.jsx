@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { useAuth } from '../../context/AuthContext'
@@ -19,7 +19,6 @@ import {
 } from '../../components/ui'
 import {
   FileText,
-  Building2,
   User,
   IndianRupee,
   Calendar,
@@ -30,12 +29,8 @@ import {
   FileCheck,
   AlertCircle,
   Info,
-  Mail,
   Home,
   DoorOpen,
-  Upload,
-  X,
-  Paperclip,
 } from 'lucide-react'
 
 // Due day dropdown options (day of the month)
@@ -57,12 +52,28 @@ const NOTICE_PERIOD_OPTIONS = [
   { value: '90', label: '90 days notice' },
 ]
 
-// Format file size in human-readable units
-const formatFileSize = (bytes) => {
-  if (!bytes || isNaN(bytes)) return ''
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+// Helper to determine if an application is for a standalone whole property (House/Villa)
+const isDirectRentalApplication = (app) => {
+  if (!app) return false
+  const pType = String(app.propertyType || '').toUpperCase()
+  return (
+    ['HOUSE', 'VILLA'].includes(pType) ||
+    (app.unitId == null && app.unitNumber == null)
+  )
+}
+
+// Calculate default 1-year end date given a start date
+const computeOneYearLater = (dateStr) => {
+  if (!dateStr) return ''
+  try {
+    const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return ''
+    d.setFullYear(d.getFullYear() + 1)
+    d.setDate(d.getDate() - 1)
+    return d.toISOString().split('T')[0]
+  } catch {
+    return ''
+  }
 }
 
 export default function CreateAgreementPage() {
@@ -95,95 +106,33 @@ export default function CreateAgreementPage() {
     'Standard 12-month residential lease. No subleasing without written consent. Landlord responsible for building maintenance and water services.'
   )
 
-  // Document Upload State
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [fileError, setFileError] = useState(null)
-  const [isDragOver, setIsDragOver] = useState(false)
-  const fileInputRef = useRef(null)
-
   // Validation & UI State
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Document validation and selection handler
-  const validateAndSetFile = (file) => {
-    setFileError(null)
+  // Populate form defaults from the selected application
+  const populateFormFromApplication = (app) => {
+    if (!app) return
 
-    if (!file) return
+    const rentVal =
+      app.monthlyRent != null && app.monthlyRent !== ''
+        ? String(app.monthlyRent)
+        : ''
+    const depositVal =
+      app.securityDeposit != null && app.securityDeposit !== ''
+        ? String(app.securityDeposit)
+        : rentVal
 
-    const allowedExtensions = ['.pdf', '.jpg', '.jpeg', '.png']
-    const fileName = (file.name || '').toLowerCase()
-    const isAllowedExt = allowedExtensions.some((ext) => fileName.endsWith(ext))
-    const isAllowedMime = [
-      'application/pdf',
-      'image/jpeg',
-      'image/png',
-      'image/jpg',
-    ].includes(file.type)
+    setMonthlyRent(rentVal)
+    setSecurityDeposit(depositVal)
 
-    if (!isAllowedExt && !isAllowedMime) {
-      setFileError('Invalid file format. Please upload a PDF, JPG, or PNG document.')
-      return
-    }
+    const prefDate = app.preferredMoveInDate || ''
+    setMoveInDate(prefDate)
 
-    const MAX_SIZE = 10 * 1024 * 1024 // 10MB
-    if (file.size > MAX_SIZE) {
-      setFileError('File size exceeds 10MB. Please choose a smaller file.')
-      return
-    }
-
-    setSelectedFile(file)
-  }
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0]
-    validateAndSetFile(file)
-  }
-
-  const handleRemoveFile = () => {
-    setSelectedFile(null)
-    setFileError(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
-
-  const handleDragOver = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragOver(true)
-  }
-
-  const handleDragLeave = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragOver(false)
-  }
-
-  const handleDrop = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragOver(false)
-
-    const file = e.dataTransfer?.files?.[0]
-    if (file) {
-      validateAndSetFile(file)
-    }
-  }
-
-  // Calculate default 1-year end date given a start date
-  const computeOneYearLater = (dateStr) => {
-    if (!dateStr) return ''
-    try {
-      const d = new Date(dateStr)
-      if (isNaN(d.getTime())) return ''
-      d.setFullYear(d.getFullYear() + 1)
-      d.setDate(d.getDate() - 1)
-      return d.toISOString().split('T')[0]
-    } catch {
-      return ''
-    }
+    const initialStart = prefDate || new Date().toISOString().split('T')[0]
+    setStartDate(initialStart)
+    setEndDate(computeOneYearLater(initialStart))
   }
 
   // Load real applications on mount
@@ -231,9 +180,10 @@ export default function CreateAgreementPage() {
         console.error('Failed to load applications for agreement creation:', err)
         if (isMounted) {
           setLoadError(
+            err?.data?.message ||
             err?.response?.data?.message ||
-              err?.message ||
-              'Failed to load approved rental applications.'
+            err?.message ||
+            'Failed to load approved rental applications.'
           )
         }
       } finally {
@@ -249,30 +199,6 @@ export default function CreateAgreementPage() {
       isMounted = false
     }
   }, [user?.role, location.state?.applicationId])
-
-  // Populate form defaults from the selected application
-  const populateFormFromApplication = (app) => {
-    if (!app) return
-
-    const rentVal =
-      app.monthlyRent != null && app.monthlyRent !== ''
-        ? String(app.monthlyRent)
-        : ''
-    const depositVal =
-      app.securityDeposit != null && app.securityDeposit !== ''
-        ? String(app.securityDeposit)
-        : rentVal
-
-    setMonthlyRent(rentVal)
-    setSecurityDeposit(depositVal)
-
-    const prefDate = app.preferredMoveInDate || ''
-    setMoveInDate(prefDate)
-
-    const initialStart = prefDate || new Date().toISOString().split('T')[0]
-    setStartDate(initialStart)
-    setEndDate(computeOneYearLater(initialStart))
-  }
 
   // Handle application dropdown change
   const handleApplicationChange = (appId) => {
@@ -302,9 +228,8 @@ export default function CreateAgreementPage() {
 
   const applicationOptions = approvedApplications.map((app) => ({
     value: String(app.applicationId),
-    label: `Application #${app.applicationId} — ${app.tenantName || 'Applicant'} (${app.propertyName || 'Property'} · ${
-      app.unitNumber ? `Unit #${app.unitNumber}` : 'Unit'
-    })`,
+    label: `Application #${app.applicationId} — ${app.tenantName || 'Applicant'} (${app.propertyName || 'Property'} · ${app.unitNumber ? `Unit #${app.unitNumber}` : 'Unit'
+      })`,
   }))
 
   const validate = () => {
@@ -320,10 +245,17 @@ export default function CreateAgreementPage() {
     } else if (startDate && new Date(endDate) <= new Date(startDate)) {
       errs.endDate = 'End date must be after start date'
     }
-    if (!monthlyRent || Number(monthlyRent) < 0) {
+    if (
+      monthlyRent === '' ||
+      !Number.isFinite(Number(monthlyRent)) ||
+      Number(monthlyRent) < 0
+    ) {
       errs.monthlyRent = 'Please enter a valid monthly rent'
     }
-    if (securityDeposit !== '' && Number(securityDeposit) < 0) {
+    if (
+      securityDeposit !== '' &&
+      (!Number.isFinite(Number(securityDeposit)) || Number(securityDeposit) < 0)
+    ) {
       errs.securityDeposit = 'Security deposit cannot be negative'
     }
     if (!dueDay || !Number.isInteger(Number(dueDay)) || Number(dueDay) < 1 || Number(dueDay) > 31) {
@@ -345,38 +277,35 @@ export default function CreateAgreementPage() {
 
     setIsSubmitting(true)
 
-    const payload = {
-      applicationId: Number(selectedApplicationId),
-      startDate,
-      endDate,
-      monthlyRent: Number(monthlyRent),
-      securityDeposit:
-        securityDeposit !== '' ? Number(securityDeposit) : 0,
-      dueDay: Number(dueDay),
-      noticePeriodDays:
-        noticePeriodDays !== '' ? Number(noticePeriodDays) : 30,
-      moveInDate: moveInDate || startDate || undefined,
-      termsAndConditions: termsAndConditions.trim() || undefined,
-    }
-
-    let agreementId = null
-    const tenantDisplay = selectedApp?.tenantName || 'Tenant'
-    const unitDisplay = isDirectRentalApplication(selectedApp)
-      ? 'Whole property'
-      : selectedApp?.unitNumber
-      ? `Unit #${selectedApp.unitNumber}`
-      : 'Unit'
-
     try {
-      // 1. Submit rental agreement via existing POST /api/rental-agreements
-      const response = await createAgreement(payload)
-      agreementId = response?.agreementId || response?.data?.agreementId
+      const payload = {
+        applicationId: Number(selectedApplicationId),
+        startDate,
+        endDate,
+        monthlyRent: Number(monthlyRent),
+        securityDeposit:
+          securityDeposit !== '' ? Number(securityDeposit) : 0,
+        dueDay: Number(dueDay),
+        noticePeriodDays:
+          noticePeriodDays !== '' ? Number(noticePeriodDays) : 30,
+        moveInDate: moveInDate || startDate || undefined,
+        termsAndConditions: termsAndConditions.trim() || undefined,
+      }
 
-      // 2. Success redirect. The backend currently exposes document download,
-      // but no upload route for an owner-provided attachment.
-      const successMessage = `Rental agreement ${
-        agreementId ? `#${agreementId} ` : ''
-      }for ${tenantDisplay} (${unitDisplay}) created successfully in DRAFT status. The official PDF has been generated.${selectedFile ? ' The selected attachment was not uploaded because the backend does not provide an upload endpoint.' : ''}`
+      const tenantDisplay = selectedApp?.tenantName || 'Tenant'
+      const unitDisplay = isDirectRentalApplication(selectedApp)
+        ? 'Whole property'
+        : selectedApp?.unitNumber
+          ? `Unit #${selectedApp.unitNumber}`
+          : 'Unit'
+
+      // 1. Submit rental agreement via POST /api/rental-agreements
+      const response = await createAgreement(payload)
+      const agreementId = response?.agreementId || response?.data?.agreementId
+
+      // 2. Success redirect with feedback message
+      const successMessage = `Rental agreement ${agreementId ? `#${agreementId} ` : ''
+        }for ${tenantDisplay} (${unitDisplay}) created successfully in DRAFT status. The official PDF has been generated.`
 
       navigate(`${basePath}/agreements`, {
         state: { successMessage },
@@ -384,6 +313,7 @@ export default function CreateAgreementPage() {
     } catch (err) {
       console.error('Failed to create rental agreement:', err)
       const msg =
+        err?.data?.message ||
         err?.response?.data?.message ||
         err?.message ||
         'Failed to create rental agreement. Please check the form and try again.'
@@ -553,8 +483,8 @@ export default function CreateAgreementPage() {
                         {selectedApp.unitNumber
                           ? `Unit #${selectedApp.unitNumber}`
                           : selectedApp.unitId
-                          ? `Unit ID #${selectedApp.unitId}`
-                          : '—'}
+                            ? `Unit ID #${selectedApp.unitId}`
+                            : 'Whole property'}
                       </p>
                     </div>
 
@@ -687,106 +617,32 @@ export default function CreateAgreementPage() {
               </div>
             </div>
 
-            {/* Section 4: Official Agreement Document Upload */}
-            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-4">
+            {/* Section 4: Official Agreement Document Generation */}
+            <div className="bg-white rounded-2xl border border-[#E3E8DF] p-6 shadow-xs space-y-3">
               <div className="flex items-center justify-between border-b border-[#E3E8DF] pb-3">
                 <h2 className="text-base font-semibold text-[#111820] flex items-center gap-2">
-                  <Upload className="w-4 h-4 text-[#3F7D58]" />
-                  4. Agreement Document (Optional)
+                  <FileCheck className="w-4 h-4 text-[#3F7D58]" />
+                  4. Agreement Document Generation
                 </h2>
-                <span className="text-xs text-[#5B6875]">PDF, JPG, PNG (Max 10MB)</span>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#EDF4ED] text-[#3F7D58]">
+                  Automated PDF
+                </span>
               </div>
 
-              <p className="text-xs text-[#5B6875] leading-relaxed">
-                SmartEstate generates the official digital Lease Agreement PDF after creation. Additional signed document uploads are not available yet; any file selected here will not be attached.
-              </p>
-
-              {/* Hidden native file input */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,application/pdf,image/png,image/jpeg,image/jpg"
-                onChange={handleFileSelect}
-                className="hidden"
-                id="agreement-document-input"
-              />
-
-              {fileError && (
-                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                  <span>{fileError}</span>
+              <div className="p-4 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF] flex items-start gap-3">
+                <Info className="w-5 h-5 text-[#3F7D58] shrink-0 mt-0.5" />
+                <div className="text-xs text-[#5B6875] space-y-1">
+                  <p className="font-semibold text-[#111820]">
+                    Official Digital Lease Agreement Generated Automatically
+                  </p>
+                  <p className="leading-relaxed">
+                    SmartEstate automatically generates the binding digital Lease Agreement PDF with verified tenant, property, rent schedule, and legal clauses immediately upon submission.
+                  </p>
+                  <p className="leading-relaxed text-[#85929E]">
+                    Additional signed document uploads are not currently supported. You can view or download the generated official PDF at any time from the Agreements list.
+                  </p>
                 </div>
-              )}
-
-              {!selectedFile ? (
-                /* Drag & Drop / Click Dropzone */
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
-                    isDragOver
-                      ? 'border-[#3F7D58] bg-[#EDF4ED]/50'
-                      : 'border-[#E3E8DF] bg-[#F7F7F1] hover:border-[#3F7D58]/60 hover:bg-[#F2F6FA]'
-                  }`}
-                >
-                  <div className="flex flex-col items-center justify-center space-y-2.5">
-                    <div className="w-12 h-12 rounded-xl bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] border border-[#E3E8DF]/80 shadow-2xs">
-                      <Upload className="w-5 h-5 text-[#3F7D58]" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-[#111820]">
-                        Click to select document or drag &amp; drop
-                      </p>
-                      <p className="text-xs text-[#5B6875] mt-0.5">
-                        Accepts PDF documents and images (JPG, PNG) up to 10MB
-                      </p>
-                    </div>
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#3F7D58] mt-1">
-                      <Paperclip className="w-3.5 h-3.5" />
-                      Browse Files
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                /* Selected File Card */
-                <div className="rounded-xl border border-[#E3E8DF] bg-[#F7F7F1] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#EDF4ED] flex items-center justify-center text-[#3F7D58] shrink-0 border border-[#E3E8DF]">
-                      <FileText className="w-5 h-5 text-[#3F7D58]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm text-[#111820] truncate max-w-[260px] sm:max-w-md">
-                        {selectedFile.name}
-                      </p>
-                      <p className="text-xs text-[#5B6875] mt-0.5">
-                        {formatFileSize(selectedFile.size)} &bull; {selectedFile.type || 'Document'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-end sm:self-center">
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isSubmitting}
-                      className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E3E8DF] text-[#111820] bg-white hover:bg-[#F7F7F1] transition-colors cursor-pointer"
-                    >
-                      Change File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleRemoveFile}
-                      disabled={isSubmitting}
-                      className="p-1.5 text-xs font-semibold rounded-md border border-red-200 text-red-600 bg-white hover:bg-red-50 transition-colors cursor-pointer"
-                      title="Remove file"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
 
             {/* Form Actions */}

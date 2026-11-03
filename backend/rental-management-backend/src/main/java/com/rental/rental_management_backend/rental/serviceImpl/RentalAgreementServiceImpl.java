@@ -1,6 +1,7 @@
 
 package com.rental.rental_management_backend.rental.serviceImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -186,7 +187,7 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         }
 
         LocalDate moveInDate = validateDates(
-                application, request.getMoveInDate());
+                application, request.getMoveInDate(), request.getStartDate());
 
         if (request.getDueDay() != null
                 && (request.getDueDay() < 1
@@ -209,24 +210,48 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
         agreement.setUnit(unit);
 
         Integer leaseDurationMonths =
-                application.getPreferredLeaseDurationMonths();
+                application.getPreferredLeaseDurationMonths() != null && application.getPreferredLeaseDurationMonths() >= 1
+                        ? application.getPreferredLeaseDurationMonths()
+                        : 12;
 
-        LocalDate endDate = moveInDate
+        LocalDate defaultEndDate = moveInDate
                 .plusMonths(leaseDurationMonths)
                 .minusDays(1);
 
-        agreement.setStartDate(moveInDate);
+        LocalDate startDate = request.getStartDate() != null
+                ? request.getStartDate()
+                : moveInDate;
+        LocalDate endDate = request.getEndDate() != null
+                ? request.getEndDate()
+                : defaultEndDate;
+
+        agreement.setStartDate(startDate);
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException(
+                    "Agreement end date cannot be before start date");
+        }
         agreement.setEndDate(endDate);
 
-        agreement.setMonthlyRent(unit == null
-                ? property.getMonthlyRent()
-                : unit.getMonthlyRent());
-        agreement.setSecurityDeposit(unit == null
-                ? property.getSecurityDeposit()
-                : unit.getSecurityDeposit());
+        BigDecimal rent = request.getMonthlyRent() != null && request.getMonthlyRent().signum() >= 0
+                ? request.getMonthlyRent()
+                : (unit == null ? property.getMonthlyRent() : unit.getMonthlyRent());
+        BigDecimal deposit = request.getSecurityDeposit() != null && request.getSecurityDeposit().signum() >= 0
+                ? request.getSecurityDeposit()
+                : (unit == null ? property.getSecurityDeposit() : unit.getSecurityDeposit());
+
+        if (rent == null) {
+            throw new IllegalStateException(
+                    "Monthly rent is required to create a rental agreement");
+        }
+        if (deposit == null) {
+            deposit = BigDecimal.ZERO;
+        }
+        agreement.setMonthlyRent(rent);
+        agreement.setSecurityDeposit(deposit);
 
         agreement.setDueDay(request.getDueDay());
-        agreement.setNoticePeriodDays(request.getNoticePeriodDays());
+        agreement.setNoticePeriodDays(
+                request.getNoticePeriodDays() != null ? request.getNoticePeriodDays() : 30);
         agreement.setMoveInDate(moveInDate);
         agreement.setTermsAndConditions(
                 cleanString(request.getTermsAndConditions()));
@@ -877,23 +902,22 @@ public class RentalAgreementServiceImpl implements RentalAgreementService {
 
     private LocalDate validateDates(
             RentalApplication application,
-            LocalDate requestedMoveInDate) {
+            LocalDate requestedMoveInDate,
+            LocalDate requestedStartDate) {
 
         LocalDate moveInDate = requestedMoveInDate != null
                 ? requestedMoveInDate
-                : application.getPreferredMoveInDate();
-
-        if (moveInDate == null) {
-            throw new IllegalArgumentException(
-                    "Move-in date is required in the agreement request or rental application");
-        }
+                : requestedStartDate != null
+                ? requestedStartDate
+                : application.getPreferredMoveInDate() != null
+                ? application.getPreferredMoveInDate()
+                : LocalDate.now();
 
         Integer leaseDurationMonths =
                 application.getPreferredLeaseDurationMonths();
 
         if (leaseDurationMonths == null || leaseDurationMonths < 1) {
-            throw new IllegalArgumentException(
-                    "Preferred lease duration must be at least 1 month in the rental application");
+            leaseDurationMonths = 12;
         }
 
         LocalDate calculatedEndDate = moveInDate

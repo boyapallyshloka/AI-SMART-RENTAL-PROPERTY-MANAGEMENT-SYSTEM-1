@@ -1,8 +1,9 @@
-
 package com.rental.rental_management_backend.rental.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,15 @@ public class RentalAgreementRequest {
 
     private String termsAndConditions;
     private LocalDate moveInDate;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    @DecimalMin(value = "0.0", message = "Monthly rent cannot be negative")
+    private BigDecimal monthlyRent;
+
+    @DecimalMin(value = "0.0", message = "Security deposit cannot be negative")
+    private BigDecimal securityDeposit;
 
     // Getters and Setters
 
@@ -63,5 +73,37 @@ public class RentalAgreementRequest {
 
     public void setMoveInDate(LocalDate moveInDate) {
         this.moveInDate = moveInDate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(BigDecimal monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public BigDecimal getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
+        this.securityDeposit = securityDeposit;
     }
 }
