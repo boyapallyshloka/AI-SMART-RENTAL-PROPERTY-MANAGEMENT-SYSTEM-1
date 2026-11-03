@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { User, Settings, LogOut, ChevronDown, Shield } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
@@ -19,7 +20,9 @@ export default function UserMenu({ role, onLogout }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [modalTab, setModalTab] = useState('profile')
+  const triggerRef = useRef(null)
   const menuRef = useRef(null)
+  const [menuPosition, setMenuPosition] = useState(null)
 
   let auth = null
   try {
@@ -54,7 +57,10 @@ export default function UserMenu({ role, onLogout }) {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        !menuRef.current?.contains(event.target) &&
+        !triggerRef.current?.contains(event.target)
+      ) {
         setIsOpen(false)
       }
     }
@@ -63,6 +69,54 @@ export default function UserMenu({ role, onLogout }) {
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) {
+      setMenuPosition(null)
+      return undefined
+    }
+
+    const updateMenuPosition = () => {
+      const triggerBounds = triggerRef.current?.getBoundingClientRect()
+      if (!triggerBounds) return
+
+      const margin = 16
+      const width = Math.min(240, window.innerWidth - margin * 2)
+      const left = Math.max(
+        margin,
+        Math.min(triggerBounds.right - width, window.innerWidth - width - margin)
+      )
+      const preferredTop = triggerBounds.bottom + 8
+      const availableBelow = window.innerHeight - preferredTop - margin
+
+      if (availableBelow < 220 && triggerBounds.top > 220) {
+        const height = Math.min(320, triggerBounds.top - margin - 8)
+        setMenuPosition({
+          left,
+          top: Math.max(margin, triggerBounds.top - height - 8),
+          width,
+          maxHeight: height,
+        })
+        return
+      }
+
+      setMenuPosition({
+        left,
+        top: preferredTop,
+        width,
+        maxHeight: Math.max(180, Math.min(320, availableBelow)),
+      })
+    }
+
+    updateMenuPosition()
+    window.addEventListener('resize', updateMenuPosition)
+    window.addEventListener('scroll', updateMenuPosition, true)
+
+    return () => {
+      window.removeEventListener('resize', updateMenuPosition)
+      window.removeEventListener('scroll', updateMenuPosition, true)
     }
   }, [isOpen])
 
@@ -77,8 +131,9 @@ export default function UserMenu({ role, onLogout }) {
 
   return (
     <>
-      <div className="relative" ref={menuRef}>
+      <div className="relative">
         <button
+          ref={triggerRef}
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="User menu"
@@ -98,8 +153,19 @@ export default function UserMenu({ role, onLogout }) {
           <ChevronDown className="hidden sm:block w-3.5 h-3.5 text-[#5B6875]" />
         </button>
 
-        {isOpen && (
-          <div className="absolute right-0 mt-2 w-60 rounded-lg bg-white border border-[#E3E8DF] shadow-md z-50 overflow-hidden animate-in fade-in">
+        {isOpen && menuPosition && createPortal(
+          <div
+            ref={menuRef}
+            style={{
+              position: 'fixed',
+              left: menuPosition.left,
+              top: menuPosition.top,
+              width: menuPosition.width,
+              maxHeight: menuPosition.maxHeight,
+              zIndex: 10000,
+            }}
+            className="overflow-y-auto rounded-lg border border-[#E3E8DF] bg-white shadow-xl animate-in fade-in"
+          >
             <div className="px-4 py-3 border-b border-[#E3E8DF] bg-[#F7F7F1]">
               <p className="text-xs font-semibold text-[#111820]">
                 {userInfo.name}
@@ -166,7 +232,8 @@ export default function UserMenu({ role, onLogout }) {
                 <span>Log out</span>
               </button>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </div>
 

@@ -19,8 +19,6 @@ import {
   FileBarChart,
   Settings,
   ArrowRight,
-  CheckCircle2,
-  AlertTriangle,
 } from 'lucide-react'
 import { getAllUsers } from '../../api/userApi'
 import { getMaintenanceRequests } from '../../api/maintenanceApi'
@@ -193,45 +191,6 @@ export default function AdminDashboardPage() {
       icon: <FileBarChart className="w-5 h-5 text-[#3F7D58]" />,
       bg: 'bg-[#EDF4ED] border-[#E3E8DF]',
       link: '/admin/reports',
-    },
-  ]
-
-  // Administrative Module Status Overview
-  const moduleStatuses = [
-    {
-      name: 'User Directory & Management',
-      route: '/admin/users',
-      status: 'LIVE',
-      description: 'Full CRUD operations for accounts via /api/users',
-      endpoints: 'GET, PUT, DELETE /api/users/*',
-    },
-    {
-      name: 'Owner Account Approvals',
-      route: '/admin/owner-verification',
-      status: 'LIVE',
-      description: 'Account activation & suspension via /api/users/filter and status update',
-      endpoints: 'GET /api/users/filter, PUT /api/users/{id}/status',
-    },
-    {
-      name: 'Platform Billing & Reports',
-      route: '/admin/reports',
-      status: 'LIVE',
-      description: 'Real invoice totals via /api/rent-invoices',
-      endpoints: 'GET /api/rent-invoices',
-    },
-    {
-      name: 'Owner Document Verification',
-      route: '/admin/owner-verification',
-      status: 'API_REQUIRED',
-      description: 'Deed and identity document review pipeline',
-      endpoints: 'GET /api/owner-documents, PUT verify',
-    },
-    {
-      name: 'Global System Settings',
-      route: '/admin/system-settings',
-      status: 'API_REQUIRED',
-      description: 'Persistent platform configuration and integration settings',
-      endpoints: 'GET, PUT /api/admin/settings',
     },
   ]
 
@@ -415,59 +374,6 @@ export default function AdminDashboardPage() {
               )}
             </div>
 
-            {/* Administrative Modules & API Status Grid */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-base font-bold text-[#111820]">
-                    Administrative Subsystems & API Integration Status
-                  </h2>
-                  <p className="text-xs text-[#5B6875]">
-                    Overview of active Spring Boot endpoints vs modules requiring backend REST implementations.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {moduleStatuses.map((mod) => (
-                  <Link
-                    key={mod.name}
-                    to={mod.route}
-                    className="block rounded-lg border border-[#E3E8DF] bg-white p-4 shadow-2xs hover:border-[#3F7D58] hover:shadow-xs transition-all group"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-bold text-[#111820] group-hover:text-[#3F7D58] transition-colors">
-                            {mod.name}
-                          </h3>
-                        </div>
-                        <p className="mt-1 text-xs text-[#5B6875]">
-                          {mod.description}
-                        </p>
-                        <div className="mt-2 text-[11px] font-mono text-[#5B6875] bg-[#F7F7F1] px-2 py-0.5 rounded border border-[#E3E8DF] inline-block">
-                          {mod.endpoints}
-                        </div>
-                      </div>
-
-                      <div className="shrink-0">
-                        {mod.status === 'LIVE' ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#EDF7EE] text-[#2A583B] border border-[#C6DEC8]">
-                            <CheckCircle2 className="w-3 h-3" />
-                            Live Backend API
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
-                            <AlertTriangle className="w-3 h-3" />
-                            API Required
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
           </>
         )}
       </div>

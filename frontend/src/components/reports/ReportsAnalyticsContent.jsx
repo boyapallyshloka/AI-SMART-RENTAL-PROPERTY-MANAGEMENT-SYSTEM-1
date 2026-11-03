@@ -190,15 +190,22 @@ export default function ReportsAnalyticsContent({ scopeLabel = 'Portfolio', role
     }))
     .filter((item) => item.amount !== null)
   const propertyPerformance = propertyIncome.map((property) => {
-    const totalInventory = numberValue(property.totalRentableInventory) ?? 0
-    const occupiedInventory = numberValue(property.occupiedRentableInventory) ?? 0
+    const totalInventory =
+      numberValue(property.totalRentableInventory ?? property.totalUnits) ?? 0
+    const occupiedInventory =
+      numberValue(property.occupiedRentableInventory ?? property.occupiedUnits) ?? 0
+    const occupancyPercent = numberValue(
+      property.rentableInventoryOccupancyRatePercent ?? property.occupancyRatePercent
+    )
     return {
       ...property,
       propertyLabel: property.propertyName || `Property ${property.propertyId}`,
       occupiedInventory,
       availableInventory: Math.max(0, totalInventory - occupiedInventory),
       totalInventory,
-      occupancyPercent: numberValue(property.rentableInventoryOccupancyRatePercent) ?? 0,
+      occupancyPercent:
+        occupancyPercent ??
+        (totalInventory > 0 ? (occupiedInventory / totalInventory) * 100 : 0),
       incomeCollected: numberValue(property.incomeCollected) ?? 0,
       recordedExpenses: numberValue(property.recordedExpenses) ?? 0,
       maintenanceCost: numberValue(property.maintenanceCost) ?? 0,

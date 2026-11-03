@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Bell, Check, Clock, AlertCircle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import { useNotifications } from "../../context/notificationcontext"
 
 export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const role = String(user?.role || '').toUpperCase()
 
   const {
     notifications,
@@ -15,12 +21,14 @@ export default function NotificationBell() {
     refreshNotifications,
   } = useNotifications()
   const dropdownRef = useRef(null)
+  const bellButtonRef = useRef(null)
+  const [dropdownPosition, setDropdownPosition] = useState(null)
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
+        !dropdownRef.current?.contains(event.target) &&
+        !bellButtonRef.current?.contains(event.target)
       ) {
         setIsOpen(false)
       }
@@ -35,6 +43,54 @@ export default function NotificationBell() {
     }
   }, [isOpen])
 
+  useEffect(() => {
+    if (!isOpen) {
+      setDropdownPosition(null)
+      return undefined
+    }
+
+    const updateDropdownPosition = () => {
+      const bellBounds = bellButtonRef.current?.getBoundingClientRect()
+      if (!bellBounds) return
+
+      const margin = 16
+      const width = Math.min(384, window.innerWidth - margin * 2)
+      const left = Math.max(
+        margin,
+        Math.min(bellBounds.right - width, window.innerWidth - width - margin)
+      )
+      const preferredTop = bellBounds.bottom + 8
+      const availableBelow = window.innerHeight - preferredTop - margin
+
+      if (availableBelow < 260 && bellBounds.top > 260) {
+        const height = Math.min(480, bellBounds.top - margin - 8)
+        setDropdownPosition({
+          left,
+          top: Math.max(margin, bellBounds.top - height - 8),
+          width,
+          maxHeight: height,
+        })
+        return
+      }
+
+      setDropdownPosition({
+        left,
+        top: preferredTop,
+        width,
+        maxHeight: Math.max(180, Math.min(480, availableBelow)),
+      })
+    }
+
+    updateDropdownPosition()
+    window.addEventListener('resize', updateDropdownPosition)
+    window.addEventListener('scroll', updateDropdownPosition, true)
+
+    return () => {
+      window.removeEventListener('resize', updateDropdownPosition)
+      window.removeEventListener('scroll', updateDropdownPosition, true)
+    }
+  }, [isOpen])
+
   // Mark all notifications as read
   const markAllRead = async () => {
     await markAllAsRead()
@@ -42,8 +98,46 @@ export default function NotificationBell() {
 
   // Mark one notification as read
   const handleNotificationClick = async (notification) => {
+    if (!notification) return
+
     if (!notification.read) {
       await markAsRead(notification.notificationId)
+    }
+
+    const referenceType = String(notification.referenceType || '').toUpperCase()
+    const referenceId = notification.referenceId
+    if (referenceId == null || String(referenceId).trim() === '') return
+
+    const encodedId = encodeURIComponent(referenceId)
+    let destination = null
+
+    if (['RENTAL_APPLICATION', 'APPLICATION'].includes(referenceType)) {
+      if (['PROPERTY_OWNER', 'OWNER'].includes(role)) {
+        destination = `/owner/applications/${encodedId}`
+      } else if (role === 'TENANT') {
+        destination = `/tenant/applications/${encodedId}`
+      } else if (role === 'PROPERTY_MANAGER') {
+        destination = `/manager/applications/${encodedId}`
+      }
+    } else if (referenceType === 'MAINTENANCE') {
+      if (['PROPERTY_OWNER', 'OWNER'].includes(role)) {
+        destination = `/owner/maintenance/${encodedId}`
+      } else if (role === 'TENANT') {
+        destination = '/tenant/maintenance'
+      } else if (role === 'PROPERTY_MANAGER') {
+        destination = `/manager/maintenance?ticket=${encodedId}`
+      }
+    } else if (['PAYMENT', 'RENT_PAYMENT'].includes(referenceType)) {
+      if (['PROPERTY_OWNER', 'OWNER'].includes(role)) {
+        destination = `/owner/payments/${encodedId}`
+      } else if (role === 'PROPERTY_MANAGER') {
+        destination = `/manager/payments/${encodedId}`
+      }
+    }
+
+    if (destination) {
+      setIsOpen(false)
+      navigate(destination)
     }
   }
 
@@ -66,9 +160,10 @@ export default function NotificationBell() {
   }
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       {/* Notification Bell */}
       <button
+        ref={bellButtonRef}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Open notifications"
@@ -85,8 +180,19 @@ export default function NotificationBell() {
       </button>
 
       {/* Notification Dropdown */}
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-lg bg-white border border-[#E3E8DF] shadow-md z-50 overflow-hidden">
+      {isOpen && dropdownPosition && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{
+            position: 'fixed',
+            left: dropdownPosition.left,
+            top: dropdownPosition.top,
+            width: dropdownPosition.width,
+            maxHeight: dropdownPosition.maxHeight,
+            zIndex: 10000,
+          }}
+          className="flex flex-col rounded-lg border border-[#E3E8DF] bg-white shadow-xl"
+        >
 
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-[#E3E8DF]">
@@ -115,7 +221,10 @@ export default function NotificationBell() {
           </div>
 
           {/* Notification List */}
-          <div className="max-h-80 overflow-y-auto divide-y divide-[#E3E8DF]">
+          <div
+            className="min-h-0 overflow-y-auto divide-y divide-[#E3E8DF]"
+            style={{ maxHeight: Math.max(80, dropdownPosition.maxHeight - 112) }}
+          >
 
             {error && (
               <div className="flex items-start justify-between gap-3 border-b border-[#F8B4B4] bg-[#FDF2F2] p-3 text-xs text-[#9B1C1C]" role="alert">
@@ -193,7 +302,8 @@ export default function NotificationBell() {
               Refreshes automatically every 10 seconds
             </span>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

@@ -79,6 +79,14 @@ export const getImagesByProperty = async (propertyId) => {
   return axiosClient.get(`/property-images/property/${propertyId}`)
 }
 
+// GET /api/property-images/public/{propertyId}
+// Used by public property cards when the listing response has only a cover image.
+export const getPublicImagesByProperty = async (propertyId) => {
+  return axiosClient.get(`/property-images/public/${propertyId}`, {
+    skipAuthToken: true,
+  })
+}
+
 // GET /api/property-images/{imageId}
 export const getImageById = async (imageId) => {
   return axiosClient.get(`/property-images/${imageId}`)

@@ -35,6 +35,8 @@ import com.rental.rental_management_backend.payment.repository.PaymentRepository
 import com.rental.rental_management_backend.property.entity.Property;
 import com.rental.rental_management_backend.property.entity.PropertyManager;
 import com.rental.rental_management_backend.property.entity.Unit;
+import com.rental.rental_management_backend.property.enums.PropertyStatus;
+import com.rental.rental_management_backend.property.enums.PropertyType;
 import com.rental.rental_management_backend.property.enums.UnitStatus;
 import com.rental.rental_management_backend.property.repository.PropertyManagerRepository;
 import com.rental.rental_management_backend.property.repository.PropertyRepository;
@@ -371,17 +373,20 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
             List<Unit> units = unitsByProperty.getOrDefault(
                     propertyId, List.of());
 
-            long occupied = units.stream()
-                    .filter(unit ->
-                            unit.getStatus() == UnitStatus.OCCUPIED)
-                    .count();
-
-            long vacant = units.stream()
-                    .filter(unit ->
-                            unit.getStatus() == UnitStatus.VACANT)
-                    .count();
-
-            long other = units.size() - occupied - vacant;
+            boolean directRental = property.getPropertyType() == PropertyType.HOUSE
+                    || property.getPropertyType() == PropertyType.VILLA;
+            long occupied = directRental
+                    ? (property.getStatus() == PropertyStatus.OCCUPIED ? 1 : 0)
+                    : units.stream()
+                            .filter(unit -> unit.getStatus() == UnitStatus.OCCUPIED)
+                            .count();
+            long vacant = directRental
+                    ? (occupied == 0 ? 1 : 0)
+                    : units.stream()
+                            .filter(unit -> unit.getStatus() == UnitStatus.VACANT)
+                            .count();
+            long totalInventory = directRental ? 1 : units.size();
+            long other = totalInventory - occupied - vacant;
 
             BigDecimal income =
                     money(incomeByProperty.get(propertyId));
@@ -404,15 +409,19 @@ public class ReportsAnalyticsServiceImpl implements ReportsAnalyticsService {
                     expenses,
                     maintenance,
                     money(netIncome),
-                    units.size(),
+                    totalInventory,
                     occupied,
                     vacant,
-                    percentage(occupied, units.size())));
+                    percentage(occupied, totalInventory)));
 
-            totalUnits += units.size();
-            occupiedUnits += occupied;
-            vacantUnits += vacant;
-            otherUnits += other;
+            // Keep the headline summary focused on apartment units while
+            // including standalone houses and villas in the property chart.
+            if (!directRental) {
+                totalUnits += units.size();
+                occupiedUnits += occupied;
+                vacantUnits += vacant;
+                otherUnits += other;
+            }
 
             totalIncome = totalIncome.add(income);
             totalExpenses = totalExpenses.add(expenses);

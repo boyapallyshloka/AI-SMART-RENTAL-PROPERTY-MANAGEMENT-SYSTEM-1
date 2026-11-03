@@ -33,7 +33,7 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#5B6875]"
+          className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[111820]"
         >
           {label}
           {required && <span className="text-[#B94A48] ml-1" aria-hidden="true">*</span>}

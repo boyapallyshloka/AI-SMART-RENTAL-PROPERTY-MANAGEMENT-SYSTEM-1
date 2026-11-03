@@ -214,9 +214,7 @@ export default function WelcomePage() {
                         className="h-full w-full animate-[fade-in_500ms_ease-out_both] object-cover"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#2A211B]/75 to-transparent" />
-                      <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#3F7D58] shadow-lg">
-                        <Sparkles className="h-3.5 w-3.5" /> Featured home
-                      </span>
+
                       <span className="absolute bottom-4 left-4 inline-flex max-w-[65%] items-center gap-1.5 truncate text-xs font-semibold text-white">
                         <MapPin className="h-3.5 w-3.5 shrink-0" /> {featuredCity || 'Explore this home'}
                       </span>
@@ -282,7 +280,7 @@ export default function WelcomePage() {
                     onClick={() => navigate(`/properties/${featuredProperty.propertyId ?? featuredProperty.id}`, { state: { publicFilters: filters } })}
                     className="mx-3 mb-3 inline-flex items-center gap-1.5 rounded-md px-1 text-xs font-semibold text-[#315F46] transition-colors hover:text-[#111820] sm:mx-4"
                   >
-                    View this home <ArrowRight className="h-3.5 w-3.5" />
+                    View this Property <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 )}
               </div>

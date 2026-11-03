@@ -161,9 +161,10 @@ export default function LoginPage() {
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#5B6875]">
-              Password
-            </span>
+            <label className="text-xs font-semibold uppercase tracking wider text-[5B6875]">
+              Password <span className="text-red-500">*</span>
+            </label>
+
             <Link
               to="/forgot-password"
               className="text-xs font-medium text-[#3F7D58] hover:underline"

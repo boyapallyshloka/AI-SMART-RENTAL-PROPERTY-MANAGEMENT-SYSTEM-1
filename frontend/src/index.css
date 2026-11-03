@@ -76,3 +76,8 @@
 .bg-white.rounded-3xl {
   background-color: rgba(248, 241, 230, 0.95);
 }
+/* Hide the browser's built-in password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}

@@ -12,7 +12,6 @@ import {
   submitPropertyForApproval,
   removePropertyManager,
   CANONICAL_PROPERTY_STATUSES,
-  OWNER_EDITABLE_PROPERTY_STATUSES,
   mapBackendPropertyToUi,
   resolveImageUrl,
 } from '../../api/propertyApi'
@@ -1696,19 +1695,21 @@ export default function PropertyDetailsPage() {
                     className="text-xs font-semibold rounded-md border border-[#E3E8DF] bg-white text-[#111820] py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#3F7D58] cursor-pointer hover:border-[#3F7D58] transition-colors disabled:opacity-60"
                   >
                     {!property.status && <option value="" disabled>Status unavailable</option>}
-                    {property.status && !OWNER_EDITABLE_PROPERTY_STATUSES.includes(property.status) && (
+                    {property.status && !CANONICAL_PROPERTY_STATUSES.includes(property.status) && (
                       <option value={property.status} disabled>
-                        {property.status === 'PUBLISHED' ? 'Published' : property.status === 'AVAILABLE' ? 'Available' : property.status.replace(/_/g, ' ')}
+                        {property.status.replace(/_/g, ' ')}
                       </option>
                     )}
-                    {OWNER_EDITABLE_PROPERTY_STATUSES.map((st) => {
+                    {CANONICAL_PROPERTY_STATUSES.map((st) => {
+                      const isPubStatus = st === 'AVAILABLE'
                       const isLocked =
+                        (isPubStatus && publishEligibility && !publishEligibility.eligible) ||
                         (st === 'OCCUPIED' && property.status !== 'OCCUPIED') ||
                         (st === 'DRAFT' && property.status !== 'DRAFT')
                       return (
                         <option key={st} value={st} disabled={isLocked}>
-                          {st === 'UNDER_MAINTENANCE'
-                            ? 'Under Maintenance'
+                          {st === 'NOT_AVAILABLE'
+                            ? 'Not available'
                             : st.charAt(0) + st.slice(1).toLowerCase()}
                           {isLocked ? ' (Approval Required)' : ''}
                         </option>

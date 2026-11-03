@@ -335,7 +335,7 @@ export default function MaintenanceDetailsPage() {
       const data = await getMaintenanceRequestById(id)
       setRequest(data)
       setRepairCost(data?.cost == null ? '' : String(data.cost))
-      setCostResponsibility(data?.payer || data?.costResponsibility || 'OWNER_PAID')
+      setCostResponsibility(data?.costResponsibility || 'OWNER_PAID')
 
       // Fetch human-readable property, unit, and tenant names
       loadRelatedEntities(data)
@@ -395,11 +395,10 @@ export default function MaintenanceDetailsPage() {
     try {
       const response = await updateMaintenanceCost(id, {
         cost: amount,
-        payer: costResponsibility,
+        costResponsibility,
       })
       const updated = response?.data || response
       setRequest((previous) => ({ ...previous, ...updated }))
-      setCostResponsibility(updated?.payer || costResponsibility)
       setSuccessMessage('Repair amount and payer saved.')
     } catch (error) {
       setCostError(error?.response?.data?.message || error?.message || 'Could not save the repair cost.')
@@ -1065,7 +1064,7 @@ export default function MaintenanceDetailsPage() {
                         </div>
                         {request.cost != null && (
                           <div className="flex justify-between">
-                            <span>Actual Repair Cost ({request.payer === 'TENANT_PAID' ? 'Tenant pays' : 'Owner pays'}):</span>
+                            <span>Actual Repair Cost ({request.costResponsibility === 'TENANT_PAID' ? 'Tenant pays' : 'Owner pays'}):</span>
                             <strong className="text-sm font-bold">₹{Number(request.cost).toLocaleString('en-IN')}</strong>
                           </div>
                         )}

@@ -3,12 +3,11 @@ import axios from 'axios'
 /**
  * Axios Client configured for SmartEstate Spring Boot REST API
  * 
- * Base URL:
- * - VITE_API_BASE_URL environment variable
- * - Fallback: http://localhost:8080/api
+ * Use an explicit API URL when configured. Otherwise route through the
+ * Vite proxy so local and remote development setups share the same path.
  */
 const API_BASE_URL =
-  import.meta?.env?.VITE_API_BASE_URL || 'http://localhost:8080/api'
+  import.meta.env.VITE_API_BASE_URL || '/api'
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,

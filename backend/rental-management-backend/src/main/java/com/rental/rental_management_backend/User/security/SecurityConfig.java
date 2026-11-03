@@ -164,6 +164,11 @@ public class SecurityConfig {
                                 "/api/properties/public/*")
                         .permitAll()
 
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/property-images/public/*")
+                        .permitAll()
+
                         // =================================================
                         // PROPERTY LIST & DETAILS
                         // OWNER & TENANT BROWSING

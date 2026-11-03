@@ -158,7 +158,11 @@ export default function AppRoutes() {
 
   React.useLayoutEffect(() => {
     completeRouteTransition()
-  }, [location.key])
+
+    if (!location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    }
+  }, [location.key, location.hash])
 
   return (
     <Routes>
@@ -332,7 +336,7 @@ export default function AppRoutes() {
                 <Route path="tenant-document-review" element={<TenantDocumentReviewPage />} />
                 <Route path="reports" element={<AdminReportsPage />} />
                 <Route path="system-settings" element={<SystemSettingsPage />} />
-                <Route Path="resolve" element={<ResolveRouter />} />
+                <Route path="resolve" element={<ResolveRouter />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
               </Routes>
             </RoleRoute>

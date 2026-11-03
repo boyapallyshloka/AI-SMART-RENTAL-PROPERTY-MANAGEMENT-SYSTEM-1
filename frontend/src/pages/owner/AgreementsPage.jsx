@@ -747,6 +747,7 @@ export default function AgreementsPage() {
                                 <Download className="w-4 h-4" />
                               </button>
                             )}
+
                             {/* Activate (DRAFT -> ACTIVE) */}
                             {isDraft && (
                               <button
@@ -958,7 +959,7 @@ export default function AgreementsPage() {
                       <p className="text-xs text-[#5B6875]">
                         {selectedDetails.agreementDocument
                           ? 'Generated and stored securely on server'
-                          : 'No PDF is currently available for this agreement.'}
+                          : 'Document record is active'}
                       </p>
                     </div>
                   </div>

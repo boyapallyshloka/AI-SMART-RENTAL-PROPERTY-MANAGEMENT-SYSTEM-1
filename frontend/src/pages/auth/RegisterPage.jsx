@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
@@ -51,19 +52,28 @@ export default function RegisterPage() {
     lowercase: false,
     uppercase: false,
     number: false,
-    special: false
+    special: false,
   })
 
+  const validatePassword = (value) => {
+    return {
+      length: value.length >= 8,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      number: /[0-9]/.test(value),
+      special: /[^A-Za-z0-9]/.test(value),
+    }
+  }
 
   const validate = () => {
     const errs = {}
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const phoneRegex = /^[6-9]\d{9}$/
 
-
     if (!firstName.trim()) {
       errs.firstName = 'First name is required'
     }
+
     if (!lastName.trim()) {
       errs.lastName = 'Last name is required'
     }
@@ -77,7 +87,8 @@ export default function RegisterPage() {
     if (!phone.trim()) {
       errs.phone = 'Phone number is required'
     } else if (!phoneRegex.test(phone.trim())) {
-      errs.phone = 'Please enter a valid 10-digit Indian mobile number (starts with 6-9)'
+      errs.phone =
+        'Please enter a valid 10-digit Indian mobile number (starts with 6-9)'
     }
 
     if (!gender) {
@@ -111,24 +122,14 @@ export default function RegisterPage() {
     return Object.keys(errs).length === 0
   }
 
-  const validatePassword = (password) => {
-    return {
-      length: password.length >= 8,
-      uppercase: /[A-Z]/.test(password),
-      lowercase: /[a-z]/.test(password),
-      number: /[0-9]/.test(password),
-      special: /[^A-Za-z0-9]/.test(password)
-
-    }
-  }
-
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError('')
+
     if (!validate()) return
 
     setIsLoading(true)
+
     try {
       const result = await register({
         firstName,
@@ -139,6 +140,7 @@ export default function RegisterPage() {
         password,
         role,
       })
+
       if (result.success) {
         if (result.requiresEmailVerification) {
           navigate('/verify-email', {
@@ -160,6 +162,7 @@ export default function RegisterPage() {
             gender,
             role,
           })
+
           setIsPendingApproval(true)
         } else {
           const destination = getDashboardPath(role)
@@ -169,13 +172,16 @@ export default function RegisterPage() {
         setFormError(result.error || 'Registration failed')
       }
     } catch (err) {
-      setFormError('An unexpected error occurred during registration. Please try again.')
+      console.error('Registration error:', err)
+      setFormError(
+        'An unexpected error occurred during registration. Please try again.'
+      )
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Waiting for Approval state view for PROPERTY_OWNER
+  // Waiting for approval state for PROPERTY_OWNER.
   if (isPendingApproval) {
     return (
       <AuthLayout
@@ -188,16 +194,21 @@ export default function RegisterPage() {
             <div className="w-12 h-12 rounded-full bg-[#EDF7EE] border border-[#C6DEC8] flex items-center justify-center mx-auto text-[#3F7D58]">
               <Clock className="w-6 h-6" />
             </div>
+
             <div>
               <h3 className="text-base font-serif font-bold text-[#111820]">
                 Awaiting Administrator Approval
               </h3>
+
               <p className="text-xs text-[#5B6875] mt-1 max-w-sm mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-[#111820]">{registeredData
-                  ? `${registeredData.firstName} ${registeredData.lastName}`
-                  : `${firstName} ${lastName}`}
-                </span>.
-                Your property owner registration has been recorded and submitted for Super Admin review.
+                Thank you,{' '}
+                <span className="font-semibold text-[#111820]">
+                  {registeredData
+                    ? `${registeredData.firstName} ${registeredData.lastName}`
+                    : `${firstName} ${lastName}`}
+                </span>
+                . Your property owner registration has been recorded and
+                submitted for Super Admin review.
               </p>
             </div>
           </div>
@@ -206,12 +217,18 @@ export default function RegisterPage() {
           <div className="p-3.5 rounded-lg bg-[#F7F7F1] border border-[#E3E8DF] text-xs space-y-2">
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Account Email:</span>
-              <span className="font-mono font-medium text-[#111820]">{registeredData?.email || email}</span>
+              <span className="font-mono font-medium text-[#111820]">
+                {registeredData?.email || email}
+              </span>
             </div>
+
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Phone Number:</span>
-              <span className="font-mono font-medium text-[#111820]">{registeredData?.phone || phone}</span>
+              <span className="font-mono font-medium text-[#111820]">
+                {registeredData?.phone || phone}
+              </span>
             </div>
+
             <div className="flex justify-between items-center py-1 border-b border-[#E3E8DF]/60">
               <span className="text-[#5B6875]">Role Requested:</span>
               <span className="inline-flex items-center gap-1 font-semibold text-[#3F7D58]">
@@ -219,6 +236,7 @@ export default function RegisterPage() {
                 Property Owner
               </span>
             </div>
+
             <div className="flex justify-between items-center py-1">
               <span className="text-[#5B6875]">Verification Status:</span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FEF7EC] text-[#8A5B16] border border-[#F4E2B6]">
@@ -228,18 +246,21 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Compliance & Next Steps Notice */}
+          {/* Compliance and Next Steps */}
           <div className="p-3 rounded-lg bg-[#EDF4ED] border border-[#E3E8DF] text-xs text-[#315F46] space-y-1.5 leading-relaxed">
             <div className="flex items-center gap-1.5 font-semibold text-[#111820]">
               <CheckCircle2 className="w-4 h-4 text-[#3F7D58]" />
               <span>What happens next?</span>
             </div>
+
             <p className="text-[11px] text-[#5B6875]">
-              In accordance with SmartEstate enterprise security policies, property owner credentials must be verified by a Super Administrator before access to the Owner Portal is unlocked.
+              In accordance with SmartEstate enterprise security policies,
+              property owner credentials must be verified by a Super
+              Administrator before access to the Owner Portal is unlocked.
             </p>
           </div>
 
-          {/* Action button */}
+          {/* Action Button */}
           <Button
             type="button"
             variant="primary"
@@ -252,7 +273,10 @@ export default function RegisterPage() {
 
           <div className="text-center text-xs text-[#5B6875]">
             Need immediate assistance?{' '}
-            <Link to="/contact" className="font-semibold text-[#3F7D58] hover:underline">
+            <Link
+              to="/contact"
+              className="font-semibold text-[#3F7D58] hover:underline"
+            >
               Contact Support
             </Link>
           </div>
@@ -273,76 +297,31 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {/* Role Selector Tabs */}
-        <div>
-          <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#111820]">
-            I am joining as a
-          </label>
-          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#F7F7F1] border border-[#E3E8DF]">
-            <button
-              type="button"
-              onClick={() => setRole(ROLES.TENANT)}
-              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isTenant(role)
-                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#111820]'
-                }`}
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>Tenant</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole(ROLES.PROPERTY_OWNER)}
-              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyOwner(role)
-                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#111820]'
-                }`}
-            >
-              <Building2 className="w-3.5 h-3.5" />
-              <span>Owner</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole(ROLES.PROPERTY_MANAGER)}
-              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${isPropertyManager(role)
-                ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-xs'
-                : 'text-[#5B6875] hover:text-[#111820]'
-                }`}
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              <span>Manager</span>
-            </button>
-          </div>
-        </div>
+
 
         <Input
           label="First Name"
-          placeholder="e.g.Alex"
+          placeholder="e.g. Alex"
           value={firstName}
           onChange={(e) => {
             setFirstName(e.target.value)
             if (errors.firstName) {
-              setErrors((prev) => ({
-                ...prev, firstName: ''
-              }))
-
+              setErrors((prev) => ({ ...prev, firstName: '' }))
             }
           }}
           error={errors.firstName}
           leftIcon={<User className="w-4 h-4" />}
           required
-
         />
+
         <Input
-          label="last Name"
-          placeholder="e.g.mallikarjun"
+          label="Last Name"
+          placeholder="e.g. Mallikarjun"
           value={lastName}
           onChange={(e) => {
             setLastName(e.target.value)
             if (errors.lastName) {
-              setErrors((prev) => ({
-                ...prev, lastName: ''
-              }))
+              setErrors((prev) => ({ ...prev, lastName: '' }))
             }
           }}
           error={errors.lastName}
@@ -357,7 +336,9 @@ export default function RegisterPage() {
           value={email}
           onChange={(e) => {
             setEmail(e.target.value)
-            if (errors.email) setErrors((prev) => ({ ...prev, email: '' }))
+            if (errors.email) {
+              setErrors((prev) => ({ ...prev, email: '' }))
+            }
           }}
           error={errors.email}
           leftIcon={<Mail className="w-4 h-4" />}
@@ -371,7 +352,9 @@ export default function RegisterPage() {
           value={phone}
           onChange={(e) => {
             setPhone(e.target.value)
-            if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }))
+            if (errors.phone) {
+              setErrors((prev) => ({ ...prev, phone: '' }))
+            }
           }}
           error={errors.phone}
           leftIcon={<Phone className="w-4 h-4" />}
@@ -383,7 +366,9 @@ export default function RegisterPage() {
           value={gender}
           onChange={(e) => {
             setGender(e.target.value)
-            if (errors.gender) setErrors((prev) => ({ ...prev, gender: '' }))
+            if (errors.gender) {
+              setErrors((prev) => ({ ...prev, gender: '' }))
+            }
           }}
           error={errors.gender}
           required
@@ -403,12 +388,13 @@ export default function RegisterPage() {
           onChange={(e) => {
             const value = e.target.value
             setPassword(value)
-            const checks = validatePassword(value)
-            setPasswordChecks(checks)
+            setPasswordChecks(validatePassword(value))
+
             if (errors.password) {
               setErrors((prev) => ({ ...prev, password: '' }))
             }
           }}
+          error={errors.password}
           rightIcon={
             <button
               type="button"
@@ -416,33 +402,20 @@ export default function RegisterPage() {
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               className="pointer-events-auto text-[#5B6875] hover:text-[#3F7D58]"
             >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           }
           required
         />
-        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-          <span className={passwordChecks.length ? 'text-green-600' : 'text-gray-500'}>
-            {passwordChecks.length ? '✓' : '○'} 8+ characters
-          </span>
 
-          <span className={passwordChecks.uppercase ? 'text-green-600' : 'text-gray-500'}>
-            {passwordChecks.uppercase ? '✓' : '○'} Uppercase
-          </span>
-
-          <span className={passwordChecks.lowercase ? 'text-green-600' : 'text-gray-500'}>
-            {passwordChecks.lowercase ? '✓' : '○'} Lowercase
-          </span>
-
-          <span className={passwordChecks.number ? 'text-green-600' : 'text-gray-500'}>
-            {passwordChecks.number ? '✓' : '○'} Number
-          </span>
-
-          <span className={passwordChecks.special ? 'text-green-600' : 'text-gray-500'}>
-            {passwordChecks.special ? '✓' : '○'} Special character
-          </span>
+        <div className="mt-2 text-xs text-gray-500">
+          Password must contain at least 8 characters, including uppercase
+          and lowercase letters, a number, and a special character.
         </div>
-
 
         <Input
           label="Confirm Password"
@@ -462,15 +435,26 @@ export default function RegisterPage() {
           rightIcon={
             <button
               type="button"
-              onClick={() => setShowConfirmPassword((visible) => !visible)}
-              aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+              onClick={() =>
+                setShowConfirmPassword((visible) => !visible)
+              }
+              aria-label={
+                showConfirmPassword
+                  ? 'Hide confirm password'
+                  : 'Show confirm password'
+              }
               className="pointer-events-auto text-[#5B6875] hover:text-[#3F7D58]"
             >
-              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showConfirmPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           }
           required
         />
+
         {confirmPassword && (
           <p
             className={
@@ -484,6 +468,57 @@ export default function RegisterPage() {
               : '✗ Passwords do not match'}
           </p>
         )}
+
+        {/* Role Selector Tabs */}
+        <div>
+          <label className="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-[#111820]">
+             Joining as
+          </label>
+
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setRole(ROLES.TENANT)}
+              aria-pressed={isTenant(role)}
+              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${
+                isTenant(role)
+                  ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#111820]'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Tenant</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setRole(ROLES.PROPERTY_OWNER)}
+              aria-pressed={isPropertyOwner(role)}
+              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${
+                isPropertyOwner(role)
+                  ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#111820]'
+              }`}
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Owner</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setRole(ROLES.PROPERTY_MANAGER)}
+              aria-pressed={isPropertyManager(role)}
+              className={`flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all ${
+                isPropertyManager(role)
+                  ? 'bg-white text-[#3F7D58] border border-[#E3E8DF] shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#111820]'
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              <span>Manager</span>
+            </button>
+          </div>
+        </div>
 
         <Button
           type="submit"

@@ -222,11 +222,7 @@ export default function TenantApplicationsPage() {
                     const isPending = (app.status || '').toUpperCase() === 'PENDING'
                     const isWithdrawing = withdrawingId === app.applicationId
                     const propName = app.propertyName || `Property #${app.propertyId}`
-                    const unitName = app.unitId == null
-                      ? 'Entire property'
-                      : app.unitNumber
-                        ? `Unit ${app.unitNumber}`
-                        : `Unit #${app.unitId}`
+                    const unitName = app.unitNumber ? `Unit ${app.unitNumber}` : `Unit #${app.unitId}`
                     const rent = formatInr(app.monthlyRent)
                     const deposit = formatInr(app.securityDeposit)
 

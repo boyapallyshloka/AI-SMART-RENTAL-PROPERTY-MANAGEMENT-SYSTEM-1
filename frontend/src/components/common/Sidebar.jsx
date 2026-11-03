@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -75,10 +76,6 @@ const ADMIN_MENU = [
 
 /**
  * Responsive horizontal role navigation for SmartEstate.
- * @param {Object} props
- * @param {string} props.role
- * @param {string} props.activeItem
- * @param {(item: string) => void} props.onSelect
  */
 export default function Sidebar({
   role = ROLES.PROPERTY_OWNER,
@@ -88,63 +85,128 @@ export default function Sidebar({
   const navigate = useNavigate()
   const location = useLocation()
   const navigationRef = useRef(null)
-  const [propertyCount, setPropertyCount] = useState(null)
-  const [navigationOverflow, setNavigationOverflow] = useState({ hasOverflow: false, canScrollLeft: false, canScrollRight: false })
 
+  const [propertyCount, setPropertyCount] = useState(null)
+
+  const [navigationOverflow, setNavigationOverflow] = useState({
+    hasOverflow: false,
+    canScrollLeft: false,
+    canScrollRight: false,
+  })
+
+  // Detect whether navigation needs horizontal scrolling
   const updateNavigationOverflow = useCallback(() => {
     const navigation = navigationRef.current
     if (!navigation) return
+
     const canScrollLeft = navigation.scrollLeft > 2
-    const canScrollRight = navigation.scrollWidth - navigation.clientWidth - navigation.scrollLeft > 2
+
+    const canScrollRight =
+      navigation.scrollWidth -
+      navigation.clientWidth -
+      navigation.scrollLeft > 2
+
     setNavigationOverflow((current) => {
       const hasOverflow = canScrollLeft || canScrollRight
+
       if (
         current.hasOverflow === hasOverflow &&
         current.canScrollLeft === canScrollLeft &&
         current.canScrollRight === canScrollRight
-      ) return current
-      return { hasOverflow, canScrollLeft, canScrollRight }
+      ) {
+        return current
+      }
+
+      return {
+        hasOverflow,
+        canScrollLeft,
+        canScrollRight,
+      }
     })
   }, [])
 
+  // Listen for scrolling and window resizing
   useEffect(() => {
     const navigation = navigationRef.current
     if (!navigation) return undefined
+
     updateNavigationOverflow()
-    navigation.addEventListener('scroll', updateNavigationOverflow, { passive: true })
+
+    navigation.addEventListener(
+      'scroll',
+      updateNavigationOverflow,
+      { passive: true }
+    )
+
     window.addEventListener('resize', updateNavigationOverflow)
+
     return () => {
-      navigation.removeEventListener('scroll', updateNavigationOverflow)
-      window.removeEventListener('resize', updateNavigationOverflow)
+      navigation.removeEventListener(
+        'scroll',
+        updateNavigationOverflow
+      )
+
+      window.removeEventListener(
+        'resize',
+        updateNavigationOverflow
+      )
     }
   }, [role, updateNavigationOverflow])
 
+  // Keep active navigation visible without centering the entire menu
   useEffect(() => {
     const navigation = navigationRef.current
-    const activeItemElement = navigation?.querySelector('[aria-current="page"]')
-    if (!navigation || !activeItemElement || navigation.scrollWidth <= navigation.clientWidth) return
+
+    const activeItemElement = navigation?.querySelector(
+      '[aria-current="page"]'
+    )
+
+    if (!navigation || !activeItemElement) return
 
     const navigationBounds = navigation.getBoundingClientRect()
-    const activeItemBounds = activeItemElement.getBoundingClientRect()
-    const activeItemLeft = activeItemBounds.left - navigationBounds.left + navigation.scrollLeft
-    const targetScrollLeft = activeItemLeft + activeItemBounds.width / 2 - navigation.clientWidth / 2
-    navigation.scrollTo({
-      left: Math.max(0, Math.min(targetScrollLeft, navigation.scrollWidth - navigation.clientWidth)),
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-    })
+    const activeBounds = activeItemElement.getBoundingClientRect()
+
+    let newScrollLeft = navigation.scrollLeft
+
+    if (activeBounds.left < navigationBounds.left) {
+      newScrollLeft -= navigationBounds.left - activeBounds.left
+    } else if (activeBounds.right > navigationBounds.right) {
+      newScrollLeft += activeBounds.right - navigationBounds.right
+    }
+
+    if (newScrollLeft !== navigation.scrollLeft) {
+      navigation.scrollTo({
+        left: Math.max(
+          0,
+          Math.min(
+            newScrollLeft,
+            navigation.scrollWidth - navigation.clientWidth
+          )
+        ),
+        behavior: window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches
+          ? 'auto'
+          : 'smooth',
+      })
+    }
   }, [activeItem, location.pathname, role])
 
+  // Load owner property count
   useEffect(() => {
     let isMounted = true
+
     if (isPropertyOwner(role)) {
       getMyProperties()
         .then((res) => {
           if (!isMounted) return
+
           const list = Array.isArray(res)
             ? res
             : Array.isArray(res?.data)
-            ? res.data
-            : (res?.data?.content || [])
+              ? res.data
+              : (res?.data?.content || [])
+
           setPropertyCount(list.length)
         })
         .catch(() => {
@@ -153,26 +215,38 @@ export default function Sidebar({
     } else {
       setPropertyCount(null)
     }
+
     return () => {
       isMounted = false
     }
   }, [role])
 
+  // Dynamic owner menu
   const dynamicOwnerMenu = OWNER_MENU.map((item) => {
-    if (item.id === 'properties' && propertyCount !== null && propertyCount > 0) {
-      return { ...item, badge: String(propertyCount) }
+    if (
+      item.id === 'properties' &&
+      propertyCount !== null &&
+      propertyCount > 0
+    ) {
+      return {
+        ...item,
+        badge: String(propertyCount),
+      }
     }
+
     return item
   })
 
+  // Select menu based on user role
   const menuItems = isSuperAdmin(role)
     ? ADMIN_MENU
     : isTenant(role)
-    ? TENANT_MENU
-    : isPropertyManager(role)
-    ? MANAGER_MENU
-    : dynamicOwnerMenu
+      ? TENANT_MENU
+      : isPropertyManager(role)
+        ? MANAGER_MENU
+        : dynamicOwnerMenu
 
+  // Navigation click handler
   const handleItemClick = (id) => {
     if (onSelect) onSelect(id)
 
@@ -182,7 +256,9 @@ export default function Sidebar({
       else if (id === 'owner-verification') navigate('/admin/owner-verification')
       else if (id === 'tenant-document-review') navigate('/admin/tenant-document-review')
       else if (id === 'reports') navigate('/admin/reports')
-      else if (id === 'settings' || id === 'system-settings') navigate('/admin/system-settings')
+      else if (id === 'settings' || id === 'system-settings') {
+        navigate('/admin/system-settings')
+      }
     } else if (isPropertyManager(role)) {
       if (id === 'dashboard') {
         navigate('/manager/dashboard')
@@ -208,8 +284,12 @@ export default function Sidebar({
         const itemLabels = {
           inspections: 'Property & Unit Inspections',
         }
+
         const label = itemLabels[id] || 'This feature'
-        alert(`${label} will be available in an upcoming Manager Portal update.`)
+
+        alert(
+          `${label} will be available in an upcoming Manager Portal update.`
+        )
       }
     } else if (isPropertyOwner(role)) {
       if (id === 'dashboard') navigate('/owner/dashboard')
@@ -224,32 +304,56 @@ export default function Sidebar({
     } else if (isTenant(role)) {
       if (id === 'dashboard') navigate('/tenant/dashboard')
       else if (id === 'account') navigate('/tenant/account')
-      else if (id === 'buildings' || id === 'my-rental') navigate('/tenant/buildings')
-      else if (id === 'find-properties' || id === 'browse') navigate('/tenant/find-properties')
-      else if (id === 'my-applications') navigate('/tenant/applications')
-      else if (id === 'agreement') navigate('/tenant/agreement')
-      else if (id === 'payments') navigate('/tenant/payments')
-      else if (id === 'maintenance') navigate('/tenant/maintenance')
+      else if (id === 'buildings' || id === 'my-rental') {
+        navigate('/tenant/buildings')
+      } else if (id === 'find-properties' || id === 'browse') {
+        navigate('/tenant/find-properties')
+      } else if (id === 'my-applications') {
+        navigate('/tenant/applications')
+      } else if (id === 'agreement') {
+        navigate('/tenant/agreement')
+      } else if (id === 'payments') {
+        navigate('/tenant/payments')
+      } else if (id === 'maintenance') {
+        navigate('/tenant/maintenance')
+      }
     }
   }
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#D8C6A8]/70 bg-[#F5E8D6]/75 px-3 py-3 backdrop-blur-md sm:px-5 lg:px-8">
       <div className="mx-auto flex max-w-[1600px] flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
+
+        {/* SmartEstate Logo */}
         <div className="flex shrink-0 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#111820] text-white shadow-sm">
               <Home className="h-5 w-5" />
             </span>
-            <span className="font-serif text-lg font-bold tracking-tight text-[#111820]">SmartEstate</span>
+
+            <span className="font-serif text-lg font-bold tracking-tight text-[#111820]">
+              SmartEstate
+            </span>
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 items-center lg:justify-center">
+        {/* Horizontal Navigation */}
+        <div className="flex min-w-0 flex-1 items-center lg:justify-start">
+
+          {/* Scroll Left */}
           {navigationOverflow.hasOverflow && (
             <button
               type="button"
-              onClick={() => navigationRef.current?.scrollBy({ left: -navigationRef.current.clientWidth * 0.7, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+              onClick={() =>
+                navigationRef.current?.scrollBy({
+                  left: -navigationRef.current.clientWidth * 0.7,
+                  behavior: window.matchMedia(
+                    '(prefers-reduced-motion: reduce)'
+                  ).matches
+                    ? 'auto'
+                    : 'smooth',
+                })
+              }
               disabled={!navigationOverflow.canScrollLeft}
               aria-label={`Scroll ${getPortalName(role)} navigation left`}
               className="mr-1 inline-flex h-9 w-8 shrink-0 items-center justify-center rounded-full border border-[#D8C6A8]/70 bg-[#F4EBDD] text-[#5B6875] transition hover:bg-white disabled:cursor-default disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
@@ -257,53 +361,70 @@ export default function Sidebar({
               <ChevronLeft className="h-4 w-4" />
             </button>
           )}
-          <nav ref={navigationRef} aria-label={`${getPortalName(role)} navigation`} className="flex min-w-0 flex-1 gap-1 overflow-x-auto scroll-smooth pb-0.5 [scrollbar-width:thin] lg:justify-center">
-            {menuItems.map((item) => {
-            const isActive =
-              activeItem === item.id ||
-              (isPropertyManager(role) &&
-                item.id === 'properties' &&
-                (location.pathname === '/manager/properties' ||
-                  location.pathname.startsWith('/manager/properties/'))) ||
-              (isPropertyManager(role) &&
-                item.id === 'applications' &&
-                (location.pathname === '/manager/applications' ||
-                  location.pathname.startsWith('/manager/applications/'))) ||
-              (isPropertyManager(role) &&
-                item.id === 'maintenance' &&
-                location.pathname === '/manager/maintenance') ||
-              (isPropertyManager(role) &&
-                item.id === 'technicians' &&
-                location.pathname.startsWith('/manager/maintenance/technicians')) ||
-              (isPropertyManager(role) &&
-                item.id === 'inspections' &&
-                location.pathname === '/manager/inspections') ||
-              (isPropertyManager(role) &&
-                item.id === 'profile' &&
-                location.pathname === '/manager/account') ||
-              (isPropertyOwner(role) &&
-                item.id === 'profile' &&
-                location.pathname === '/owner/account') ||
-              (isPropertyManager(role) &&
-                item.id === 'dashboard' &&
-                location.pathname === '/manager/dashboard')
 
-            return (
-              <NavItem
-                key={item.id}
-                icon={item.icon}
-                label={item.label}
-                badge={item.badge}
-                isActive={isActive}
-                onClick={() => handleItemClick(item.id)}
-              />
-            )
+          {/* Navigation Links */}
+          <nav
+            ref={navigationRef}
+            aria-label={`${getPortalName(role)} navigation`}
+            className="flex min-w-0 flex-1 items-center justify-start gap-1 overflow-x-auto overflow-y-hidden scroll-smooth pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {menuItems.map((item) => {
+              const isActive =
+                activeItem === item.id ||
+                (isPropertyManager(role) &&
+                  item.id === 'properties' &&
+                  (location.pathname === '/manager/properties' ||
+                    location.pathname.startsWith('/manager/properties/'))) ||
+                (isPropertyManager(role) &&
+                  item.id === 'applications' &&
+                  (location.pathname === '/manager/applications' ||
+                    location.pathname.startsWith('/manager/applications/'))) ||
+                (isPropertyManager(role) &&
+                  item.id === 'maintenance' &&
+                  location.pathname === '/manager/maintenance') ||
+                (isPropertyManager(role) &&
+                  item.id === 'technicians' &&
+                  location.pathname.startsWith('/manager/maintenance/technicians')) ||
+                (isPropertyManager(role) &&
+                  item.id === 'inspections' &&
+                  location.pathname === '/manager/inspections') ||
+                (isPropertyManager(role) &&
+                  item.id === 'profile' &&
+                  location.pathname === '/manager/account') ||
+                (isPropertyOwner(role) &&
+                  item.id === 'profile' &&
+                  location.pathname === '/owner/account') ||
+                (isPropertyManager(role) &&
+                  item.id === 'dashboard' &&
+                  location.pathname === '/manager/dashboard')
+
+              return (
+                <NavItem
+                  key={item.id}
+                  icon={item.icon}
+                  label={item.label}
+                  badge={item.badge}
+                  isActive={isActive}
+                  onClick={() => handleItemClick(item.id)}
+                />
+              )
             })}
           </nav>
+
+          {/* Scroll Right */}
           {navigationOverflow.hasOverflow && (
             <button
               type="button"
-              onClick={() => navigationRef.current?.scrollBy({ left: navigationRef.current.clientWidth * 0.7, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+              onClick={() =>
+                navigationRef.current?.scrollBy({
+                  left: navigationRef.current.clientWidth * 0.7,
+                  behavior: window.matchMedia(
+                    '(prefers-reduced-motion: reduce)'
+                  ).matches
+                    ? 'auto'
+                    : 'smooth',
+                })
+              }
               disabled={!navigationOverflow.canScrollRight}
               aria-label={`Scroll ${getPortalName(role)} navigation right`}
               className="ml-1 inline-flex h-9 w-8 shrink-0 items-center justify-center rounded-full border border-[#D8C6A8]/70 bg-[#F4EBDD] text-[#5B6875] transition hover:bg-white disabled:cursor-default disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F7D58]"
@@ -312,7 +433,6 @@ export default function Sidebar({
             </button>
           )}
         </div>
-
       </div>
     </header>
   )

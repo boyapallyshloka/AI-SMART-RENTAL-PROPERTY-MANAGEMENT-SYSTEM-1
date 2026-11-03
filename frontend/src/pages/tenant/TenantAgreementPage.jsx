@@ -194,7 +194,9 @@ export default function TenantAgreementPage() {
     const agrId = selectedAgreement.agreementId
 
     if (!selectedAgreement.agreementDocument) {
-      setNotice('No digital agreement document is available for this lease. Contact your property manager if you require a signed copy.')
+      setNotice(
+        'No digital agreement document has been uploaded for this lease yet. Contact your property manager if you require a signed copy.'
+      )
       return
     }
 
